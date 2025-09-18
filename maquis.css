@@ -1,0 +1,895 @@
+/**
+ *------
+ * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
+ * Maquis implementation : © Michał Delikat michal.delikat0@gmail.com
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * maquissolo.css
+ *
+ * Maquis stylesheet
+ *
+ */
+
+/*
+    This is the CSS stylesheet of your game User Interface.
+    
+    Styles defined on this file will be applied to the HTML elements you define in your
+    HTML template (maquissolo_maquissolo.tpl), and to HTML elements you create dynamically
+    (in maquissolo.js).
+    
+    Usually, you are using CSS to:
+    
+    1°) define the overall layout of your game
+        (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
+
+    2°) create your CSS-sprites:
+        All images of your games should be gathered into a small number of image files. Then, using
+        background-image and background-position CSS properties, you create HTML blocks that can 
+        display these images correctly (see example below).
+    
+    3°) ... anything else:
+        It is really easy to add and remove CSS classes dynamically from your Javascript with
+        dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
+        (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
+        very often, using CSS classes for the logic of your user interface allow you to do complex
+        thing easily.
+        
+        
+     Note: on the production platform, this file will be compressed and comments will be removed.
+           Consequently, don't hesitate to put as many comments as necessary.
+*/
+
+
+/* Note: you must not use any @import directive */
+
+.current_player_is_active #page-title, .gamestate_gameEnd #page-title, #page-title {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: #f9f4d3;
+}
+
+#game_play_area {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+.standard_popin {
+  height: 300px;
+  padding: 10px;
+}
+
+.player-board {
+    background-color: #f9f4d3;
+}
+
+#custom-player-board {
+    padding: 16px;
+}
+
+#workers {
+    display: flex;
+    justify-content: space-between;
+}
+
+#resistance-worker-icon, #milice-worker-icon, #soldier-worker-icon {
+    width: 50px;
+    aspect-ratio: 1;
+    background-size: 400%;
+    background-image: url('img/Meeples.png');
+    background-position-y: center;
+    z-index: 1;
+}
+
+#milice-worker-icon {
+    background-position-x: 67%;
+}
+
+#soldier-worker-icon {
+    background-position-x: 100%;
+}
+
+#resources {
+    display: flex;
+    width: 200px;
+    height: 170px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.resource-icon {
+    position: relative;
+    width: 60px;
+    aspect-ratio: 1;
+    background-size: 300%;
+    background-image: url('img/Tokens.png');
+    background-position-y: center;
+    z-index: 1;
+}
+
+.resource-icon-circle {
+
+}
+
+.resource-box {
+    text-align: center;
+}
+
+.worker {
+    width: 6vw;
+    aspect-ratio: 1;
+    background-size: 400%;
+    background-image: url('img/Meeples.png');
+    background-position-y: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    position: absolute;
+}
+
+@media (min-width: 1400px) {
+    .worker {
+        width: 3vw;
+    }
+}
+
+.resistance {
+    background-position-x: 33%;
+}
+
+.milice {
+    background-position-x: 67%;
+}
+
+.soldier {
+    background-position-x: 100%;
+}
+
+.card {
+    width: 22vw;
+    aspect-ratio: 0.714;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    border: 2px solid black;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+@media (min-width: 995px) {
+    .card {
+        width: 15vw;
+    }
+}
+
+@media (min-width: 1400px) {
+    .card {
+        width: 10vw;
+    }
+}
+
+.marker {
+    width: 18px;
+    aspect-ratio: 1;
+    background-size: 700%;
+    background-position-y: center;
+    background-image: url('img/Markers.png');
+    position: absolute;
+    transition: transform 0.5s ease;
+}
+
+.round-number-space:hover > .marker, .morale-track-space:hover > .marker, .soldiers-track-space:hover > .marker {
+    transform: translateY(-30px);
+}
+
+@media (min-width: 1400px) {
+    .marker {
+        width: 16%;
+    }
+}
+
+.token {
+    width: 60px;
+    height: 60px;
+    background-image: url('img/Tokens.png');
+    background-size: 304%;
+    position: absolute;
+}
+
+.food-token, #food-icon {
+    background-position-y: center;
+    background-position-x: -50%;
+}
+
+#medicine-icon {
+    background-position-y: center;
+    background-position-x: center;
+}
+
+.money-token, #money-icon {
+    background-position-y: top;
+    background-position-x: -50%; 
+}
+
+.weapon-token, #weapon-icon {
+    background-position-y: top;
+}
+
+#explosives-icon {
+    background-position-x: center;
+    background-position-y: top;
+}
+
+#fakeID-icon {
+    background-position-y: bottom;
+    background-position-x: -50%;
+}
+
+#poison-icon {
+    background-position-y: bottom;
+    background-position-x: center;
+}
+
+#board-and-missions {
+    width: 100%;
+    margin-bottom: 32px;
+}
+
+@media (min-width: 1400px) {
+    #board-and-missions {
+        width: 53%;
+        margin-right: 2%;
+    }
+}
+
+#mission-cards {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.mission-slot {
+    width: fit-content;
+    position: relative;
+    perspective: 1000px;
+    transform: translateX(-50%);
+}
+
+#mission-slot-1 {
+    left: 35.5%;
+}
+
+#mission-slot-2 {
+    position: absolute;
+    left: 59.7%;
+}
+
+@media (min-width: 1400px) {
+    #mission-slot-2 {
+        left: 31.7%;
+    }
+}
+
+.mission-description {
+    padding: 16px;
+}
+
+.mission-card-front, .mission-card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url('img/Mission_Cards_0star.jpg');
+    background-size: 400%;
+    border-radius: 10px;
+    backface-visibility: hidden;
+}
+
+.mission-card-back {
+    background-position-x: 66.7%;
+    transform: rotateY(180deg);
+}
+
+.flipped > .mission-space {
+    display: none;
+} 
+
+#mission-1 > .mission-card-front {
+    background-position-x: 0;
+}
+
+#mission-2 > .mission-card-front {
+    background-position-x: 33.3%;
+}
+
+#mission-2 > .mission-space-2, #mission-2 > .mission-space-3 {
+    display: none;
+}
+
+#mission-3 > .mission-card-face, #mission-4 > .mission-card-face, #mission-5 > .mission-card-face, #mission-6 > .mission-card-face, #mission-7 > .mission-card-face {
+    background-image: url('img/Mission_Cards_1star.jpg');
+    background-size: 300%;
+}
+
+#mission-3 > .mission-card-back, #mission-4 > .mission-card-back, #mission-5 > .mission-card-back, #mission-6 > .mission-card-back, #mission-7 > .mission-card-face {
+    background-position-x: 100%;
+    background-position-y: bottom;
+}
+
+#mission-2 > .mission-space-1 {
+    left: 65%;
+}
+
+#mission-3 > .mission-space-1, #mission-4 > .mission-space-1, #mission-6 > .mission-space-1 {
+    left: 7.5%;
+}
+
+#mission-3 > .mission-space-2, #mission-4 > .mission-space-2, #mission-6 > .mission-space-2 {
+    left: 36%;
+}
+
+#mission-5 > .mission-space-1 {
+    left: 22%;
+}
+
+#mission-5 > .mission-space-2 {
+    left: 51%;
+}
+
+#mission-5 > .mission-space-3 {
+    display: none;
+}
+
+#mission-6 > .mission-space {
+    top: 13%;
+}
+
+#mission-4 > .mission-card-front {
+    background-position-x: 50%;
+}
+
+#mission-5 > .mission-card-front {
+    background-position-x: 100%;
+}
+
+#mission-6 > .mission-card-front {
+    background-position-y: bottom;
+}
+
+#mission-7 > .mission-card-front {
+    background-position-x: center;
+    background-position-y: bottom;
+}
+
+#cards {
+    display: flex;
+    justify-content: space-between;
+}
+
+#right-panel {
+    width: 100%;
+}
+
+@media (min-width: 1400px) {
+    #right-panel {
+        width: 45%;
+    }
+}
+
+#cards > * {
+    margin-bottom: 24px;
+}
+
+#help-card {
+    background-image: url('img/Mission_Cards_0star.jpg');
+    background-position-x: 100%;
+    background-size: 400%;
+}
+
+#morale-and-soldiers-track {
+    background-size: cover;
+    background-image: url('img/Tracking_card_Patrol_back.jpg');
+    position: relative;
+}
+
+#morale-track, #soldiers-track {
+    position: absolute;
+    left: 7.5%;
+    width: 85.7%;
+    aspect-ratio: 2.05;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-between;
+}
+
+#morale-track {
+    top: 17%;
+}
+
+#soldiers-track {
+    top: 62.5%;
+}
+
+.morale-track-space, .soldiers-track-space {
+    width: 22%;
+    height: 43%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid green; */
+}
+
+#marker-morale {
+    background-position-x: 5.7%;
+}
+
+#marker-soldiers {
+    background-position-x: 92.7%;
+}
+
+#patrol-cards {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+#patrol-deck {
+    background-size: cover;
+    background-position-x: right;
+    background-image: url('img/Tracking_card_Patrol_back.jpg');
+}
+
+#board {
+    width: 100%;
+    aspect-ratio: 1.43;
+    background-size: contain;
+    background-image: url('img/Board.jpg');
+    position: relative;
+    border: 2px solid black;
+}
+
+@media (min-width: 1400px) {
+    #board {
+        width: 100%;
+    }
+}
+
+.space {
+    z-index: 2;
+    position: absolute;
+}
+
+.board-space {
+    width: 14%;
+    aspect-ratio: 1;
+}
+
+.mission-space {
+    width: 26.7%;
+    height: 13.5%;
+    top: 50.5%;
+    left: 66%
+}
+
+.mission-space > .worker-space {
+    top: -30%;
+}
+
+.room-tile-space {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: -5%;
+    top: -2%;
+}
+
+@media (min-width: 1400px) {
+    .room-tile-space > .room-tile {
+        width: 7.05vw;
+        height: 7.05vw;
+    }
+}
+
+.token-spaces {
+    width: 50%;
+    height: 100%;
+    /* border: 1px red solid; */
+}
+
+.token-space {
+    position: absolute;
+    z-index: 4;
+    width: 50%;
+    height: 20%;
+    /* border: 1px green solid; */
+}
+
+.worker-space {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background-space {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
+.board-space > .background-space {
+    border-radius: 50%;
+}
+
+.marker-space {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mission-space > .marker-space {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.marker-mission {
+    background-position: 64%;
+}
+
+@media (min-width: 1400px) {
+    .marker-mission {
+        width: 50%;
+    }
+}
+
+.available-space {
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.space-with-available-worker {
+    background-color: rgba(255, 255, 0, 0.5);
+    cursor: pointer;
+}
+
+.space-with-worker-to-remove {
+    background-color: rgba(100, 50, 90, 0.5);
+    cursor: pointer;
+}
+
+.active-space {
+    background-color: rgba(166, 82, 169, 0.5);
+}
+
+.space-with-milice {
+    background-color: rgba(245, 11, 42, 0.5);
+    cursor: pointer;
+}
+
+.empty-field {
+    background-color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+}
+
+#round-number-spaces {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    top: 3.15%;
+    left: 3.3%;
+    width: 2.5%;
+    height: 93.5%;
+}
+
+#help-card, #morale-and-soldiers-track, #patrol-discard, #patrol-deck {
+    /* margin: 34px; */
+}
+
+.round-number-space {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    /* border: 1px green solid; */
+}
+
+#marker-round {
+    background-position-x: 35.5%;
+    width: 100%;
+}
+
+.patrol-card {
+    position: absolute;
+}
+
+.patrol-card-front {
+    background-image: url('img/Patrol_cards.jpg');
+    background-size: 500%;
+    background-repeat: no-repeat;
+}
+
+.patrol-card-front, .patrol-card-back {
+    position: absolute;
+    backface-visibility: hidden;
+    border: none;
+}
+
+.patrol-card-front {
+    transform: rotateY(180deg);
+}
+
+.patrol-card-back {
+    background-image: url('img/Tracking_card_Patrol_back.jpg');
+    background-size: 200%;
+    background-position-x: right;
+}
+
+#patrol-1 > .patrol-card-front {
+    background-position-x: 49%;
+}
+
+#patrol-2 > .patrol-card-front {
+    background-position-x: 24%;
+}
+
+#patrol-3 > .patrol-card-front {
+    background-position-x: 0%;
+}
+
+#patrol-4 > .patrol-card-front {
+    background-position-x: 24%;
+    background-position-y: 100%;
+}
+
+#patrol-5 > .patrol-card-front {
+    background-position-x: 0;
+    background-position-y: 100%;
+}
+
+#patrol-6 > .patrol-card-front {
+    background-position-x: 99%;
+}
+
+#patrol-7 > .patrol-card-front {
+    background-position-x: 74%;
+}
+
+#patrol-8 > .patrol-card-front {
+    background-position-x: 99%;
+    background-position-y: 100%;
+}
+
+#patrol-9 > .patrol-card-front {
+    background-position-x: 74%;
+    background-position-y: 100%;
+}
+
+#patrol-10 > .patrol-card-front {
+    background-position-x: 49%;
+    background-position-y: 100%;
+}
+
+#space-1 {
+    left: 9%;
+    top: 14%;
+}
+
+#space-2 {
+    left: 28.3%;
+    top: 3%;
+}
+
+#space-3 {
+    left: 52.5%;
+    top: 2.7%;
+}
+
+#space-4 {
+    left: 78.15%;
+    top: 4.1%;
+}
+
+#space-5 {
+    left: 26.1%;
+    top: 27.4%;
+}
+
+#space-6 {
+    left: 44.1%;
+    top: 26.2%;
+}
+
+#space-7 {
+    left: 63.73%;
+    top: 24.6%;
+}
+
+#space-8 {
+    left: 82%;
+    top: 29.5%;
+}
+
+#space-9 {
+    left: 8.9%;
+    top: 40.2%;
+}
+
+#space-10 {
+    left: 24.9%;
+    top: 52.2%;
+}
+
+#space-11 {
+    left: 44.4%;
+    top: 51.4%;
+}
+
+#space-12 {
+    left: 63.5%;
+    top: 50.5%;
+}
+
+#space-13 {
+    left: 82%;
+    top: 55.5%;
+}
+
+#space-14 {
+    left: 10.5%;
+    top: 74.2%;
+}
+
+#space-15 {
+    left: 32%;
+    top: 75.4%;
+}
+
+#space-16 {
+    left: 50.6%;
+    top: 75.3%;
+}
+
+#space-17 {
+    left: 69.5%;
+    top: 76%;
+}
+
+#room-tiles {
+    position: relative;
+    width: 100%;
+    height: 15vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.room-tile-container {
+    aspect-ratio: 1;
+}
+
+.room-tile {
+    position: absolute;
+    aspect-ratio: 1;
+    z-index: 0;
+    background-image: url('img/Spare_rooms2.png');
+    background-size: 300%;
+    display: flex;
+    justify-content: center;
+}
+
+.room-tile, .room-tile-container {
+    width: 15vw;
+}
+
+.room-tile > .circle-shape, .resource-icon-circle, .token-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid black;
+    width: 90%;
+    height: 90%;
+}
+
+.room-tile > .rectangle-shape {
+    position: absolute;
+    background-image: url('img/Spare_rooms2.png');
+    background-size: 450%;
+    background-position-x: 7.1%;
+    background-position-y: 27.65%;
+    width: 66%;
+    height: 20%;
+    border: 3px solid black;
+    border-top: none;
+    bottom: 0;
+}
+
+.flipped {
+    transform: rotateY(180deg);
+}
+
+@media (min-width: 995px) {
+    .room-tile, .room-tile-container {
+        width: 11.5vw;
+    }
+}
+
+@media (min-width: 1400px) {
+    .room-tile, .room-tile-container {
+        width: 7.05vw;
+        height: 7.05vw;
+    }
+}
+
+#room-tile-2 {
+    background-position-x: center;
+}
+
+#room-tile-2 > .rectangle-shape, #room-tile-5 > .rectangle-shape {
+    background-position-x: 49.9%;
+}
+
+#room-tile-3 {
+    background-position-x: right;
+}
+
+#room-tile-3 > .rectangle-shape, #room-tile-6 > .rectangle-shape {
+    background-position-x: 93%;
+}
+
+#room-tile-4 {
+    background-position-y: center;
+}
+
+#room-tile-5 {
+    background-position-y: center;
+    background-position-x: center;
+}
+
+#room-tile-6 {
+    background-position-y: center;
+    background-position-x: right;
+}
+
+#room-tile-4 > .rectangle-shape, #room-tile-5 > .rectangle-shape, #room-tile-6 > .rectangle-shape {
+    background-position-y: 63.5%;
+}
+
+/* #room-tile-7 {
+    background-position-y: bottom;
+}
+
+#room-tile-8 {
+    background-position-y: bottom;
+    background-position-x: center;
+}
+
+#room-tile-9 {
+    background-position-y: bottom;
+    background-position-x: right;
+}
+
+#room-tile-7 > .rectangle-shape, #room-tile-8 > .rectangle-shape, #room-tile-9 > .rectangle-shape {
+    background-position-y: 63.5%;
+} */
