@@ -102,7 +102,7 @@ class Game extends \Table {
 
         // Missions
 
-        $this->configureMissions(MISSION_OFFICERS_MANSION, MISSION_DOUBLE_AGENT);
+        $this->configureMissions(MISSION_INFILTRATION, MISSION_DOUBLE_AGENT);
 
         // Dummy content.
         $this->setGameStateInitialValue("my_first_global_variable", 0);
@@ -119,6 +119,9 @@ class Game extends \Table {
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
 
+        $this->updateResourceQuantity(RESOURCE_INTEL, 2);
+        $this->updateResourceQuantity(RESOURCE_WEAPON, 1);
+        $this->updateResourceQuantity(RESOURCE_EXPLOSIVES, 1);
     }
 
     public function actPlaceWorker(int $spaceID): void {
@@ -140,6 +143,7 @@ class Game extends \Table {
                 $card = $this->PATROL_CARD_ITEMS[$cardID - 1];
                 $doubleAgentLocation = $card['space_a'];
                 $this->addSpaceAction($doubleAgentLocation, ACTION_COMPLETE_DOUBLE_AGENT_MISSION);
+                $this->updateDarkLadyLocation($doubleAgentLocation, true);
                 
                 $this->notify->all("darkLadyFound", clienttranslate("Dark Lady found at " . $this->getSpaceNameById($card['space_a'])), array(
                     "cardId" => $cardID
@@ -251,6 +255,7 @@ class Game extends \Table {
             $this->saveAction(ACTION_INSERT_MOLE);
             $this->gamestate->nextState("nextWorker");
         } else if ($actionName === ACTION_COMPLETE_DOUBLE_AGENT_MISSION) {
+            $this->updateDarkLadyLocation($activeSpace, false);
             $this->completeMission(MISSION_DOUBLE_AGENT);
             foreach([1, 3, 5, 6, 9, 11] as $space) {
                 $this->removeMarker($space);
@@ -844,7 +849,7 @@ class Game extends \Table {
                 $this->updateResourceQuantity(RESOURCE_WEAPON, -1);
                 $this->updateResourceQuantity(RESOURCE_EXPLOSIVES, -1);
                 $this->setMoleInserted(false);
-                $this->returnWorker($activeSpace - 1);
+                $this->returnOrArrest($activeSpace - 1);
                 $this->returnOrArrest($activeSpace);
                 $this->completeMission(MISSION_INFILTRATION);
                 break;
@@ -898,7 +903,7 @@ class Game extends \Table {
     
     protected function getBoard() {
         return $this->getCollectionFromDb(
-            "SELECT `space_id`, `has_worker`, `has_milice`, `has_soldier`, `is_safe`, `has_item`, `marker_number`, `mission_id` FROM `board`;"
+            "SELECT `space_id`, `has_worker`, `has_milice`, `has_soldier`, `is_safe`, `has_item`, `marker_number`, `mission_id`, `dark_lady_location` FROM `board`;"
         );
     }
 
@@ -1675,6 +1680,14 @@ class Game extends \Table {
         self::DbQuery('
             UPDATE board
             SET is_safe = ' . (int) $isSafe . '
+            WHERE space_id = ' . $spaceID . ';'
+        );
+    }
+
+    protected function updateDarkLadyLocation(int $spaceID, bool $darkLadyLocation): void {
+        self::DbQuery('
+            UPDATE board
+            SET dark_lady_location = ' . (int) $darkLadyLocation . '
             WHERE space_id = ' . $spaceID . ';'
         );
     }

@@ -266,12 +266,12 @@ function (dojo, declare) {
                         break;
                 }
                     
-                // this.addTooltipHtml(`mission-${mission.mission_id}`, `
-                // <div class="mission-tooltip-wrapper">
-                //     <div class="mission-description">
-                //         ${description}
-                //     </div>
-                // </div>`);
+                this.addTooltipHtml(`mission-${mission.mission_id}`, `
+                <div class="mission-tooltip-wrapper">
+                    <div class="mission-description">
+                        ${description}
+                    </div>
+                </div>`);
             });
 
             // MORALE
@@ -347,6 +347,10 @@ function (dojo, declare) {
                         for (var j = 1; j <= markerNumber; j++) {
                             this.placeMissionMarker(board[i].space_id, j, false);
                         }
+                    }
+
+                    if (parseInt(board[i].dark_lady_location)) {
+                        this.placeDarkLadyLocationReminder(parseInt(board[i].space_id));
                     }
                 }
             }
@@ -685,6 +689,14 @@ function (dojo, declare) {
                 </div>`);
             // dialog.resize(200, 300);
             dialog.show();
+        },
+
+        placeDarkLadyLocationReminder: function(spaceID) {
+            dojo.place(`
+                <div id="dark-lady-location"></div>
+            `, `space-${spaceID}`);
+
+            this.addTooltipHtml(`space-${spaceID}`, `Dark Lady's Location`);
         },
 
         ///////////////////////////////////////////////////

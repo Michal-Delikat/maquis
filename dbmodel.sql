@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `board` (
     `marker_number` INT NOT NULL DEFAULT 0,
     `mission_id` INT UNSIGNED DEFAULT 0,
     `room_id` INT UNSIGNED DEFAULT NULL,
+    `dark_lady_location` BOOL NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`space_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
