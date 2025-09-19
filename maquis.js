@@ -305,7 +305,7 @@ function (dojo, declare) {
                     <div id="space-${i + 1}" class="space board-space">
                         <div id="space-${i + 1}-room-tile-space" class="room-tile-space"></div>
                         <div id="space-${i + 1}-token-spaces" class="token-spaces"></div>
-                        <div id="space-${i + 1}-marker-space" class="marker-space"></div>
+                        <div id="space-${i + 1}-marker-spaces"></div>
                         <div id="space-${i + 1}-worker-space" class="worker-space"></div>
                         <div id="space-${i + 1}-background-space" class="background-space"></div>
                     </div>
@@ -320,6 +320,16 @@ function (dojo, declare) {
                         ></div>
                     `, `space-${i + 1}-token-spaces`);
                 }
+
+                for (let j = 0; j < 2; j++) {
+                    dojo.place(`
+                        <div 
+                            id="space-${i + 1}-marker-space-${j + 1}" 
+                            class="marker-space"
+                            style="left: ${50 * j}%"
+                        ></div>
+                    `, `space-${i + 1}-marker-spaces`);
+                }
             }
 
             for (let i = 1; i <= 23; i++) {
@@ -332,8 +342,11 @@ function (dojo, declare) {
                         this.placeSoldier(i, false);
                     }
 
-                    if (parseInt(board[i].has_marker)) {
-                        this.placeMissionMarker(board[i].space_id, false);
+                    let markerNumber = parseInt(board[i].marker_number);
+                    if (markerNumber > 0) {
+                        for (var j = 1; j <= markerNumber; j++) {
+                            this.placeMissionMarker(board[i].space_id, j, false);
+                        }
                     }
                 }
             }
@@ -618,20 +631,20 @@ function (dojo, declare) {
             await this.bgaPlayDojoAnimation(animation);
         },
 
-        placeMissionMarker: async function(spaceID, animate = true) {
+        placeMissionMarker: async function(spaceID, marker_number, animate = true) {
             const markerIDs = dojo.query(".marker-mission").map(node => node.id);
             const markerID = markerIDs.length
 
-            dojo.place(`<div id="mission-marker-${markerID}" class="marker marker-mission"></div>`, `space-${spaceID}-marker-space`);
+            dojo.place(`<div id="mission-marker-${markerID}" class="marker marker-mission"></div>`, `space-${spaceID}-marker-space-${marker_number}`);
             if (animate) {
                 this.placeOnObject(`mission-marker-${markerID}`, 'player_boards');
-                const animation = this.slideToObject(`mission-marker-${markerID}`, `space-${spaceID}-marker-space`);
+                const animation = this.slideToObject(`mission-marker-${markerID}`, `space-${spaceID}-marker-space-${marker_number}`);
                 await this.bgaPlayDojoAnimation(animation);
             }
         },
 
-        removeMarker: async function(spaceID) {
-            let space = dojo.byId(`space-${spaceID}-marker-space`);
+        removeMarker: async function(spaceID, markerNumber) {
+            let space = dojo.byId(`space-${spaceID}-marker-space-${markerNumber + 1}`);
             let markerID = space.firstElementChild.id;
 
             const animation = this.slideToObject(`${markerID}`, "player_boards");
@@ -798,12 +811,12 @@ function (dojo, declare) {
             this.moveSoldiersMarker(newNumber);
         },
 
-        notif_markerPlaced: function({spaceID}) {
-            this.placeMissionMarker(spaceID);
+        notif_markerPlaced: function({spaceID, markerNumber}) {
+            this.placeMissionMarker(spaceID, markerNumber);
         },
 
-        notif_markerRemoved: function({spaceID}) {
-            this.removeMarker(spaceID);
+        notif_markerRemoved: function({spaceID, markerNumber}) {
+            this.removeMarker(spaceID, markerNumber);
         },
 
         notif_missionCompleted: function({missionID, playerScore, playerId}) {

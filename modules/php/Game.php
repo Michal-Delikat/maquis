@@ -1105,7 +1105,7 @@ class Game extends \Table {
                 case ACTION_GET_MONEY_FOR_MEDICINE:
                     return $this->getResource(RESOURCE_MEDICINE) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
                 case ACTION_WRITE_GRAFFITI:
-                    return $this->countMarkers($spaceID) === 0 && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
+                    return (($this->countMarkers($spaceID) === 0) || (($this->countMarkers($spaceID) === 1) && $this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT))) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
                     break;
                 case ACTION_COMPLETE_OFFICERS_MANSION_MISSION:
                     return ((!$this->getIsMissionSelected(MISSION_DOUBLE_AGENT) || $this->getIsMissionCompleted(MISSION_DOUBLE_AGENT)) && $this->countMarkersInSpaces([1, 3, 11]) == 3) || ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && $this->countMarkersInSpaces([1, 3, 11]) == 6) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
@@ -1623,7 +1623,8 @@ class Game extends \Table {
         static::DbQuery("UPDATE board SET marker_number = marker_number + 1 WHERE space_id = $spaceID;");
 
         $this->notify->all("markerPlaced", clienttranslate("Marker placed at " . $this->getSpaceNameById($spaceID)), array(
-            "spaceID" => $spaceID
+            "spaceID" => $spaceID,
+            "markerNumber" => $this->countMarkers($spaceID)
         ));
     }
 
@@ -1631,7 +1632,8 @@ class Game extends \Table {
         static::DbQuery("UPDATE board SET marker_number = marker_number - 1 WHERE space_id = $spaceID;");
 
         $this->notify->all("markerRemoved", clienttranslate("Marker removed from " . $this->getSpaceNameById($spaceID)), array(
-            "spaceID" => $spaceID
+            "spaceID" => $spaceID,
+            "markerNumber" => $this->countMarkers($spaceID)
         ));
     }
 
