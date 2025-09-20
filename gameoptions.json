@@ -1,1 +1,16 @@
-{}
+{
+    "100": { 
+        "name": "Mission cards difficulty",
+        "values": {
+            "0": { 
+                "name": "0-star missions only", 
+                "tmdisplay": "0-star only" 
+            },
+            "1": { 
+                "name": "Up to 1-star", 
+                "tmdisplay": "1-star missions" 
+            }
+        },
+        "default": 0
+    }
+}

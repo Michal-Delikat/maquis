@@ -102,7 +102,27 @@ class Game extends \Table {
 
         // Missions
 
-        $this->configureMissions(MISSION_INFILTRATION, MISSION_DOUBLE_AGENT);
+        $missionsDifficulty = (int) $this->tableOptions->get(100);
+
+        $this->dump("missionsDifficulty", $missionsDifficulty);
+
+        if ($missionsDifficulty == 0) {
+            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+        } else {
+            $missions = [
+                MISSION_MILICE_PARADE_DAY,
+                MISSION_OFFICERS_MANSION,
+                MISSION_SABOTAGE,
+                MISSION_INFILTRATION,
+                MISSION_GERMAN_SHEPARDS,
+                MISSION_DOUBLE_AGENT,
+                MISSION_UNDERGROUND_NEWSPAPER
+            ];
+
+            $keys = array_rand($missions, 2);
+
+            $this->configureMissions($missions[$keys[0]], $missions[$keys[1]]);
+        }
 
         // Dummy content.
         $this->setGameStateInitialValue("my_first_global_variable", 0);
@@ -119,9 +139,9 @@ class Game extends \Table {
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
 
-        $this->updateResourceQuantity(RESOURCE_INTEL, 2);
-        $this->updateResourceQuantity(RESOURCE_WEAPON, 1);
-        $this->updateResourceQuantity(RESOURCE_EXPLOSIVES, 1);
+        // $this->updateResourceQuantity(RESOURCE_INTEL, 2);
+        // $this->updateResourceQuantity(RESOURCE_WEAPON, 1);
+        // $this->updateResourceQuantity(RESOURCE_EXPLOSIVES, 1);
     }
 
     public function actPlaceWorker(int $spaceID): void {
