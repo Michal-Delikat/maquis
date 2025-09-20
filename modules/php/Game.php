@@ -104,8 +104,6 @@ class Game extends \Table {
 
         $missionsDifficulty = (int) $this->tableOptions->get(100);
 
-        $this->dump("missionsDifficulty", $missionsDifficulty);
-
         if ($missionsDifficulty == 0) {
             $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
         } else {
@@ -128,14 +126,15 @@ class Game extends \Table {
         $this->setGameStateInitialValue("my_first_global_variable", 0);
         
         // Init game statistics.
-        //
-        // NOTE: statistics used in this file must be defined in your `stats.inc.php` file.
-        
-        // Dummy content.
-        // $this->initStat("table", "table_teststat1", 0);
-        // $this->initStat("player", "player_teststat1", 0);
-        
-        
+        $this->initStat("table", "turns_number", 0);
+        $this->initStat("player", "food_aquired", 0);
+        $this->initStat("player", "medicine_aquired", 0);
+        $this->initStat("player", "money_aquired", 0);
+        $this->initStat("player", "weapon_aquired", 0);
+        $this->initStat("player", "intel_aquired", 0);
+        $this->initStat("player", "explosives_aquired", 0);
+        $this->initStat("player", "workers_recruited", 0);
+
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
 
@@ -358,6 +357,7 @@ class Game extends \Table {
     }
 
     public function stRoundEnd(): void {
+        $this->incStat(1, "turns_number");
         $board = $this->getBoard();
         $roundData = $this->getRoundData();
         $morale = $roundData['morale'];
@@ -753,20 +753,25 @@ class Game extends \Table {
             case ACTION_GET_WEAPON:
                 $this->decrementResourceQuantity(RESOURCE_MONEY);
                 $this->incrementResourceQuantity(RESOURCE_WEAPON);
+                $this->incStat(1, "weapon_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_FOOD:
                 $this->incrementResourceQuantity(RESOURCE_FOOD);
+                $this->incStat(1, "food_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_MEDICINE:
                 $this->incrementResourceQuantity(RESOURCE_MEDICINE);
+                $this->incStat(1, "medicine_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_INTEL:
                 $this->incrementResourceQuantity(RESOURCE_INTEL);
+                $this->incStat(1, "intel_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_MONEY_FOR_FOOD:
                 if ($this->getAvailableResource(RESOURCE_MONEY) > 0) {
                     $this->decrementResourceQuantity(RESOURCE_FOOD);
                     $this->incrementResourceQuantity(RESOURCE_MONEY);
+                    $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                     $this->decrementMorale();
                 }
                 break;
@@ -774,6 +779,7 @@ class Game extends \Table {
                 if ($this->getAvailableResource(RESOURCE_MONEY) > 0) {
                     $this->decrementResourceQuantity(RESOURCE_MEDICINE);
                     $this->incrementResourceQuantity(RESOURCE_MONEY);
+                    $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                     $this->decrementMorale();
                 }
                 break;
@@ -786,6 +792,7 @@ class Game extends \Table {
                 $roundData = $this->getRoundData();
                 $this->decrementResourceQuantity(RESOURCE_FOOD);
                 $this->updateActiveResistance($roundData['active_resistance'] + 1);
+                $this->incStat(1, "workers_recruited", $this->getActivePlayerId());
                 $this->updateResistanceToRecruit($roundData['resistance_to_recruit'] - 1);
                 break;
             case ACTION_COLLECT_ITEMS:
@@ -794,6 +801,7 @@ class Game extends \Table {
                 $itemType = $spacesWithItems[$activeSpace]['item'];
                 $quantity = $spacesWithItems[$activeSpace]['quantity'];
 
+                $this->incStat($quantity, $itemType . "_aquired", $this->getActivePlayerId());
                 $this->updateResourceQuantityFromCollectingAirdrop($itemType, (int) $quantity);
                 $this->setItems($activeSpace);
                 break;
@@ -815,16 +823,20 @@ class Game extends \Table {
                 break;
             case ACTION_GET_MONEY:
                 $this->incrementResourceQuantity(RESOURCE_MONEY);
+                $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_EXPLOSIVES:
                 $this->decrementResourceQuantity(RESOURCE_MEDICINE);
                 $this->incrementResourceQuantity(RESOURCE_EXPLOSIVES);
+                $this->incStat(1, "explosives_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_3_FOOD:
                 $this->incrementResourceQuantity(RESOURCE_FOOD, 3);
+                $this->incStat(3, "food_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_3_MEDICINE:
                 $this->incrementResourceQuantity(RESOURCE_MEDICINE, 3);
+                $this->incStat(3, "medicine_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_INCREASE_MORALE:
                 $morale = $this->getMorale();

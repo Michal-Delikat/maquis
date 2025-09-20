@@ -1,1 +1,46 @@
-{}
+{
+  "table": {
+    "turns_number": {
+      "id": 10,
+        "name": "Number of turns",
+        "type": "int"
+    }
+},
+  "player": {
+    "food_aquired": {
+      "id": 11,
+      "name": "Food aquired",
+      "type": "int"
+    },
+    "medicine_aquired": {
+      "id": 12,
+      "name": "Medicine aquired",
+      "type": "int"
+    },
+    "money_aquired": {
+        "id": 13,
+        "name": "Money aquired",
+        "type": "int"
+    },
+    "weapon_aquired": {
+      "id": 14,
+      "name": "Weapon aquired",
+      "type": "int"
+    },
+    "intel_aquired": {
+        "id": 15,
+        "name": "Intel aquired",
+        "type": "int"
+    },
+    "explosives_aquired": {
+      "id": 16,
+      "name": "Explosives aquired",
+      "type": "int"
+    },
+    "workers_recruited": {
+      "id": 17,
+      "name": "Workers recruited",
+      "type": "int"
+    }
+  }
+}
