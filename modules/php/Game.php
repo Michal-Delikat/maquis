@@ -1763,10 +1763,9 @@ class Game extends \Table {
 
     // BOILERPLATE
     
-    public function getGameProgression() {
-        // TODO: compute and return the game progression
-
-        return 0;
+    public function getGameProgression() {        
+        $round = $this->getRoundData()['round'] ?? 0;
+        return min(100, intval($round * 100 / 15));
     }
 
     /**

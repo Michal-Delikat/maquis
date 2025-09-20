@@ -52,7 +52,7 @@ class DataService {
             (9, "' . ACTION_GET_WORKER . '", "Pay 1 food to gain 1 worker", FALSE),
             (10, "' . ACTION_GET_MONEY_FOR_MEDICINE . '", "Pay 1 medicine to gain 1 money and lose 1 morale", FALSE),
             (11, "' . ACTION_COLLECT_ITEMS . '", "Collect items", FALSE),
-            (12, "' . ACTION_WRITE_GRAFFITI . '", "Write anti-fascist graffiti", FALSE),
+            (12, "' . ACTION_WRITE_GRAFFITI . '", "Write anti-fascist graffiti", TRUE),
             (13, "' . ACTION_COMPLETE_OFFICERS_MANSION_MISSION . '", "Complete Mission", TRUE),
             (14, "' . ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION . '", "Complete Mission", TRUE),
             (15, "' . ACTION_GET_MONEY . '", "Gain 1 money", FALSE),

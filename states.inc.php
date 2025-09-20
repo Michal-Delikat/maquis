@@ -145,6 +145,7 @@ $machinestates = [
         "type" => "game",
         "action" => "stRoundEnd",
         "transitions" => ["placeWorker" => ST_PLAYER_PLACE_WORKER, "gameEnd" => ST_BGA_GAME_END],
+        "updateGameProgression" => true,
     ],
 
     // Final state.
