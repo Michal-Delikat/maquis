@@ -196,4 +196,26 @@ class DataService {
             ("' . ROOM_PROPAGANDIST . '");
         ';
     }
+
+    public static function setupComponents(): string {
+        return '
+            INSERT INTO components (name, location, state)
+            VALUES
+            ("resistance_1", "safe_house", "active"),
+            ("resistance_2", "safe_house", "active"),
+            ("resistance_3", "safe_house", "active"),
+            ("resistance_4", "cafe", "inactive"),
+            ("resistance_5", "cafe", "inactive"),
+            ("milice_1", "off_board", "NaN"),
+            ("milice_2", "off_board", "NaN"),
+            ("milice_3", "off_board", "NaN"),
+            ("milice_4", "off_board", "NaN"),
+            ("milice_5", "off_board", "NaN"),
+            ("soldier_1", "off_board", "NaN"),
+            ("soldier_2", "off_board", "NaN"),
+            ("soldier_3", "off_board", "NaN"),
+            ("soldier_4", "off_board", "NaN"),
+            ("soldier_5", "off_board", "NaN");
+        ';
+    }
 }

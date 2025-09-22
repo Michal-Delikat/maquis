@@ -5,19 +5,53 @@ trait ComponentsTrait {
         return $this->getCollectionFromDb("SELECT * FROM components WHERE name LIKE 'resistance%';");
     }
 
+    function getMilice(): array {
+        return $this->getCollectionFromDb("SELECT * FROM components WHERE name LIKE 'milice%';");
+    }
+
+    function getSoldiers(): array {
+        return $this->getCollectionFromDb("SELECT * FROM components WHERE name LIKE 'soldier%';");
+    }
+
     function getNextAvailableWorker(): string {
-        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE state = 'active' LIMIT 1;");
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'resistance%' AND state = 'active' LIMIT 1;");
+    }
+
+    function getNextAvailableMilice(): string {
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'milice%' AND location = 'off_board' LIMIT 1;");
+    }
+
+    function getNextAvailableSoldier(): string {
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND location = 'off_board' LIMIT 1;");
     }
 
     function getWorkerIdByLocation(string $location): string {
-        return (string) $this->getUniqueValueFromDb("SELECT name FROM components WHERE location = '$location';");
+        return (string) $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'resistance%' AND location = '$location';");
     }
 
-    function updateResistanceWorkerLocation(string $workerID, string $location, string $state): void {
+    function getMiliceIdByLocation(string $location): string {
+        return (string) $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'milice%' AND location = '$location';");
+    }
+    function getSoldierIdByLocation(string $location): string {
+        return (string) $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND location = '$location';");
+    }
+
+    function updateComponent(string $componentID, string $location, string $state): void {
         static::DbQuery("
             UPDATE components
             SET location = '$location', state = '$state'
-            WHERE name = '$workerID';
+            WHERE name = '$componentID';
         ");
+    }
+
+    function recruitWorker(): void {
+        $workerID = (string) $this->getUniqueValueFromDb("
+            SELECT name
+            FROM components
+            WHERE name LIKE 'resistance%' AND state = 'inactive'
+            LIMIT 1;
+        ");
+
+        $this->updateComponent($workerID, 'safe_house', 'active');
     }
 }

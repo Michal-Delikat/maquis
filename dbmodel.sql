@@ -29,9 +29,6 @@ CREATE TABLE IF NOT EXISTS `round_data` (
 CREATE TABLE IF NOT EXISTS `board` (
     `space_id` INT UNSIGNED NOT NULL,
     `space_name` varchar(16) NOT NULL,
-    `has_worker` BOOLEAN NOT NULL DEFAULT FALSE,
-    `has_milice` BOOLEAN NOT NULL DEFAULT FALSE,
-    `has_soldier` BOOLEAN NOT NULL DEFAULT FALSE,
     `is_safe` BOOLEAN NOT NULL DEFAULT FALSE,
     `is_field` BOOLEAN NOT NULL DEFAULT FALSE,
     `has_item` BOOLEAN NOT NULL DEFAULT FALSE,
@@ -98,4 +95,11 @@ CREATE TABLE IF NOT EXISTS `room` (
     `room_name` VARCHAR(16) NOT NULL,
     `available` BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY (`room_id`)
+) ENGINE=InnoDb DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `components` (
+    `name` VARCHAR(32) NOT NULL,
+    `location` VARCHAR(32) NOT NULL,
+    `state` VARCHAR(16),
+    PRIMARY KEY (`name`)
 ) ENGINE=InnoDb DEFAULT CHARSET=utf8;

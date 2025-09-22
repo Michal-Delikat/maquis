@@ -3,7 +3,7 @@ namespace Bga\Games\Maquis;
 trait BoardTrait {
     protected function getBoard() {
         return $this->getCollectionFromDb(
-            "SELECT `space_id`, `has_worker`, `has_milice`, `has_soldier`, `is_safe`, `has_item`, `marker_number`, `mission_id`, `dark_lady_location` FROM `board`;"
+            "SELECT `space_id`, `is_safe`, `has_item`, `marker_number`, `mission_id`, `dark_lady_location` FROM `board`;"
         );
     }
 
@@ -16,13 +16,19 @@ trait BoardTrait {
     }
 
     protected function getEmptySpaces(): array {
-        $results = $this->getCollectionFromDB('
-            SELECT space_id, has_worker, has_milice, has_soldier, is_safe, is_field
+        $result = array_keys($this->getCollectionFromDB('
+            SELECT space_id
             FROM board
-            WHERE has_worker = 0 AND has_milice = 0 AND has_soldier = 0 AND is_safe = 0 AND (is_field = 0 OR (is_field = 1 AND has_item = 1)) AND (mission_id = 0 || marker_number = 0);
-        ');
+            WHERE is_safe = 0 AND (is_field = 0 OR (is_field = 1 AND has_item = 1)) AND (mission_id = 0 || marker_number = 0);
+        '));
 
-        return array_keys($results);
+        $spacesWithResistance = $this->getSpacesWithResistanceWorkers();
+        $spacesWithMilice = $this->getSpacesWithMilice();
+        $spacesWithSoldiers = $this->getSpacesWithSoldiers();
+
+        return array_filter($result, function($space) use ($spacesWithResistance, $spacesWithMilice, $spacesWithSoldiers) {
+            return !(in_array($space, $spacesWithResistance) || in_array($space, $spacesWithMilice) || in_array($space, $spacesWithSoldiers));
+        });
     }
 
     protected function getEmptyFields(): array {
@@ -36,24 +42,29 @@ trait BoardTrait {
     }
 
     protected function getSpacesWithResistanceWorkers(): array {
-        $result = array_keys($this->getCollectionFromDb("SELECT `space_id` FROM `board` WHERE `has_worker` = TRUE"));
+        $resistanceWorkersLocations = array_map(function ($resistanceWorker) {
+            return $resistanceWorker['location'];
+        }, $this->getResistanceWorkers());
         if ($this->getIsMissionSelected(MISSION_INFILTRATION) && $this->getIsMoleInserted()) {
             $spaceIdWithMole = $this->getSpaceIdsByMissionName(MISSION_INFILTRATION)[0];
 
-            $result = array_filter($result, function($spaceId) use ($spaceIdWithMole) {
+            $resistanceWorkersLocations = array_filter($resistanceWorkersLocations, function($spaceId) use ($spaceIdWithMole) {
                 return $spaceId != $spaceIdWithMole;
             });
         }
-        return $result;
+        return $resistanceWorkersLocations;
     }
     
     protected function getSpacesWithMilice(): array {
-        $result = $this->getCollectionFromDb("
-            SELECT space_id
-            FROM board
-            WHERE has_milice = TRUE;"
-        );
-        return array_keys($result);
+        return array_map(function ($milice) {
+            return $milice['location'];
+        }, $this->getMilice());
+    }
+
+    protected function getSpacesWithSoldiers(): array {
+        return array_map(function ($milice) {
+            return $milice['location'];
+        }, $this->getSoldiers());
     }
     
     protected function getSpacesWithItems(): array {
