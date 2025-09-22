@@ -1,4 +1,5 @@
 <?php
+
 trait ComponentsTrait {
     function getResistanceWorkers(): array {
         return $this->getCollectionFromDb("SELECT * FROM components WHERE name LIKE 'resistance%';");

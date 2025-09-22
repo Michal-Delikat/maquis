@@ -16,14 +16,33 @@ declare(strict_types=1);
 
 namespace Bga\Games\Maquis;
 
+use ComponentsTrait;
+
 require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
 require_once("DataService.php");
 require_once("constants.inc.php");
+require_once("ComponentsTrait.php");
+require_once("BoardTrait.php");
+require_once("MissionsTrait.php");
+require_once("RoundTrait.php");
+require_once("RoomsTrait.php");
+require_once("ResourcesTrait.php");
+require_once("PatrolCardsTrait.php");
+require_once("PlayerTrait.php");
 
 const BOARD = 'BOARD_STATE';
 
 class Game extends \Table {
+    use ComponentsTrait;
+    use BoardTrait;
+    use MissionsTrait;
+    use RoundTrait;
+    use ResourcesTrait;
+    use PatrolCardsTrait;
+    use RoomsTrait;
+    use PlayerTrait;
+
     private array $PATROL_CARD_ITEMS;
     private mixed $patrol_cards;
 
@@ -588,86 +607,6 @@ class Game extends \Table {
         }
     }
 
-    protected function configureMissions(string $missionAName, string $missionBName): void {
-        $this->setSelectedMissions($missionAName, $missionBName);
-
-        $missionsWithSpaces = [
-            MISSION_OFFICERS_MANSION, 
-            MISSION_SABOTAGE, 
-            MISSION_INFILTRATION, 
-            MISSION_GERMAN_SHEPARDS, 
-            MISSION_UNDERGROUND_NEWSPAPER
-        ];
-
-        if (in_array($missionAName, $missionsWithSpaces)) {
-            $this->addBoardSpace(18, $missionAName);
-        }
-
-        if (in_array($missionBName, $missionsWithSpaces)) {
-            $this->addBoardSpace(21, $missionBName);
-        }
-
-        $missionNames = [$missionAName, $missionBName];
-
-        if (in_array(MISSION_MILICE_PARADE_DAY, $missionNames)) {
-            $this->addSpaceAction(1, ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION);
-        }
-        
-        if (in_array(MISSION_OFFICERS_MANSION, $missionNames)) {
-            $missionSpace = $missionAName === MISSION_OFFICERS_MANSION ? 18 : 21;
-            foreach([1, 3, 11] as $space) { 
-                $this->addSpaceAction($space, ACTION_WRITE_GRAFFITI);
-            }
-            $this->addSpaceAction($missionSpace, ACTION_COMPLETE_OFFICERS_MANSION_MISSION);
-        }
-
-        if (in_array(MISSION_SABOTAGE, $missionNames)) {
-            $missionSpace = $missionAName === MISSION_SABOTAGE ? 18 : 21;
-            $this->addSpaceAction($missionSpace, ACTION_INFILTRATE_FACTORY);
-        }
-
-        if (in_array(MISSION_UNDERGROUND_NEWSPAPER, $missionNames)) {
-            $missionSpace = $missionAName === MISSION_UNDERGROUND_NEWSPAPER ? 18 : 21;
-            $this->addSpaceAction($missionSpace, ACTION_DELIVER_INTEL);
-        }
-
-        if (in_array(MISSION_INFILTRATION, $missionNames)) {
-            $missionSpace = $missionAName === MISSION_INFILTRATION ? 18 : 21;
-            $this->addSpaceAction($missionSpace, ACTION_INSERT_MOLE);
-        }
-
-        if (in_array(MISSION_GERMAN_SHEPARDS, $missionNames)) {
-            $missionSpace = $missionAName === MISSION_GERMAN_SHEPARDS ? 18 : 21;
-            $this->addSpaceAction($missionSpace, ACTION_POISON_SHEPARDS);
-        }
-    }
-
-    protected function addBoardSpace(int $spaceID, string $missionName): void {
-        $missionID = $this->getMissionIdByMissionName($missionName);
-
-        if (in_array((int) $spaceID, [18, 19, 20])) {
-            static::DbQuery("
-                INSERT INTO board (`space_id`, `space_name`, `mission_id`) 
-                VALUES ($spaceID, \"Mission A\", $missionID);
-            ");
-
-            static::DbQuery("
-                INSERT INTO board_path (`space_id_start`, `space_id_end`)
-                VALUES (2, $spaceID), ($spaceID, 2);
-            ");
-        } else if (in_array((int) $spaceID, [21, 22, 23])) {
-            static::DbQuery("
-                INSERT INTO board (`space_id`, `space_name`, `mission_id`) 
-                VALUES ($spaceID, \"Mission B\", $missionID);
-            ");
-
-            static::DbQuery("
-                INSERT INTO board_path (`space_id_start`, `space_id_end`)
-                VALUES (3, $spaceID), ($spaceID, 3);
-            ");
-        }
-    }
-
     protected function addSpaceAction(int $spaceID, string $actionName): void {
         self::DbQuery("
             INSERT INTO board_action (space_id, action_id)
@@ -675,40 +614,6 @@ class Game extends \Table {
             FROM action
             WHERE action_name = \"$actionName\";
         ");
-    }
-
-    protected function removeBoardSpace(int $spaceID) {
-        static::DbQuery("
-            DELETE FROM board_action
-            WHERE space_id = $spaceID;
-        ");
-        
-        static::DbQuery("
-            DELETE FROM board
-            WHERE space_id = $spaceID;    
-        ");
-
-        static::DbQuery("
-            DELETE FROM board_path
-            WHERE space_id_start = $spaceID OR space_id_end = $spaceID;
-        ");
-    }
-
-    protected function completeMission(string $missionName): void {
-        static::DbQuery("
-            UPDATE mission
-            SET completed = TRUE
-            WHERE mission_name = '$missionName';
-        ");
-
-        $spaceIDs = $this->getSpaceIdsByMissionName($missionName);
-        foreach ($spaceIDs as $spaceID) {
-            $this->removeBoardSpace((int) $spaceID);
-        }
-
-        $this->incrementPlayerScore();
-
-        $this->notify->all("missionCompleted", clienttranslate("Mission completed"), array("missionID" => $this->getMissionIdByMissionName($missionName), "playerScore" => $this->getPlayerScore(), "playerId" => $this->getActivePlayerId()));
     }
 
     protected function addSpareRoomActions(int $spaceID, int $roomID): void {
@@ -845,7 +750,7 @@ class Game extends \Table {
             case ACTION_INFILTRATE_FACTORY:
                 $activeSpace = $this->getActiveSpace();
                 $this->placeMarker($activeSpace);
-                $this->addBoardSpace($activeSpace + 1, MISSION_SABOTAGE);
+                $this->addMissionSpace($activeSpace + 1, MISSION_SABOTAGE);
                 if ($activeSpace == 19 || $activeSpace == 22) {
                     $this->addSpaceAction($activeSpace + 1, ACTION_SABOTAGE_FACTORY);
                 } else {
@@ -865,7 +770,7 @@ class Game extends \Table {
                     $this->completeMission(MISSION_UNDERGROUND_NEWSPAPER);
                 } else {
                     $this->placeMarker($activeSpace);
-                    $this->addBoardSpace($activeSpace + 1, MISSION_UNDERGROUND_NEWSPAPER);
+                    $this->addMissionSpace($activeSpace + 1, MISSION_UNDERGROUND_NEWSPAPER);
                     $this->addSpaceAction($activeSpace + 1, ACTION_DELIVER_INTEL);
                 }
                 break;
@@ -873,7 +778,7 @@ class Game extends \Table {
                 $activeSpace = $this->getActiveSpace();
                 $this->setMoleInserted(true);
                 $this->updateResourceQuantity(RESOURCE_INTEL, -2);
-                $this->addBoardSpace($activeSpace + 1, MISSION_INFILTRATION);
+                $this->addMissionSpace($activeSpace + 1, MISSION_INFILTRATION);
                 $this->addSpaceAction($activeSpace + 1, ACTION_RECOVER_MOLE);
                 break;
             case ACTION_RECOVER_MOLE:
@@ -894,7 +799,7 @@ class Game extends \Table {
                     $this->completeMission(MISSION_GERMAN_SHEPARDS);
                 } else {
                     $this->placeMarker($activeSpace);
-                    $this->addBoardSpace($activeSpace + 1, MISSION_GERMAN_SHEPARDS);
+                    $this->addMissionSpace($activeSpace + 1, MISSION_GERMAN_SHEPARDS);
                     $this->addSpaceAction($activeSpace + 1, ACTION_POISON_SHEPARDS);
                 }
                 break;
@@ -929,179 +834,6 @@ class Game extends \Table {
         $result["activeMilice"] = max(0, $this->getPatrolsToPlace() - $roundData["active_soldiers"]);
 
         return $result;
-    }
-
-    // BOARD
-    
-    protected function getBoard() {
-        return $this->getCollectionFromDb(
-            "SELECT `space_id`, `has_worker`, `has_milice`, `has_soldier`, `is_safe`, `has_item`, `marker_number`, `mission_id`, `dark_lady_location` FROM `board`;"
-        );
-    }
-
-    protected function getSpaceNameById(int $spaceID): string {
-        return (string) $this->getUniqueValueFromDb("
-            SELECT space_name
-            FROM board
-            WHERE space_id = $spaceID;
-        ");
-    }
-
-    protected function getEmptySpaces(): array {
-        $results = $this->getCollectionFromDB('
-            SELECT space_id, has_worker, has_milice, has_soldier, is_safe, is_field
-            FROM board
-            WHERE has_worker = 0 AND has_milice = 0 AND has_soldier = 0 AND is_safe = 0 AND (is_field = 0 OR (is_field = 1 AND has_item = 1)) AND (mission_id = 0 || marker_number = 0);
-        ');
-
-        return array_keys($results);
-    }
-
-    protected function getEmptyFields(): array {
-        $result = $this->getCollectionFromDb('
-            SELECT space_id
-            FROM board
-            WHERE is_field = 1 AND item IS NULL;
-        ');
-
-        return $result;
-    }
-
-    protected function getSpacesWithResistanceWorkers(): array {
-        $result = array_keys($this->getCollectionFromDb("SELECT `space_id` FROM `board` WHERE `has_worker` = TRUE"));
-        if ($this->getIsMissionSelected(MISSION_INFILTRATION) && $this->getIsMoleInserted()) {
-            $spaceIdWithMole = $this->getSpaceIdsByMissionName(MISSION_INFILTRATION)[0];
-
-            $result = array_filter($result, function($spaceId) use ($spaceIdWithMole) {
-                return $spaceId != $spaceIdWithMole;
-            });
-        }
-        return $result;
-    }
-    
-    protected function getSpacesWithMilice(): array {
-        $result = $this->getCollectionFromDb("
-            SELECT space_id
-            FROM board
-            WHERE has_milice = TRUE;"
-        );
-        return array_keys($result);
-    }
-    
-    protected function getSpacesWithItems(): array {
-        return $this->getCollectionFromDb("
-            SELECT space_id, item, quantity
-            FROM board
-            WHERE has_item = TRUE;
-        ");
-    }
-
-    protected function getSpacesWithRooms(): array {
-        return (array) $this->getCollectionFromDb("
-            SELECT space_id, room_id
-            FROM board
-            WHERE room_id IS NOT NULL;
-        ");
-    }
-
-    protected function checkMarkersInSpaces($spaces): bool {
-        $result = $this->getCollectionFromDb("
-            SELECT space_id, marker_number
-            FROM board
-            WHERE space_id IN (" . implode(",", $spaces) . ");");
-
-        $this->dump("result", $result);
-
-        $allSpacesHaveMarkers = true;
-        foreach ($result as $space) {
-            if ((int) $space["marker_number"] <= 0) {
-                $allSpacesHaveMarkers = false;
-                break;
-            }
-        }
-        return $allSpacesHaveMarkers;
-    }
-
-    protected function countMarkers(int $spaceID): int {
-        return (int) $this->getUniqueValueFromDb("SELECT marker_number FROM board WHERE space_id = $spaceID;");
-    }
-
-    protected function countMarkersInSpaces(array $spaces): int {
-        $result = $this->getCollectionFromDb("
-            SELECT space_id, marker_number
-            FROM board
-            WHERE space_id IN (" . implode(",", $spaces) . ");
-        ");
-
-        return array_reduce($result, function($carry, $space) {
-            $carry += (int) $space['marker_number'];
-            return $carry;
-        }, 0);
-    }
-
-    protected function getSpaceIdsByMissionId(int $missionID): array {
-        return (array) $this->getCollectionFromDb("
-            SELECT space_id
-            FROM board
-            WHERE mission_id = $missionID;
-        ");
-    }
-    
-    protected function getIsRoomPlaced(int $spaceID): bool {
-        return (bool) $this->getUniqueValueFromDb("
-            SELECT room_id
-            FROM board
-            WHERE space_id = $spaceID;
-        ");
-    }
-
-    // ROUND
-
-    protected function getRoundData(): array {
-        return (array) $this->getObjectFromDb(
-            "SELECT `round`, `morale`, `active_soldiers`, `active_resistance`, `resistance_to_recruit`, `placed_resistance`, `placed_milice`, `placed_soldiers`, `milice_in_game` FROM `round_data`"
-        );
-    }
-
-    protected function getActiveSpace(): int {
-        return (int) $this->getUniqueValueFromDb("SELECT active_space FROM round_data");
-    }
-
-    protected function getActiveResistance(): int {
-        return (int) $this->getUniqueValueFromDb("SELECT active_resistance FROM round_data");
-    }
-
-    protected function getResistanceToRecruit(): int {
-        return (int) $this->getUniqueValueFromDb("SELECT resistance_to_recruit FROM round_data");
-    }
-
-    protected function getActionTaken(): bool {
-        return (bool) $this->getUniqueValueFromDb("SELECT action_taken FROM round_data");
-    }
-
-    protected function getMorale(): int {
-        return (int) $this->getUniqueValueFromDb("SELECT morale from round_data;");
-    }
-    
-    protected function getSelectedField(): int {
-        return (int) $this->getUniqueValueFromDb("
-            SELECT selected_field
-            FROM round_data;
-        ");
-    }
-    
-    protected function getShotToday(): bool {
-        return (bool) $this->getUniqueValueFromDb("SELECT shot_today FROM round_data");
-    }
-
-    protected function getCanShoot(): bool {
-        $weapon = $this->getResource('weapon');
-        $placedMilice = $this->getRoundData()['placed_milice'];
-        return ($weapon > 0 && !$this->getShotToday() && $placedMilice > 0) && !($this->getIsMissionSelected(MISSION_GERMAN_SHEPARDS) && !$this->getIsMissionCompleted(MISSION_GERMAN_SHEPARDS));
-    }
-
-    protected function getIsMoleInserted(): bool {
-        return (bool) $this->getUniqueValueFromDb("SELECT mole_inserted FROM round_data");
     }
     
     // GET POSSIBLE ACTIONS
@@ -1260,354 +992,13 @@ class Game extends \Table {
         return $result;
     }
 
-    // RESOURCES
-
-    protected function getResource(string $resourceName): int {
-        return (int) $this->getUniqueValueFromDb("
-            SELECT quantity 
-            FROM resource 
-            WHERE resource_name = \"$resourceName\"
-        ;");
-    }
-
-    protected function getAvailableResource(string $resourceName): int {
-        return (int) $this->getUniqueValueFromDb("
-            SELECT available 
-            FROM resource 
-            WHERE resource_name = \"$resourceName\"
-        ;");
-    }
-
-    protected function getResources(array $resourceNames): array {
-        return (array) $this->getCollectionFromDb("
-            SELECT quantity
-            FROM resource
-            WHERE resource_name IN (\"" . implode("\",", $resourceNames) . "\");"
-        );
-    }
-
-    protected function getAllResources(): array {
-        return (array) $this->getCollectionFromDb("SELECT * FROM resource");
-    }
-
     // ACTIONS
 
     protected function getIsSafe(string $actionName): bool {
         return (bool) $this->getUniqueValueFromDb("SELECT is_safe FROM action WHERE action_name = \"$actionName\";");
     }
 
-    // MISSION
-
-    protected function getIsMissionCompleted(string $missionName): bool {
-        return (bool) $this->getUniqueValueFromDb("
-            SELECT completed
-            FROM mission
-            WHERE mission_name = '$missionName';
-        ");
-    } 
-
-    protected function getMissionIdByMissionName(string $missionName): int {
-        return (int) $this->getUniqueValueFromDb("
-            SELECT mission_id
-            FROM mission
-            WHERE mission_name = '$missionName';
-        ");
-    }
-
-    protected function getSpaceIdsByMissionName(string $missionName): array {
-        $result = (array) $this->getCollectionFromDB("
-            SELECT b.space_id
-            FROM board AS b
-            JOIN mission AS m ON b.mission_id = m.mission_id
-            WHERE m.mission_name = '$missionName';
-        ");
-
-        return array_keys($result);
-    }
-
-    protected function setSelectedMissions(string $missionAName, string $missionBName): void {
-        self::DbQuery("
-            UPDATE mission
-            SET selected = TRUE
-            WHERE mission_name = '$missionAName' OR mission_name = '$missionBName';"
-        );
-    }
-
-    protected function getSelectedMissions(): array {
-        return (array) $this->getCollectionFromDb("
-            SELECT mission_id
-            FROM mission
-            WHERE selected = TRUE;
-        ");
-    }
-
-    protected function getIsMissionSelected(string $missionName): bool {
-        return (bool) $this->getUniqueValueFromDb("
-            SELECT selected
-            FROM mission
-            WHERE mission_name = '$missionName';
-        ");
-    }
-
-    protected function getCompletedMissions(): array {
-        return (array) $this->getCollectionFromDb("
-            SELECT mission_id
-            FROM mission
-            WHERE completed = TRUE;
-        ");
-    }
-
-    // PLAYER
-
-    protected function getPlayerScore(): int {
-        return (int) $this->getUniqueValueFromDb("
-            SELECT player_score
-            FROM player
-            WHERE player_id = " . $this->getCurrentPlayerID() . ";"
-        );
-    }
-
-    // ROOMS
-
-    protected function getRooms(): array {
-        return (array) $this->getCollectionFromDb("
-            SELECT room_id, room_name, available
-            FROM room;
-        ");
-    }
-
-    protected function getAvailableRooms(): array {
-        return (array) $this->getCollectionFromDb("
-            SELECT room_id, room_name
-            FROM room
-            WHERE available = TRUE;
-        ");
-    }
-
-    // CARDS 
-
-    protected function shuffleIfNeeded(): void {
-        if ($this->patrol_cards->countCardInLocation('deck') <= 0) {
-            $this->patrol_cards->moveAllCardsInLocation('discard', 'deck');            
-            $this->patrol_cards->shuffle('deck');
-            $this->notify->all("patrolCardsShuffled", clienttranslate("Patrol Cards Shuffled"));
-        }
-    }
-
-    protected function peekTopPatrolCardId(): int {
-        $this->shuffleIfNeeded();
-
-        $cardId = (int) $this->patrol_cards->getCardOnTop('deck')['type_arg'];
-
-        return $cardId;
-    } 
-
-    protected function drawPatrolCard() {
-        $this->shuffleIfNeeded();
-
-        $card = $this->patrol_cards->pickCardForLocation('deck', 'discard');
-        $cardID = $card['type_arg'];
-
-        $this->notify->all("patrolCardDiscarded", clienttranslate(""), array(
-            "patrolCardID" => $cardID
-        ));
-
-        return $cardID;
-    }
-
     // UPDATES
-
-    protected function updateSpace($spaceID, $hasWorker = false, $hasMilice = false, $hasSoldier = false) {
-        self::DbQuery('
-            UPDATE board
-            SET has_worker = ' . (int) $hasWorker . ', has_milice = ' . (int) $hasMilice . ', has_soldier = ' . (int) $hasSoldier . '
-            WHERE space_id = ' . $spaceID . ';'
-        );
-    }
-
-    protected function setRoomId($spaceID, $roomID) {
-        self::DbQuery("
-            UPDATE board
-            SET room_id = $roomID
-            WHERE space_id = $spaceID;
-        ");
-    }
-
-    protected function updateActiveResistance($newNumber) {
-        self::DbQuery("
-            UPDATE round_data
-            SET active_resistance = $newNumber;
-        ");
-
-        $this->notify->all("activeResistanceUpdated", clienttranslate("You have $newNumber active resistance operatives"), array(
-            "active_resistance" => $newNumber
-        ));
-    }
-
-    protected function updatePlacedResistance($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET placed_resistance = ' . $newNumber . ';'
-        );
-
-        $this->notify->all("placedResistanceUpdated", '', array(
-            "placedResistance" => $newNumber,
-        ));
-    }
-
-    protected function updateResistanceToRecruit($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET resistance_to_recruit = ' . $newNumber . ';'
-        );
-
-        $this->notify->all("resistanceToRecruitUpdated", '', array(
-            "resistanceToRecruit" => $newNumber,
-        ));
-    }
-
-    protected function updatePlacedMilice($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET placed_milice = ' . $newNumber . ';'
-        );
-
-        $this->notify->all("placedMiliceUpdated", '', array(
-            "placedMilice" => $newNumber,
-        ));
-    }
-
-    protected function updateMiliceInGame($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET milice_in_game = ' . $newNumber . ';'
-        );
-
-        $this->notify->all("miliceInGameUpdated", '', array(
-            "miliceInGame" => $newNumber,
-        ));
-    }
-
-    protected function updatePlacedSoldiers($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET placed_soldiers = ' . $newNumber . ';'
-        );
-    }
-
-    protected function updateActiveSpace($spaceID) {
-        self::DbQuery('
-            UPDATE round_data
-            SET active_space = ' . $spaceID . ';'
-        );
-    }
-
-    protected function resetActiveSpace() {
-        self::DbQuery('
-            UPDATE round_data
-            SET active_space = 0;'
-        );
-    }
-
-    protected function updateActionTaken() {
-        self::DbQuery('
-            UPDATE round_data
-            SET action_taken = TRUE;
-        ');
-    }
-
-    protected function resetActionTaken(): void {
-        self::DbQuery('
-            UPDATE round_data
-            SET action_taken = FALSE;
-        ');
-    }
-
-    protected function updateRoundData($round, $morale, $placedMilice = 0, $placedSoldiers = 0): void {
-        self::DbQuery("
-            UPDATE round_data
-            SET round = $round, morale = $morale, placed_milice = $placedMilice, placed_soldiers = $placedSoldiers;  
-        ");
-
-        $this->notify->all("roundDataUpdated", clienttranslate("Round $round begins."), array(
-            "round" => $round,
-            "morale" => $morale
-        ));
-    }
-
-    protected function updateResourceQuantity(string $resourceName, int $amount): void {
-        self::DbQuery("
-            UPDATE resource
-            SET quantity = quantity + $amount, available = available - $amount
-            WHERE resource_name = \"$resourceName\";
-        ");
-
-        $result = (array) $this->getObjectFromDb("
-            SELECT quantity, available
-            FROM resource
-            WHERE resource_name = \"$resourceName\";
-        ");
-
-        $this->notify->all("resourcesChanged", clienttranslate("You have " . $result["quantity"] . " $resourceName."), array(
-            "resource_name" => $resourceName,
-            "quantity" => $result["quantity"],
-            "available" => $result["available"]
-        ));
-    }
-
-    protected function updateResourceQuantityFromCollectingAirdrop(string $resourceName, int $amount): void {
-        self::DbQuery("
-            UPDATE resource
-            SET quantity = quantity + $amount
-            WHERE resource_name = \"$resourceName\";
-        ");
-
-        $result = (array) $this->getObjectFromDb("
-            SELECT quantity, available
-            FROM resource
-            WHERE resource_name = \"$resourceName\";
-        ");
-
-        $this->notify->all("resourcesChanged", clienttranslate("You have " . $result["quantity"] . " $resourceName."), array(
-            "resource_name" => $resourceName,
-            "quantity" => $result["quantity"],
-            "available" => $result["available"]
-        ));
-    }
-
-    protected function updateMorale(int $newMorale): void {
-        self::DbQuery("
-            UPDATE round_data
-            SET morale = $newMorale;
-        ");
-
-        $this->notify->all("moraleUpdated", clienttranslate("Morale is $newMorale"), array(
-            "player_id" => $this->getCurrentPlayerId(),
-            "morale" => $newMorale
-        ));
-    }
-
-    protected function updateSoldiers($newNumber): void {
-        self::DbQuery("
-            UPDATE round_data
-            SET active_soldiers = $newNumber;
-        ");
-
-        $this->notify->all("soldiersUpdated", clienttranslate("There are $newNumber active soldiers now"), array(
-            "newNumber" => $newNumber
-        ));
-    }
-
-    protected function incrementPlayerScore(): void {
-        static::DbQuery("UPDATE player SET player_score = player_score + 1 WHERE player_id = " . $this->getCurrentPlayerId() . ";");
-    }
-
-    protected function setSelectedField(int $spaceID): void {
-        self::DbQuery("
-            UPDATE round_data
-            SET selected_field = $spaceID;
-        ");
-    }
 
     protected function setItems(int $spaceID, string|null $itemType = NULL, int $quantity = 0): void {
         if ($itemType != NULL) {
@@ -1645,85 +1036,6 @@ class Game extends \Table {
         }
     }
 
-    protected function setShotToday(bool $shotToday): void {
-        self::DbQuery("
-            UPDATE round_data
-            SET shot_today = " . (int) $shotToday . ";"
-        );
-    }
-
-    protected function setMoleInserted(bool $moleInserted = false): void {
-        self::DbQuery("UPDATE round_data SET mole_inserted = " . (int) $moleInserted . ";");
-    }
-
-    protected function placeMarker(int $spaceID): void {
-        static::DbQuery("UPDATE board SET marker_number = marker_number + 1 WHERE space_id = $spaceID;");
-
-        $this->notify->all("markerPlaced", clienttranslate("Marker placed at " . $this->getSpaceNameById($spaceID)), array(
-            "spaceID" => $spaceID,
-            "markerNumber" => $this->countMarkers($spaceID)
-        ));
-    }
-
-    protected function removeMarker(int $spaceID): void {
-        static::DbQuery("UPDATE board SET marker_number = marker_number - 1 WHERE space_id = $spaceID;");
-
-        $this->notify->all("markerRemoved", clienttranslate("Marker removed from " . $this->getSpaceNameById($spaceID)), array(
-            "spaceID" => $spaceID,
-            "markerNumber" => $this->countMarkers($spaceID)
-        ));
-    }
-
-    protected function setResistanceToRecruit(int $resistanceToRecruit): void {
-        self::DbQuery("
-            UPDATE round_data
-            SET resistance_to_recruit = $resistanceToRecruit;
-        ");
-    }
-
-    protected function setIsRoomAvailable(int $roomID, bool $isAvailable): void {
-        self::DbQuery("
-            UPDATE room
-            SET available = " . (int) $isAvailable . " 
-            WHERE room_id = $roomID;
-        ");
-    }
-
-    protected function incrementResourceQuantity(string $resourceName, int $amount = 1): void {
-        $availableResource = $this->getAvailableResource($resourceName);
-        $amount = min($amount, $availableResource);
-        
-        $this->updateResourceQuantity($resourceName, $amount);
-    }
-
-    protected function decrementResourceQuantity(string $resourceName, int $amount = 1): void {
-        $this->updateResourceQuantity($resourceName,  -$amount);
-    }
-
-    protected function incrementMorale(): void {
-       $this->updateMorale($this->getMorale() + 1);
-    }
-
-    protected function decrementMorale(): void {
-       $this->updateMorale($this->getMorale() - 1);
-    }
-
-    protected function updateFieldsSafety(int $spaceID, $isSafe = false): void {
-        self::DbQuery('
-            UPDATE board
-            SET is_safe = ' . (int) $isSafe . '
-            WHERE space_id = ' . $spaceID . ';'
-        );
-    }
-
-    protected function updateDarkLadyLocation(int $spaceID, bool $darkLadyLocation): void {
-        self::DbQuery('
-            UPDATE board
-            SET dark_lady_location = ' . (int) $darkLadyLocation . '
-            WHERE space_id = ' . $spaceID . ';'
-        );
-    }
-
     // CHECK ESCAPE ROUTE 
 
     protected function checkEscapeRoute(): bool {
@@ -1744,7 +1056,6 @@ class Game extends \Table {
             $isSafe = (bool) $board[$spaceID]['is_safe'];
 
             if ($isSafe) {
-                // $this->notify->all("routeChecked", clienttranslate("Escape route found"), array());
                 return true;
             } else if (!$board[$spaceID]['has_milice'] && !$board[$spaceID]['has_soldier']) { 
                 $spacesToAdd = array();
@@ -1763,7 +1074,6 @@ class Game extends \Table {
             }
         }
 
-        // $this->notify->all("routeChecked", clienttranslate("No escape route found"), array());
         return false;
     }
 
@@ -1772,8 +1082,6 @@ class Game extends \Table {
     protected function isParadeDay(int $day): bool {
         return $day > 0 && ($day === 14 || $day % 3 === 0);
     }
-
-    // BOILERPLATE
     
     public function getGameProgression() {        
         $round = $this->getRoundData()['round'] ?? 0;
