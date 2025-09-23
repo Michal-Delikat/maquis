@@ -7,9 +7,9 @@ require_once("constants.inc.php");
 class DataService {
     public static function setupRoundData(): string {
         return '
-            INSERT INTO round_data (morale, active_resistance, resistance_to_recruit, milice_in_game)
+            INSERT INTO round_data (morale)
             VALUES
-            (6, 3, 2, 5);
+            (6);
         ';
     }
 
@@ -211,11 +211,11 @@ class DataService {
             ("milice_3", "off_board", "NaN"),
             ("milice_4", "off_board", "NaN"),
             ("milice_5", "off_board", "NaN"),
-            ("soldier_1", "off_board", "NaN"),
-            ("soldier_2", "off_board", "NaN"),
-            ("soldier_3", "off_board", "NaN"),
-            ("soldier_4", "off_board", "NaN"),
-            ("soldier_5", "off_board", "NaN");
+            ("soldier_1", "off_board", "inactive"),
+            ("soldier_2", "off_board", "inactive"),
+            ("soldier_3", "off_board", "inactive"),
+            ("soldier_4", "off_board", "inactive"),
+            ("soldier_5", "off_board", "inactive");
         ';
     }
 }

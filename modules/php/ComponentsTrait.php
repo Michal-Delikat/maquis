@@ -25,6 +25,10 @@ trait ComponentsTrait {
         return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND location = 'off_board' LIMIT 1;");
     }
 
+    function getNextInactiveSoldier(): string {
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND state = 'inactive' LIMIT 1;");
+    }
+
     function getWorkerIdByLocation(string $location): string {
         return (string) $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'resistance%' AND location = '$location';");
     }
@@ -32,6 +36,7 @@ trait ComponentsTrait {
     function getMiliceIdByLocation(string $location): string {
         return (string) $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'milice%' AND location = '$location';");
     }
+
     function getSoldierIdByLocation(string $location): string {
         return (string) $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND location = '$location';");
     }
@@ -53,5 +58,53 @@ trait ComponentsTrait {
         ");
 
         $this->updateComponent($workerID, 'safe_house', 'active');
+    }
+
+    function getPlacedResistance(): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE name LIKE 'resistance%' AND state = 'placed';
+        ");
+    }
+
+    function getActiveResistance(): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE name LIKE 'resistance%' AND (state = 'active' OR state = 'placed');
+        ");
+    }
+
+    function getResistanceToRecruit(): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE name LIKE 'resistance%' AND state = 'inactive'; 
+        ");
+    }
+
+    function getPlacedMilice(): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE name LIKE 'milice%' AND state = 'placed';
+        ");
+    }
+
+    function getPlacedSoldiers(): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE name LIKE 'soldier%' AND state = 'placed'; 
+        ");
+    }
+
+    function getActiveSoldiers(): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE name LIKE 'soldier%' AND (state = 'active' OR state = 'placed');
+        ");
     }
 }

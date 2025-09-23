@@ -5,20 +5,12 @@ namespace Bga\Games\Maquis;
 trait RoundTrait {
     protected function getRoundData(): array {
         return (array) $this->getObjectFromDb(
-            "SELECT `round`, `morale`, `active_soldiers`, `active_resistance`, `resistance_to_recruit`, `placed_resistance`, `placed_milice`, `placed_soldiers`, `milice_in_game` FROM `round_data`"
+            "SELECT `round`, `morale` FROM `round_data`"
         );
     }
 
     protected function getActiveSpace(): int {
         return (int) $this->getUniqueValueFromDb("SELECT active_space FROM round_data");
-    }
-
-    protected function getActiveResistance(): int {
-        return (int) $this->getUniqueValueFromDb("SELECT active_resistance FROM round_data");
-    }
-
-    protected function getResistanceToRecruit(): int {
-        return (int) $this->getUniqueValueFromDb("SELECT resistance_to_recruit FROM round_data");
     }
 
     protected function getActionTaken(): bool {
@@ -42,74 +34,12 @@ trait RoundTrait {
 
     protected function getCanShoot(): bool {
         $weapon = $this->getResource('weapon');
-        $placedMilice = $this->getRoundData()['placed_milice'];
+        $placedMilice = $this->getPlacedMilice();
         return ($weapon > 0 && !$this->getShotToday() && $placedMilice > 0) && !($this->getIsMissionSelected(MISSION_GERMAN_SHEPARDS) && !$this->getIsMissionCompleted(MISSION_GERMAN_SHEPARDS));
     }
 
     protected function getIsMoleInserted(): bool {
         return (bool) $this->getUniqueValueFromDb("SELECT mole_inserted FROM round_data");
-    }
-
-    protected function updateActiveResistance($newNumber) {
-        self::DbQuery("
-            UPDATE round_data
-            SET active_resistance = $newNumber;
-        ");
-
-        $this->notify->all("activeResistanceUpdated", clienttranslate("You have $newNumber active resistance operatives"), array(
-            "active_resistance" => $newNumber
-        ));
-    }
-
-    protected function updatePlacedResistance($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET placed_resistance = ' . $newNumber . ';'
-        );
-
-        $this->notify->all("placedResistanceUpdated", '', array(
-            "placedResistance" => $newNumber,
-        ));
-    }
-
-    protected function updateResistanceToRecruit($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET resistance_to_recruit = ' . $newNumber . ';'
-        );
-
-        $this->notify->all("resistanceToRecruitUpdated", '', array(
-            "resistanceToRecruit" => $newNumber,
-        ));
-    }
-
-    protected function updatePlacedMilice($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET placed_milice = ' . $newNumber . ';'
-        );
-
-        $this->notify->all("placedMiliceUpdated", '', array(
-            "placedMilice" => $newNumber,
-        ));
-    }
-
-    protected function updateMiliceInGame($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET milice_in_game = ' . $newNumber . ';'
-        );
-
-        $this->notify->all("miliceInGameUpdated", '', array(
-            "miliceInGame" => $newNumber,
-        ));
-    }
-
-    protected function updatePlacedSoldiers($newNumber) {
-        self::DbQuery('
-            UPDATE round_data
-            SET placed_soldiers = ' . $newNumber . ';'
-        );
     }
 
     protected function updateActiveSpace($spaceID) {
@@ -140,10 +70,10 @@ trait RoundTrait {
         ');
     }
 
-    protected function updateRoundData($round, $morale, $placedMilice = 0, $placedSoldiers = 0): void {
+    protected function updateRoundData($round, $morale): void {
         self::DbQuery("
             UPDATE round_data
-            SET round = $round, morale = $morale, placed_milice = $placedMilice, placed_soldiers = $placedSoldiers;  
+            SET round = $round, morale = $morale;  
         ");
 
         $this->notify->all("roundDataUpdated", clienttranslate("Round $round begins."), array(
@@ -164,17 +94,6 @@ trait RoundTrait {
         ));
     }
 
-    protected function updateSoldiers($newNumber): void {
-        self::DbQuery("
-            UPDATE round_data
-            SET active_soldiers = $newNumber;
-        ");
-
-        $this->notify->all("soldiersUpdated", clienttranslate("There are $newNumber active soldiers now"), array(
-            "newNumber" => $newNumber
-        ));
-    }
-
     protected function setSelectedField(int $spaceID): void {
         self::DbQuery("
             UPDATE round_data
@@ -191,13 +110,6 @@ trait RoundTrait {
 
     protected function setMoleInserted(bool $moleInserted = false): void {
         self::DbQuery("UPDATE round_data SET mole_inserted = " . (int) $moleInserted . ";");
-    }
-
-    protected function setResistanceToRecruit(int $resistanceToRecruit): void {
-        self::DbQuery("
-            UPDATE round_data
-            SET resistance_to_recruit = $resistanceToRecruit;
-        ");
     }
 
     protected function incrementMorale(): void {

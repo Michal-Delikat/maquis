@@ -164,11 +164,9 @@ class Game extends \Table {
     }
 
     public function actPlaceWorker(int $spaceID): void {
-        $roundData = $this->getRoundData();
         $spaceName = $this->getSpaceNameById($spaceID);
 
         // $this->updateSpace($spaceID, hasWorker: true);
-        $this->updatePlacedResistance($roundData["placed_resistance"] + 1);
         $workerID = $this->getNextAvailableWorker();
         $this->updateComponent($workerID, (string) $spaceID, "placed");
 
@@ -197,15 +195,6 @@ class Game extends \Table {
     }
 
     public function stPlacePatrol(): void {
-        // if ($this->patrol_cards->countCardInLocation('deck') <= 0) {
-        //     $this->patrol_cards->moveAllCardsInLocation('discard', 'deck');            
-        //     $this->patrol_cards->shuffle('deck');
-        // }
-        // $card = $this->patrol_cards->pickCardForLocation('deck', 'discard');
-        // $cardID = $card['id'];
-
-        // $card = $this->PATROL_CARD_ITEMS[$cardID - 1];
-
         $card = $this->PATROL_CARD_ITEMS[$this->drawPatrolCard() - 1];
 
         $spaceID = null;
@@ -239,7 +228,7 @@ class Game extends \Table {
         if ($spaceID != null) {
             $spaceName = $this->getSpaceNameById($spaceID);
 
-            $placeSoldier = $this->getPatrolsToPlace() - $roundData['active_soldiers'] < $roundData['placed_milice'] + 1;
+            $placeSoldier = $this->getPatrolsToPlace() - $this->getActiveSoldiers() < $this->getPlacedMilice() + 1;
 
             $soldierID = $this->getNextAvailableSoldier();
             $miliceID = $this->getNextAvailableMilice();
@@ -247,11 +236,9 @@ class Game extends \Table {
             if ($placeSoldier) {
                 // $this->updateSpace($spaceID, hasWorker: $arrestedOnsite, hasSoldier: true);
                 $this->updateComponent($soldierID, (string) $spaceID, 'placed');
-                $this->updatePlacedSoldiers($roundData['placed_soldiers'] + 1);
             } else {
                 // $this->updateSpace($spaceID, hasWorker: $arrestedOnsite, hasMilice: true);
                 $this->updateComponent($miliceID, (string) $spaceID, 'placed');
-                $this->updatePlacedMilice($roundData['placed_milice'] + 1);
             }
 
             $this->notify->all("patrolPlaced", clienttranslate("Patrol placed at $spaceName"), array(
@@ -265,9 +252,9 @@ class Game extends \Table {
             }
         }
 
-        if ($roundData['placed_resistance'] < $roundData['active_resistance']) {
+        if ($this->getPlacedResistance() < $this->getActiveResistance()) {
             $this->gamestate->nextState("placeWorker");
-        } else if ($roundData['placed_milice'] + $roundData['placed_soldiers'] + 1 < $this->getPatrolsToPlace()) {
+        } else if ($this->getPlacedMilice() + $this->getPlacedSoldiers() < $this->getPatrolsToPlace()) {
             $this->gamestate->nextState("placePatrol");
         } else {
             $this->gamestate->nextState("activateWorker");
@@ -347,9 +334,9 @@ class Game extends \Table {
         $this->resetActiveSpace();
         $this->resetActionTaken();
 
-        if ($this->getIsMoleInserted() && $roundData['placed_resistance'] == 1) {
+        if ($this->getIsMoleInserted() && $this->getPlacedResistance() == 1) {
             $this->gamestate->nextState("roundEnd");
-        } else if ($roundData['placed_resistance'] > 0) {
+        } else if ($this->getPlacedResistance() > 0) {
             $this->gamestate->nextState("activateWorker");
         } 
         // else if ($roundData['placed_resistance'] == 1) {
@@ -398,14 +385,13 @@ class Game extends \Table {
         }
 
         $this->updateRoundData($round, $morale);
-        $this->updatePlacedMilice(0);
 
-        if ($morale <= 0 || $roundData['active_resistance'] <= 0 || $round >= 15 || ($roundData['active_resistance'] == 1 && $this->getIsMissionSelected(MISSION_INFILTRATION))) {
+        if ($morale <= 0 || $this->getActiveResistance() <= 0 || $round >= 15 || ($this->getActiveResistance() == 1 && $this->getIsMissionSelected(MISSION_INFILTRATION))) {
             $this->gamestate->nextstate("gameEnd");
         } else {
             foreach (array_merge($this->getMilice(), $this->getSoldiers()) as $patrol) {
                 if ($patrol['state'] === 'placed') {
-                    $this->updateComponent($patrol['name'], 'off_board', 'NaN');
+                    $this->updateComponent($patrol['name'], 'off_board', 'active');
 
                     $this->notify->all("patrolRemoved", '', array(
                         "patrolID" => $patrol['name']
@@ -432,23 +418,18 @@ class Game extends \Table {
     public function actShootMilice(int $spaceID): void {
         $roundData = $this->getRoundData();
         $morale = $roundData["morale"];
-        $placedMilice = $roundData['placed_milice'];
-        $miliceInGame = $roundData['milice_in_game'];
-        $activeSoldiers = $roundData['active_soldiers'];
-        $patrolID = $this->getMiliceIdByLocation((string) $spaceID);
+        $miliceID = $this->getMiliceIdByLocation((string) $spaceID);
 
-        $this->updateComponent($patrolID, 'off_board', 'NaN');
+        $this->updateComponent($miliceID, 'off_board', 'NaN');
 
         $this->notify->all("patrolRemoved", clienttranslate("Milice patrol at " . $this->getSpaceNameById($spaceID) . " shot"), array(
-            "patrolID" => $patrolID
+            "patrolID" => $miliceID
         ));
 
-        $this->updatePlacedMilice($placedMilice - 1);
-        $this->updateMiliceInGame($miliceInGame - 1);
-        $this->updateSoldiers($activeSoldiers + 1);
         $this->updateResourceQuantity(RESOURCE_WEAPON, -1);
         $this->setShotToday(true);
         $this->updateMorale($morale - 1);
+        $this->updateComponent($this->getNextInactiveSoldier(), 'off_board', 'active');
         if ($morale - 1 <= 0) {
             $this->gamestate->nextState("endGame");
         } else {
@@ -568,7 +549,6 @@ class Game extends \Table {
         // $this->updateSpace($spaceID);
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
         $this->updateComponent($workerID, 'safe_house', 'active');
-        $this->updatePlacedResistance($roundData['placed_resistance'] - 1);
 
         $this->notify->all("workerRemoved", clienttranslate("Worker safely returned from $spaceName"), array(
             "activeSpace" => $spaceID
@@ -581,7 +561,6 @@ class Game extends \Table {
         }
 
         $spaceName = $this->getSpaceNameById($spaceID);
-        $roundData = $this->getRoundData();
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
 
         if ($arrestedOnSite) {
@@ -596,9 +575,6 @@ class Game extends \Table {
         $this->notify->all("workerRemoved", clienttranslate("Worker arrested at " . $spaceName), array(
             "activeSpace" => $spaceID
         ));
-
-        $this->updatePlacedResistance($roundData['placed_resistance'] - 1);
-        $this->updateActiveResistance($roundData['active_resistance'] - 1);
     }
 
     public function removeWorker(int $spaceID): void {
@@ -607,15 +583,12 @@ class Game extends \Table {
         }
 
         $spaceName = $this->getSpaceNameById($spaceID);
-        $roundData = $this->getRoundData();
         
         $this->notify->all("workerRemoved", clienttranslate("Worker removed from " . $spaceName), array(
             "activeSpace" => $spaceID
         ));
 
         $this->updateSpace($spaceID, $hasWorker = false);
-        $this->updatePlacedResistance($roundData['placed_resistance'] - 1);
-        $this->updateActiveResistance($roundData['active_resistance'] - 1);
     }
 
     public function returnOrArrest(int $spaceID): void {
@@ -715,10 +688,8 @@ class Game extends \Table {
             case ACTION_GET_WORKER:
                 $roundData = $this->getRoundData();
                 $this->decrementResourceQuantity(RESOURCE_FOOD);
-                $this->updateActiveResistance($roundData['active_resistance'] + 1);
                 $this->recruitWorker();
                 $this->incStat(1, "workers_recruited", $this->getActivePlayerId());
-                $this->updateResistanceToRecruit($roundData['resistance_to_recruit'] - 1);
                 break;
             case ACTION_COLLECT_ITEMS:
                 $activeSpace = $this->getActiveSpace();
@@ -841,17 +812,31 @@ class Game extends \Table {
         );
 
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
-        $roundData = $this->getRoundData();
-        $result["roundData"] = $roundData;
+        $result["roundData"] = $this->getRoundData();
+
         $result["board"] = $this->getBoard();
         $result["spacesWithItems"] = $this->getSpacesWithItems();
+        $result["spacesWithRooms"] = $this->getSpacesWithRooms();
+
         $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');
+
         $result["resources"] = $this->getAllResources();
+
         $result["selectedMissions"] = $this->getSelectedMissions();
         $result["completedMissions"] = $this->getCompletedMissions();
+
         $result["rooms"] = $this->getRooms();
-        $result["spacesWithRooms"] = $this->getSpacesWithRooms();
-        $result["activeMilice"] = max(0, $this->getPatrolsToPlace() - $roundData["active_soldiers"]);
+        
+        $result["placedResistance"] = $this->getPlacedResistance();
+        $result["activeResistance"] = $this->getActiveResistance();
+        $result["resistanceToRecruit"] = $this->getResistanceToRecruit();
+
+        $result["activeMilice"] = max(0, $this->getPatrolsToPlace() - $this->getActiveSoldiers());
+        $result["placedMilice"] = $this->getPlacedMilice();
+
+        $result["placedSoldiers"] = $this->getPlacedSoldiers();
+        $result["activeSoldiers"] = $this->getActiveSoldiers();
+
         $result["resistanceWorkers"] = $this->getResistanceWorkers();
         $result["milice"] = $this->getMilice();
         $result["soldiers"] = $this->getSoldiers();
@@ -978,9 +963,6 @@ class Game extends \Table {
     }
 
     protected function getPatrolsToPlace(): int {
-        $roundData = $this->getRoundData();
-        $activeResistance = (int) $roundData['active_resistance'];
-
         $morale_to_patrols_map = array(
             0 => 5,
             1 => 5,
@@ -992,7 +974,9 @@ class Game extends \Table {
             7 => 2
         );
 
-        return max($activeResistance, $morale_to_patrols_map[$roundData['morale']]);
+        $roundData = $this->getRoundData();
+
+        return max($this->getActiveResistance(), $morale_to_patrols_map[$roundData['morale']]);
     }
 
     // BOARD PATHS

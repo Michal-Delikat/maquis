@@ -35,25 +35,29 @@ function (dojo, declare) {
             let currentRound = parseInt(gamedatas.roundData.round);
             let currentMorale = parseInt(gamedatas.roundData.morale);
 
-            let placedWorkers = parseInt(gamedatas.roundData.placed_resistance);
-            let activeWorkers = parseInt(gamedatas.roundData.active_resistance);
-            let resistanceToRecruit = parseInt(gamedatas.roundData.resistance_to_recruit);
+            let placedResistance = parseInt(gamedatas.placedResistance);
+            let activeResistance = parseInt(gamedatas.activeResistance);
+            let resistanceToRecruit = parseInt(gamedatas.resistanceToRecruit);
 
-            let placedMilice = parseInt(gamedatas.roundData.placed_milice);
+            let placedMilice = parseInt(gamedatas.placedMilice);
             let activeMilice = parseInt(gamedatas.activeMilice);
-            let miliceInGame = parseInt(gamedatas.roundData.milice_in_game);
 
-            let placedSoldiers = parseInt(gamedatas.roundData.placed_soldiers);
-            let activeSoldiers = parseInt(gamedatas.roundData.active_soldiers);
+            let placedSoldiers = parseInt(gamedatas.placedSoldiers);
+            let activeSoldiers = parseInt(gamedatas.activeSoldiers);
 
             let board = gamedatas.board;
             let spacesWithItems = Object.values(gamedatas.spacesWithItems);
             let spacesWithRooms = Object.values(gamedatas.spacesWithRooms);
+
             let discardedPatrolCards = gamedatas.discardedPatrolCards;
+
             let resources = gamedatas.resources;
+
             let completedMissions = Object.values(gamedatas.completedMissions);
             let selectedMissions = Object.values(gamedatas.selectedMissions);
+
             let rooms = Object.values(gamedatas.rooms);
+
             let resistanceWorkers = Object.values(gamedatas.resistanceWorkers);
             let milice = Object.values(gamedatas.milice);
             let soldiers = Object.values(gamedatas.soldiers);
@@ -70,9 +74,9 @@ function (dojo, declare) {
                         <div id="resistance">
                             <div id="resistance-worker-icon"></div>
                             <div id="resistance-worker-numbers">
-                                <span id="placed-resistance">${placedWorkers}</span>
+                                <span id="placed-resistance">${placedResistance}</span>
                                 <span>|</span>
-                                <span id="active-resistance">${activeWorkers}</span>
+                                <span id="active-resistance">${activeResistance}</span>
                                 <span>|</span>
                                 <span id="resistance-to-recruit">${resistanceToRecruit}</span>
                             </div>
@@ -83,8 +87,6 @@ function (dojo, declare) {
                                 <span id="placed-milice">${placedMilice}</span>
                                 <span>|</span>
                                 <span id="active-milice">${activeMilice}</span>
-                                <span>|</span>
-                                <span id="milice-in-game">${miliceInGame}</span>
                             </div>
                         </div>
                         <div id="soldiers">
@@ -93,8 +95,6 @@ function (dojo, declare) {
                                 <span id="placed-soldiers">${placedSoldiers}</span>
                                 <span>|</span>
                                 <span id="active-soldiers">${activeSoldiers}</span>
-                                <span>|</span>
-                                <span id="soldiers-in-game">5</span>
                             </div>
                         </div>
                     </div>
@@ -277,7 +277,7 @@ function (dojo, declare) {
                 </div>`);
             });
 
-            // MORALE
+            // MORALE TRACK
 
             for (let i = 0; i <= 7; i++) {
                 dojo.place(`<div id="morale-track-space-${i}" class="morale-track-space"></div>`, "morale-track");
@@ -285,7 +285,7 @@ function (dojo, declare) {
 
             dojo.place(`<div id="marker-morale" class="marker"></div>`, `morale-track-space-${currentMorale}`);
 
-            // SOLDIERS
+            // SOLDIER TRACK
 
             for (let i = 0; i <= 5; i++) {
                 dojo.place(`<div id="soldiers-track-space-${i}" class="soldiers-track-space"></div>`, "soldiers-track");
@@ -401,7 +401,7 @@ function (dojo, declare) {
         //// Game & client states
         
         onEnteringState: function(stateName, args) {
-            console.log('Entering state: ' + stateName, args);
+            // console.log('Entering state: ' + stateName, args);
             
             switch(stateName) {
                 case 'placeWorker':
