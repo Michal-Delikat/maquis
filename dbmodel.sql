@@ -10,10 +10,7 @@
 -- dbmodel.sql
 
 CREATE TABLE IF NOT EXISTS `round_data` (
-    `round` INT DEFAULT 0,
-    `morale` INT DEFAULT 0,
     `active_space` INT DEFAULT 0,
-    `action_taken` BOOLEAN DEFAULT FALSE,
     `selected_field` INT DEFAULT 0,
     `shot_today` BOOLEAN DEFAULT FALSE,
     `mole_inserted` BOOLEAN DEFAULT FALSE

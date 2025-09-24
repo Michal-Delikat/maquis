@@ -7,9 +7,9 @@ require_once("constants.inc.php");
 class DataService {
     public static function setupRoundData(): string {
         return '
-            INSERT INTO round_data (morale)
+            INSERT INTO round_data (active_space)
             VALUES
-            (6);
+            (0);
         ';
     }
 
@@ -201,6 +201,9 @@ class DataService {
         return '
             INSERT INTO components (name, location, state)
             VALUES
+            ("round_marker", "0", "NaN"),
+            ("morale_marker", "6", "NaN"),
+            ("soldier_marker", "0", "NaN"),
             ("resistance_1", "safe_house", "active"),
             ("resistance_2", "safe_house", "active"),
             ("resistance_3", "safe_house", "active"),

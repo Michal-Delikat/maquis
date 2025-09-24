@@ -32,8 +32,8 @@ function (dojo, declare) {
         setup: function(gamedatas) {
             // console.log("Starting game setup");
 
-            let currentRound = parseInt(gamedatas.roundData.round);
-            let currentMorale = parseInt(gamedatas.roundData.morale);
+            let currentRound = parseInt(gamedatas.round);
+            let currentMorale = parseInt(gamedatas.morale);
 
             let placedResistance = parseInt(gamedatas.placedResistance);
             let activeResistance = parseInt(gamedatas.activeResistance);
@@ -789,9 +789,8 @@ function (dojo, declare) {
             dojo.byId(`placed-milice`).innerHTML = placedMilice;
         },
 
-        notif_roundDataUpdated: function({round, morale}) {
+        notif_roundNumberUpdated: function({round}) {
             this.moveRoundMarker(round);
-            this.moveMoraleMarker(morale);
         },
 
         notif_moraleUpdated: function({morale}) {
@@ -815,8 +814,8 @@ function (dojo, declare) {
             this.removeItems(notif.spaceID)
         },
 
-        notif_soldiersUpdated: function({newNumber}) {
-            this.moveSoldiersMarker(newNumber);
+        notif_activeSoldiersUpdated: function({soldierNumber}) {
+            this.moveSoldiersMarker(soldierNumber);
         },
 
         notif_markerPlaced: function({spaceID, markerNumber}) {

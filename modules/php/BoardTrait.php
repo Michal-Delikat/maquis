@@ -22,12 +22,14 @@ trait BoardTrait {
             WHERE is_safe = 0 AND (is_field = 0 OR (is_field = 1 AND has_item = 1)) AND (mission_id = 0 || marker_number = 0);
         '));
 
-        $spacesWithResistance = $this->getSpacesWithResistanceWorkers();
-        $spacesWithMilice = $this->getSpacesWithMilice();
-        $spacesWithSoldiers = $this->getSpacesWithSoldiers();
+        $spacesWithPawns = array_merge(
+            $this->getSpacesWithResistanceWorkers(), 
+            $this->getSpacesWithMilice(), 
+            $this->getSpacesWithSoldiers()
+        );
 
-        return array_filter($result, function($space) use ($spacesWithResistance, $spacesWithMilice, $spacesWithSoldiers) {
-            return !(in_array($space, $spacesWithResistance) || in_array($space, $spacesWithMilice) || in_array($space, $spacesWithSoldiers));
+        return array_filter($result, function($space) use ($spacesWithPawns) {
+            return !in_array($space, $spacesWithPawns);
         });
     }
 
