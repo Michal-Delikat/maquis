@@ -998,12 +998,6 @@ class Game extends \Table {
                 WHERE space_id = $spaceID;
             ");
 
-            self::DbQuery("
-                UPDATE resource
-                SET available = available - $quantity
-                WHERE resource_name = \"$itemType\";
-            ");
-
             $this->notify->all("itemsPlaced", clienttranslate("$quantity $itemType airdropped onto field"), array(
                 "spaceID" => $spaceID,
                 "supplyType" => $itemType,
