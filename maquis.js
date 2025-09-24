@@ -104,8 +104,7 @@ function (dojo, declare) {
             `, player_board_div);
 
             // RESOURCES
-            
-            Object.values(resources).forEach(({resource_name, quantity, available}) => dojo.place(`
+            Object.values(resources).forEach(([resource_name, quantity, available]) => dojo.place(`
                 <div class="resource-box">
                     <div id="${resource_name}-icon" class="resource-icon">
                         <div class="resource-icon-circle"></div>

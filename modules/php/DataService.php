@@ -157,19 +157,6 @@ class DataService {
         ';
     }
 
-    public static function setupResources(): string {
-        return '
-            INSERT INTO resource (resource_name)
-            VALUES
-            ("' . RESOURCE_FOOD . '"),
-            ("' . RESOURCE_MEDICINE . '"),
-            ("' . RESOURCE_MONEY . '"),
-            ("' . RESOURCE_EXPLOSIVES . '"),
-            ("' . RESOURCE_WEAPON . '"),
-            ("' . RESOURCE_INTEL . '");
-        ';
-    }
-
     public static function setupMissions(): string {
         return '
             INSERT INTO mission (mission_name)
@@ -201,6 +188,30 @@ class DataService {
         return '
             INSERT INTO components (name, location, state)
             VALUES
+            ("food_token_1", "off_board", "available"),
+            ("food_token_2", "off_board", "available"),
+            ("food_token_3", "off_board", "available"),
+            ("food_token_4", "off_board", "available"),
+            ("medicine_token_1", "off_board", "available"),
+            ("medicine_token_2", "off_board", "available"),
+            ("medicine_token_3", "off_board", "available"),
+            ("medicine_token_4", "off_board", "available"),
+            ("money_token_1", "off_board", "available"),
+            ("money_token_2", "off_board", "available"),
+            ("money_token_3", "off_board", "available"),
+            ("money_token_4", "off_board", "available"),
+            ("explosives_token_1", "off_board", "available"),
+            ("explosives_token_2", "off_board", "available"),
+            ("explosives_token_3", "off_board", "available"),
+            ("explosives_token_4", "off_board", "available"),
+            ("weapon_token_1", "off_board", "available"),
+            ("weapon_token_2", "off_board", "available"),
+            ("weapon_token_3", "off_board", "available"),
+            ("weapon_token_4", "off_board", "available"),
+            ("intel_token_1", "off_board", "available"),
+            ("intel_token_2", "off_board", "available"),
+            ("intel_token_3", "off_board", "available"),
+            ("intel_token_4", "off_board", "available"),
             ("round_marker", "0", "NaN"),
             ("morale_marker", "6", "NaN"),
             ("soldier_marker", "0", "NaN"),

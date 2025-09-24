@@ -111,7 +111,6 @@ class Game extends \Table {
         static::DbQuery(DataService::setupActions());
         static::DbQuery(DataService::setupBoardActions());
 
-        static::DbQuery(DataService::setupResources());
         static::DbQuery(DataService::setupMissions());
         static::DbQuery(DataService::setupRooms());
         static::DbQuery(DataService::setupComponents());
@@ -159,10 +158,6 @@ class Game extends \Table {
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
-
-        // $this->updateResourceQuantity(RESOURCE_INTEL, 2);
-        // $this->updateResourceQuantity(RESOURCE_WEAPON, 1);
-        // $this->updateResourceQuantity(RESOURCE_EXPLOSIVES, 1);
     }
 
     public function actPlaceWorker(int $spaceID): void {
@@ -421,7 +416,7 @@ class Game extends \Table {
             "patrolID" => $miliceID
         ));
 
-        $this->updateResourceQuantity(RESOURCE_WEAPON, -1);
+        $this->decrementResourceQuantity(RESOURCE_WEAPON, 1);
         $this->setShotToday(true);
         $this->updateActiveSoldiers($this->getActiveSoldiers() + 1);
         $this->updateMorale($morale - 1);
@@ -683,7 +678,7 @@ class Game extends \Table {
                 $quantity = $spacesWithItems[$activeSpace]['quantity'];
 
                 $this->incStat($quantity, $itemType . "_aquired", $this->getActivePlayerId());
-                $this->updateResourceQuantityFromCollectingAirdrop($itemType, (int) $quantity);
+                $this->incrementResourceQuantity($itemType, (int) $quantity);
                 $this->setItems($activeSpace);
                 break;
             case ACTION_WRITE_GRAFFITI:
@@ -734,13 +729,13 @@ class Game extends \Table {
                 }
                 break;
             case ACTION_SABOTAGE_FACTORY:
-                $this->updateResourceQuantity(RESOURCE_EXPLOSIVES, -2);
+                $this->decrementResourceQuantity(RESOURCE_EXPLOSIVES, 2);
                 $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_SABOTAGE);
                 break;
             case ACTION_DELIVER_INTEL:
                 $activeSpace = $this->getActiveSpace();
-                $this->updateResourceQuantity(RESOURCE_INTEL, -2);
+                $this->decrementResourceQuantity(RESOURCE_INTEL, 2);
                 if ($activeSpace == 20 || $activeSpace == 23) {
                     $this->returnOrArrest($activeSpace);
                     $this->completeMission(MISSION_UNDERGROUND_NEWSPAPER);
@@ -753,14 +748,14 @@ class Game extends \Table {
             case ACTION_INSERT_MOLE:
                 $activeSpace = $this->getActiveSpace();
                 $this->setMoleInserted(true);
-                $this->updateResourceQuantity(RESOURCE_INTEL, -2);
+                $this->decrementResourceQuantity(RESOURCE_INTEL, 2);
                 $this->addMissionSpace($activeSpace + 1, MISSION_INFILTRATION);
                 $this->addSpaceAction($activeSpace + 1, ACTION_RECOVER_MOLE);
                 break;
             case ACTION_RECOVER_MOLE:
                 $activeSpace = $this->getActiveSpace();
-                $this->updateResourceQuantity(RESOURCE_WEAPON, -1);
-                $this->updateResourceQuantity(RESOURCE_EXPLOSIVES, -1);
+                $this->decrementResourceQuantity(RESOURCE_WEAPON, 1);
+                $this->decrementResourceQuantity(RESOURCE_EXPLOSIVES, 1);
                 $this->setMoleInserted(false);
                 $this->returnOrArrest($activeSpace - 1);
                 $this->returnOrArrest($activeSpace);
@@ -768,8 +763,8 @@ class Game extends \Table {
                 break;
             case ACTION_POISON_SHEPARDS:
                 $activeSpace = $this->getActiveSpace();
-                $this->updateResourceQuantity(RESOURCE_FOOD, -1);
-                $this->updateResourceQuantity(RESOURCE_MEDICINE, -1);
+                $this->decrementResourceQuantity(RESOURCE_FOOD, 1);
+                $this->decrementResourceQuantity(RESOURCE_MEDICINE, 1);
                 if ($activeSpace == 20 || $activeSpace == 23) {
                     $this->returnOrArrest($activeSpace);
                     $this->completeMission(MISSION_GERMAN_SHEPARDS);

@@ -31,6 +31,13 @@ CREATE TABLE IF NOT EXISTS `board` (
     PRIMARY KEY (`space_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `board_path` (
+    `path_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `space_id_start` INT unsigned NOT NULL,
+    `space_id_end` INT unsigned NOT NULL,
+    PRIMARY KEY (`path_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `patrol_card` (
     `card_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `card_type` VARCHAR(32) NOT NULL,
@@ -56,21 +63,6 @@ CREATE TABLE IF NOT EXISTS `board_action` (
     FOREIGN KEY (`action_id`)
         REFERENCES `action`(`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `board_path` (
-    `path_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `space_id_start` INT unsigned NOT NULL,
-    `space_id_end` INT unsigned NOT NULL,
-    PRIMARY KEY (`path_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `resource` (
-    `resource_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `resource_name` VARCHAR(16) NOT NULL,
-    `quantity` INT UNSIGNED NOT NULL DEFAULT 0,
-    `available` INT UNSIGNED NOT NULL DEFAULT 4,
-    PRIMARY KEY (`resource_id`)
-) ENGINE=InnoDb DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `mission` (
     `mission_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
