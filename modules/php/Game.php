@@ -263,11 +263,9 @@ class Game extends \Table {
     }
 
     public function actActivateWorker(int $spaceID): void {
-        $spaceName = $this->getSpaceNameById($spaceID);
-
         $this->updateActiveSpace($spaceID);
-
-        $spaceName = $this->getActiveSpace();
+        
+        $spaceName = $this->getSpaceNameById($spaceID);
 
         $this->notify->all("spaceActivated", clienttranslate("Worker at $spaceName activated"), array(
             "spaceID" => $spaceID
