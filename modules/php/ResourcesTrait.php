@@ -11,6 +11,23 @@ trait ResourcesTrait {
         ;");
     }
 
+    protected function getTokenTypeInSpace(int $spaceID): string {
+        return explode('_', (string) $this->getUniqueValueFromDb("
+            SELECT name
+            FROM components
+            WHERE location LIKE '$spaceID%' AND name LIKE '%token%'
+            LIMIT 1;
+        "))[0];
+    } 
+
+    protected function getTokenQuantityInSpace(int $spaceID): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE location LIKE '$spaceID%' AND name LIKE '%token%';
+        ");
+    }
+
     protected function getAvailableResource(string $resourceName): int {
         return (int) $this->getUniqueValueFromDb("
             SELECT COUNT(*) 
@@ -60,6 +77,26 @@ trait ResourcesTrait {
 
         $this->notify->all("tokensPlaced", clienttranslate("$quantity $itemType airdropped onto field"), array(
             "tokens" => $tokens,
+        ));
+    }
+
+    protected function removeTokens(string $tokenType, int $spaceID): void {
+        self::DbQuery("
+            UPDATE components
+            SET location = 'possessed', state = 'possessed'
+            WHERE name LIKE '$tokenType%' AND location LIKE '$spaceID%';
+        ");
+
+        $this->notify->all("tokensCollected", '', array(
+            "tokenType" => $tokenType,
+            "location" => $spaceID
+        ));
+
+        $quantityPossesed = $this->getResource($tokenType);
+        $this->notify->all("resourcesChanged", clienttranslate("You have $quantityPossesed $tokenType."), array(
+            "resource_name" => $tokenType,
+            "quantity" => $quantityPossesed,
+            "available" => $this->getAvailableResource($tokenType)
         ));
     }
 

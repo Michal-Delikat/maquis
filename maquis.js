@@ -588,7 +588,6 @@ function (dojo, declare) {
                 let tokenID = _tokens[i].name.split('_').join('-');
                 let tokenClass = tokenID.split('-').slice(0, -1).join('-');
                 let targetID = `space-${_tokens[i].location.split('_')[0]}-token-space-${_tokens[i].location.split('_')[1]}`;
-                console.log(tokenID, targetID);
 
                 dojo.place(`
                     <div id=${tokenID} class="token ${tokenClass}">
@@ -603,15 +602,14 @@ function (dojo, declare) {
             };
         },
 
-        removeItems: async function(spaceID) {
+        removeTokens: async function(tokenType, spaceID) {
             for (let i = 5; i > 0; i--) {
                 let space = dojo.byId(`space-${spaceID}-token-space-${i}`);
                 if (space.firstElementChild) {
-                    let itemTokenID = space.firstElementChild.id;
-                    let itemType = itemTokenID.split("-")[0];
-                    const animation = this.slideToObject(`${itemTokenID}`, `${itemType}-icon`);
+                    let tokenID = space.firstElementChild.id;
+                    const animation = this.slideToObject(`${tokenID}`, `${tokenType}-icon`);
                     await this.bgaPlayDojoAnimation(animation);
-                    dojo.destroy(`${itemTokenID}`);
+                    dojo.destroy(`${tokenID}`);
                 }
             }
         },
@@ -810,8 +808,8 @@ function (dojo, declare) {
             this.placeTokens(tokens);
         },
 
-        notif_itemsCollected: function(notif) {
-            this.removeItems(notif.spaceID)
+        notif_tokensCollected: function({tokenType, location}) {
+            this.removeTokens(tokenType, location);
         },
 
         notif_activeSoldiersUpdated: function({soldierNumber}) {

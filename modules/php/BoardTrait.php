@@ -19,8 +19,10 @@ trait BoardTrait {
         $result = array_keys($this->getCollectionFromDB('
             SELECT space_id
             FROM board
-            WHERE is_safe = 0 AND is_field = 0 AND (mission_id = 0 || marker_number = 0);
+            WHERE is_safe = 0 AND (mission_id = 0 || marker_number = 0);
         '));
+
+        $spacesWithTokens = $this->getSpacesWithTokens();
 
         $spacesWithPawns = array_merge(
             $this->getSpacesWithResistanceWorkers(), 
@@ -28,9 +30,21 @@ trait BoardTrait {
             $this->getSpacesWithSoldiers()
         );
 
-        return array_filter($result, function($space) use ($spacesWithPawns) {
-            return !in_array($space, $spacesWithPawns);
+        return array_filter($result, function($space) use ($spacesWithPawns, $spacesWithTokens) {
+            return !in_array($space, $spacesWithPawns) && 
+                    (!in_array($space, $this->getFields()) || 
+                    (in_array($space, $spacesWithTokens) && in_array($space, $spacesWithTokens)));
         });
+    }
+
+    protected function getFields(): array {
+        $result = (array) $this->getCollectionFromDb('
+            SELECT space_id
+            FROM board
+            WHERE is_field = 1;
+        ');
+
+        return array_keys($result);
     }
 
     protected function getEmptyFields(): array {
@@ -69,12 +83,18 @@ trait BoardTrait {
         }, $this->getSoldiers());
     }
     
-    protected function getSpacesWithItems(): array {
-        return $this->getCollectionFromDb("
-            SELECT space_id, item, quantity
-            FROM board
-            WHERE has_item = TRUE;
+    protected function getSpacesWithTokens(): array {
+        $result = (array) $this->getCollectionFromDb("
+            SELECT location
+            FROM components
+            WHERE name LIKE '%token%' AND state = 'placed';
         ");
+
+        $result = array_map(function($space) {
+            return explode("_", $space['location'])[0];
+        }, $result);
+
+        return $result;
     }
 
     protected function getSpacesWithRooms(): array {

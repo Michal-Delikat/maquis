@@ -673,13 +673,11 @@ class Game extends \Table {
                 break;
             case ACTION_COLLECT_ITEMS:
                 $activeSpace = $this->getActiveSpace();
-                $spacesWithItems = $this->getSpacesWithItems();
-                $itemType = $spacesWithItems[$activeSpace]['item'];
-                $quantity = $spacesWithItems[$activeSpace]['quantity'];
+                $itemType = $this->getTokenTypeInSpace($activeSpace);
+                $quantity = $this->getTokenQuantityInSpace($activeSpace);
 
                 $this->incStat($quantity, $itemType . "_aquired", $this->getActivePlayerId());
-                $this->incrementResourceQuantity($itemType, (int) $quantity);
-                $this->setItems($activeSpace);
+                $this->removeTokens($itemType, $activeSpace);
                 break;
             case ACTION_WRITE_GRAFFITI:
                 $this->placeMarker($this->getActiveSpace());
