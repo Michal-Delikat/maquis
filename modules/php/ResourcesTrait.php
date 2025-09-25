@@ -19,13 +19,49 @@ trait ResourcesTrait {
         ;");
     }
 
-    // protected function getResources(array $resourceNames): array {
-    //     return (array) $this->getCollectionFromDb("
-    //         SELECT quantity
-    //         FROM resource
-    //         WHERE resource_name IN (\"" . implode("\",", $resourceNames) . "\");"
-    //     );
-    // }
+    protected function decrementAvailableResource(string $resourceName, int $amount): void {
+        self::DbQuery("
+            UPDATE components
+            SET location = 'off_board', state = 'available'
+            WHERE name LIKE '$resourceName%' AND state = 'possessed'
+            LIMIT $amount;
+        ");
+    }
+
+    protected function getPlacedTokens(): array {
+        return (array) $this->getCollectionFromDb("
+            SELECT name, location
+            FROM components
+            WHERE name LIKE '%token%' AND state = 'placed';
+        ");
+    }
+
+    protected function placeTokens(int $spaceID, string $itemType, int $quantity): void {
+        $quantity = min($quantity, $this->getAvailableResource($itemType));
+
+        for ($i = 1; $i <= $quantity; $i++) {
+            $location = $spaceID . "_" . $i;
+
+            static::DbQuery("
+                UPDATE components
+                SET location = '$location', state = 'placed'
+                WHERE name LIKE '$itemType%'
+                AND location = 'off_board'
+                AND state = 'available'
+                LIMIT 1
+            ");
+        }
+
+        $tokens = (array) $this->getCollectionFromDb("
+            SELECT name, location
+            FROM components
+            WHERE name LIKE '$itemType%' AND state = 'placed';
+        ");
+
+        $this->notify->all("tokensPlaced", clienttranslate("$quantity $itemType airdropped onto field"), array(
+            "tokens" => $tokens,
+        ));
+    }
 
     protected function getAllResources(): array {
         return [
@@ -36,14 +72,6 @@ trait ResourcesTrait {
             RESOURCE_WEAPON => [RESOURCE_WEAPON, $this->getResource(RESOURCE_WEAPON), $this->getAvailableResource(RESOURCE_WEAPON)],
             RESOURCE_INTEL => [RESOURCE_INTEL, $this->getResource(RESOURCE_INTEL), $this->getAvailableResource(RESOURCE_INTEL)]
         ];
-    }
-
-    protected function updateResourceQuantity(string $resourceName, int $amount): void {
-        
-
-        $quantityPossesed = $this->getResource($resourceName);
-
-        
     }
 
     protected function incrementResourceQuantity(string $resourceName, int $amount = 1): void {

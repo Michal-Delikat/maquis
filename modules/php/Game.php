@@ -360,7 +360,7 @@ class Game extends \Table {
         $quantity = $supplyType == RESOURCE_FOOD ? 3 : 1;
 
         if ($this->getAvailableResource($supplyType) > 0) {
-            $this->setItems($spaceID, $supplyType, $quantity);
+            $this->placeTokens($spaceID, $supplyType, $quantity);
         }
 
         $this->returnWorker($this->getActiveSpace());
@@ -796,7 +796,7 @@ class Game extends \Table {
         $result["morale"] = $this->getMorale();
 
         $result["board"] = $this->getBoard();
-        $result["spacesWithItems"] = $this->getSpacesWithItems();
+        $result["placedTokens"] = $this->getPlacedTokens();
         $result["spacesWithRooms"] = $this->getSpacesWithRooms();
 
         $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');
@@ -986,35 +986,7 @@ class Game extends \Table {
 
     // UPDATES
 
-    protected function setItems(int $spaceID, string|null $itemType = NULL, int $quantity = 0): void {
-        if ($itemType != NULL) {
-            $quantity = min($quantity, $this->getAvailableResource($itemType));
-        }
-
-        if ($itemType != NULL && $quantity > 0) {
-            self::DbQuery("
-                UPDATE board
-                SET has_item = TRUE, item = \"$itemType\", quantity = \"$quantity\"
-                WHERE space_id = $spaceID;
-            ");
-
-            $this->notify->all("itemsPlaced", clienttranslate("$quantity $itemType airdropped onto field"), array(
-                "spaceID" => $spaceID,
-                "supplyType" => $itemType,
-                "quantity" => $quantity
-            ));
-        } else {
-            self::DbQuery("
-                UPDATE board
-                SET has_item = FALSE, item = NULL, quantity = 0
-                WHERE space_id = $spaceID;
-            ");
-
-            $this->notify->all("itemsCollected", clienttranslate("Items collected from $spaceID"), array(
-                "spaceID" => $spaceID 
-            ));
-        }
-    }
+    
 
     // CHECK ESCAPE ROUTE 
 

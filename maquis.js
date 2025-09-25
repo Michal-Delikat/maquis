@@ -46,7 +46,7 @@ function (dojo, declare) {
             let activeSoldiers = parseInt(gamedatas.activeSoldiers);
 
             let board = gamedatas.board;
-            let spacesWithItems = Object.values(gamedatas.spacesWithItems);
+            let placedTokens = Object.values(gamedatas.placedTokens);
             let spacesWithRooms = Object.values(gamedatas.spacesWithRooms);
 
             let discardedPatrolCards = gamedatas.discardedPatrolCards;
@@ -337,13 +337,13 @@ function (dojo, declare) {
             // PAWNS
 
             resistanceWorkers.forEach(worker => { 
-                if (worker.state === 'placed') this.placeWorker(worker.name, worker.location)
+                if (worker.state === 'placed') this.placeWorker(worker.name, worker.location, false)
             });
             milice.forEach(milice => {
-                if (milice.state === 'placed') this.placeMilice(milice.name, milice.location)
+                if (milice.state === 'placed') this.placeMilice(milice.name, milice.location, false)
             });
             soldiers.forEach(soldier => {
-                if (soldier.state === 'placed') this.placeSoldier(soldier.name, soldier.location)
+                if (soldier.state === 'placed') this.placeSoldier(soldier.name, soldier.location, false)
             });
 
             for (let i = 1; i <= 23; i++) {
@@ -362,10 +362,7 @@ function (dojo, declare) {
                 }
             }
 
-            spacesWithItems.forEach(space => {
-                this.placeItems(space.space_id, space.item, space.quantity, false);
-            });
-
+            this.placeTokens(placedTokens, false);
             
             // ROOM TILES
             
@@ -585,21 +582,25 @@ function (dojo, declare) {
             dojo.destroy(`${patrolID}`);
         },
 
-        placeItems: async function(spaceID, itemType, quantity, animate = true) {
-            for (let i = 0; i < quantity; i++) {
-                let tokenID = `${itemType}-token-${i + 1}`;
-                let targetID = `space-${spaceID}-token-space-${i + 1}`;
+        placeTokens: async function(tokens, animate = true) {
+            const _tokens = Object.values(tokens);
+            for (var i = 0; i < _tokens.length; i++) {
+                let tokenID = _tokens[i].name.split('_').join('-');
+                let tokenClass = tokenID.split('-').slice(0, -1).join('-');
+                let targetID = `space-${_tokens[i].location.split('_')[0]}-token-space-${_tokens[i].location.split('_')[1]}`;
+                console.log(tokenID, targetID);
 
                 dojo.place(`
-                    <div id=${tokenID} class="token ${itemType}-token">
+                    <div id=${tokenID} class="token ${tokenClass}">
                         <div class="token-circle"></div>
                     </div>`, targetID);
+
                 if (animate) {
-                    this.placeOnObject(tokenID, `${itemType}-icon`);
+                    this.placeOnObject(tokenID, `custom-player-board`);
                     const animation = this.slideToObject(tokenID, targetID);
                     await this.bgaPlayDojoAnimation(animation);
                 }
-            }
+            };
         },
 
         removeItems: async function(spaceID) {
@@ -805,8 +806,8 @@ function (dojo, declare) {
             dojo.byId("active-resistance").innerHTML = notif.active_resistance;
         },
 
-        notif_itemsPlaced: function(notif) {
-            this.placeItems(notif.spaceID, notif.supplyType, notif.quantity);
+        notif_tokensPlaced: function({tokens}) {
+            this.placeTokens(tokens);
         },
 
         notif_itemsCollected: function(notif) {

@@ -3,7 +3,7 @@ namespace Bga\Games\Maquis;
 trait BoardTrait {
     protected function getBoard() {
         return $this->getCollectionFromDb(
-            "SELECT `space_id`, `is_safe`, `has_item`, `marker_number`, `mission_id`, `dark_lady_location` FROM `board`;"
+            "SELECT `space_id`, `is_safe`, `marker_number`, `mission_id`, `dark_lady_location` FROM `board`;"
         );
     }
 
@@ -19,7 +19,7 @@ trait BoardTrait {
         $result = array_keys($this->getCollectionFromDB('
             SELECT space_id
             FROM board
-            WHERE is_safe = 0 AND (is_field = 0 OR (is_field = 1 AND has_item = 1)) AND (mission_id = 0 || marker_number = 0);
+            WHERE is_safe = 0 AND is_field = 0 AND (mission_id = 0 || marker_number = 0);
         '));
 
         $spacesWithPawns = array_merge(
@@ -37,7 +37,7 @@ trait BoardTrait {
         $result = $this->getCollectionFromDb('
             SELECT space_id
             FROM board
-            WHERE is_field = 1 AND item IS NULL;
+            WHERE is_field = 1;
         ');
 
         return $result;
