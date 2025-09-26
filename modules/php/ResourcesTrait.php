@@ -36,15 +36,6 @@ trait ResourcesTrait {
         ;");
     }
 
-    protected function decrementAvailableResource(string $resourceName, int $amount): void {
-        self::DbQuery("
-            UPDATE components
-            SET location = 'off_board', state = 'available'
-            WHERE name LIKE '$resourceName%' AND state = 'possessed'
-            LIMIT $amount;
-        ");
-    }
-
     protected function getPlacedTokens(): array {
         return (array) $this->getCollectionFromDb("
             SELECT name, location
@@ -53,8 +44,8 @@ trait ResourcesTrait {
         ");
     }
 
-    protected function placeTokens(int $spaceID, string $itemType, int $quantity): void {
-        $quantity = min($quantity, $this->getAvailableResource($itemType));
+    protected function placeTokens(int $spaceID, string $tokenType, int $quantity): void {
+        $quantity = min($quantity, $this->getAvailableResource($tokenType));
 
         for ($i = 1; $i <= $quantity; $i++) {
             $location = $spaceID . "_" . $i;
@@ -62,7 +53,7 @@ trait ResourcesTrait {
             static::DbQuery("
                 UPDATE components
                 SET location = '$location', state = 'placed'
-                WHERE name LIKE '$itemType%'
+                WHERE name LIKE '$tokenType%'
                 AND location = 'off_board'
                 AND state = 'available'
                 LIMIT 1
@@ -72,15 +63,22 @@ trait ResourcesTrait {
         $tokens = (array) $this->getCollectionFromDb("
             SELECT name, location
             FROM components
-            WHERE name LIKE '$itemType%' AND state = 'placed';
+            WHERE name LIKE '$tokenType%' AND state = 'placed' AND location LIKE '$spaceID%';
         ");
 
-        $this->notify->all("tokensPlaced", clienttranslate("$quantity $itemType airdropped onto field"), array(
+        $this->notify->all("tokensPlaced", clienttranslate("$quantity $tokenType airdropped onto field"), array(
             "tokens" => $tokens,
+        ));
+
+        $quantityPossesed = $this->getResource($tokenType);
+        $this->notify->all("resourcesChanged", clienttranslate("You have $quantityPossesed $tokenType."), array(
+            "resource_name" => $tokenType,
+            "quantity" => $quantityPossesed,
+            "available" => $this->getAvailableResource($tokenType)
         ));
     }
 
-    protected function removeTokens(string $tokenType, int $spaceID): void {
+    protected function collectTokens(string $tokenType, int $spaceID): void {
         self::DbQuery("
             UPDATE components
             SET location = 'possessed', state = 'possessed'
@@ -111,7 +109,7 @@ trait ResourcesTrait {
         ];
     }
 
-    protected function incrementResourceQuantity(string $resourceName, int $amount = 1): void {
+    protected function getTokens(string $resourceName, int $amount = 1): void {
         self::DbQuery("
             UPDATE components
             SET location = 'possessed', state = 'possessed'
@@ -127,7 +125,7 @@ trait ResourcesTrait {
         ));
     }
 
-    protected function decrementResourceQuantity(string $resourceName, int $amount = 1): void {
+    protected function spendTokens(string $resourceName, int $amount = 1): void {
         self::DbQuery("
             UPDATE components
             SET location = 'off_board', state = 'available'

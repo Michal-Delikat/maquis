@@ -48,13 +48,15 @@ trait BoardTrait {
     }
 
     protected function getEmptyFields(): array {
-        $result = $this->getCollectionFromDb('
-            SELECT space_id
-            FROM board
-            WHERE is_field = 1;
-        ');
+        $fields = $this->getFields();
 
-        return $result;
+        $fieldsWithTokens = array_map('intval', $this->getSpacesWithTokens());
+
+        $fields = array_filter($fields, function($field) use ($fieldsWithTokens) {
+            return !in_array((int) $field, $fieldsWithTokens);
+        });
+
+        return $fields;
     }
 
     protected function getSpacesWithResistanceWorkers(): array {
@@ -94,7 +96,7 @@ trait BoardTrait {
             return explode("_", $space['location'])[0];
         }, $result);
 
-        return $result;
+        return array_unique($result);
     }
 
     protected function getSpacesWithRooms(): array {

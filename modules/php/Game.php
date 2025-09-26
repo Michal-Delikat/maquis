@@ -30,6 +30,7 @@ require_once("RoomsTrait.php");
 require_once("ResourcesTrait.php");
 require_once("PatrolCardsTrait.php");
 require_once("PlayerTrait.php");
+require_once("PawnsTrait.php");
 
 const BOARD = 'BOARD_STATE';
 
@@ -42,6 +43,7 @@ class Game extends \Table {
     use PatrolCardsTrait;
     use RoomsTrait;
     use PlayerTrait;
+    use PawnsTrait;
 
     private array $PATROL_CARD_ITEMS;
     private mixed $patrol_cards;
@@ -416,7 +418,7 @@ class Game extends \Table {
             "patrolID" => $miliceID
         ));
 
-        $this->decrementResourceQuantity(RESOURCE_WEAPON, 1);
+        $this->spendTokens(RESOURCE_WEAPON, 1);
         $this->setShotToday(true);
         $this->updateActiveSoldiers($this->getActiveSoldiers() + 1);
         $this->updateMorale($morale - 1);
@@ -433,7 +435,7 @@ class Game extends \Table {
         $this->setIsRoomAvailable($roomID, false); 
         $this->setRoomID($activeSpace, $roomID);
         $this->addSpareRoomActions($activeSpace, $roomID);
-        $this->decrementResourceQuantity(RESOURCE_MONEY, 2);
+        $this->spendTokens(RESOURCE_MONEY, 2);
 
         $this->notify->all("roomPlaced", clienttranslate("Room placed."), array(
             "roomID" => $roomID,
@@ -463,7 +465,7 @@ class Game extends \Table {
 
     public function argPlaceWorker(): array {
         return [
-            "emptyFields" => $this->getEmptySpaces()
+            "emptySpaces" => $this->getEmptySpaces()
         ];
     }
 
@@ -629,45 +631,45 @@ class Game extends \Table {
     protected function saveAction(string $actionName): void {
         switch($actionName) {
             case ACTION_GET_WEAPON:
-                $this->decrementResourceQuantity(RESOURCE_MONEY);
-                $this->incrementResourceQuantity(RESOURCE_WEAPON);
+                $this->spendTokens(RESOURCE_MONEY);
+                $this->getTokens(RESOURCE_WEAPON);
                 $this->incStat(1, "weapon_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_FOOD:
-                $this->incrementResourceQuantity(RESOURCE_FOOD);
+                $this->getTokens(RESOURCE_FOOD);
                 $this->incStat(1, "food_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_MEDICINE:
-                $this->incrementResourceQuantity(RESOURCE_MEDICINE);
+                $this->getTokens(RESOURCE_MEDICINE);
                 $this->incStat(1, "medicine_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_INTEL:
-                $this->incrementResourceQuantity(RESOURCE_INTEL);
+                $this->getTokens(RESOURCE_INTEL);
                 $this->incStat(1, "intel_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_MONEY_FOR_FOOD:
                 if ($this->getAvailableResource(RESOURCE_MONEY) > 0) {
-                    $this->decrementResourceQuantity(RESOURCE_FOOD);
-                    $this->incrementResourceQuantity(RESOURCE_MONEY);
+                    $this->spendTokens(RESOURCE_FOOD);
+                    $this->getTokens(RESOURCE_MONEY);
                     $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                     $this->decrementMorale();
                 }
                 break;
             case ACTION_GET_MONEY_FOR_MEDICINE:
                 if ($this->getAvailableResource(RESOURCE_MONEY) > 0) {
-                    $this->decrementResourceQuantity(RESOURCE_MEDICINE);
-                    $this->incrementResourceQuantity(RESOURCE_MONEY);
+                    $this->spendTokens(RESOURCE_MEDICINE);
+                    $this->getTokens(RESOURCE_MONEY);
                     $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                     $this->decrementMorale();
                 }
                 break;
             case ACTION_PAY_FOR_MORALE:
                 $this->incrementMorale();
-                $this->decrementResourceQuantity(RESOURCE_MEDICINE);
-                $this->decrementResourceQuantity(RESOURCE_FOOD);
+                $this->spendTokens(RESOURCE_MEDICINE);
+                $this->spendTokens(RESOURCE_FOOD);
                 break;
             case ACTION_GET_WORKER:
-                $this->decrementResourceQuantity(RESOURCE_FOOD);
+                $this->spendTokens(RESOURCE_FOOD);
                 $this->recruitWorker();
                 $this->incStat(1, "workers_recruited", $this->getActivePlayerId());
                 break;
@@ -677,14 +679,14 @@ class Game extends \Table {
                 $quantity = $this->getTokenQuantityInSpace($activeSpace);
 
                 $this->incStat($quantity, $itemType . "_aquired", $this->getActivePlayerId());
-                $this->removeTokens($itemType, $activeSpace);
+                $this->collectTokens($itemType, $activeSpace);
                 break;
             case ACTION_WRITE_GRAFFITI:
                 $this->placeMarker($this->getActiveSpace());
                 break;
             case ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION:
                 $this->completeMission(MISSION_MILICE_PARADE_DAY);
-                $this->decrementResourceQuantity(RESOURCE_WEAPON);
+                $this->spendTokens(RESOURCE_WEAPON);
                 $this->incrementMorale($this->getMorale());
                 $this->arrestWorker(1);
                 break;
@@ -696,20 +698,20 @@ class Game extends \Table {
                 }
                 break;
             case ACTION_GET_MONEY:
-                $this->incrementResourceQuantity(RESOURCE_MONEY);
+                $this->getTokens(RESOURCE_MONEY);
                 $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_EXPLOSIVES:
-                $this->decrementResourceQuantity(RESOURCE_MEDICINE);
-                $this->incrementResourceQuantity(RESOURCE_EXPLOSIVES);
+                $this->spendTokens(RESOURCE_MEDICINE);
+                $this->getTokens(RESOURCE_EXPLOSIVES);
                 $this->incStat(1, "explosives_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_3_FOOD:
-                $this->incrementResourceQuantity(RESOURCE_FOOD, 3);
+                $this->getTokens(RESOURCE_FOOD, 3);
                 $this->incStat(3, "food_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_3_MEDICINE:
-                $this->incrementResourceQuantity(RESOURCE_MEDICINE, 3);
+                $this->getTokens(RESOURCE_MEDICINE, 3);
                 $this->incStat(3, "medicine_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_INCREASE_MORALE:
@@ -727,13 +729,13 @@ class Game extends \Table {
                 }
                 break;
             case ACTION_SABOTAGE_FACTORY:
-                $this->decrementResourceQuantity(RESOURCE_EXPLOSIVES, 2);
+                $this->spendTokens(RESOURCE_EXPLOSIVES, 2);
                 $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_SABOTAGE);
                 break;
             case ACTION_DELIVER_INTEL:
                 $activeSpace = $this->getActiveSpace();
-                $this->decrementResourceQuantity(RESOURCE_INTEL, 2);
+                $this->spendTokens(RESOURCE_INTEL, 2);
                 if ($activeSpace == 20 || $activeSpace == 23) {
                     $this->returnOrArrest($activeSpace);
                     $this->completeMission(MISSION_UNDERGROUND_NEWSPAPER);
@@ -746,14 +748,14 @@ class Game extends \Table {
             case ACTION_INSERT_MOLE:
                 $activeSpace = $this->getActiveSpace();
                 $this->setMoleInserted(true);
-                $this->decrementResourceQuantity(RESOURCE_INTEL, 2);
+                $this->spendTokens(RESOURCE_INTEL, 2);
                 $this->addMissionSpace($activeSpace + 1, MISSION_INFILTRATION);
                 $this->addSpaceAction($activeSpace + 1, ACTION_RECOVER_MOLE);
                 break;
             case ACTION_RECOVER_MOLE:
                 $activeSpace = $this->getActiveSpace();
-                $this->decrementResourceQuantity(RESOURCE_WEAPON, 1);
-                $this->decrementResourceQuantity(RESOURCE_EXPLOSIVES, 1);
+                $this->spendTokens(RESOURCE_WEAPON, 1);
+                $this->spendTokens(RESOURCE_EXPLOSIVES, 1);
                 $this->setMoleInserted(false);
                 $this->returnOrArrest($activeSpace - 1);
                 $this->returnOrArrest($activeSpace);
@@ -761,8 +763,8 @@ class Game extends \Table {
                 break;
             case ACTION_POISON_SHEPARDS:
                 $activeSpace = $this->getActiveSpace();
-                $this->decrementResourceQuantity(RESOURCE_FOOD, 1);
-                $this->decrementResourceQuantity(RESOURCE_MEDICINE, 1);
+                $this->spendTokens(RESOURCE_FOOD, 1);
+                $this->spendTokens(RESOURCE_MEDICINE, 1);
                 if ($activeSpace == 20 || $activeSpace == 23) {
                     $this->returnOrArrest($activeSpace);
                     $this->completeMission(MISSION_GERMAN_SHEPARDS);
