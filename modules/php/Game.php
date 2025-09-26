@@ -31,6 +31,7 @@ require_once("ResourcesTrait.php");
 require_once("PatrolCardsTrait.php");
 require_once("PlayerTrait.php");
 require_once("PawnsTrait.php");
+require_once("MarkersTrait.php");
 
 const BOARD = 'BOARD_STATE';
 
@@ -44,6 +45,7 @@ class Game extends \Table {
     use RoomsTrait;
     use PlayerTrait;
     use PawnsTrait;
+    use MarkersTrait;
 
     private array $PATROL_CARD_ITEMS;
     private mixed $patrol_cards;
@@ -128,7 +130,7 @@ class Game extends \Table {
         $missionsDifficulty = (int) $this->tableOptions->get(100);
 
         if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+            $this->configureMissions(MISSION_DOUBLE_AGENT, MISSION_OFFICERS_MANSION);
         } else {
             $missions = [
                 MISSION_MILICE_PARADE_DAY,
@@ -798,6 +800,7 @@ class Game extends \Table {
         $result["board"] = $this->getBoard();
         $result["placedTokens"] = $this->getPlacedTokens();
         $result["spacesWithRooms"] = $this->getSpacesWithRooms();
+        $result["spacesWithMarkers"] = $this->getSpacesWithMarkers();
 
         $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');
 
@@ -846,6 +849,8 @@ class Game extends \Table {
             ");
         }
 
+        $this->debug("hello");
+
         $result = array_filter($result, function($action) use ($spaceID) {
             switch ($action['action_name']) {
                 case ACTION_GET_WEAPON:
@@ -863,6 +868,7 @@ class Game extends \Table {
                 case ACTION_GET_MONEY_FOR_MEDICINE:
                     return $this->getResource(RESOURCE_MEDICINE) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
                 case ACTION_WRITE_GRAFFITI:
+                    $this->debug("markerNumber: " . (string) $this->countMarkers($spaceID));
                     return (($this->countMarkers($spaceID) === 0) || (($this->countMarkers($spaceID) === 1) && $this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT))) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
                     break;
                 case ACTION_COMPLETE_OFFICERS_MANSION_MISSION:

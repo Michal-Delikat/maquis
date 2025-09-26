@@ -188,6 +188,16 @@ class DataService {
         return '
             INSERT INTO components (name, location, state)
             VALUES
+            ("mission_marker_1", "off_board", "available"),
+            ("mission_marker_2", "off_board", "available"),
+            ("mission_marker_3", "off_board", "available"),
+            ("mission_marker_4", "off_board", "available"),
+            ("mission_marker_5", "off_board", "available"),
+            ("mission_marker_6", "off_board", "available"),
+            ("mission_marker_7", "off_board", "available"),
+            ("mission_marker_8", "off_board", "available"),
+            ("mission_marker_9", "off_board", "available"),
+            ("mission_marker_10", "off_board", "available"),
             ("food_token_1", "off_board", "available"),
             ("food_token_2", "off_board", "available"),
             ("food_token_3", "off_board", "available"),

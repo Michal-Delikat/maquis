@@ -8,18 +8,10 @@ trait RoundTrait {
     }
 
     protected function updateActiveSpace(int $spaceID) {
-        $this->debug("spaceID: " . $spaceID);
         self::DbQuery("
             UPDATE round_data
             SET active_space = $spaceID;
         ");
-
-        $activeSpace = $this->getUniqueValueFromDb("
-            SELECT active_space
-            FROM round_data;
-        ");
-
-        $this->debug("activeSpace2: " . $activeSpace);
     }
 
     protected function resetActiveSpace() {

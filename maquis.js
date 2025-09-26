@@ -34,19 +34,15 @@ function (dojo, declare) {
 
             let currentRound = parseInt(gamedatas.round);
             let currentMorale = parseInt(gamedatas.morale);
+            let activeSoldiers = parseInt(gamedatas.activeSoldiers);
 
             let placedResistance = parseInt(gamedatas.placedResistance);
             let activeResistance = parseInt(gamedatas.activeResistance);
             let resistanceToRecruit = parseInt(gamedatas.resistanceToRecruit);
 
-            let placedMilice = parseInt(gamedatas.placedMilice);
-            let activeMilice = parseInt(gamedatas.activeMilice);
-
-            let placedSoldiers = parseInt(gamedatas.placedSoldiers);
-            let activeSoldiers = parseInt(gamedatas.activeSoldiers);
-
             let board = gamedatas.board;
             let placedTokens = Object.values(gamedatas.placedTokens);
+            let spacesWithMarkers = Object.values(gamedatas.spacesWithMarkers);
             let spacesWithRooms = Object.values(gamedatas.spacesWithRooms);
 
             let discardedPatrolCards = gamedatas.discardedPatrolCards;
@@ -55,6 +51,7 @@ function (dojo, declare) {
 
             let completedMissions = Object.values(gamedatas.completedMissions);
             let selectedMissions = Object.values(gamedatas.selectedMissions);
+            console.log(selectedMissions);
 
             let rooms = Object.values(gamedatas.rooms);
 
@@ -332,19 +329,16 @@ function (dojo, declare) {
 
             for (let i = 1; i <= 23; i++) {
                 if (board[i]) {
-
-                    let markerNumber = parseInt(board[i].marker_number);
-                    if (markerNumber > 0) {
-                        for (var j = 1; j <= markerNumber; j++) {
-                            this.placeMissionMarker(board[i].space_id, j, false);
-                        }
-                    }
-
                     if (parseInt(board[i].dark_lady_location)) {
                         this.placeDarkLadyLocationReminder(parseInt(board[i].space_id));
                     }
                 }
             }
+
+            // MARKERS
+            spacesWithMarkers.forEach(space => this.placeMissionMarker(space['location'], space['marker_number'], false));
+
+            // TOKENS
 
             this.placeTokens(placedTokens, false);
             
@@ -587,10 +581,6 @@ function (dojo, declare) {
 
         notif_patrolRemoved: function({patrolID}) {
             this.removePatrol(patrolID);
-        },
-
-        notif_placedResistanceUpdated: function(notif) {
-            dojo.byId(`placed-resistance`).innerHTML = notif.placedResistance;
         },
 
         notif_resistanceToRecruitUpdated: function({resistanceToRecruit}) {
