@@ -3,7 +3,7 @@ namespace Bga\Games\Maquis;
 trait BoardTrait {
     protected function getBoard() {
         return $this->getCollectionFromDb(
-            "SELECT `space_id`, `is_safe`, `mission_id`, `dark_lady_location` FROM `board`;"
+            "SELECT `space_id`, `is_safe`, `dark_lady_location` FROM `board`;"
         );
     }
 

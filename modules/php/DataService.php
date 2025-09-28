@@ -157,20 +157,6 @@ class DataService {
         ';
     }
 
-    public static function setupMissions(): string {
-        return '
-            INSERT INTO mission (mission_name)
-            VALUES
-            ("' . MISSION_MILICE_PARADE_DAY . '"),
-            ("' . MISSION_OFFICERS_MANSION . '"),
-            ("' . MISSION_SABOTAGE . '"),
-            ("' . MISSION_UNDERGROUND_NEWSPAPER . '"),
-            ("' . MISSION_INFILTRATION . '"),
-            ("' . MISSION_GERMAN_SHEPARDS . '"),
-            ("' . MISSION_DOUBLE_AGENT . '");
-        ';
-    }
-
     public static function setupRooms(): string {
         return '
             INSERT INTO room (room_name)
@@ -188,6 +174,13 @@ class DataService {
         return '
             INSERT INTO components (name, location, state)
             VALUES
+            ("mission_card_' . MISSION_MILICE_PARADE_DAY . '", "off_board", "not_selected"),
+            ("mission_card_' . MISSION_OFFICERS_MANSION . '", "off_board", "not_selected"),
+            ("mission_card_' . MISSION_SABOTAGE . '", "off_board", "not_selected"),
+            ("mission_card_' . MISSION_UNDERGROUND_NEWSPAPER . '", "off_board", "not_selected"),
+            ("mission_card_' . MISSION_INFILTRATION . '", "off_board", "not_selected"),
+            ("mission_card_' . MISSION_GERMAN_SHEPARDS . '", "off_board", "not_selected"),
+            ("mission_card_' . MISSION_DOUBLE_AGENT . '", "off_board", "not_selected"),
             ("mission_marker_1", "off_board", "available"),
             ("mission_marker_2", "off_board", "available"),
             ("mission_marker_3", "off_board", "available"),

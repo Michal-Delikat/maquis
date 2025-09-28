@@ -115,7 +115,6 @@ class Game extends \Table {
         static::DbQuery(DataService::setupActions());
         static::DbQuery(DataService::setupBoardActions());
 
-        static::DbQuery(DataService::setupMissions());
         static::DbQuery(DataService::setupRooms());
         static::DbQuery(DataService::setupComponents());
 
@@ -130,7 +129,7 @@ class Game extends \Table {
         $missionsDifficulty = (int) $this->tableOptions->get(100);
 
         if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_DOUBLE_AGENT, MISSION_OFFICERS_MANSION);
+            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
         } else {
             $missions = [
                 MISSION_MILICE_PARADE_DAY,

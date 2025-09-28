@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `board` (
     `space_name` varchar(16) NOT NULL,
     `is_safe` BOOLEAN NOT NULL DEFAULT FALSE,
     `is_field` BOOLEAN NOT NULL DEFAULT FALSE,
-    `mission_id` INT UNSIGNED DEFAULT 0,
     `room_id` INT UNSIGNED DEFAULT NULL,
     `dark_lady_location` BOOL NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`space_id`)
@@ -59,14 +58,6 @@ CREATE TABLE IF NOT EXISTS `board_action` (
     FOREIGN KEY (`action_id`)
         REFERENCES `action`(`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `mission` (
-    `mission_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `mission_name` VARCHAR(32) NOT NULL,
-    `selected` BOOLEAN NOT NULL DEFAULT FALSE,
-    `completed` BOOLEAN NOT NULL DEFAULT FALSE,
-    PRIMARY KEY (`mission_id`)
-) ENGINE=InnoDb DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `room` (
     `room_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

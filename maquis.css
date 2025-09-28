@@ -298,69 +298,69 @@
     display: none;
 } 
 
-#mission-1 > .mission-card-front {
+#mission_card_milice_parade_day > .mission-card-front {
     background-position-x: 0;
 }
 
-#mission-2 > .mission-card-front {
+#mission_card_officers_mansion > .mission-card-front {
     background-position-x: 33.3%;
 }
 
-#mission-2 > .mission-space-2, #mission-2 > .mission-space-3 {
+#mission_card_officers_mansion > .mission-space-2, #mission_card_officers_mansion > .mission-space-3 {
     display: none;
 }
 
-#mission-3 > .mission-card-face, #mission-4 > .mission-card-face, #mission-5 > .mission-card-face, #mission-6 > .mission-card-face, #mission-7 > .mission-card-face {
+#mission_card_sabotage > .mission-card-face, #mission_card_underground_newspaper > .mission-card-face, #mission_card_infiltration > .mission-card-face, #mission_card_german_shepards > .mission-card-face, #mission_card_double_agent > .mission-card-face {
     background-image: url('img/Mission_Cards_1star.jpg');
     background-size: 300%;
 }
 
-#mission-3 > .mission-card-back, #mission-4 > .mission-card-back, #mission-5 > .mission-card-back, #mission-6 > .mission-card-back, #mission-7 > .mission-card-face {
+#mission_card_sabotage > .mission-card-back, #mission_card_underground_newspaper > .mission-card-back, #mission_card_infiltration > .mission-card-back, #mission_card_german_shepards > .mission-card-back, #mission_card_double_agent > .mission-card-face {
     background-position-x: 100%;
     background-position-y: bottom;
 }
 
-#mission-2 > .mission-space-1 {
+#mission_card_officers_mansion > .mission-space-1 {
     left: 65%;
 }
 
-#mission-3 > .mission-space-1, #mission-4 > .mission-space-1, #mission-6 > .mission-space-1 {
+#mission_card_sabotage > .mission-space-1, #mission_card_underground_newspaper > .mission-space-1, #mission_card_german_shepards > .mission-space-1 {
     left: 7.5%;
 }
 
-#mission-3 > .mission-space-2, #mission-4 > .mission-space-2, #mission-6 > .mission-space-2 {
+#mission_card_sabotage > .mission-space-2, #mission_card_underground_newspaper > .mission-space-2, #mission_card_german_shepards > .mission-space-2 {
     left: 36%;
 }
 
-#mission-5 > .mission-space-1 {
+#mission_card_infiltration > .mission-space-1 {
     left: 22%;
 }
 
-#mission-5 > .mission-space-2 {
+#mission_card_infiltration > .mission-space-2 {
     left: 51%;
 }
 
-#mission-5 > .mission-space-3 {
+#mission_card_infiltration > .mission-space-3 {
     display: none;
 }
 
-#mission-6 > .mission-space {
+#mission_card_german_shepards > .mission-space {
     top: 13%;
 }
 
-#mission-4 > .mission-card-front {
+#mission_card_underground_newspaper > .mission-card-front {
     background-position-x: 50%;
 }
 
-#mission-5 > .mission-card-front {
+#mission_card_infiltration > .mission-card-front {
     background-position-x: 100%;
 }
 
-#mission-6 > .mission-card-front {
+#mission_card_german_shepards > .mission-card-front {
     background-position-y: bottom;
 }
 
-#mission-7 > .mission-card-front {
+#mission_card_double_agent > .mission-card-front {
     background-position-x: center;
     background-position-y: bottom;
 }

@@ -18,13 +18,13 @@ const ST_GAME_ROUND_END = 90;
 
 const ST_BGA_GAME_END = 99;
 
-const MISSION_MILICE_PARADE_DAY = "Milice Parade Day";
-const MISSION_OFFICERS_MANSION = "Officer\'s Mansion";
-const MISSION_SABOTAGE = 'Sabotage';
-const MISSION_UNDERGROUND_NEWSPAPER = 'Underground newspaper';
-const MISSION_INFILTRATION = 'Infiltration';
-const MISSION_GERMAN_SHEPARDS = 'German Shepards';
-const MISSION_DOUBLE_AGENT = 'Double Agent';
+const MISSION_MILICE_PARADE_DAY = "milice_parade_day";
+const MISSION_OFFICERS_MANSION = "officers_mansion";
+const MISSION_SABOTAGE = 'sabotage';
+const MISSION_UNDERGROUND_NEWSPAPER = 'underground_newspaper';
+const MISSION_INFILTRATION = 'infiltration';
+const MISSION_GERMAN_SHEPARDS = 'german_shepards';
+const MISSION_DOUBLE_AGENT = 'double_agent';
 
 const ACTION_INSERT_MOLE = 'insertMole';
 const ACTION_RECOVER_MOLE = 'recoverMole';

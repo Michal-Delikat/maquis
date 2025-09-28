@@ -56,12 +56,12 @@ trait MissionsTrait {
     }
 
     protected function addMissionSpace(int $spaceID, string $missionName): void {
-        $missionID = $this->getMissionIdByMissionName($missionName);
+        // $missionID = $this->getMissionIdByMissionName($missionName);
 
         if (in_array((int) $spaceID, [18, 19, 20])) {
             static::DbQuery("
-                INSERT INTO board (`space_id`, `space_name`, `mission_id`) 
-                VALUES ($spaceID, \"Mission A\", $missionID);
+                INSERT INTO board (`space_id`, `space_name`) 
+                VALUES ($spaceID, \"Mission A\");
             ");
 
             static::DbQuery("
@@ -70,8 +70,8 @@ trait MissionsTrait {
             ");
         } else if (in_array((int) $spaceID, [21, 22, 23])) {
             static::DbQuery("
-                INSERT INTO board (`space_id`, `space_name`, `mission_id`) 
-                VALUES ($spaceID, \"Mission B\", $missionID);
+                INSERT INTO board (`space_id`, `space_name`) 
+                VALUES ($spaceID, \"Mission B\");
             ");
 
             static::DbQuery("
@@ -83,9 +83,9 @@ trait MissionsTrait {
 
     protected function completeMission(string $missionName): void {
         static::DbQuery("
-            UPDATE mission
-            SET completed = TRUE
-            WHERE mission_name = '$missionName';
+            UPDATE components
+            SET state = 'completed'
+            WHERE name = 'mission_card_$missionName';
         ");
 
         $spaceIDs = $this->getSpaceIdsByMissionName($missionName);
@@ -95,7 +95,11 @@ trait MissionsTrait {
 
         $this->incrementPlayerScore();
 
-        $this->notify->all("missionCompleted", clienttranslate("Mission completed"), array("missionID" => $this->getMissionIdByMissionName($missionName), "playerScore" => $this->getPlayerScore(), "playerId" => $this->getActivePlayerId()));
+        $this->notify->all("missionCompleted", clienttranslate("Mission completed"), array(
+            "missionName" => $missionName, 
+            "playerScore" => $this->getPlayerScore(), 
+            "playerId" => $this->getActivePlayerId()
+        ));
     }
     
     protected function removeMissionSpace(int $spaceID) {
@@ -117,26 +121,17 @@ trait MissionsTrait {
 
     protected function getIsMissionCompleted(string $missionName): bool {
         return (bool) $this->getUniqueValueFromDb("
-            SELECT completed
-            FROM mission
-            WHERE mission_name = '$missionName';
+            SELECT *
+            FROM components
+            WHERE name = 'mission_card_$missionName' AND state = 'completed';
         ");
     } 
 
-    protected function getMissionIdByMissionName(string $missionName): int {
-        return (int) $this->getUniqueValueFromDb("
-            SELECT mission_id
-            FROM mission
-            WHERE mission_name = '$missionName';
-        ");
-    }
-
     protected function getSpaceIdsByMissionName(string $missionName): array {
         $result = (array) $this->getCollectionFromDB("
-            SELECT b.space_id
-            FROM board AS b
-            JOIN mission AS m ON b.mission_id = m.mission_id
-            WHERE m.mission_name = '$missionName';
+            SELECT location
+            FROM components
+            WHERE name = 'mission_card_$missionName' AND location != 'off_board';
         ");
 
         return array_keys($result);
@@ -144,33 +139,45 @@ trait MissionsTrait {
 
     protected function setSelectedMissions(string $missionAName, string $missionBName): void {
         self::DbQuery("
-            UPDATE mission
-            SET selected = TRUE
-            WHERE mission_name = '$missionAName' OR mission_name = '$missionBName';"
+            UPDATE components
+            SET state = 'selected'
+            WHERE name = 'mission_card_$missionAName' OR name = 'mission_card_$missionBName';"
         );
+
+        self::DbQuery("
+            UPDATE components
+            SET location = 'mission_card_a'
+            WHERE name = 'mission_card_$missionAName';
+        ");
+
+        self::DbQuery("
+            UPDATE components
+            SET location = 'mission_card_b'
+            WHERE name = 'mission_card_$missionBName';
+        ");
     }
 
     protected function getSelectedMissions(): array {
         return (array) $this->getCollectionFromDb("
-            SELECT mission_id
-            FROM mission
-            WHERE selected = TRUE;
+            SELECT name, location
+            FROM components
+            WHERE name LIKE 'mission_card%' AND (state = 'selected' OR state = 'completed');
         ");
     }
 
     protected function getIsMissionSelected(string $missionName): bool {
         return (bool) $this->getUniqueValueFromDb("
-            SELECT selected
-            FROM mission
-            WHERE mission_name = '$missionName';
+            SELECT *
+            FROM components
+            WHERE name = 'mission_card_$missionName' AND (state = 'selected' OR state = 'completed');
         ");
     }
 
     protected function getCompletedMissions(): array {
         return (array) $this->getCollectionFromDb("
-            SELECT mission_id
-            FROM mission
-            WHERE completed = TRUE;
+            SELECT name, location
+            FROM components
+            WHERE name LIKE 'mission_card%' AND state = 'completed';
         ");
     }
 }

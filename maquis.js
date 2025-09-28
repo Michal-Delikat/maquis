@@ -49,9 +49,8 @@ function (dojo, declare) {
 
             let resources = gamedatas.resources;
 
-            let completedMissions = Object.values(gamedatas.completedMissions);
             let selectedMissions = Object.values(gamedatas.selectedMissions);
-            console.log(selectedMissions);
+            let completedMissions = Object.values(gamedatas.completedMissions);
 
             let rooms = Object.values(gamedatas.rooms);
 
@@ -98,7 +97,7 @@ function (dojo, declare) {
                 <div id="board-and-missions">
                     <div id="mission-cards">
                         <div id="mission-slot-1" class="mission-slot">
-                            <div id="mission-${selectedMissions[0].mission_id}" class="card mission-card">
+                            <div id="${selectedMissions[0].name}" class="card mission-card">
                                 <div class="mission-card-back mission-card-face"></div>
                                 <div class="mission-card-front mission-card-face"></div>
                                 <div id="space-18" class="space mission-space mission-space-1">
@@ -119,7 +118,7 @@ function (dojo, declare) {
                             </div>
                         </div>
                         <div id="mission-slot-2" class="mission-slot">
-                            <div id="mission-${selectedMissions[1].mission_id}" class="card mission-card">
+                            <div id="${selectedMissions[1].name}" class="card mission-card">
                                 <div class="mission-card-back mission-card-face"></div>
                                 <div class="mission-card-front mission-card-face"></div>
                                 <div id="space-21" class="space mission-space mission-space-1">
@@ -160,7 +159,7 @@ function (dojo, declare) {
 
             // FLIP MISSIONS 
 
-            completedMissions.forEach(mission => this.flipMission(mission['mission_id']));
+            completedMissions.forEach(mission => this.flipMission(mission['name']));
 
             // ADD TOOLTIPS TO MISSIONS
 
@@ -410,7 +409,6 @@ function (dojo, declare) {
                     const emptyFields = Object.values(args.args.emptyFields);
                     
                     emptyFields.forEach(field => {
-                        console.log(field);
                         let space = dojo.byId(`space-${field}-background-space`);
                         if (space) dojo.addClass(space, 'empty-field');
                     });
@@ -628,10 +626,10 @@ function (dojo, declare) {
             this.removeMarker(spaceID, markerNumber);
         },
 
-        notif_missionCompleted: function({missionID, playerScore, playerId}) {
+        notif_missionCompleted: function({missionName, playerScore, playerId}) {
             dojo.byId("player_score_" + playerId).innerHTML = playerScore;
 
-            this.flipMission(missionID);
+            this.flipMission(`mission_card_${missionName}`);
         },
 
         notif_roomPlaced: function({roomID, spaceID}) {
@@ -817,8 +815,8 @@ function (dojo, declare) {
             dojo.destroy(`${markerID}`);
         },
 
-        flipMission: function(missionID) {
-            dojo.toggleClass(dojo.byId(`mission-${missionID}`), 'flipped');
+        flipMission: function(missionName) {
+            dojo.toggleClass(dojo.byId(`${missionName}`), 'flipped');
         },
 
         placeRoomTile: async function(spaceID, roomID, animate = true) {
