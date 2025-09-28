@@ -43,7 +43,7 @@ function (dojo, declare) {
             let board = gamedatas.board;
             let placedTokens = Object.values(gamedatas.placedTokens);
             let spacesWithMarkers = Object.values(gamedatas.spacesWithMarkers);
-            let spacesWithRooms = Object.values(gamedatas.spacesWithRooms);
+            let placedRooms = Object.values(gamedatas.placedRooms);
 
             let discardedPatrolCards = gamedatas.discardedPatrolCards;
 
@@ -344,16 +344,16 @@ function (dojo, declare) {
             // ROOM TILES
             
             rooms.forEach((room) => dojo.place(`
-                    <div id="${room.room_id}-tile-container" class="room-tile-container">
-                        <div id="room-tile-${room.room_id}" class="room-tile">
+                    <div id="${room.name}-tile-container" class="room-tile-container">
+                        <div id="room-tile-${room.name}" class="room-tile">
                             <div class="circle-shape"></div>
                             <div class="rectangle-shape"></div>
                         </div>
                     <div>
                 `, `room-tiles`));
             
-            spacesWithRooms.forEach(space => {
-                this.placeRoomTile(space.space_id, space.room_id, false);
+            placedRooms.forEach(room => {
+                this.placeRoomTile(room.location, room.name, false);
             });
 
             // PATROL DISCARD
@@ -489,7 +489,7 @@ function (dojo, declare) {
                         break;
 
                     case 'selectSpareRoom':
-                        Object.values(args).forEach(room => this.addActionButton('actSelectRoom_' + `${room.room_id}`, (`${room.room_name}`), () => this.bgaPerformAction("actSelectRoom", { roomID: room.room_id}), null, null, 'blue'));
+                        Object.values(args).forEach(room => this.addActionButton('actSelectRoom_' + `${room.name}`, (`${room.name}`), () => this.bgaPerformAction("actSelectRoom", { roomID: room.name}), null, null, 'blue'));
                         break;
 
                     case 'shootMilice':

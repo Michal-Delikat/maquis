@@ -115,7 +115,6 @@ class Game extends \Table {
         static::DbQuery(DataService::setupActions());
         static::DbQuery(DataService::setupBoardActions());
 
-        static::DbQuery(DataService::setupRooms());
         static::DbQuery(DataService::setupComponents());
 
         $this->reattributeColorsBasedOnPreferences($players, $gameinfos["player_colors"]);
@@ -161,6 +160,8 @@ class Game extends \Table {
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
+
+        $this->getTokens(RESOURCE_MONEY, 2);
     }
 
     public function actPlaceWorker(int $spaceID): void {
@@ -430,11 +431,10 @@ class Game extends \Table {
         }
     }
 
-    public function actSelectRoom(int $roomID): void {
+    public function actSelectRoom(string $roomID): void {
         $activeSpace = $this->getActiveSpace();
 
-        $this->setIsRoomAvailable($roomID, false); 
-        $this->setRoomID($activeSpace, $roomID);
+        $this->placeRoom($roomID, $activeSpace); 
         $this->addSpareRoomActions($activeSpace, $roomID);
         $this->spendTokens(RESOURCE_MONEY, 2);
 
@@ -592,10 +592,8 @@ class Game extends \Table {
         ");
     }
 
-    protected function addSpareRoomActions(int $spaceID, int $roomID): void {
-        $rooms = $this->getRooms();
-
-        switch ($rooms[$roomID]["room_name"]) {
+    protected function addSpareRoomActions(int $spaceID, string $roomID): void {
+        switch ($roomID) {
             case ROOM_INFORMANT:
                 $this->addSpaceAction($spaceID, ACTION_GET_INTEL);
                 break;
@@ -614,15 +612,6 @@ class Game extends \Table {
                 break;
             case ROOM_PROPAGANDIST:
                 $this->addSpaceAction($spaceID, ACTION_INCREASE_MORALE);
-                break;
-            case ROOM_FIXER:
-
-                break;
-            case ROOM_PHARMACIST:
-                $this->addSpaceAction($spaceID, ACTION_GET_POISON);
-                break;
-            case ROOM_FORGER:
-                $this->addSpaceAction($spaceID, ACTION_GET_FAKE_ID);
                 break;
         }
     } 
@@ -798,7 +787,7 @@ class Game extends \Table {
 
         $result["board"] = $this->getBoard();
         $result["placedTokens"] = $this->getPlacedTokens();
-        $result["spacesWithRooms"] = $this->getSpacesWithRooms();
+        $result["placedRooms"] = $this->getPlacedRooms();
         $result["spacesWithMarkers"] = $this->getSpacesWithMarkers();
 
         $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');

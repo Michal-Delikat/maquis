@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `board` (
     `space_name` varchar(16) NOT NULL,
     `is_safe` BOOLEAN NOT NULL DEFAULT FALSE,
     `is_field` BOOLEAN NOT NULL DEFAULT FALSE,
-    `room_id` INT UNSIGNED DEFAULT NULL,
     `dark_lady_location` BOOL NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`space_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -58,13 +57,6 @@ CREATE TABLE IF NOT EXISTS `board_action` (
     FOREIGN KEY (`action_id`)
         REFERENCES `action`(`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `room` (
-    `room_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `room_name` VARCHAR(16) NOT NULL,
-    `available` BOOLEAN NOT NULL DEFAULT TRUE,
-    PRIMARY KEY (`room_id`)
-) ENGINE=InnoDb DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `components` (
     `name` VARCHAR(32) NOT NULL,

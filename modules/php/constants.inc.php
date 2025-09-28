@@ -18,8 +18,8 @@ const ST_GAME_ROUND_END = 90;
 
 const ST_BGA_GAME_END = 99;
 
-const MISSION_MILICE_PARADE_DAY = "milice_parade_day";
-const MISSION_OFFICERS_MANSION = "officers_mansion";
+const MISSION_MILICE_PARADE_DAY = 'milice_parade_day';
+const MISSION_OFFICERS_MANSION = 'officers_mansion';
 const MISSION_SABOTAGE = 'sabotage';
 const MISSION_UNDERGROUND_NEWSPAPER = 'underground_newspaper';
 const MISSION_INFILTRATION = 'infiltration';
@@ -61,17 +61,12 @@ const RESOURCE_WEAPON = 'weapon';
 const RESOURCE_INTEL = 'intel';
 const RESOURCE_MONEY = 'money';
 const RESOURCE_EXPLOSIVES = 'explosives';
-const RESOURCE_POISON = 'poison';
-const RESOURCE_FAKE_ID = 'fake_id';
 
-const ROOM_INFORMANT = 'Informant';
-const ROOM_COUNTERFEITER = 'Counterfeiter';
-const ROOM_SAFE_HOUSE = 'Safe House';
-const ROOM_CHEMISTS_LAB = "Chemist's Lab";
-const ROOM_SMUGGLER = 'Smuggler';
-const ROOM_PROPAGANDIST = 'Propagandist';
-const ROOM_FIXER = 'Fixer';
-const ROOM_PHARMACIST = 'Pharmacist';
-const ROOM_FORGER = 'Forger';
+const ROOM_INFORMANT = 'informant';
+const ROOM_COUNTERFEITER = 'counterfeiter';
+const ROOM_SAFE_HOUSE = 'safe_house';
+const ROOM_CHEMISTS_LAB = 'chemists_lab';
+const ROOM_SMUGGLER = 'smuggler';
+const ROOM_PROPAGANDIST = 'propagandist';
 
 ?>

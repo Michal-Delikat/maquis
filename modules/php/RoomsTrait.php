@@ -5,24 +5,41 @@ namespace Bga\Games\Maquis;
 trait RoomsTrait {
     protected function getRooms(): array {
         return (array) $this->getCollectionFromDb("
-            SELECT room_id, room_name, available
-            FROM room;
+            SELECT name, location, state
+            FROM components
+            WHERE name LIKE 'room%';
         ");
     }
 
     protected function getAvailableRooms(): array {
         return (array) $this->getCollectionFromDb("
-            SELECT room_id, room_name
-            FROM room
-            WHERE available = TRUE;
+            SELECT name
+            FROM components
+            WHERE state = 'available' AND name LIKE 'room%';
         ");
     }
 
-    protected function setIsRoomAvailable(int $roomID, bool $isAvailable): void {
+    protected function placeRoom(string $roomID, int $location): void {
         self::DbQuery("
-            UPDATE room
-            SET available = " . (int) $isAvailable . " 
-            WHERE room_id = $roomID;
+            UPDATE components
+            SET state = 'placed', location = $location
+            WHERE name = '$roomID';
+        ");
+    }
+
+    protected function getIsRoomPlaced(int $spaceID): bool {
+        return (bool) $this->getUniqueValueFromDb("
+            SELECT *
+            FROM components
+            WHERE location = $spaceID AND name LIKE 'room%';
+        ");
+    }
+
+    protected function getPlacedRooms(): array {
+        return (array) $this->getCollectionFromDb("
+            SELECT name, location
+            FROM components
+            WHERE name LIKE 'room%' AND state = 'placed';
         ");
     }
 }

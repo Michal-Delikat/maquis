@@ -852,37 +852,37 @@
     }
 }
 
-#room-tile-2 {
+#room-tile-room_counterfeiter {
     background-position-x: center;
 }
 
-#room-tile-2 > .rectangle-shape, #room-tile-5 > .rectangle-shape {
+#room-tile-room_counterfeiter > .rectangle-shape, #room-tile-room_smuggler > .rectangle-shape {
     background-position-x: 49.9%;
 }
 
-#room-tile-3 {
+#room-tile-room_safe_house {
     background-position-x: right;
 }
 
-#room-tile-3 > .rectangle-shape, #room-tile-6 > .rectangle-shape {
+#room-tile-room_safe_house > .rectangle-shape, #room-tile-room_propagandist > .rectangle-shape {
     background-position-x: 93%;
 }
 
-#room-tile-4 {
+#room-tile-room_chemists_lab {
     background-position-y: center;
 }
 
-#room-tile-5 {
+#room-tile-room_smuggler {
     background-position-y: center;
     background-position-x: center;
 }
 
-#room-tile-6 {
+#room-tile-room_propagandist {
     background-position-y: center;
     background-position-x: right;
 }
 
-#room-tile-4 > .rectangle-shape, #room-tile-5 > .rectangle-shape, #room-tile-6 > .rectangle-shape {
+#room-tile-room_chemists_lab > .rectangle-shape, #room-tile-room_smuggler > .rectangle-shape, #room-tile-room_propagandist > .rectangle-shape {
     background-position-y: 63.5%;
 }
 

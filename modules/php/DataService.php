@@ -157,23 +157,16 @@ class DataService {
         ';
     }
 
-    public static function setupRooms(): string {
-        return '
-            INSERT INTO room (room_name)
-            VALUES
-            ("' . ROOM_INFORMANT . '"),
-            ("' . ROOM_COUNTERFEITER . '"),
-            ("' . ROOM_SAFE_HOUSE . '"),
-            ("' . ROOM_CHEMISTS_LAB . '"),
-            ("' . ROOM_SMUGGLER . '"),
-            ("' . ROOM_PROPAGANDIST . '");
-        ';
-    }
-
     public static function setupComponents(): string {
         return '
             INSERT INTO components (name, location, state)
             VALUES
+            ("room_' . ROOM_INFORMANT . '", "off_board", "available"),
+            ("room_' . ROOM_COUNTERFEITER . '", "off_board", "available"),
+            ("room_' . ROOM_SAFE_HOUSE . '", "off_board", "available"),
+            ("room_' . ROOM_CHEMISTS_LAB . '", "off_board", "available"),
+            ("room_' . ROOM_SMUGGLER . '", "off_board", "available"),
+            ("room_' . ROOM_PROPAGANDIST . '", "off_board", "available"),
             ("mission_card_' . MISSION_MILICE_PARADE_DAY . '", "off_board", "not_selected"),
             ("mission_card_' . MISSION_OFFICERS_MANSION . '", "off_board", "not_selected"),
             ("mission_card_' . MISSION_SABOTAGE . '", "off_board", "not_selected"),
