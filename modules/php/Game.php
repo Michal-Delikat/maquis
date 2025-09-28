@@ -521,8 +521,10 @@ class Game extends \Table {
     }
 
     public function argSelectRoom(): array {
-        // TODO Turn into assosiative array.
-        return $this->getAvailableRooms();
+        return [
+            "availableRooms" => $this->getAvailableRooms(),
+            "roomsDescriptions" => ROOM_DESCRIPTIONS
+        ];
     }
 
     public function argRemoveWorker(): array {
@@ -784,6 +786,7 @@ class Game extends \Table {
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
         $result["round"] = $this->getRoundNumber();
         $result["morale"] = $this->getMorale();
+        $result["activeSoldiers"] = $this->getActiveSoldiers();
 
         $result["board"] = $this->getBoard();
         $result["placedTokens"] = $this->getPlacedTokens();
@@ -802,12 +805,6 @@ class Game extends \Table {
         $result["placedResistance"] = $this->getPlacedResistance();
         $result["activeResistance"] = $this->getActiveResistance();
         $result["resistanceToRecruit"] = $this->getResistanceToRecruit();
-
-        $result["activeMilice"] = max(0, $this->getPatrolsToPlace() - $this->getActiveSoldiers());
-        $result["placedMilice"] = $this->getPlacedMilice();
-
-        $result["placedSoldiers"] = $this->getPlacedSoldiers();
-        $result["activeSoldiers"] = $this->getActiveSoldiers();
 
         $result["resistanceWorkers"] = $this->getResistanceWorkers();
         $result["milice"] = $this->getMilice();

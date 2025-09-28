@@ -1,5 +1,7 @@
 <?php
 
+require_once("constants.inc.php");
+
 const PATROL_CARD_ITEMS = [
     ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 1, 'space_a' => 12, 'space_b' => 6, 'space_c' => 5], // 1. Grocer / Poor District
     ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 2, 'space_a' => 4, 'space_b' => 12, 'space_c' => 7], // 2. Radio B / Grocer
@@ -11,4 +13,13 @@ const PATROL_CARD_ITEMS = [
     ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 8, 'space_a' => 2, 'space_b' => 1, 'space_c' => 6],  // 8. Fence / Rue Baradat
     ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 9, 'space_a' => 12, 'space_b' => 3, 'space_c' => 2], // 9. Grocer / Pont Du Nord
     ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 10, 'space_a' => 2, 'space_b' => 3, 'space_c' => 11] // 10. Fence / Pont Du Nord
+];
+
+const ROOM_DESCRIPTIONS = [
+    ROOM_SMUGGLER => 'Smuggler',
+    ROOM_INFORMANT => 'Informant',
+    ROOM_SAFE_HOUSE => 'Safe House',
+    ROOM_CHEMISTS_LAB => 'Chemist\'s Lab',
+    ROOM_PROPAGANDIST => 'Propagandist',
+    ROOM_COUNTERFEITER => 'Counterfeiter' 
 ];
