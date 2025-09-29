@@ -161,6 +161,7 @@ class DataService {
         return '
             INSERT INTO components (name, location, state)
             VALUES
+            ("dark_lady_location", "off_board", "available"),
             ("room_' . ROOM_INFORMANT . '", "off_board", "available"),
             ("room_' . ROOM_COUNTERFEITER . '", "off_board", "available"),
             ("room_' . ROOM_SAFE_HOUSE . '", "off_board", "available"),

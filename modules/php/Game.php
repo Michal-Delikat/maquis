@@ -128,7 +128,7 @@ class Game extends \Table {
         $missionsDifficulty = (int) $this->tableOptions->get(100);
 
         if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_UNDERGROUND_NEWSPAPER, MISSION_GERMAN_SHEPARDS);
+            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
         } else {
             $missions = [
                 MISSION_MILICE_PARADE_DAY,
@@ -182,10 +182,11 @@ class Game extends \Table {
                 $card = $this->PATROL_CARD_ITEMS[$cardID - 1];
                 $doubleAgentLocation = $card['space_a'];
                 $this->addSpaceAction($doubleAgentLocation, ACTION_COMPLETE_DOUBLE_AGENT_MISSION);
-                $this->updateDarkLadyLocation($doubleAgentLocation, true);
+                $this->updateDarkLadyLocation((string) $doubleAgentLocation, 'placed');
                 
                 $this->notify->all("darkLadyFound", clienttranslate("Dark Lady found at " . $this->getSpaceNameById($card['space_a'])), array(
-                    "cardId" => $cardID
+                    "cardId" => $cardID,
+                    "location" => $doubleAgentLocation
                 ));
             }
         }
@@ -288,7 +289,7 @@ class Game extends \Table {
             $this->saveAction(ACTION_INSERT_MOLE);
             $this->gamestate->nextState("nextWorker");
         } else if ($actionName === ACTION_COMPLETE_DOUBLE_AGENT_MISSION) {
-            $this->updateDarkLadyLocation($activeSpace, false);
+            $this->updateDarkLadyLocation('off_board', 'NaN');
             $this->completeMission(MISSION_DOUBLE_AGENT);
             foreach([1, 3, 5, 6, 9, 11] as $space) {
                 $this->removeMarker($space);
@@ -567,12 +568,11 @@ class Game extends \Table {
         }
 
         $spaceName = $this->getSpaceNameById($spaceID);
+        $this->updateComponent($this->getWorkerIdByLocation((string) $spaceID), 'off_board', 'removed');
         
         $this->notify->all("workerRemoved", clienttranslate("Worker removed from " . $spaceName), array(
             "activeSpace" => $spaceID
         ));
-
-        $this->updateSpace($spaceID, $hasWorker = false);
     }
 
     public function returnOrArrest(int $spaceID): void {
@@ -812,6 +812,8 @@ class Game extends \Table {
         $result["milice"] = $this->getMilice();
         $result["soldiers"] = $this->getSoldiers();
 
+        $result["darkLadyLocation"] = $this->getDarkLadyLocation();
+
         return $result;
     }
     
@@ -836,8 +838,6 @@ class Game extends \Table {
             ");
         }
 
-        $this->debug("hello");
-
         $result = array_filter($result, function($action) use ($spaceID) {
             switch ($action['action_name']) {
                 case ACTION_GET_WEAPON:
@@ -855,7 +855,6 @@ class Game extends \Table {
                 case ACTION_GET_MONEY_FOR_MEDICINE:
                     return $this->getResource(RESOURCE_MEDICINE) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
                 case ACTION_WRITE_GRAFFITI:
-                    $this->debug("markerNumber: " . (string) $this->countMarkers($spaceID));
                     return (($this->countMarkers($spaceID) === 0) || (($this->countMarkers($spaceID) === 1) && $this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT))) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
                     break;
                 case ACTION_COMPLETE_OFFICERS_MANSION_MISSION:

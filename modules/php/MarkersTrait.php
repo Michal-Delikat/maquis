@@ -145,12 +145,20 @@ trait MarkersTrait {
         }, 0);
     }
 
-    protected function updateDarkLadyLocation(int $spaceID, bool $darkLadyLocation): void {
-        self::DbQuery('
-            UPDATE board
-            SET dark_lady_location = ' . (int) $darkLadyLocation . '
-            WHERE space_id = ' . $spaceID . ';'
-        );
+    protected function getDarkLadyLocation(): string {
+        return (string) $this->getUniqueValueFromDb("
+            SELECT location
+            FROM components
+            WHERE name = 'dark_lady_location';
+        ");
+    }
+
+    protected function updateDarkLadyLocation(string $spaceID, string $state): void {
+        self::DbQuery("
+            UPDATE components
+            SET location = '$spaceID', state = '$state'
+            WHERE name = 'dark_lady_location'
+        ");
     }
 
     protected function getSpacesWithMarkers(): array {

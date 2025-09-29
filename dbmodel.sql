@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `board` (
     `space_name` varchar(16) NOT NULL,
     `is_safe` BOOLEAN NOT NULL DEFAULT FALSE,
     `is_field` BOOLEAN NOT NULL DEFAULT FALSE,
-    `dark_lady_location` BOOL NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`space_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

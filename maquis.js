@@ -40,7 +40,6 @@ function (dojo, declare) {
             let activeResistance = parseInt(gamedatas.activeResistance);
             let resistanceToRecruit = parseInt(gamedatas.resistanceToRecruit);
 
-            let board = gamedatas.board;
             let placedTokens = Object.values(gamedatas.placedTokens);
             let spacesWithMarkers = Object.values(gamedatas.spacesWithMarkers);
             let placedRooms = Object.values(gamedatas.placedRooms);
@@ -59,6 +58,8 @@ function (dojo, declare) {
             let soldiers = Object.values(gamedatas.soldiers);
 
             let player_id = gamedatas.currentPlayerID;
+
+            let darkLadyLocation = gamedatas.darkLadyLocation;
 
             let player_board_div = $('player_board_' + player_id);
 
@@ -269,7 +270,6 @@ function (dojo, declare) {
             });
 
             // MORALE TRACK
-
             for (let i = 0; i <= 7; i++) {
                 dojo.place(`<div id="morale-track-space-${i}" class="morale-track-space"></div>`, "morale-track");
             }
@@ -277,7 +277,6 @@ function (dojo, declare) {
             dojo.place(`<div id="marker-morale" class="marker"></div>`, `morale-track-space-${currentMorale}`);
 
             // SOLDIER TRACK
-
             for (let i = 0; i <= 5; i++) {
                 dojo.place(`<div id="soldiers-track-space-${i}" class="soldiers-track-space"></div>`, "soldiers-track");
             }
@@ -285,7 +284,6 @@ function (dojo, declare) {
             dojo.place('<div id="marker-soldiers" class="marker"></div>', `soldiers-track-space-${activeSoldiers}`);
 
             // ROUND NUMBER
-            
             for (let i = 0; i < 16; i++) {
                 dojo.place(`<div id="round-number-space-${i}" class="round-number-space"></div>`, 'round-number-spaces')
             }
@@ -293,7 +291,6 @@ function (dojo, declare) {
             dojo.place(`<div id="marker-round" class="marker"></div>`, `round-number-space-${currentRound}`);
             
             // BOARD SPACES
-
             for (let i = 0; i < 17; i++) {
                 dojo.place(`
                     <div id="space-${i + 1}" class="space board-space">
@@ -327,7 +324,6 @@ function (dojo, declare) {
             }
 
             // PAWNS
-
             resistanceWorkers.forEach(worker => { 
                 if (worker.state === 'placed') this.placeWorker(worker.name, worker.location, false)
             });
@@ -338,23 +334,13 @@ function (dojo, declare) {
                 if (soldier.state === 'placed') this.placeSoldier(soldier.name, soldier.location, false)
             });
 
-            for (let i = 1; i <= 23; i++) {
-                if (board[i]) {
-                    if (parseInt(board[i].dark_lady_location)) {
-                        this.placeDarkLadyLocationReminder(parseInt(board[i].space_id));
-                    }
-                }
-            }
-
             // MARKERS
             spacesWithMarkers.forEach(space => this.placeMissionMarker(space['location'], space['marker_number'], false));
 
             // TOKENS
-
             this.placeTokens(placedTokens, false);
             
             // ROOM TILES
-            
             rooms.forEach((room) => dojo.place(`
                     <div id="${room.name}-tile-container" class="room-tile-container">
                         <div id="room-tile-${room.name}" class="room-tile">
@@ -369,11 +355,14 @@ function (dojo, declare) {
             });
 
             // PATROL DISCARD
-
             Object.values(discardedPatrolCards).forEach((card) => this.discardPatrolCard(card.type_arg, true));
 
-            // Event Listeners
+            // DARK LADY LOCATION REMINDER
+            if (darkLadyLocation !== 'off_board') {
+                this.placeDarkLadyLocationReminder(darkLadyLocation);
+            }
 
+            // Event Listeners
             dojo.query('.background-space').connect('click', this, "onSpaceClicked");
  
             // Setup game notifications to handle (see "setupNotifications" method below)
@@ -631,7 +620,6 @@ function (dojo, declare) {
         },
 
         notif_markerPlaced: function({spaceID, markerNumber}) {
-            console.log(spaceID, markerNumber);
             this.placeMissionMarker(spaceID, markerNumber);
         },
 
@@ -659,8 +647,9 @@ function (dojo, declare) {
             });
         },
 
-        notif_darkLadyFound: function({cardId}) {
+        notif_darkLadyFound: function({cardId, location}) {
             this.displayModalWithCard(cardId, "Dark Lady found at place #1");
+            this.placeDarkLadyLocationReminder(location);
         },
 
         // UTILITY
@@ -811,7 +800,6 @@ function (dojo, declare) {
             const markerIDs = dojo.query(".marker-mission").map(node => node.id);
             const markerID = markerIDs.length
 
-            console.log(spaceID, marker_number, markerID);
             dojo.place(`<div id="mission-marker-${markerID}" class="marker marker-mission"></div>`, `space-${spaceID}-marker-space-${marker_number}`);
             if (animate) {
                 this.placeOnObject(`mission-marker-${markerID}`, 'player_boards');
