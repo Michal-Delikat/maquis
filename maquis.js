@@ -49,7 +49,7 @@ function (dojo, declare) {
 
             let resources = gamedatas.resources;
 
-            let selectedMissions = Object.values(gamedatas.selectedMissions);
+            let selectedMissions = gamedatas.selectedMissions;
             let completedMissions = Object.values(gamedatas.completedMissions);
 
             let rooms = Object.values(gamedatas.rooms);
@@ -97,43 +97,55 @@ function (dojo, declare) {
                 <div id="board-and-missions">
                     <div id="mission-cards">
                         <div id="mission-slot-1" class="mission-slot">
-                            <div id="${selectedMissions[0].name}" class="card mission-card">
+                            <div id="${selectedMissions.mission_card_a}" class="card mission-card">
                                 <div class="mission-card-back mission-card-face"></div>
                                 <div class="mission-card-front mission-card-face"></div>
                                 <div id="space-18" class="space mission-space mission-space-1">
                                     <div id="space-18-worker-space" class="worker-space"></div>
-                                    <div id="space-18-marker-space" class="marker-space"></div>
+                                    <div id="space-18-marker-space" class="marker-space">
+                                        <div id="space-18-marker-space-1" class="marker-space"></div>
+                                    </div>
                                     <div id="space-18-background-space" class="background-space"></div>
                                 </div>
                                 <div id="space-19" class="space mission-space mission-space-2">
                                     <div id="space-19-worker-space" class="worker-space"></div>
-                                    <div id="space-19-marker-space" class="marker-space"></div>
+                                    <div id="space-19-marker-space" class="marker-space">
+                                        <div id="space-19-marker-space-1" class="marker-space"></div>
+                                    </div>
                                     <div id="space-19-background-space" class="background-space"></div>
                                 </div>
                                 <div id="space-20" class="space mission-space mission-space-3">
                                     <div id="space-20-worker-space" class="worker-space"></div>
-                                    <div id="space-20-marker-space" class="marker-space"></div>
+                                    <div id="space-20-marker-space" class="marker-space">
+                                        <div id="space-20-marker-space-1" class="marker-space"></div>    
+                                    </div>
                                     <div id="space-20-background-space" class="background-space"></div>
                                 </div>
                             </div>
                         </div>
                         <div id="mission-slot-2" class="mission-slot">
-                            <div id="${selectedMissions[1].name}" class="card mission-card">
+                            <div id="${selectedMissions.mission_card_b}" class="card mission-card">
                                 <div class="mission-card-back mission-card-face"></div>
                                 <div class="mission-card-front mission-card-face"></div>
                                 <div id="space-21" class="space mission-space mission-space-1">
                                     <div id="space-21-worker-space" class="worker-space"></div>
-                                    <div id="space-21-marker-space" class="marker-space"></div>
+                                    <div id="space-21-marker-space" class="marker-space">
+                                        <div id="space-21-marker-space-1"></div>
+                                    </div>
                                     <div id="space-21-background-space" class="background-space"></div>
                                 </div>
                                 <div id="space-22" class="space mission-space mission-space-2">
                                     <div id="space-22-worker-space" class="worker-space"></div>
-                                    <div id="space-22-marker-space" class="marker-space"></div>
+                                    <div id="space-22-marker-space" class="marker-space">
+                                        <div id="space-22-marker-space-1" class="marker-space"></div>
+                                    </div>
                                     <div id="space-22-background-space" class="background-space"></div>
                                 </div>
                                 <div id="space-23" class="space mission-space mission-space-3">
                                     <div id="space-23-worker-space" class="worker-space"></div>
-                                    <div id="space-23-marker-space" class="marker-space"></div>
+                                    <div id="space-23-marker-space" class="marker-space">
+                                        <div id="space-23-marker-space-1" class="marker-space"></div>
+                                    </div>
                                     <div id="space-23-background-space" class="background-space"></div>
                                 </div>
                             </div>
@@ -163,7 +175,7 @@ function (dojo, declare) {
 
             // ADD TOOLTIPS TO MISSIONS
 
-            selectedMissions.forEach(mission => {
+            Object.values(selectedMissions).forEach(mission => {
                 let description = null;
                 switch(parseInt(mission.mission_id)) {
                     case 1:
@@ -619,6 +631,7 @@ function (dojo, declare) {
         },
 
         notif_markerPlaced: function({spaceID, markerNumber}) {
+            console.log(spaceID, markerNumber);
             this.placeMissionMarker(spaceID, markerNumber);
         },
 
@@ -798,6 +811,7 @@ function (dojo, declare) {
             const markerIDs = dojo.query(".marker-mission").map(node => node.id);
             const markerID = markerIDs.length
 
+            console.log(spaceID, marker_number, markerID);
             dojo.place(`<div id="mission-marker-${markerID}" class="marker marker-mission"></div>`, `space-${spaceID}-marker-space-${marker_number}`);
             if (animate) {
                 this.placeOnObject(`mission-marker-${markerID}`, 'player_boards');

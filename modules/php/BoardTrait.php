@@ -22,7 +22,10 @@ trait BoardTrait {
             WHERE is_safe = 0;
         '));
 
-        //TODO: Filter mission spaces with markers
+        //TODO: Filter out mission spaces with markers
+
+        $spacesWithMarkers = array_keys($this->getSpacesWithMarkers());
+        $this->dump("spacesWithMarkers", $spacesWithMarkers);
 
         $spacesWithTokens = $this->getSpacesWithTokens();
 
@@ -32,10 +35,12 @@ trait BoardTrait {
             $this->getSpacesWithSoldiers()
         );
 
-        return array_filter($result, function($space) use ($spacesWithPawns, $spacesWithTokens) {
+        $fieldSpaces = $this->getFields();
+
+        return array_filter($result, function($space) use ($spacesWithPawns, $spacesWithTokens, $fieldSpaces, $spacesWithMarkers) {
             return !in_array($space, $spacesWithPawns) && 
-                    (!in_array($space, $this->getFields()) || 
-                    (in_array($space, $spacesWithTokens) && in_array($space, $spacesWithTokens)));
+                    (!in_array($space, $fieldSpaces) || (in_array($space, $fieldSpaces) && in_array($space, $spacesWithTokens))) && 
+                    ((!in_array($space, $spacesWithMarkers) && in_array((int) $space, [18, 19, 20, 21, 22, 23])) || !in_array((int) $space, [18, 19, 20, 21, 22, 23]));
         });
     }
 

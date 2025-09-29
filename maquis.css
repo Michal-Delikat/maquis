@@ -192,6 +192,10 @@
     .marker {
         width: 16%;
     }
+
+    .mission-space .marker-mission {
+        width: 100%;
+    }
 }
 
 .token {
@@ -534,7 +538,7 @@
     border-radius: 50%;
 }
 
-.marker-space {
+.board-space > .marker-space {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -550,6 +554,14 @@
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+.mission-space > .marker-space > * {
+    position: relative;
+    top: 15%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
 }
 
 .marker-mission {

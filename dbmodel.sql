@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `board_action` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `components` (
-    `name` VARCHAR(32) NOT NULL,
+    `name` VARCHAR(128) NOT NULL,
     `location` VARCHAR(32) NOT NULL,
     `state` VARCHAR(16),
     PRIMARY KEY (`name`)

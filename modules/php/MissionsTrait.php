@@ -158,11 +158,11 @@ trait MissionsTrait {
     }
 
     protected function getSelectedMissions(): array {
-        return (array) $this->getCollectionFromDb("
+        return (array) array_values($this->getCollectionFromDb("
             SELECT name, location
             FROM components
             WHERE name LIKE 'mission_card%' AND (state = 'selected' OR state = 'completed');
-        ");
+        "));
     }
 
     protected function getIsMissionSelected(string $missionName): bool {

@@ -128,7 +128,7 @@ class Game extends \Table {
         $missionsDifficulty = (int) $this->tableOptions->get(100);
 
         if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+            $this->configureMissions(MISSION_UNDERGROUND_NEWSPAPER, MISSION_GERMAN_SHEPARDS);
         } else {
             $missions = [
                 MISSION_MILICE_PARADE_DAY,
@@ -160,8 +160,6 @@ class Game extends \Table {
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
-
-        $this->getTokens(RESOURCE_MONEY, 2);
     }
 
     public function actPlaceWorker(int $spaceID): void {
@@ -796,8 +794,12 @@ class Game extends \Table {
         $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');
 
         $result["resources"] = $this->getAllResources();
-
-        $result["selectedMissions"] = $this->getSelectedMissions();
+        
+        $selectedMissions = $this->getSelectedMissions();    
+        $result["selectedMissions"] = [
+            $selectedMissions[0]['location'] => $selectedMissions[0]['name'],
+            $selectedMissions[1]['location'] => $selectedMissions[1]['name']
+        ];
         $result["completedMissions"] = $this->getCompletedMissions();
 
         $result["rooms"] = $this->getRooms();
