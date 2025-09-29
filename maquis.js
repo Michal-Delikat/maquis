@@ -417,7 +417,7 @@ function (dojo, declare) {
                     break;
 
                 case 'shootMilice':
-                    const spacesWithMilice = Object.values(args.args);
+                    const spacesWithMilice = Object.values(args.args.spacesWithMilice);
 
                     spacesWithMilice.forEach(spaceID => {
                         let space = dojo.byId(`space-${spaceID}-background-space`);

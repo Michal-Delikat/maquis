@@ -515,8 +515,9 @@ class Game extends \Table {
     }
 
     public function argShootMilice(): array {
-        // TODO Turn into assosiative array.
-        return $this->getSpacesWithMilice();
+        return [
+            "spacesWithMilice" => $this->getSpacesWithMilice()
+        ];
     }
 
     public function argSelectRoom(): array {
@@ -767,21 +768,11 @@ class Game extends \Table {
         }
     } 
 
-    // GETTERS
-
     protected function getAllDatas() {
         $result = [];
 
-        // WARNING: We must only return information visible by the current player.
         $result["currentPlayerID"] = (int) $this->getCurrentPlayerId();
 
-        // Get information about players.
-        // NOTE: you can retrieve some extra field you added for "player" table in `dbmodel.sql` if you need it.
-        $result["players"] = $this->getCollectionFromDb(
-            "SELECT `player_id` `id`, `player_score` `score` FROM `player`"
-        );
-
-        // TODO: Gather all information about current game situation (visible by player $current_player_id).
         $result["round"] = $this->getRoundNumber();
         $result["morale"] = $this->getMorale();
         $result["activeSoldiers"] = $this->getActiveSoldiers();
