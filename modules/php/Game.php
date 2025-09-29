@@ -595,7 +595,7 @@ class Game extends \Table {
     }
 
     protected function addSpareRoomActions(int $spaceID, string $roomID): void {
-        switch ($roomID) {
+        switch (str_replace("room_", "", $roomID)) {
             case ROOM_INFORMANT:
                 $this->addSpaceAction($spaceID, ACTION_GET_INTEL);
                 break;

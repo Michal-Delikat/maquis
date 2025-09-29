@@ -108,4 +108,12 @@ trait BoardTrait {
             WHERE mission_id = $missionID;
         ");
     }
+
+    protected function updateFieldsSafety(int $spaceID, $isSafe = false): void {
+        self::DbQuery('
+            UPDATE board
+            SET is_safe = ' . (int) $isSafe . '
+            WHERE space_id = ' . $spaceID . ';'
+        );
+    }
 }

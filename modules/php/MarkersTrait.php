@@ -145,14 +145,6 @@ trait MarkersTrait {
         }, 0);
     }
 
-    protected function updateFieldsSafety(int $spaceID, $isSafe = false): void {
-        self::DbQuery('
-            UPDATE board
-            SET is_safe = ' . (int) $isSafe . '
-            WHERE space_id = ' . $spaceID . ';'
-        );
-    }
-
     protected function updateDarkLadyLocation(int $spaceID, bool $darkLadyLocation): void {
         self::DbQuery('
             UPDATE board

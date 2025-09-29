@@ -489,7 +489,6 @@ function (dojo, declare) {
                         break;
 
                     case 'selectSpareRoom':
-                        console.log(args);
                         Object.values(args.availableRooms).forEach(room => this.addActionButton('actSelectRoom_' + `${room.name}`, (`${args.roomsDescriptions[room.name.replace("room_", "")]}`), () => this.bgaPerformAction("actSelectRoom", { roomID: room.name}), null, null, 'blue'));
                         break;
 
