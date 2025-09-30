@@ -325,7 +325,7 @@ function (dojo, declare) {
 
             // PAWNS
             resistanceWorkers.forEach(worker => { 
-                if (worker.state === 'placed') this.placeWorker(worker.name, worker.location, false)
+                if (worker.state === 'placed' || worker.state === 'mole') this.placeWorker(worker.name, worker.location, false)
             });
             milice.forEach(milice => {
                 if (milice.state === 'placed') this.placeMilice(milice.name, milice.location, false)

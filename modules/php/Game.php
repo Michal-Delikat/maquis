@@ -128,7 +128,7 @@ class Game extends \Table {
         $missionsDifficulty = (int) $this->tableOptions->get(100);
 
         if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+            $this->configureMissions(MISSION_INFILTRATION, MISSION_OFFICERS_MANSION);
         } else {
             $missions = [
                 MISSION_MILICE_PARADE_DAY,
@@ -160,6 +160,10 @@ class Game extends \Table {
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
+
+        $this->getTokens(RESOURCE_INTEL, 2);
+        $this->getTokens(RESOURCE_WEAPON, 1);
+        $this->getTokens(RESOURCE_EXPLOSIVES, 1);
     }
 
     public function actPlaceWorker(int $spaceID): void {
@@ -331,7 +335,7 @@ class Game extends \Table {
     public function stNextWorker() {
         $this->resetActiveSpace();
 
-        if ($this->getIsMoleInserted() && $this->getPlacedResistance() == 1) {
+        if ($this->getIsMoleInserted() && ($this->getPlacedResistance() === 1)) {
             $this->gamestate->nextState("roundEnd");
         } else if ($this->getPlacedResistance() > 0) {
             $this->gamestate->nextState("activateWorker");
@@ -376,7 +380,7 @@ class Game extends \Table {
         $round = $this->getRoundNumber() + 1;
         $this->updateRoundNumber($round);
         
-        if ($this->isParadeDay($round)) {
+        if ($this->isParadeDay()) {
             $this->updateMorale($this->getMorale() - 1);
         }
 
@@ -470,8 +474,17 @@ class Game extends \Table {
     }
 
     public function argActivateWorker(): array {
+        $resistanceWorkersLocations = $this->getSpacesWithResistanceWorkers();
+        if ($this->getIsMoleInserted()) {
+            $spaceIdWithMole = $this->getSpaceIdWithMole();
+
+            $resistanceWorkersLocations = array_filter($resistanceWorkersLocations, function($spaceId) use ($spaceIdWithMole) {
+                return $spaceId !== $spaceIdWithMole;
+            });
+        }
+
         return [
-            "spaces" => $this->getSpacesWithResistanceWorkers(),
+            "spaces" => $resistanceWorkersLocations,
             "canShoot" => $this->getCanShoot()
         ];
     }
@@ -529,59 +542,6 @@ class Game extends \Table {
 
     public function argRemoveWorker(): array {
         return $this->getSpacesWithResistanceWorkers();
-    }
-
-    // UTILITY 
-
-    public function returnWorker(int $spaceID): void {
-        if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
-            return;
-        }
-
-        $spaceName = $this->getSpaceNameById($spaceID);
-
-        $workerID = $this->getWorkerIdByLocation((string) $spaceID);
-        $this->updateComponent($workerID, 'safe_house', 'active');
-
-        $this->notify->all("workerRemoved", clienttranslate("Worker safely returned from $spaceName"), array(
-            "activeSpace" => $spaceID
-        ));
-    }
-
-    public function arrestWorker(int $spaceID): void {
-         if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
-            return;
-        }
-
-        $spaceName = $this->getSpaceNameById($spaceID);
-        $workerID = $this->getWorkerIdByLocation((string) $spaceID);
-
-        $this->updateComponent($workerID, 'arrest', 'arrested');
-        
-        $this->notify->all("workerRemoved", clienttranslate("Worker arrested at " . $spaceName), array(
-            "activeSpace" => $spaceID
-        ));
-    }
-
-    public function removeWorker(int $spaceID): void {
-         if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
-            return;
-        }
-
-        $spaceName = $this->getSpaceNameById($spaceID);
-        $this->updateComponent($this->getWorkerIdByLocation((string) $spaceID), 'off_board', 'removed');
-        
-        $this->notify->all("workerRemoved", clienttranslate("Worker removed from " . $spaceName), array(
-            "activeSpace" => $spaceID
-        ));
-    }
-
-    public function returnOrArrest(int $spaceID): void {
-        if ($this->checkEscapeRoute($spaceID)) {
-            $this->returnWorker($spaceID);
-        } else {
-            $this->arrestWorker($spaceID);
-        }
     }
 
     protected function addSpaceAction(int $spaceID, string $actionName): void {
@@ -738,8 +698,11 @@ class Game extends \Table {
                 break;
             case ACTION_INSERT_MOLE:
                 $activeSpace = $this->getActiveSpace();
-                $this->setMoleInserted(true);
                 $this->spendTokens(RESOURCE_INTEL, 2);
+
+                $moleID = $this->getWorkerIdByLocation((string) $activeSpace);
+                $this->updateComponent($moleID, (string) $activeSpace, 'mole');
+
                 $this->addMissionSpace($activeSpace + 1, MISSION_INFILTRATION);
                 $this->addSpaceAction($activeSpace + 1, ACTION_RECOVER_MOLE);
                 break;
@@ -747,7 +710,6 @@ class Game extends \Table {
                 $activeSpace = $this->getActiveSpace();
                 $this->spendTokens(RESOURCE_WEAPON, 1);
                 $this->spendTokens(RESOURCE_EXPLOSIVES, 1);
-                $this->setMoleInserted(false);
                 $this->returnOrArrest($activeSpace - 1);
                 $this->returnOrArrest($activeSpace);
                 $this->completeMission(MISSION_INFILTRATION);
@@ -772,6 +734,10 @@ class Game extends \Table {
         $result = [];
 
         $result["currentPlayerID"] = (int) $this->getCurrentPlayerId();
+
+        $result["players"] = $this->getCollectionFromDb(
+            "SELECT `player_id` `id`, `player_score` `score` FROM `player`"
+        );
 
         $result["round"] = $this->getRoundNumber();
         $result["morale"] = $this->getMorale();
@@ -852,7 +818,7 @@ class Game extends \Table {
                     return ((!$this->getIsMissionSelected(MISSION_DOUBLE_AGENT) || $this->getIsMissionCompleted(MISSION_DOUBLE_AGENT)) && $this->countMarkersInSpaces([1, 3, 11]) == 3) || ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && $this->countMarkersInSpaces([1, 3, 11]) == 6) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
                     break;
                 case ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION:
-                    return $this->getResource(RESOURCE_WEAPON) > 0 && $this->isParadeDay($this->getRoundNumber());
+                    return $this->getResource(RESOURCE_WEAPON) > 0 && $this->isParadeDay();
                     break;
                 case ACTION_GET_WORKER:
                     return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResistanceToRecruit() > 0;
@@ -874,6 +840,8 @@ class Game extends \Table {
                     break;
                 case ACTION_COMPLETE_DOUBLE_AGENT_MISSION:
                     return !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT);
+                case ACTION_RECOVER_MOLE:
+                    return ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getResource(RESOURCE_EXPLOSIVES) >= 1);
                 default:
                     return true;
                     break;
@@ -954,7 +922,7 @@ class Game extends \Table {
         return array_filter($result, function ($connection) use ($roundNumber, $paradeCanHappen) {
             return !(
                     (($connection['space_id_start'] == '1' && $connection['space_id_end'] == '2') || ($connection['space_id_start'] == '2' && $connection['space_id_end'] == '1')) && 
-                    $this->isParadeDay($roundNumber) &&
+                    $this->isParadeDay() &&
                     $paradeCanHappen
                 );
         });
@@ -966,10 +934,6 @@ class Game extends \Table {
     protected function getIsSafe(string $actionName): bool {
         return (bool) $this->getUniqueValueFromDb("SELECT is_safe FROM action WHERE action_name = \"$actionName\";");
     }
-
-    // UPDATES
-
-    
 
     // CHECK ESCAPE ROUTE 
 
@@ -1015,9 +979,8 @@ class Game extends \Table {
         return false;
     }
 
-    // PREDICATES
-
-    protected function isParadeDay(int $day): bool {
+    protected function isParadeDay(): bool {
+        $day = $this->getRoundNumber();
         return $day > 0 && ($day === 14 || $day % 3 === 0);
     }
     

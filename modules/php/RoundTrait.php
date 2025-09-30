@@ -38,10 +38,6 @@ trait RoundTrait {
         return ($weapon > 0 && !$this->getShotToday() && $placedMilice > 0) && !($this->getIsMissionSelected(MISSION_GERMAN_SHEPARDS) && !$this->getIsMissionCompleted(MISSION_GERMAN_SHEPARDS));
     }
 
-    protected function getIsMoleInserted(): bool {
-        return (bool) $this->getUniqueValueFromDb("SELECT mole_inserted FROM round_data");
-    }
-
     protected function setSelectedField(int $spaceID): void {
         self::DbQuery("
             UPDATE round_data
@@ -54,9 +50,5 @@ trait RoundTrait {
             UPDATE round_data
             SET shot_today = " . (int) $shotToday . ";"
         );
-    }
-
-    protected function setMoleInserted(bool $moleInserted = false): void {
-        self::DbQuery("UPDATE round_data SET mole_inserted = " . (int) $moleInserted . ";");
     }
 }

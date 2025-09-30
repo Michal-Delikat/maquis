@@ -58,7 +58,7 @@ trait PawnsTrait {
         return (int) $this->getUniqueValueFromDb("
             SELECT COUNT(*)
             FROM components
-            WHERE name LIKE 'resistance%' AND state = 'placed';
+            WHERE name LIKE 'resistance%' AND (state = 'placed' OR state = 'mole');
         ");
     }
 
@@ -66,7 +66,7 @@ trait PawnsTrait {
         return (int) $this->getUniqueValueFromDb("
             SELECT COUNT(*)
             FROM components
-            WHERE name LIKE 'resistance%' AND (state = 'active' OR state = 'placed');
+            WHERE name LIKE 'resistance%' AND (state = 'active' OR state = 'placed' OR state = 'mole');
         ");
     }
 
@@ -92,5 +92,72 @@ trait PawnsTrait {
             FROM components
             WHERE name LIKE 'soldier%' AND state = 'placed'; 
         ");
+    }
+
+    protected function getIsMoleInserted(): bool {
+        return (bool) $this->getUniqueValueFromDb("
+            SELECT * 
+            FROM components
+            WHERE name LIKE 'resistance%' AND state = 'mole';
+        ");
+    }
+
+    protected function getSpaceIdWithMole(): string {
+        return (string) $this->getUniqueValueFromDb("
+            SELECT location
+            FROM components
+            WHERE name LIKE 'resistance%' AND state = 'mole';
+        ");
+    }
+
+    public function returnWorker(int $spaceID): void {
+        if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
+            return;
+        }
+
+        $spaceName = $this->getSpaceNameById($spaceID);
+
+        $workerID = $this->getWorkerIdByLocation((string) $spaceID);
+        $this->updateComponent($workerID, 'safe_house', 'active');
+
+        $this->notify->all("workerRemoved", clienttranslate("Worker safely returned from $spaceName"), array(
+            "activeSpace" => $spaceID
+        ));
+    }
+
+    public function arrestWorker(int $spaceID): void {
+        if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
+            return;
+        }
+
+        $spaceName = $this->getSpaceNameById($spaceID);
+        $workerID = $this->getWorkerIdByLocation((string) $spaceID);
+
+        $this->updateComponent($workerID, 'arrest', 'arrested');
+        
+        $this->notify->all("workerRemoved", clienttranslate("Worker arrested at " . $spaceName), array(
+            "activeSpace" => $spaceID
+        ));
+    }
+
+    public function removeWorker(int $spaceID): void {
+         if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
+            return;
+        }
+
+        $spaceName = $this->getSpaceNameById($spaceID);
+        $this->updateComponent($this->getWorkerIdByLocation((string) $spaceID), 'off_board', 'removed');
+        
+        $this->notify->all("workerRemoved", clienttranslate("Worker removed from " . $spaceName), array(
+            "activeSpace" => $spaceID
+        ));
+    }
+
+    public function returnOrArrest(int $spaceID): void {
+        if ($this->checkEscapeRoute($spaceID)) {
+            $this->returnWorker($spaceID);
+        } else {
+            $this->arrestWorker($spaceID);
+        }
     }
 }

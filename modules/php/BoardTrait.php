@@ -25,7 +25,6 @@ trait BoardTrait {
         //TODO: Filter out mission spaces with markers
 
         $spacesWithMarkers = array_keys($this->getSpacesWithMarkers());
-        $this->dump("spacesWithMarkers", $spacesWithMarkers);
 
         $spacesWithTokens = $this->getSpacesWithTokens();
 
@@ -36,9 +35,10 @@ trait BoardTrait {
         );
 
         $fieldSpaces = $this->getFields();
+        $spaceWithMole = $this->getSpaceIdWithMole();
 
-        return array_filter($result, function($space) use ($spacesWithPawns, $spacesWithTokens, $fieldSpaces, $spacesWithMarkers) {
-            return !in_array($space, $spacesWithPawns) && 
+        return array_filter($result, function($space) use ($spacesWithPawns, $spacesWithTokens, $fieldSpaces, $spacesWithMarkers, $spaceWithMole) {
+            return !in_array($space, $spacesWithPawns) && (string) $space !== (string) $spaceWithMole && 
                     (!in_array($space, $fieldSpaces) || (in_array($space, $fieldSpaces) && in_array($space, $spacesWithTokens))) && 
                     ((!in_array($space, $spacesWithMarkers) && in_array((int) $space, [18, 19, 20, 21, 22, 23])) || !in_array((int) $space, [18, 19, 20, 21, 22, 23]));
         });
@@ -67,17 +67,9 @@ trait BoardTrait {
     }
 
     protected function getSpacesWithResistanceWorkers(): array {
-        $resistanceWorkersLocations = array_map(function ($resistanceWorker) {
+        return array_map(function ($resistanceWorker) {
             return $resistanceWorker['location'];
         }, $this->getResistanceWorkers());
-        if ($this->getIsMissionSelected(MISSION_INFILTRATION) && $this->getIsMoleInserted()) {
-            $spaceIdWithMole = $this->getSpaceIdsByMissionName(MISSION_INFILTRATION)[0];
-
-            $resistanceWorkersLocations = array_filter($resistanceWorkersLocations, function($spaceId) use ($spaceIdWithMole) {
-                return $spaceId != $spaceIdWithMole;
-            });
-        }
-        return $resistanceWorkersLocations;
     }
     
     protected function getSpacesWithMilice(): array {
