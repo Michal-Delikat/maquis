@@ -67,19 +67,6 @@ function (dojo, declare) {
 
             dojo.place(`
                 <div id="custom-player-board">
-                    <div id="workers">
-                        <div id="resistance">
-                            <div id="resistance-worker-icon"></div>
-                            <div id="resistance-worker-numbers">
-                                <span id="placed-resistance">${placedResistance}</span>
-                                <span>|</span>
-                                <span id="active-resistance">${activeResistance}</span>
-                                <span>|</span>
-                                <span id="resistance-to-recruit">${resistanceToRecruit}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <hr/>
                     <div id="resources"></div>
                 </div>
             `, player_board_div);
@@ -151,6 +138,13 @@ function (dojo, declare) {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div id="arrest">
+                        <div id="arrest-space-1" class="arrest-space"></div>
+                        <div id="arrest-space-2" class="arrest-space"></div>
+                        <div id="arrest-space-3" class="arrest-space"></div>
+                        <div id="arrest-space-4" class="arrest-space"></div>
+                        <div id="arrest-space-5" class="arrest-space"></div>
                     </div>
                     <div id="board">
                         <div id="spaces"></div>
@@ -323,9 +317,26 @@ function (dojo, declare) {
                 }
             }
 
+            // ADDITIONAL SPACES FOR RESISTANCE
+            // SAFE HOUSE
+            dojo.place(`
+                <div id="safe-house-space-1" class="safe-house-space"></div>
+                <div id="safe-house-space-2" class="safe-house-space"></div>
+                <div id="safe-house-space-3" class="safe-house-space"></div>
+                <div id="safe-house-space-4" class="safe-house-space"></div>
+                <div id="safe-house-space-5" class="safe-house-space"></div>
+                `, 'space-16-worker-space');
+            // CAFE
+            dojo.place(`
+                <div class="cafe-spaces">
+                    <div id="cafe-space-1" class="cafe-space"></div>
+                    <div id="cafe-space-2" class="cafe-space"></div>
+                </div>
+                `, 'spaces');
+                
             // PAWNS
             resistanceWorkers.forEach(worker => { 
-                if (worker.state === 'placed' || worker.state === 'mole') this.placeWorker(worker.name, worker.location, false)
+                this.placeWorker(worker.name, worker.location, false)
             });
             milice.forEach(milice => {
                 if (milice.state === 'placed') this.placeMilice(milice.name, milice.location, false)
@@ -558,8 +569,20 @@ function (dojo, declare) {
             this.bgaSetupPromiseNotifications();
         },
         
-        notif_workerPlaced: function({workerID, spaceID}) {
-            this.placeWorker(workerID, spaceID);
+        notif_workerMoved: function({workerID, spaceID}) {
+            this.moveWorker(workerID, spaceID);
+        },
+
+        notif_workerRecruited: function({workerID}) {
+            this.recruitWorker(workerID);
+        },
+
+        notif_workerReturned: function({activeSpace, workerID}) {
+            this.returnWorker(activeSpace, workerID);
+        },
+
+        notif_workerArrested: function({workerID}) {
+            this.arrestWorker(workerID);
         },
 
         notif_patrolPlaced: function({placeSoldier, patrolID, spaceID}) {
@@ -572,10 +595,6 @@ function (dojo, declare) {
         
         notif_patrolCardDiscarded: function({patrolCardID}) {
             this.discardPatrolCard(patrolCardID);
-        },
-
-        notif_workerRemoved: function(notif) {
-            this.removeWorker(notif.activeSpace);
         },
 
         notif_patrolRemoved: function({patrolID}) {
@@ -692,13 +711,107 @@ function (dojo, declare) {
             });
         },
         
-        placeWorker: async function(resistanceID, spaceID, animate = true) {
-            dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `space-${spaceID}-worker-space`);            
-            if (animate) {
-                this.placeOnObject(`${resistanceID}`, 'resistance-worker-icon');
-                const animation = this.slideToObject(`${resistanceID}`, `space-${spaceID}-worker-space`);
-                await this.bgaPlayDojoAnimation(animation);
+        placeWorker: async function(resistanceID, spaceID) {
+            if (spaceID === 'safe_house') {
+                for (let i = 1; i <= 5; i++) {
+                    const safeHouseSpace = dojo.byId(`safe-house-space-${i}`);
+                    if (!safeHouseSpace.firstElementChild) {
+                        dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `safe-house-space-${i}`); 
+                        this.placeOnObject(resistanceID, `safe-house-space-${i}`);
+                        break; 
+                    }
+                }
+            } else if (spaceID === 'cafe') {
+                for (let i = 1; i <= 2; i++) {
+                    const cafeSpace = dojo.byId(`cafe-space-${i}`);
+                    if (!cafeSpace.firstElementChild) {
+                        dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `cafe-space-${i}`);
+                        this.placeOnObject(resistanceID,  `cafe-space-${i}`);
+                        break; 
+                    }
+                }
+            } else if (spaceID === 'arrest') {
+                for (let i = 1; i <= 5; i++) {
+                    const arrestSpace = dojo.byId(`arrest-space-${i}`);
+                    if (!arrestSpace.firstElementChild) {
+                        dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `arrest-space-${i}`);
+                        this.placeOnObject(resistanceID,  `arrest-space-${i}`);
+                        break; 
+                    }
+                }
+            } else {
+                dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `space-${spaceID}-worker-space`);            
             }
+        },
+
+        moveWorker: async function(resistanceID, spaceID) {
+            const resistanceNode = dojo.byId(resistanceID);
+            const parentNode = resistanceNode.parentNode;
+
+            dojo.destroy(resistanceID);
+            dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `space-${spaceID}-worker-space`);
+            this.placeOnObject(resistanceID, parentNode.id);
+
+            const animation = this.slideToObject(resistanceID, `space-${spaceID}-worker-space`);
+            await this.bgaPlayDojoAnimation(animation);
+        },
+
+        recruitWorker: async function(resistanceID) {
+            const resistanceNode = dojo.byId(resistanceID);
+            const parentNode = resistanceNode.parentNode;
+
+            for (let i = 1; i <= 5; i++) {
+                const safeHouseSpace = dojo.byId(`safe-house-space-${i}`);
+                if (!safeHouseSpace.firstElementChild) {
+                    dojo.destroy(resistanceID);
+                    dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `safe-house-space-${i}`);
+                    this.placeOnObject(resistanceID, parentNode.id);
+
+                    const animation = this.slideToObject(resistanceID, `safe-house-space-${i}`);
+                    await this.bgaPlayDojoAnimation(animation);
+                    break; 
+                }
+            }
+        },
+
+        returnWorker: async function(spaceID, resistanceID) {
+            dojo.destroy(resistanceID);
+            for (let i = 1; i <= 5; i++) {
+                const safeHouseSpace = dojo.byId(`safe-house-space-${i}`);
+                if (!safeHouseSpace.firstElementChild) {
+                    dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `safe-house-space-${i}`); 
+                    this.placeOnObject(resistanceID, `space-${spaceID}-worker-space`);
+                    const animation = this.slideToObject(resistanceID, `safe-house-space-${i}`);
+                    await this.bgaPlayDojoAnimation(animation);
+                    break; 
+                }
+            }
+        },
+
+        arrestWorker: async function(resistanceID) {
+            const resistanceNode = dojo.byId(resistanceID);
+            const parentNode = resistanceNode.parentNode;
+
+            for (let i = 1; i <= 5; i++) {
+                const arrestSpace = dojo.byId(`arrest-space-${i}`);
+                if (!arrestSpace.firstElementChild) {
+                    dojo.destroy(resistanceID);
+                    dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `arrest-space-${i}`);
+                    this.placeOnObject(resistanceID,  parentNode.id);
+                    const animation = this.slideToObject(resistanceID, `arrest-space-${i}`);
+                    await this.bgaPlayDojoAnimation(animation);
+                    break; 
+                }
+            }
+        },
+
+        removeWorker: async function(spaceID) {
+            let space = dojo.byId(`space-${spaceID}-worker-space`);
+            let resistanceID = space.firstElementChild.id;
+
+            const animation = this.slideToObject(`${resistanceID}`, 'custom-player-board');
+            await this.bgaPlayDojoAnimation(animation);
+            dojo.destroy(`${resistanceID}`);
         },
         
         placeMilice: async function(miliceID, spaceID, animate = true) {
@@ -732,15 +845,6 @@ function (dojo, declare) {
                 const slideAnimation = this.slideToObjectPos(`patrol-${patrolCardID}`, `patrol-discard`, 0, 0, 2000);
                 await this.bgaPlayDojoAnimation(slideAnimation);
             }
-        },
-
-        removeWorker: async function(spaceID) {
-            let space = dojo.byId(`space-${spaceID}-worker-space`);
-            let resistanceID = space.firstElementChild.id;
-
-            const animation = this.slideToObject(`${resistanceID}`, 'resistance-worker-icon');
-            await this.bgaPlayDojoAnimation(animation);
-            dojo.destroy(`${resistanceID}`);
         },
 
         removePatrol: async function(patrolID) {

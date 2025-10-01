@@ -52,6 +52,10 @@ trait PawnsTrait {
         ");
 
         $this->updateComponent($workerID, 'safe_house', 'active');
+
+        $this->notify->all("workerRecruited", "", array(
+            "workerID" => $workerID 
+        ));
     }
 
     function getPlacedResistance(): int {
@@ -120,8 +124,9 @@ trait PawnsTrait {
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
         $this->updateComponent($workerID, 'safe_house', 'active');
 
-        $this->notify->all("workerRemoved", clienttranslate("Worker safely returned from $spaceName"), array(
-            "activeSpace" => $spaceID
+        $this->notify->all("workerReturned", clienttranslate("Worker safely returned from $spaceName"), array(
+            "activeSpace" => $spaceID,
+            "workerID" => $workerID
         ));
     }
 
@@ -135,8 +140,8 @@ trait PawnsTrait {
 
         $this->updateComponent($workerID, 'arrest', 'arrested');
         
-        $this->notify->all("workerRemoved", clienttranslate("Worker arrested at " . $spaceName), array(
-            "activeSpace" => $spaceID
+        $this->notify->all("workerArrested", clienttranslate("Worker arrested at " . $spaceName), array(
+            "workerID" => $workerID
         ));
     }
 

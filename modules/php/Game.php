@@ -128,7 +128,7 @@ class Game extends \Table {
         $missionsDifficulty = (int) $this->tableOptions->get(100);
 
         if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_INFILTRATION, MISSION_OFFICERS_MANSION);
+            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
         } else {
             $missions = [
                 MISSION_MILICE_PARADE_DAY,
@@ -173,7 +173,7 @@ class Game extends \Table {
         $workerID = $this->getNextAvailableWorker();
         $this->updateComponent($workerID, (string) $spaceID, "placed");
 
-        $this->notify->all("workerPlaced", clienttranslate("Worker placed at " . $spaceName), array(
+        $this->notify->all("workerMoved", clienttranslate("Worker placed at " . $spaceName), array(
             "workerID" => $workerID,
             "spaceID" => $spaceID,
         ));
