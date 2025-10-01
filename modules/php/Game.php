@@ -233,14 +233,12 @@ class Game extends \Table {
 
             $placeSoldier = $this->getPatrolsToPlace() - $this->getActiveSoldiers() < $this->getPlacedMilice() + 1;
 
-            $soldierID = $this->getNextAvailableSoldier();
-            $miliceID = $this->getNextAvailableMilice();
-
+            $miliceID = $this->getNextActiveMilice();
+            
             if ($placeSoldier) {
-                // $this->updateSpace($spaceID, hasWorker: $arrestedOnsite, hasSoldier: true);
+                $soldierID = $this->getNextActiveSoldier();
                 $this->updateComponent($soldierID, (string) $spaceID, 'placed');
             } else {
-                // $this->updateSpace($spaceID, hasWorker: $arrestedOnsite, hasMilice: true);
                 $this->updateComponent($miliceID, (string) $spaceID, 'placed');
             }
 
@@ -389,7 +387,7 @@ class Game extends \Table {
         } else {
             foreach (array_merge($this->getMilice(), $this->getSoldiers()) as $patrol) {
                 if ($patrol['state'] === 'placed') {
-                    $this->updateComponent($patrol['name'], 'barracks', 'available');
+                    $this->updateComponent($patrol['name'], 'barracks', 'active');
 
                     $this->notify->all("patrolReturned", '', array(
                         "patrolID" => $patrol['name']
@@ -426,6 +424,7 @@ class Game extends \Table {
         $this->spendTokens(RESOURCE_WEAPON, 1);
         $this->setShotToday(true);
         $this->updateActiveSoldiers($this->getActiveSoldiers() + 1);
+        $this->updateComponent($this->getNextInactiveSoldier(), 'barracks', 'active');
         $this->updateMorale($morale - 1);
         if ($morale - 1 <= 0) {
             $this->gamestate->nextState("endGame");

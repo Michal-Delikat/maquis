@@ -259,20 +259,17 @@
     top: 17%;
     width: 9vw;
     height: 5vw;
-    border: 1px solid red;
 }
 
 #barracks > * {
     width: 100%;
     height: 50%;
-    border: 1px solid blue;
     display: flex;
 }
 
 #milice-row > *, #soldiers-row > * {
     width: 20%;
     height: 100%;
-    border: 1px solid yellow;
 }
 
 #mission-cards {

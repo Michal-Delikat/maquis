@@ -352,13 +352,13 @@ function (dojo, declare) {
                 
             // PAWNS
             resistanceWorkers.forEach(worker => { 
-                this.placeWorker(worker.name, worker.location)
+                this.placeWorker(worker.name, worker.location);
             });
             milice.forEach(milice => {
-                this.placeMilice(milice.name, milice.location)
+                if (milice.location !== 'off_board') this.placeMilice(milice.name, milice.location);
             });
             soldiers.forEach(soldier => {
-                if (soldier.state === 'placed') this.placeSoldier(soldier.name, soldier.location, false)
+                this.placeSoldier(soldier.name, soldier.location);
             });
 
             // MARKERS
@@ -839,7 +839,6 @@ function (dojo, declare) {
         },
         
         placeMilice: async function(miliceID, spaceID) {
-            console.log(miliceID, spaceID);
             if (spaceID === 'barracks') {
                 for (let i = 1; i <= 5; i++) {
                     const barracksSpace = dojo.byId(`barracks-milice-space-${i}`);
@@ -883,12 +882,48 @@ function (dojo, declare) {
             }
         },
 
-        placeSoldier: async function(soldierID, spaceID, animate = true) {
+        placeSoldier: async function(soldierID, spaceID) {
+            console.log(soldierID, spaceID);
+            if (spaceID === 'barracks') {
+                for (let i = 1; i <= 5; i++) {
+                    const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);
+                    if (!barracksSpace.firstElementChild) {
+                        dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `barracks-soldier-space-${i}`); 
+                        this.placeOnObject(soldierID, `barracks-soldier-space-${i}`);
+                        break; 
+                    }
+                }
+            } else {
+                dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `space-${spaceID}-worker-space`);
+            }
+        },
+
+        moveSoldier: async function(soldierID, spaceID) {
+            const soldierNode = dojo.byId(soldierID);
+            const parentNode = soldierNode.parentNode;
+
+            dojo.destroy(soldierID);
             dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `space-${spaceID}-worker-space`);
-            if (animate) {
-                this.placeOnObject(`${soldierID}`, 'player_boards');
-                const animation = this.slideToObject(`${soldierID}`, `space-${spaceID}-worker-space`);
-                await this.bgaPlayDojoAnimation(animation);
+            this.placeOnObject(soldierID, parentNode.id);
+
+            const animation = this.slideToObject(soldierID, `space-${spaceID}-worker-space`);
+            await this.bgaPlayDojoAnimation(animation);
+        },
+
+        returnSoldier: async function(soldierID) {
+            const soldierNode = dojo.byId(soldierID);
+            const parentNode = soldierNode.parentNode;
+
+            for (let i = 1; i <= 5; i++) {
+                const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);
+                if (!barracksSpace.firstElementChild) {
+                    dojo.destroy(soldierID);
+                    dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `barracks-soldier-space-${i}`);
+                    this.placeOnObject(soldierID, parentNode.id);
+                    const animation = this.slideToObject(soldierID, `barracks-soldier-space-${i}`);
+                    await this.bgaPlayDojoAnimation(animation);
+                    break; 
+                }
             }
         },
 

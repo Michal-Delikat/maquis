@@ -19,12 +19,12 @@ trait PawnsTrait {
         return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'resistance%' AND state = 'active' LIMIT 1;");
     }
 
-    function getNextAvailableMilice(): string {
-        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'milice%' AND state = 'available' LIMIT 1;");
+    function getNextActiveMilice(): string {
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'milice%' AND state = 'active' LIMIT 1;");
     }
 
-    function getNextAvailableSoldier(): string {
-        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND location = 'off_board' LIMIT 1;");
+    function getNextActiveSoldier(): string {
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND state = 'active' LIMIT 1;");
     }
 
     function getNextInactiveSoldier(): string {

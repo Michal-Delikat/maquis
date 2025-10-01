@@ -217,16 +217,16 @@ class DataService {
             ("resistance_3", "safe_house", "active"),
             ("resistance_4", "cafe", "inactive"),
             ("resistance_5", "cafe", "inactive"),
-            ("milice_1", "barracks", "available"),
-            ("milice_2", "barracks", "available"),
-            ("milice_3", "barracks", "available"),
-            ("milice_4", "barracks", "available"),
-            ("milice_5", "barracks", "available"),
-            ("soldier_1", "off_board", "inactive"),
-            ("soldier_2", "off_board", "inactive"),
-            ("soldier_3", "off_board", "inactive"),
-            ("soldier_4", "off_board", "inactive"),
-            ("soldier_5", "off_board", "inactive");
+            ("milice_1", "barracks", "active"),
+            ("milice_2", "barracks", "active"),
+            ("milice_3", "barracks", "active"),
+            ("milice_4", "barracks", "active"),
+            ("milice_5", "barracks", "active"),
+            ("soldier_1", "barracks", "inactive"),
+            ("soldier_2", "barracks", "inactive"),
+            ("soldier_3", "barracks", "inactive"),
+            ("soldier_4", "barracks", "inactive"),
+            ("soldier_5", "barracks", "inactive");
         ';
     }
 }
