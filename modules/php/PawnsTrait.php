@@ -20,7 +20,7 @@ trait PawnsTrait {
     }
 
     function getNextAvailableMilice(): string {
-        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'milice%' AND location = 'off_board' LIMIT 1;");
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'milice%' AND state = 'available' LIMIT 1;");
     }
 
     function getNextAvailableSoldier(): string {

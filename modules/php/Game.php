@@ -389,9 +389,9 @@ class Game extends \Table {
         } else {
             foreach (array_merge($this->getMilice(), $this->getSoldiers()) as $patrol) {
                 if ($patrol['state'] === 'placed') {
-                    $this->updateComponent($patrol['name'], 'off_board', 'active');
+                    $this->updateComponent($patrol['name'], 'barracks', 'available');
 
-                    $this->notify->all("patrolRemoved", '', array(
+                    $this->notify->all("patrolReturned", '', array(
                         "patrolID" => $patrol['name']
                     ));
                 }
