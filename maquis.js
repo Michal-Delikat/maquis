@@ -83,89 +83,93 @@ function (dojo, declare) {
 
             dojo.place(`
                 <div id="board-and-missions">
-                    <div id="barracks">
-                        <div id="milice-row">
-                            <div id="barracks-milice-space-1"></div>
-                            <div id="barracks-milice-space-2"></div>
-                            <div id="barracks-milice-space-3"></div>
-                            <div id="barracks-milice-space-4"></div>
-                            <div id="barracks-milice-space-5"></div>
-                        </div>
-                        <div id="soldiers-row">
-                            <div id="barracks-soldier-space-1"></div>
-                            <div id="barracks-soldier-space-2"></div>
-                            <div id="barracks-soldier-space-3"></div>
-                            <div id="barracks-soldier-space-4"></div>
-                            <div id="barracks-soldier-space-5"></div>
+                <div id="arrest">
+                        <p>Arrest</p>
+                        <div>
+                            <div id="arrest-space-1" class="arrest-space"></div>
+                            <div id="arrest-space-2" class="arrest-space"></div>
+                            <div id="arrest-space-3" class="arrest-space"></div>
+                            <div id="arrest-space-4" class="arrest-space"></div>
+                            <div id="arrest-space-5" class="arrest-space"></div>
                         </div>
                     </div>
-                    <div id="mission-cards">
-                        <div id="mission-slot-1" class="mission-slot">
-                            <div id="${selectedMissions.mission_card_a}" class="card mission-card">
-                                <div class="mission-card-back mission-card-face"></div>
-                                <div class="mission-card-front mission-card-face"></div>
-                                <div id="space-18" class="space mission-space mission-space-1">
-                                    <div id="space-18-worker-space" class="worker-space"></div>
-                                    <div id="space-18-marker-space" class="marker-space">
-                                        <div id="space-18-marker-space-1" class="marker-space"></div>
-                                    </div>
-                                    <div id="space-18-background-space" class="background-space"></div>
-                                </div>
-                                <div id="space-19" class="space mission-space mission-space-2">
-                                    <div id="space-19-worker-space" class="worker-space"></div>
-                                    <div id="space-19-marker-space" class="marker-space">
-                                        <div id="space-19-marker-space-1" class="marker-space"></div>
-                                    </div>
-                                    <div id="space-19-background-space" class="background-space"></div>
-                                </div>
-                                <div id="space-20" class="space mission-space mission-space-3">
-                                    <div id="space-20-worker-space" class="worker-space"></div>
-                                    <div id="space-20-marker-space" class="marker-space">
-                                        <div id="space-20-marker-space-1" class="marker-space"></div>    
-                                    </div>
-                                    <div id="space-20-background-space" class="background-space"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="mission-slot-2" class="mission-slot">
-                            <div id="${selectedMissions.mission_card_b}" class="card mission-card">
-                                <div class="mission-card-back mission-card-face"></div>
-                                <div class="mission-card-front mission-card-face"></div>
-                                <div id="space-21" class="space mission-space mission-space-1">
-                                    <div id="space-21-worker-space" class="worker-space"></div>
-                                    <div id="space-21-marker-space" class="marker-space">
-                                        <div id="space-21-marker-space-1"></div>
-                                    </div>
-                                    <div id="space-21-background-space" class="background-space"></div>
-                                </div>
-                                <div id="space-22" class="space mission-space mission-space-2">
-                                    <div id="space-22-worker-space" class="worker-space"></div>
-                                    <div id="space-22-marker-space" class="marker-space">
-                                        <div id="space-22-marker-space-1" class="marker-space"></div>
-                                    </div>
-                                    <div id="space-22-background-space" class="background-space"></div>
-                                </div>
-                                <div id="space-23" class="space mission-space mission-space-3">
-                                    <div id="space-23-worker-space" class="worker-space"></div>
-                                    <div id="space-23-marker-space" class="marker-space">
-                                        <div id="space-23-marker-space-1" class="marker-space"></div>
-                                    </div>
-                                    <div id="space-23-background-space" class="background-space"></div>
-                                </div>
-                            </div>
-                        </div>
+                <div id="mission-cards">
+                    <div id="mission-slot-1" class="mission-slot">
+                    <div id="${selectedMissions.mission_card_a}" class="card mission-card">
+                    <div class="mission-card-back mission-card-face"></div>
+                    <div class="mission-card-front mission-card-face"></div>
+                    <div id="space-18" class="space mission-space mission-space-1">
+                    <div id="space-18-worker-space" class="worker-space"></div>
+                    <div id="space-18-marker-space" class="marker-space">
+                    <div id="space-18-marker-space-1" class="marker-space"></div>
                     </div>
-                    <div id="arrest">
-                        <div id="arrest-space-1" class="arrest-space"></div>
-                        <div id="arrest-space-2" class="arrest-space"></div>
-                        <div id="arrest-space-3" class="arrest-space"></div>
-                        <div id="arrest-space-4" class="arrest-space"></div>
-                        <div id="arrest-space-5" class="arrest-space"></div>
+                    <div id="space-18-background-space" class="background-space"></div>
                     </div>
-                    <div id="board">
-                        <div id="spaces"></div>
-                        <div id="round-number-spaces"></div>
+                    <div id="space-19" class="space mission-space mission-space-2">
+                    <div id="space-19-worker-space" class="worker-space"></div>
+                    <div id="space-19-marker-space" class="marker-space">
+                    <div id="space-19-marker-space-1" class="marker-space"></div>
                     </div>
+                    <div id="space-19-background-space" class="background-space"></div>
+                    </div>
+                    <div id="space-20" class="space mission-space mission-space-3">
+                    <div id="space-20-worker-space" class="worker-space"></div>
+                    <div id="space-20-marker-space" class="marker-space">
+                    <div id="space-20-marker-space-1" class="marker-space"></div>    
+                    </div>
+                    <div id="space-20-background-space" class="background-space"></div>
+                    </div>
+                    </div>
+                    </div>
+                    <div id="mission-slot-2" class="mission-slot">
+                    <div id="${selectedMissions.mission_card_b}" class="card mission-card">
+                    <div class="mission-card-back mission-card-face"></div>
+                    <div class="mission-card-front mission-card-face"></div>
+                    <div id="space-21" class="space mission-space mission-space-1">
+                    <div id="space-21-worker-space" class="worker-space"></div>
+                    <div id="space-21-marker-space" class="marker-space">
+                    <div id="space-21-marker-space-1"></div>
+                    </div>
+                    <div id="space-21-background-space" class="background-space"></div>
+                    </div>
+                    <div id="space-22" class="space mission-space mission-space-2">
+                    <div id="space-22-worker-space" class="worker-space"></div>
+                    <div id="space-22-marker-space" class="marker-space">
+                    <div id="space-22-marker-space-1" class="marker-space"></div>
+                    </div>
+                    <div id="space-22-background-space" class="background-space"></div>
+                    </div>
+                    <div id="space-23" class="space mission-space mission-space-3">
+                    <div id="space-23-worker-space" class="worker-space"></div>
+                    <div id="space-23-marker-space" class="marker-space">
+                    <div id="space-23-marker-space-1" class="marker-space"></div>
+                    </div>
+                    <div id="space-23-background-space" class="background-space"></div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+                <div id="barracks">
+                    <p>Barracks</p>
+                    <div id="milice-row">
+                        <div id="barracks-milice-space-1"></div>
+                        <div id="barracks-milice-space-2"></div>
+                        <div id="barracks-milice-space-3"></div>
+                        <div id="barracks-milice-space-4"></div>
+                        <div id="barracks-milice-space-5"></div>
+                    </div>
+                    <div id="soldiers-row">
+                        <div id="barracks-soldier-space-1"></div>
+                        <div id="barracks-soldier-space-2"></div>
+                        <div id="barracks-soldier-space-3"></div>
+                        <div id="barracks-soldier-space-4"></div>
+                        <div id="barracks-soldier-space-5"></div>
+                    </div>
+                </div>
+                <div id="board">
+                    <div id="spaces"></div>
+                    <div id="round-number-spaces"></div>
+                </div>
                 </div>
                 <div id="right-panel">
                     <div id="cards">
