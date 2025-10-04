@@ -605,6 +605,10 @@ function (dojo, declare) {
             this.arrestWorker(workerID);
         },
 
+        notif_workerRemoved: function({workerID}) {
+            this.removeWorker(workerID);
+        },
+
         notif_patrolPlaced: function({placeSoldier, patrolID, spaceID}) {
             if (placeSoldier) {
                 this.moveSoldier(patrolID, spaceID);
@@ -833,10 +837,7 @@ function (dojo, declare) {
             }
         },
 
-        removeWorker: async function(spaceID) {
-            let space = dojo.byId(`space-${spaceID}-worker-space`);
-            let resistanceID = space.firstElementChild.id;
-
+        removeWorker: async function(resistanceID) {
             const animation = this.slideToObject(`${resistanceID}`, 'custom-player-board');
             await this.bgaPlayDojoAnimation(animation);
             dojo.destroy(`${resistanceID}`);
@@ -887,7 +888,6 @@ function (dojo, declare) {
         },
 
         placeSoldier: async function(soldierID, spaceID) {
-            console.log(soldierID, spaceID);
             if (spaceID === 'barracks') {
                 for (let i = 1; i <= 5; i++) {
                     const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);

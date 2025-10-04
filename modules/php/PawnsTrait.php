@@ -151,10 +151,11 @@ trait PawnsTrait {
         }
 
         $spaceName = $this->getSpaceNameById($spaceID);
-        $this->updateComponent($this->getWorkerIdByLocation((string) $spaceID), 'off_board', 'removed');
+        $workerID = $this->getWorkerIdByLocation((string) $spaceID);
+        $this->updateComponent($workerID, 'off_board', 'removed');
         
         $this->notify->all("workerRemoved", clienttranslate("Worker removed from " . $spaceName), array(
-            "activeSpace" => $spaceID
+            "workerID" => $workerID
         ));
     }
 
