@@ -36,22 +36,18 @@ function (dojo, declare) {
             let currentMorale = parseInt(gamedatas.morale);
             let activeSoldiers = parseInt(gamedatas.activeSoldiers);
 
-            let placedResistance = parseInt(gamedatas.placedResistance);
-            let activeResistance = parseInt(gamedatas.activeResistance);
-            let resistanceToRecruit = parseInt(gamedatas.resistanceToRecruit);
-
             let placedTokens = Object.values(gamedatas.placedTokens);
             let spacesWithMarkers = Object.values(gamedatas.spacesWithMarkers);
-            let placedRooms = Object.values(gamedatas.placedRooms);
-
+            
             let discardedPatrolCards = gamedatas.discardedPatrolCards;
-
+            
             let resources = gamedatas.resources;
-
+            
             let selectedMissions = gamedatas.selectedMissions;
             let completedMissions = Object.values(gamedatas.completedMissions);
-
+            
             let rooms = Object.values(gamedatas.rooms);
+            let placedRooms = Object.values(gamedatas.placedRooms);
 
             let resistanceWorkers = Object.values(gamedatas.resistanceWorkers);
             let milice = Object.values(gamedatas.milice);
@@ -108,14 +104,14 @@ function (dojo, declare) {
                     <div id="space-19" class="space mission-space mission-space-2">
                     <div id="space-19-worker-space" class="worker-space"></div>
                     <div id="space-19-marker-space" class="marker-space">
-                    <div id="space-19-marker-space-1" class="marker-space"></div>
+                        <div id="space-19-marker-space-1" class="marker-space"></div>
                     </div>
                     <div id="space-19-background-space" class="background-space"></div>
                     </div>
                     <div id="space-20" class="space mission-space mission-space-3">
                     <div id="space-20-worker-space" class="worker-space"></div>
                     <div id="space-20-marker-space" class="marker-space">
-                    <div id="space-20-marker-space-1" class="marker-space"></div>    
+                        <div id="space-20-marker-space-1" class="marker-space"></div>    
                     </div>
                     <div id="space-20-background-space" class="background-space"></div>
                     </div>
@@ -386,7 +382,7 @@ function (dojo, declare) {
             });
 
             // PATROL DISCARD
-            Object.values(discardedPatrolCards).forEach((card) => this.discardPatrolCard(card.type_arg, true));
+            Object.values(discardedPatrolCards).forEach((card) => this.discardPatrolCard(card.type_arg, false));
 
             // DARK LADY LOCATION REMINDER
             if (darkLadyLocation !== 'off_board') {
@@ -502,7 +498,7 @@ function (dojo, declare) {
         onUpdateActionButtons: function(stateName, args) {
             // console.log('onUpdateActionButtons: ' + stateName, args);
                       
-            if(this.isCurrentPlayerActive())
+            if (this.isCurrentPlayerActive())
             {            
                 switch(stateName) {
                     case 'activateWorker':
@@ -633,14 +629,6 @@ function (dojo, declare) {
             this.removePatrol(patrolID);
         },
 
-        notif_resistanceToRecruitUpdated: function({resistanceToRecruit}) {
-            dojo.byId(`resistance-to-recruit`).innerHTML = resistanceToRecruit;
-        },
-
-        notif_placedMiliceUpdated: function({placedMilice}) {
-            dojo.byId(`placed-milice`).innerHTML = placedMilice;
-        },
-
         notif_roundNumberUpdated: function({round}) {
             this.moveRoundMarker(round);
         },
@@ -652,10 +640,6 @@ function (dojo, declare) {
         notif_resourcesChanged: function({resource_name, quantity, available}) {
             dojo.byId(`${resource_name}-quantity`).innerHTML = quantity;
             dojo.byId(`${resource_name}-available`).innerHTML = available;
-        },
-
-        notif_activeResistanceUpdated: function(notif) {
-            dojo.byId("active-resistance").innerHTML = notif.active_resistance;
         },
 
         notif_tokensPlaced: function({tokens}) {
@@ -675,7 +659,7 @@ function (dojo, declare) {
         },
 
         notif_markerRemoved: function({spaceID, markerNumber}) {
-            this.removeMarker(spaceID, markerNumber);
+            this.removeMissionMarker(spaceID, markerNumber);
         },
 
         notif_missionCompleted: function({missionName, playerScore, playerId}) {
@@ -937,11 +921,14 @@ function (dojo, declare) {
                     <div class="card patrol-card-back"></div>
                     <div class="card patrol-card-front"></div>
                 </div>`, 'patrol-discard');
+            
             if (animate) {
                 this.placeOnObject(`patrol-${patrolCardID}`, 'patrol-deck');
                 dojo.toggleClass(dojo.byId(`patrol-${patrolCardID}`), 'flipped');
                 const slideAnimation = this.slideToObjectPos(`patrol-${patrolCardID}`, `patrol-discard`, 0, 0, 2000);
                 await this.bgaPlayDojoAnimation(slideAnimation);
+            } else {
+                dojo.toggleClass(dojo.byId(`patrol-${patrolCardID}`), 'flipped');
             }
         },
 
@@ -1010,7 +997,7 @@ function (dojo, declare) {
             }
         },
 
-        removeMarker: async function(spaceID, markerNumber) {
+        removeMissionMarker: async function(spaceID, markerNumber) {
             let space = dojo.byId(`space-${spaceID}-marker-space-${markerNumber + 1}`);
             let markerID = space.firstElementChild.id;
 

@@ -109,7 +109,7 @@ trait ResourcesTrait {
         ];
     }
 
-    protected function getTokens(string $resourceName, int $amount = 1): void {
+    protected function gainTokens(string $resourceName, int $amount = 1): void {
         self::DbQuery("
             UPDATE components
             SET location = 'possessed', state = 'possessed'

@@ -16,8 +16,6 @@ declare(strict_types=1);
 
 namespace Bga\Games\Maquis;
 
-use ComponentsTrait;
-
 require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
 require_once("DataService.php");
@@ -106,6 +104,9 @@ class Game extends \Table {
             )
         );
 
+        $this->reattributeColorsBasedOnPreferences($players, $gameinfos["player_colors"]);
+        $this->reloadPlayersBasicInfos();
+
         // Add master data to DB
         static::DbQuery(DataService::setupRoundData());
 
@@ -117,28 +118,25 @@ class Game extends \Table {
 
         static::DbQuery(DataService::setupComponents());
 
-        $this->reattributeColorsBasedOnPreferences($players, $gameinfos["player_colors"]);
-        $this->reloadPlayersBasicInfos();
-
-        // Init global values with their initial values.
         $this->patrol_cards->createCards($this->PATROL_CARD_ITEMS);
 
         // Missions
 
         $missionsDifficulty = (int) $this->tableOptions->get(100);
 
-        if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
-        } else {
-            $missions = [
-                MISSION_MILICE_PARADE_DAY,
-                MISSION_OFFICERS_MANSION,
-                MISSION_SABOTAGE,
-                MISSION_INFILTRATION,
+        $zeroStarMissions = array(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+        $oneStarMissions = array(
+                MISSION_SABOTAGE, 
+                MISSION_INFILTRATION, 
                 MISSION_GERMAN_SHEPARDS,
                 MISSION_DOUBLE_AGENT,
                 MISSION_UNDERGROUND_NEWSPAPER
-            ];
+        );
+
+        if ($missionsDifficulty == 0) {
+            $this->configureMissions($zeroStarMissions[0], $zeroStarMissions[1]);
+        } else {
+            $missions = array_merge($zeroStarMissions, $oneStarMissions);
 
             $keys = array_rand($missions, 2);
 
@@ -161,15 +159,14 @@ class Game extends \Table {
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
 
-        $this->getTokens(RESOURCE_INTEL, 2);
-        $this->getTokens(RESOURCE_WEAPON, 1);
-        $this->getTokens(RESOURCE_EXPLOSIVES, 1);
+        $this->gainTokens(RESOURCE_INTEL, 2);
+        $this->gainTokens(RESOURCE_WEAPON, 1);
+        $this->gainTokens(RESOURCE_EXPLOSIVES, 1);
     }
 
     public function actPlaceWorker(int $spaceID): void {
         $spaceName = $this->getSpaceNameById($spaceID);
 
-        // $this->updateSpace($spaceID, hasWorker: true);
         $workerID = $this->getNextAvailableWorker();
         $this->updateComponent($workerID, (string) $spaceID, "placed");
 
@@ -289,6 +286,7 @@ class Game extends \Table {
             $this->gamestate->nextstate("selectRoom");    
         } else if ($actionName === ACTION_INSERT_MOLE) {
             $this->saveAction(ACTION_INSERT_MOLE);
+
             $this->gamestate->nextState("nextWorker");
         } else if ($actionName === ACTION_COMPLETE_DOUBLE_AGENT_MISSION) {
             $this->updateDarkLadyLocation('off_board', 'NaN');
@@ -296,6 +294,7 @@ class Game extends \Table {
             foreach([1, 3, 5, 6, 9, 11] as $space) {
                 $this->removeMarker($space);
             }
+
             $this->gamestate->nextState("removeWorker");
         } else if ($this->checkEscapeRoute()) {
             if ($actionName == ACTION_AIRDROP) {
@@ -304,6 +303,7 @@ class Game extends \Table {
                 } else {
                     $this->notify->all("noEmptyFieldsFound", clienttranslate("There are no empty fields"));
                     $this->returnWorker($activeSpace);
+
                     $this->gamestate->nextstate("nextWorker");
                 }
             } else {
@@ -335,21 +335,26 @@ class Game extends \Table {
 
         if ($this->getIsMoleInserted() && ($this->getPlacedResistance() === 1)) {
             $this->gamestate->nextState("roundEnd");
-        } else if ($this->getPlacedResistance() > 0) {
-            $this->gamestate->nextState("activateWorker");
         } 
-        // else if ($this->getPlacedResistance() == 1) {
-        //     $spacesWithResistanceWorkers = $this->getSpacesWithResistanceWorkers();
-        //     $spaceID = $spacesWithResistanceWorkers[0];
+        // else if ($this->getPlacedResistance() === 1) {
+        //     $spacesWithResistanceWorkers = array_filter($this->getSpacesWithResistanceWorkers(), function ($space) {
+        //         return $space !== 'cafe' && $space !== 'safe_house';
+        //     });
+        //     $this->dump("spacesWithResistanceWorkers", $spacesWithResistanceWorkers);
+        //     $spaceID = (int) $spacesWithResistanceWorkers[0];
         //     $this->updateActiveSpace($spaceID);
-        //     $possibleActions = $this->getPossibleActions($spaceID);
+        //     // $possibleActions = $this->getPossibleActions($spaceID);
 
-        //     if (count($possibleActions) == 1) {
-        //         $this->actTakeAction($possibleActions[0]['action_name']);
-        //     } else {
-        //         $this->gamestate->nextState("takeAction");
-        //     }
-        // } 
+        //     // if (count($possibleActions) === 1) {
+        //     //     $this->actTakeAction($possibleActions[0]['action_name']);
+        //     // } else {
+        //     //     $this->gamestate->nextState("takeAction");
+        //     // }
+        //     $this->gamestate->nextState("takeAction");
+        // }
+        else if ($this->getPlacedResistance() > 0) {
+            $this->gamestate->nextState("activateWorker");
+        }
         else {
             $this->gamestate->nextState("roundEnd");
         }
@@ -582,25 +587,25 @@ class Game extends \Table {
         switch($actionName) {
             case ACTION_GET_WEAPON:
                 $this->spendTokens(RESOURCE_MONEY);
-                $this->getTokens(RESOURCE_WEAPON);
+                $this->gainTokens(RESOURCE_WEAPON);
                 $this->incStat(1, "weapon_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_FOOD:
-                $this->getTokens(RESOURCE_FOOD);
+                $this->gainTokens(RESOURCE_FOOD);
                 $this->incStat(1, "food_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_MEDICINE:
-                $this->getTokens(RESOURCE_MEDICINE);
+                $this->gainTokens(RESOURCE_MEDICINE);
                 $this->incStat(1, "medicine_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_INTEL:
-                $this->getTokens(RESOURCE_INTEL);
+                $this->gainTokens(RESOURCE_INTEL);
                 $this->incStat(1, "intel_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_MONEY_FOR_FOOD:
                 if ($this->getAvailableResource(RESOURCE_MONEY) > 0) {
                     $this->spendTokens(RESOURCE_FOOD);
-                    $this->getTokens(RESOURCE_MONEY);
+                    $this->gainTokens(RESOURCE_MONEY);
                     $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                     $this->decrementMorale();
                 }
@@ -608,7 +613,7 @@ class Game extends \Table {
             case ACTION_GET_MONEY_FOR_MEDICINE:
                 if ($this->getAvailableResource(RESOURCE_MONEY) > 0) {
                     $this->spendTokens(RESOURCE_MEDICINE);
-                    $this->getTokens(RESOURCE_MONEY);
+                    $this->gainTokens(RESOURCE_MONEY);
                     $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                     $this->decrementMorale();
                 }
@@ -648,20 +653,20 @@ class Game extends \Table {
                 }
                 break;
             case ACTION_GET_MONEY:
-                $this->getTokens(RESOURCE_MONEY);
+                $this->gainTokens(RESOURCE_MONEY);
                 $this->incStat(1, "money_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_EXPLOSIVES:
                 $this->spendTokens(RESOURCE_MEDICINE);
-                $this->getTokens(RESOURCE_EXPLOSIVES);
+                $this->gainTokens(RESOURCE_EXPLOSIVES);
                 $this->incStat(1, "explosives_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_3_FOOD:
-                $this->getTokens(RESOURCE_FOOD, 3);
+                $this->gainTokens(RESOURCE_FOOD, 3);
                 $this->incStat(3, "food_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_GET_3_MEDICINE:
-                $this->getTokens(RESOURCE_MEDICINE, 3);
+                $this->gainTokens(RESOURCE_MEDICINE, 3);
                 $this->incStat(3, "medicine_aquired", $this->getActivePlayerId());
                 break;
             case ACTION_INCREASE_MORALE:
