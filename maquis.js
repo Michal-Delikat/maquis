@@ -188,8 +188,8 @@ function (dojo, declare) {
 
             Object.values(selectedMissions).forEach(mission => {
                 let description = null;
-                switch(parseInt(mission.mission_id)) {
-                    case 1:
+                switch(mission.split('_').slice(2).join("_")) {
+                    case 'milice-parade-day':
                         description = `<p>
                             The Milice are holding parades around town - a
                             brave volunteer must show our defiance. They
@@ -202,7 +202,7 @@ function (dojo, declare) {
                             Fence is blocked on Parade Days.
                         </p>`;
                         break;
-                    case 2:
+                    case 'officers_mansion':
                         description = `<p>
                             The local commander has commandeered a fancy
                             house north of town. We need to make sure he
@@ -215,7 +215,7 @@ function (dojo, declare) {
                             here to complete.
                         </p>`;
                         break;
-                    case 3:
+                    case 'sabotage':
                         description = `<p>
                             The occupation runs a munitions factory on
                             the outskirts of town. Infiltrate and sabotage
@@ -226,7 +226,7 @@ function (dojo, declare) {
                             Explosives.
                         </p>`;
                         break;
-                    case 4:
+                    case 'underground_newspaper':
                         description = `<p>
                             Get the word out and counter the 
                             propaganda of the occupation.<br><br>
@@ -235,7 +235,7 @@ function (dojo, declare) {
                             separate days.
                         </p>`;
                         break;
-                    case 5:
+                    case 'infiltration':
                         description = `<p>
                                 The best place to collect reconnaissance is often
                                 from the inside. Insert a mole into the Milice.<br><br>
@@ -247,7 +247,7 @@ function (dojo, declare) {
                                 the Patrol deck before the placement phase.
                             </p>`;
                         break;
-                    case 6:
+                    case 'german_shepards':
                         description = `<p>
                             The occupiers have dogs to help with patrols. 
                             Use poison to eliminate them<br><br>
@@ -257,7 +257,7 @@ function (dojo, declare) {
                             mission is completed, Milice units may not 
                             be eliminated.
                         </p>`;
-                    case 7:
+                    case 'double_agent':
                         description = `<p>
                             We must enearth the double agent known only as the "Dark Lady"...<br><br>
 
@@ -271,12 +271,13 @@ function (dojo, declare) {
                         break;
                 }
                     
-                this.addTooltipHtml(`mission-${mission.mission_id}`, `
-                <div class="mission-tooltip-wrapper">
-                    <div class="mission-description">
-                        ${description}
-                    </div>
-                </div>`);
+                this.addTooltipHtml(mission, 
+                    `<div class="mission-tooltip-wrapper">
+                        <div class="mission-description">
+                            ${description}
+                        </div>
+                    </div>`
+                );
             });
 
             // MORALE TRACK
