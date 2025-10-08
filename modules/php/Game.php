@@ -225,13 +225,12 @@ class Game extends \Table {
             $spaceName = $this->getSpaceNameById($spaceID);
 
             $placeSoldier = $this->getPatrolsToPlace() - $this->getActiveSoldiers() < $this->getPlacedMilice() + 1;
-
-            $miliceID = $this->getNextActiveMilice();
             
             if ($placeSoldier) {
                 $soldierID = $this->getNextActiveSoldier();
                 $this->updateComponent($soldierID, (string) $spaceID, 'placed');
             } else {
+                $miliceID = $this->getNextActiveMilice();
                 $this->updateComponent($miliceID, (string) $spaceID, 'placed');
             }
 
@@ -274,7 +273,7 @@ class Game extends \Table {
     }
 
     public function actTakeAction(string $actionName): void {
-        $this->notify->all("actionTaken", clienttranslate("Action selected: " . $actionName), array());
+        // $this->notify->all("actionTaken", clienttranslate("Action selected: " . $actionName), array());
 
         $activeSpace = $this->getActiveSpace();
 
