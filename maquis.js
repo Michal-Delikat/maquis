@@ -82,17 +82,17 @@ function (dojo, declare) {
 
             dojo.place(`
                 <div id="board-and-missions">
-                    <div id="arrest">
-                        <p>Arrest</p>
-                        <div>
-                            <div id="arrest-space-1" class="arrest-space"></div>
-                            <div id="arrest-space-2" class="arrest-space"></div>
-                            <div id="arrest-space-3" class="arrest-space"></div>
-                            <div id="arrest-space-4" class="arrest-space"></div>
-                            <div id="arrest-space-5" class="arrest-space"></div>
+                    <div id="top-area">
+                        <div id="arrest" class="whiteblock">
+                            <p>Arrest</p>
+                            <div>
+                                <div id="arrest-space-1" class="arrest-space"></div>
+                                <div id="arrest-space-2" class="arrest-space"></div>
+                                <div id="arrest-space-3" class="arrest-space"></div>
+                                <div id="arrest-space-4" class="arrest-space"></div>
+                                <div id="arrest-space-5" class="arrest-space"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div id="mission-cards">
                         <div id="mission-slot-1" class="mission-slot">
                             <div id="${selectedMissions.mission_card_a}" class="card mission-card">
                                 <div class="mission-card-back mission-card-face"></div>
@@ -147,22 +147,22 @@ function (dojo, declare) {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="barracks">
-                        <p>Barracks</p>
-                        <div id="milice-row">
-                            <div id="barracks-milice-space-1"></div>
-                            <div id="barracks-milice-space-2"></div>
-                            <div id="barracks-milice-space-3"></div>
-                            <div id="barracks-milice-space-4"></div>
-                            <div id="barracks-milice-space-5"></div>
-                        </div>
-                        <div id="soldiers-row">
-                            <div id="barracks-soldier-space-1"></div>
-                            <div id="barracks-soldier-space-2"></div>
-                            <div id="barracks-soldier-space-3"></div>
-                            <div id="barracks-soldier-space-4"></div>
-                            <div id="barracks-soldier-space-5"></div>
+                        <div id="barracks" class="whiteblock">
+                            <p>Barracks</p>
+                            <div id="milice-row">
+                                <div id="barracks-milice-space-1"></div>
+                                <div id="barracks-milice-space-2"></div>
+                                <div id="barracks-milice-space-3"></div>
+                                <div id="barracks-milice-space-4"></div>
+                                <div id="barracks-milice-space-5"></div>
+                            </div>
+                            <div id="soldiers-row">
+                                <div id="barracks-soldier-space-1"></div>
+                                <div id="barracks-soldier-space-2"></div>
+                                <div id="barracks-soldier-space-3"></div>
+                                <div id="barracks-soldier-space-4"></div>
+                                <div id="barracks-soldier-space-5"></div>
+                            </div>
                         </div>
                     </div>
                     <div id="board">
@@ -512,12 +512,12 @@ function (dojo, declare) {
                         break;
 
                     case 'takeAction':
-                        Object.values(args.actions).forEach(action => this.addActionButton('actTakeAction_' + `${action.action_name}`, (`${action.action_description}`), () => this.bgaPerformAction("actTakeAction", { actionName: action.action_name }), null, null, action.action_name == 'return' ? 'gray' : 'blue'));
+                        Object.values(args.actions).forEach(action => this.addActionButton('actTakeAction_' + `${action.action_name}`, _(`${action.action_description}`), () => this.bgaPerformAction("actTakeAction", { actionName: action.action_name }), null, null, action.action_name == 'return' ? 'gray' : 'blue'));
                         this.addActionButton('actBack', _('Back'), () => this.bgaPerformAction("actBack"), null, null, 'red');
                         break;
 
                     case 'airdropSelectSupplies':
-                        Object.values(args.options).forEach(option => this.addActionButton('actAirdropSelectSupplies_' + `${option["resourceName"]}`, (`${option["airdropOptionDescription"]}`), () => this.bgaPerformAction("actSelectSupplies", { supplyType: option["resourceName"]}), null, null, 'blue'));
+                        Object.values(args.options).forEach(option => this.addActionButton('actAirdropSelectSupplies_' + `${option["resourceName"]}`, _(`${option["airdropOptionDescription"]}`), () => this.bgaPerformAction("actSelectSupplies", { supplyType: option["resourceName"]}), null, null, 'blue'));
                         break;
 
                     case 'selectSpareRoom':
@@ -677,7 +677,7 @@ function (dojo, declare) {
         },
 
         notif_cardPeeked: function({cardId}) {
-            this.displayModalWithCard(cardId, "Next Patrol card");
+            this.displayModalWithCard(cardId, _("Next Patrol card"));
         },
         
         notif_patrolCardsShuffled: function() {
@@ -687,7 +687,7 @@ function (dojo, declare) {
         },
 
         notif_darkLadyFound: function({cardId, location}) {
-            this.displayModalWithCard(cardId, "Dark Lady found at place #1");
+            this.displayModalWithCard(cardId, _("Dark Lady found at place #1"));
             this.placeDarkLadyLocationReminder(location);
         },
 
