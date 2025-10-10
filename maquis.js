@@ -84,7 +84,7 @@ function (dojo, declare) {
                 <div id="board-and-missions">
                     <div id="top-area">
                         <div id="arrest" class="whiteblock">
-                            <p>Arrest</p>
+                            <b>${_('Arrest')}</b>
                             <div>
                                 <div id="arrest-space-1" class="arrest-space"></div>
                                 <div id="arrest-space-2" class="arrest-space"></div>
@@ -148,7 +148,7 @@ function (dojo, declare) {
                             </div>
                         </div>
                         <div id="barracks" class="whiteblock">
-                            <p>Barracks</p>
+                            <b>${_('Barracks')}</b>
                             <div id="milice-row">
                                 <div id="barracks-milice-space-1"></div>
                                 <div id="barracks-milice-space-2"></div>
@@ -192,84 +192,46 @@ function (dojo, declare) {
             Object.values(selectedMissions).forEach(mission => {
                 let description = null;
                 switch(mission.split('_').slice(2).join("_")) {
-                    case 'milice-parade-day':
+                    case 'milice_parade_day':
                         description = `<p>
-                            The Milice are holding parades around town - a
-                            brave volunteer must show our defiance. They
-                            probably won't make it back...<br><br>
-                            
-                            Deliver 1 Weapon to Rue Baradat on a Parade Day
-                            (Day 3, 6, 9, 12, and 14). The Worker is Arrested.
-                            Increase Morale by 1. Before this mission is
-                            completed, the road between Rue Baradat and
-                            Fence is blocked on Parade Days.
+                            ${_('The Milice are holding parades around town - a brave volunteer must show our defiance. They probably won\'t make it back...')}<br><br>
+                            ${_('Deliver 1 Weapon to Rue Baradat on a Parade Day (Day 3, 6, 9, 12, and 14). The Worker is Arrested. Increase Morale by 1. Before this mission is completed, the road between Rue Baradat and Fence is blocked on Parade Days.')}
                         </p>`;
                         break;
                     case 'officers_mansion':
                         description = `<p>
-                            The local commander has commandeered a fancy
-                            house north of town. We need to make sure he
-                            knows that he will never have us cowed.<br><br>
-                            
-                            Place a Worker on Rue Baradat, Pont Leveque and
-                            Pont du Nord to write anti-fascist graffiti (place
-                            markers during Action Phase to track graffiti).
-                            Once all three locations are tagged, place a Worker
-                            here to complete.
+                            ${_('The local commander has commandeered a fancy house north of town. We need to make sure he knows that he will never have us cowed.')}<br><br>
+                            ${_('Place a Worker on Rue Baradat, Pont Leveque and Pont du Nord to write anti-fascist graffiti (place markers during Action Phase to track graffiti). Once all three locations are tagged, place a Worker here to complete.')}
                         </p>`;
                         break;
                     case 'sabotage':
                         description = `<p>
-                            The occupation runs a munitions factory on
-                            the outskirts of town. Infiltrate and sabotage
-                            the operation by any means possible.<br><br>
-                            
-                            A Worker must infiltrate the factory twice, 
-                            then return a third day to deliver 
-                            Explosives.
+                            ${_('The occupation runs a munitions factory on the outskirts of town. Infiltrate and sabotage the operation by any means possible.')}<br><br>
+                            ${_('A Worker must infiltrate the factory twice, then return a third day to deliver Explosives.')}
                         </p>`;
                         break;
                     case 'underground_newspaper':
                         description = `<p>
-                            Get the word out and counter the 
-                            propaganda of the occupation.<br><br>
-                            
-                            Deliver 2 Intel to this location on three
-                            separate days.
+                            ${_('Get the word out and counter the propaganda of the occupation.')}<br><br>
+                            ${_('Deliver 2 Intel to this location on three separate days.')}
                         </p>`;
                         break;
                     case 'infiltration':
                         description = `<p>
-                                The best place to collect reconnaissance is often
-                                from the inside. Insert a mole into the Milice.<br><br>
-
-                                Deliver 2 Intel to this location. The Worker
-                                must remain here until another Worker delivers
-                                1 Weapon and 1 Explosive. While the first
-                                Worker is here, you may look at the top card of
-                                the Patrol deck before the placement phase.
-                            </p>`;
+                            ${_('The best place to collect reconnaissance is often from the inside. Insert a mole into the Milice.')}<br><br>
+                            ${_('Deliver 2 Intel to this location. The Worker must remain here until another Worker delivers 1 Weapon and 1 Explosive. While the first Worker is here, you may look at the top card of the Patrol deck before the placement phase.')}
+                        </p>`;
                         break;
                     case 'german_shepards':
                         description = `<p>
-                            The occupiers have dogs to help with patrols. 
-                            Use poison to eliminate them<br><br>
-                            
-                            Deliver 1 Medicine and 1 Food to this 
-                            location on three separate days. Before this 
-                            mission is completed, Milice units may not 
-                            be eliminated.
+                            ${_('The occupiers have dogs to help with patrols. Use poison to eliminate them')}<br><br>
+                            ${_('Deliver 1 Medicine and 1 Food to this location on three separate days. Before this mission is completed, Milice units may not be eliminated.')}
                         </p>`;
+                        break;
                     case 'double_agent':
                         description = `<p>
-                            We must enearth the double agent known only as the "Dark Lady"...<br><br>
-
-                            Visit all locations on the west side of the
-                            river except the Fence and Spare Room. Once 
-                            completed, turn over the top patrol card; 
-                            Location #1 is the location of the "Dark Lady".
-                            Visit that location again to complete the mission.
-                            Remove one Worker permanently from the game.
+                            ${_('We must enearth the double agent known only as the "Dark Lady"...')}<br><br>
+                            ${_('Visit all locations on the west side of the river except the Fence and Spare Room. Once completed, turn over the top patrol card; Location #1 is the location of the "Dark Lady". Visit that location again to complete the mission. Remove one Worker permanently from the game.')}
                         </p>`;
                         break;
                 }

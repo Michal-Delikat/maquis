@@ -251,10 +251,9 @@
     right: 0;
 }
 
-#barracks > p, #arrest > p {
+#barracks > b, #arrest > b {
     font-size: 18px;
     font-family: 'Courier New', Courier, monospace;
-    text-align: center;
     margin: 0; 
     height: 20%;
 }
@@ -276,13 +275,15 @@
 }
 
 #arrest > div {
-    display: flex;
     height: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .arrest-space {
-    width: 20%;
-    height: 100%;
+    width: 45%;
+    height: 33%;
 }
 
 .mission-slot {
