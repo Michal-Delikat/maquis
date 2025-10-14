@@ -222,6 +222,7 @@
     margin-bottom: 8px;
     height: 31vw;
     display: flex;
+    position: relative;
 }
 
 @media (min-width: 995px) {
@@ -246,9 +247,10 @@
 #barracks {
     width: 25%;
     margin: 0;
-    height: inherit;
     position: absolute;
     right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 #barracks > b, #arrest > b {
@@ -393,7 +395,7 @@
 
 #cards {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 #right-panel {
@@ -642,7 +644,7 @@
     align-items: center;
     justify-content: space-between;
     top: 3.15%;
-    left: 3.3%;
+    left: 3.1%;
     width: 2.5%;
     height: 93.5%;
 }

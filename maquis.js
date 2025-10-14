@@ -84,7 +84,7 @@ function (dojo, declare) {
                 <div id="board-and-missions">
                     <div id="top-area">
                         <div id="arrest" class="whiteblock">
-                            <b>${_('Arrest')}</b>
+                            <b>${_('Arrested Resistance')}</b>
                             <div>
                                 <div id="arrest-space-1" class="arrest-space"></div>
                                 <div id="arrest-space-2" class="arrest-space"></div>
@@ -148,7 +148,7 @@ function (dojo, declare) {
                             </div>
                         </div>
                         <div id="barracks" class="whiteblock">
-                            <b>${_('Barracks')}</b>
+                            <b>${_('Milice')}</b>
                             <div id="milice-row">
                                 <div id="barracks-milice-space-1"></div>
                                 <div id="barracks-milice-space-2"></div>
@@ -156,6 +156,7 @@ function (dojo, declare) {
                                 <div id="barracks-milice-space-4"></div>
                                 <div id="barracks-milice-space-5"></div>
                             </div>
+                            <b>${_('Soldiers')}</b>
                             <div id="soldiers-row">
                                 <div id="barracks-soldier-space-1"></div>
                                 <div id="barracks-soldier-space-2"></div>
