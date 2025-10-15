@@ -19,7 +19,7 @@ trait MarkersTrait {
             WHERE name = 'round_marker';  
         ");
 
-        $this->notify->all("roundNumberUpdated", clienttranslate("Round $round begins."), array(
+        $this->notify->all("roundNumberUpdated", clienttranslate('Round ${round} begins.'), array(
             "round" => $round,
         ));
     }
@@ -41,7 +41,7 @@ trait MarkersTrait {
             WHERE name = 'morale_marker';
         ");
 
-        $this->notify->all("moraleUpdated", clienttranslate("Morale is $newMorale"), array(
+        $this->notify->all("moraleUpdated", clienttranslate('Morale is ${newMorale}'), array(
             "morale" => $newMorale
         ));
     }
@@ -71,7 +71,7 @@ trait MarkersTrait {
             WHERE name = 'soldier_marker';
         ");
 
-        $this->notify->all("activeSoldiersUpdated", clienttranslate("There are $soldierNumber active soldiers now"), array(
+        $this->notify->all("activeSoldiersUpdated", clienttranslate('There are ${soldierNumber} active soldiers now'), array(
             "soldierNumber" => $soldierNumber
         ));
     }
@@ -110,9 +110,10 @@ trait MarkersTrait {
             LIMIT 1;
         ");
 
-        $this->notify->all("markerRemoved", clienttranslate("Marker removed from " . $this->getSpaceNameById($spaceID)), array(
+        $this->notify->all("markerRemoved", clienttranslate('Marker removed from ${spaceName}'), array(
             "spaceID" => $spaceID,
-            "markerNumber" => $this->countMarkers($spaceID)
+            "markerNumber" => $this->countMarkers($spaceID),
+            "spaceName" => $this->getSpaceNameById($spaceID)
         ));
     }
 

@@ -66,12 +66,14 @@ trait ResourcesTrait {
             WHERE name LIKE '$tokenType%' AND state = 'placed' AND location LIKE '$spaceID%';
         ");
 
-        $this->notify->all("tokensPlaced", clienttranslate("$quantity $tokenType airdropped onto field"), array(
+        $this->notify->all("tokensPlaced", clienttranslate('${quantity} ${tokenType} airdropped onto field'), array(
             "tokens" => $tokens,
+            "tokenType" => $tokenType,
+            "quantity" => $quantity
         ));
 
         $quantityPossesed = $this->getResource($tokenType);
-        $this->notify->all("resourcesChanged", clienttranslate("You have $quantityPossesed $tokenType."), array(
+        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
             "resource_name" => $tokenType,
             "quantity" => $quantityPossesed,
             "available" => $this->getAvailableResource($tokenType)
@@ -91,7 +93,7 @@ trait ResourcesTrait {
         ));
 
         $quantityPossesed = $this->getResource($tokenType);
-        $this->notify->all("resourcesChanged", clienttranslate("You have $quantityPossesed $tokenType."), array(
+        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
             "resource_name" => $tokenType,
             "quantity" => $quantityPossesed,
             "available" => $this->getAvailableResource($tokenType)
@@ -118,7 +120,7 @@ trait ResourcesTrait {
         ");
 
         $quantityPossesed = $this->getResource($resourceName);
-        $this->notify->all("resourcesChanged", clienttranslate("You have $quantityPossesed $resourceName."), array(
+        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
             "resource_name" => $resourceName,
             "quantity" => $quantityPossesed,
             "available" => $this->getAvailableResource($resourceName)
@@ -134,7 +136,7 @@ trait ResourcesTrait {
         ");
         
         $quantityPossesed = $this->getResource($resourceName);
-        $this->notify->all("resourcesChanged", clienttranslate("You have $quantityPossesed $resourceName."), array(
+        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
             "resource_name" => $resourceName,
             "quantity" => $quantityPossesed,
             "available" => $this->getAvailableResource($resourceName)

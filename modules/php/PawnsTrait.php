@@ -124,9 +124,10 @@ trait PawnsTrait {
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
         $this->updateComponent($workerID, 'safe_house', 'active');
 
-        $this->notify->all("workerReturned", clienttranslate("Worker safely returned from $spaceName"), array(
+        $this->notify->all("workerReturned", clienttranslate('Worker safely returned from ${spaceName}'), array(
             "activeSpace" => $spaceID,
-            "workerID" => $workerID
+            "workerID" => $workerID,
+            "spaceName" => $spaceName
         ));
     }
 
@@ -139,9 +140,10 @@ trait PawnsTrait {
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
 
         $this->updateComponent($workerID, 'arrest', 'arrested');
-        
-        $this->notify->all("workerArrested", clienttranslate("Worker arrested at " . $spaceName), array(
-            "workerID" => $workerID
+
+        $this->notify->all("workerArrested", clienttranslate('Worker arrested at ${spaceName}'), array(
+            "workerID" => $workerID,
+            "spaceName" => $spaceName
         ));
     }
 
@@ -153,9 +155,10 @@ trait PawnsTrait {
         $spaceName = $this->getSpaceNameById($spaceID);
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
         $this->updateComponent($workerID, 'off_board', 'removed');
-        
-        $this->notify->all("workerRemoved", clienttranslate("Worker removed from " . $spaceName), array(
-            "workerID" => $workerID
+
+        $this->notify->all("workerRemoved", clienttranslate('Worker removed from ${spaceName}'), array(
+            "workerID" => $workerID,
+            "spaceName" => $spaceName
         ));
     }
 

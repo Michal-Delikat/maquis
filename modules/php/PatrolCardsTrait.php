@@ -25,7 +25,7 @@ trait PatrolCardsTrait {
         $card = $this->patrol_cards->pickCardForLocation('deck', 'discard');
         $cardID = $card['type_arg'];
 
-        $this->notify->all("patrolCardDiscarded", clienttranslate(""), array(
+        $this->notify->all("patrolCardDiscarded", '', array(
             "patrolCardID" => $cardID
         ));
 

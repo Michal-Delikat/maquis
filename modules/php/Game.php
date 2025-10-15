@@ -166,9 +166,10 @@ class Game extends \Table {
         $workerID = $this->getNextAvailableWorker();
         $this->updateComponent($workerID, (string) $spaceID, "placed");
 
-        $this->notify->all("workerMoved", clienttranslate("Worker placed at " . $spaceName), array(
+        $this->notify->all("workerMoved", clienttranslate('Worker placed at ${spaceName}'), array(
             "workerID" => $workerID,
             "spaceID" => $spaceID,
+            "spaceName" => $spaceName
         ));
 
         if ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && in_array($spaceID, [1, 3, 5, 6, 9, 11]) && $this->countMarkers($spaceID) <= 0) {
@@ -180,10 +181,11 @@ class Game extends \Table {
                 $doubleAgentLocation = $card['space_a'];
                 $this->addSpaceAction($doubleAgentLocation, ACTION_COMPLETE_DOUBLE_AGENT_MISSION);
                 $this->updateDarkLadyLocation((string) $doubleAgentLocation, 'placed');
-                
-                $this->notify->all("darkLadyFound", clienttranslate("Dark Lady found at " . $this->getSpaceNameById($card['space_a'])), array(
+
+                $this->notify->all("darkLadyFound", clienttranslate('Dark Lady found at ${locationName}'), array(
                     "cardId" => $cardID,
-                    "location" => $doubleAgentLocation
+                    "location" => $doubleAgentLocation,
+                    "locationName" => $this->getSpaceNameById($doubleAgentLocation)
                 ));
             }
         }
@@ -234,10 +236,11 @@ class Game extends \Table {
                 $this->updateComponent($miliceID, (string) $spaceID, 'placed');
             }
 
-            $this->notify->all("patrolPlaced", clienttranslate("Patrol placed at $spaceName"), array(
+            $this->notify->all("patrolPlaced", clienttranslate('Patrol placed at ${spaceName}'), array(
                 "placeSoldier" => $placeSoldier,
                 "patrolID" => $placeSoldier ? $soldierID : $miliceID,
-                "spaceID" => $spaceID
+                "spaceID" => $spaceID,
+                "spaceName" => $spaceName
             ));
 
             if ($arrestedOnsite) {
@@ -259,8 +262,9 @@ class Game extends \Table {
         
         $spaceName = $this->getSpaceNameById($spaceID);
 
-        $this->notify->all("spaceActivated", clienttranslate("Worker at $spaceName activated"), array(
-            "spaceID" => $spaceID
+        $this->notify->all("spaceActivated", clienttranslate('Worker at ${spaceName} activated'), array(
+            "spaceID" => $spaceID,
+            "spaceName" => $spaceName
         ));
 
         $possibleActions = $this->getPossibleActions($spaceID);
@@ -421,8 +425,9 @@ class Game extends \Table {
 
         $this->updateComponent($miliceID, 'off_board', 'NaN');
 
-        $this->notify->all("patrolRemoved", clienttranslate("Milice patrol at " . $this->getSpaceNameById($spaceID) . " shot"), array(
-            "patrolID" => $miliceID
+        $this->notify->all("patrolRemoved", clienttranslate('Milice patrol at ${spaceName} shot'), array(
+            "patrolID" => $miliceID,
+            "spaceName" => $this->getSpaceNameById($spaceID)
         ));
 
         $this->spendTokens(RESOURCE_WEAPON, 1);
@@ -444,7 +449,7 @@ class Game extends \Table {
         $this->addSpareRoomActions($activeSpace, $roomID);
         $this->spendTokens(RESOURCE_MONEY, 2);
 
-        $this->notify->all("roomPlaced", clienttranslate("Room placed."), array(
+        $this->notify->all("roomPlaced", clienttranslate('Room placed'), array(
             "roomID" => $roomID,
             "spaceID" => $activeSpace
         ));
