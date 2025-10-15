@@ -39,56 +39,54 @@ class DataService {
 
     public static function setupActions(): string {
         return '
-            INSERT INTO action (action_id, action_name, action_description, is_safe)
+            INSERT INTO action (action_name, is_safe)
             VALUES
-            (1, "' . ACTION_GET_WEAPON . '", "Pay 1 money to gain 1 weapon", FALSE),
-            (2, "' . ACTION_GET_INTEL . '", "Gain 1 intel", FALSE),
-            (3, "' . ACTION_AIRDROP . '", "Airdop supplies onto an empty field", FALSE),
-            (4, "' . ACTION_GET_MEDICINE . '", "Gain 1 medicine", FALSE),
-            (5, "' . ACTION_PAY_FOR_MORALE . '", "Pay 1 food and 1 medicine to gain 1 morale", TRUE),
-            (6, "' . ACTION_GET_MONEY_FOR_FOOD . '", "Pay 1 food to gain 1 money and lose 1 morale", FALSE),
-            (7, "' . ACTION_GET_SPARE_ROOM . '", "Pay 2 money to gain a spare room", TRUE),
-            (8, "' . ACTION_GET_FOOD . '", "Gain 1 food", FALSE),
-            (9, "' . ACTION_GET_WORKER . '", "Pay 1 food to gain 1 worker", FALSE),
-            (10, "' . ACTION_GET_MONEY_FOR_MEDICINE . '", "Pay 1 medicine to gain 1 money and lose 1 morale", FALSE),
-            (11, "' . ACTION_COLLECT_ITEMS . '", "Collect items", FALSE),
-            (12, "' . ACTION_WRITE_GRAFFITI . '", "Write anti-fascist graffiti", TRUE),
-            (13, "' . ACTION_COMPLETE_OFFICERS_MANSION_MISSION . '", "Complete Mission", TRUE),
-            (14, "' . ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION . '", "Complete Mission", TRUE),
-            (15, "' . ACTION_GET_MONEY . '", "Gain 1 money", FALSE),
-            (16, "' . ACTION_GET_EXPLOSIVES . '", "Pay 1 medicine to gain 1 explosives", FALSE),
-            (17, "' . ACTION_GET_3_FOOD . '", "Gain 3 food", FALSE),
-            (18, "' . ACTION_GET_3_MEDICINE . '", "Gain 3 medicine", FALSE),
-            (19, "' . ACTION_INCREASE_MORALE . '", "Increase morale by 1", TRUE),
-            (20, "' . ACTION_GET_POISON . '", "Pay 2 medicine to gain 1 poison", FALSE),
-            (21, "' . ACTION_GET_FAKE_ID . '", "Pay 1 money and 2 intel to gain 1 fake id", FALSE),
-            (22, "' . ACTION_INFILTRATE_FACTORY . '", "Infiltrate Factory", TRUE),
-            (23, "' . ACTION_SABOTAGE_FACTORY . '", "Sabotage Factory", TRUE),
-            (24, "' . ACTION_DELIVER_INTEL . '", "Deliver 2 Intel", TRUE),
-            (25, "' . ACTION_INSERT_MOLE . '", "Insert Mole", TRUE),
-            (26, "' . ACTION_RECOVER_MOLE . '", "Recover mole and complete mission", TRUE),
-            (27, "' . ACTION_POISON_SHEPARDS . '", "Poison Shepards", TRUE),
-            (28, "' . ACTION_COMPLETE_DOUBLE_AGENT_MISSION . '", "Complete the mission", TRUE);
+            (\'' . ACTION_GET_WEAPON . '\', FALSE),
+            (\'' . ACTION_GET_INTEL . '\', FALSE),
+            (\'' . ACTION_AIRDROP . '\', FALSE),
+            (\'' . ACTION_GET_MEDICINE . '\', FALSE),
+            (\'' . ACTION_PAY_FOR_MORALE . '\', TRUE),
+            (\'' . ACTION_GET_MONEY_FOR_FOOD . '\', FALSE),
+            (\'' . ACTION_GET_SPARE_ROOM . '\', TRUE),
+            (\'' . ACTION_GET_FOOD . '\', FALSE),
+            (\'' . ACTION_GET_WORKER . '\', FALSE),
+            (\'' . ACTION_GET_MONEY_FOR_MEDICINE . '\', FALSE),
+            (\'' . ACTION_COLLECT_ITEMS . '\', FALSE),
+            (\'' . ACTION_WRITE_GRAFFITI . '\', TRUE),
+            (\'' . ACTION_COMPLETE_OFFICERS_MANSION_MISSION . '\', TRUE),
+            (\'' . ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION . '\', TRUE),
+            (\'' . ACTION_GET_MONEY . '\', FALSE),
+            (\'' . ACTION_GET_EXPLOSIVES . '\', FALSE),
+            (\'' . ACTION_GET_3_FOOD . '\', FALSE),
+            (\'' . ACTION_GET_3_MEDICINE . '\', FALSE),
+            (\'' . ACTION_INCREASE_MORALE . '\', TRUE),
+            (\'' . ACTION_INFILTRATE_FACTORY . '\', TRUE),
+            (\'' . ACTION_SABOTAGE_FACTORY . '\', TRUE),
+            (\'' . ACTION_DELIVER_INTEL . '\', TRUE),
+            (\'' . ACTION_INSERT_MOLE . '\', TRUE),
+            (\'' . ACTION_RECOVER_MOLE . '\', TRUE),
+            (\'' . ACTION_POISON_SHEPARDS . '\', TRUE),
+            (\'' . ACTION_COMPLETE_DOUBLE_AGENT_MISSION . '\', TRUE);
         ';
     }
 
     public static function setupBoardActions(): string {
         return '
-            INSERT INTO board_action (space_id, action_id)
+            INSERT INTO board_action (space_id, action_name)
             VALUES
-            (2, 1),
-            (4, 2),(4, 3),
-            (5, 4),
-            (6, 5),
-            (7, 6), (7, 10),
-            (8, 7),
-            (9, 2),(9, 3),
-            (10, 7),
-            (12, 8),
-            (13, 7),
-            (14, 11),
-            (15, 9),
-            (17, 11);
+            (2, \'' . ACTION_GET_WEAPON . '\'),
+            (4, \'' . ACTION_GET_INTEL . '\'),(4, \'' . ACTION_AIRDROP . '\'),
+            (5, \'' . ACTION_GET_MEDICINE . '\'),
+            (6, \'' . ACTION_PAY_FOR_MORALE . '\'),
+            (7, \'' . ACTION_GET_MONEY_FOR_FOOD . '\'),(7, \'' . ACTION_GET_MONEY_FOR_MEDICINE . '\'),
+            (8, \'' . ACTION_GET_SPARE_ROOM . '\'),
+            (9, \'' . ACTION_GET_INTEL . '\'),(9, \'' . ACTION_AIRDROP . '\'),
+            (10, \'' . ACTION_GET_SPARE_ROOM . '\'),
+            (12, \'' . ACTION_GET_FOOD . '\'),
+            (13, \'' . ACTION_GET_SPARE_ROOM . '\'),
+            (14, \'' . ACTION_COLLECT_ITEMS . '\'),
+            (15, \'' . ACTION_GET_WORKER . '\'),
+            (17, \'' . ACTION_COLLECT_ITEMS . '\');
         ';
     }
 

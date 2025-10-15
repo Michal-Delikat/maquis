@@ -265,8 +265,8 @@ class Game extends \Table {
 
         $possibleActions = $this->getPossibleActions($spaceID);
 
-        if (count($possibleActions) == 1) {
-            $this->actTakeAction($possibleActions[0]['action_name']);
+        if (count($possibleActions) === 0) {
+            $this->actTakeAction(ACTION_RETURN);
         } else {
             $this->gamestate->nextState("takeAction");
         }
@@ -277,7 +277,7 @@ class Game extends \Table {
 
         $activeSpace = $this->getActiveSpace();
 
-        if ($actionName == ACTION_GET_SPARE_ROOM) {
+        if ($actionName === ACTION_GET_SPARE_ROOM) {
             $this->gamestate->nextstate("selectRoom");    
         } else if ($actionName === ACTION_INSERT_MOLE) {
             $this->saveAction(ACTION_INSERT_MOLE);
@@ -290,9 +290,13 @@ class Game extends \Table {
                 $this->removeMarker($space);
             }
 
-            $this->gamestate->nextState("removeWorker");
+            if ($this->getPlayerScore() >= 2) {
+                $this->gamestate->nextState("gameEnd");
+            } else {
+                $this->gamestate->nextState("removeWorker");
+            }
         } else if ($this->checkEscapeRoute()) {
-            if ($actionName == ACTION_AIRDROP) {
+            if ($actionName === ACTION_AIRDROP) {
                 if (!empty($this->getEmptyFields())) {
                     $this->gamestate->nextstate("airdrop");
                 } else {
@@ -505,15 +509,15 @@ class Game extends \Table {
         $options = [
             [
                 "resourceName" => RESOURCE_FOOD,
-                "airdropOptionDescription" => "Airdrop 3 food"
+                "airdropOptionDescription" => clienttranslate("Airdrop 3 food")
             ], 
             [
                 "resourceName" => RESOURCE_MONEY,
-                "airdropOptionDescription" => "Airdrop 1 money"
+                "airdropOptionDescription" => clienttranslate("Airdrop 1 money")
             ], 
             [
                 "resourceName" => RESOURCE_WEAPON,
-                "airdropOptionDescription" => "Airdrop 1 weapon"
+                "airdropOptionDescription" => clienttranslate("Airdrop 1 weapon")
             ]
         ];
 
@@ -545,10 +549,8 @@ class Game extends \Table {
 
     protected function addSpaceAction(int $spaceID, string $actionName): void {
         self::DbQuery("
-            INSERT INTO board_action (space_id, action_id)
-            SELECT $spaceID, action_id
-            FROM action
-            WHERE action_name = \"$actionName\";
+            INSERT INTO board_action (space_id, action_name)
+            VALUES ($spaceID, '$actionName');
         ");
     }
 
@@ -776,20 +778,20 @@ class Game extends \Table {
     // GET POSSIBLE ACTIONS
 
     protected function getPossibleActions($spaceID): array {
-        $willGetArrested = $this->checkEscapeRoute($spaceID);
+        $willNotGetArrested = $this->checkEscapeRoute($spaceID);
 
-        if ($willGetArrested) {
+        if ($willNotGetArrested) {
             $result = (array) $this->getCollectionFromDb("
-                SELECT a.action_id, a.action_name, a.action_description
+                SELECT a.action_name
                 FROM board_action ba
-                JOIN action a ON ba.action_id = a.action_id
+                JOIN action a ON ba.action_name = a.action_name
                 WHERE ba.space_id = $spaceID;
             ");
         } else {
             $result = (array) $this->getCollectionFromDb("
-                SELECT a.action_id, a.action_name, a.action_description
+                SELECT a.action_name
                 FROM board_action ba
-                JOIN action a ON ba.action_id = a.action_id
+                JOIN action a ON ba.action_name = a.action_name
                 WHERE ba.space_id = $spaceID AND a.is_safe = TRUE;
             ");
         }
@@ -847,47 +849,73 @@ class Game extends \Table {
             }
         });
 
+        $actionDescriptions = [
+            ACTION_INSERT_MOLE => clienttranslate("Insert mole"),
+            ACTION_RECOVER_MOLE => clienttranslate("Recover mole and complete the mission"),
+            ACTION_POISON_SHEPARDS => clienttranslate("Poison German Shepards"),
+            ACTION_GET_SPARE_ROOM => clienttranslate("Get spare room"),
+            ACTION_GET_WEAPON => clienttranslate("Get weapon"),
+            ACTION_GET_FOOD => clienttranslate("Get food"),
+            ACTION_GET_MEDICINE => clienttranslate("Get medicine"),
+            ACTION_GET_INTEL => clienttranslate("Get intel"),
+            ACTION_GET_MONEY_FOR_FOOD => clienttranslate("Get money for food"),
+            ACTION_GET_MONEY_FOR_MEDICINE => clienttranslate("Get money for medicine"),
+            ACTION_PAY_FOR_MORALE => clienttranslate("Pay for morale"),
+            ACTION_GET_WORKER => clienttranslate("Recruit worker"),
+            ACTION_COLLECT_ITEMS => clienttranslate("Collect items"),
+            ACTION_WRITE_GRAFFITI => clienttranslate("Write graffiti"),
+            ACTION_GET_MONEY => clienttranslate("Get money"),
+            ACTION_GET_EXPLOSIVES => clienttranslate("Get explosives"),
+            ACTION_GET_3_FOOD => clienttranslate("Get 3 food"),
+            ACTION_GET_3_MEDICINE => clienttranslate("Get 3 medicine"),
+            ACTION_INCREASE_MORALE => clienttranslate("Increase morale"),
+            ACTION_INFILTRATE_FACTORY => clienttranslate("Infiltrate factory"),
+            ACTION_SABOTAGE_FACTORY => clienttranslate("Sabotage factory"),
+            ACTION_DELIVER_INTEL => clienttranslate("Deliver intel"),
+            ACTION_AIRDROP => clienttranslate("Airdrop supplies onto an empty field"),
+            ACTION_COMPLETE_OFFICERS_MANSION_MISSION => clienttranslate("Complete Officers Mansion mission"),
+            ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION => clienttranslate("Complete Milice Parade Day mission"),
+            ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate("Complete the mission"),
+        ];
+
         foreach($result as &$action) {
+            $action['action_description'] = $actionDescriptions[$action['action_name']] ?? "";
+
             switch($action['action_name']) {
                 case ACTION_GET_FOOD:
                     if ($this->getAvailableResource(RESOURCE_FOOD) <= 0) {
-                        $action['action_description'] .= " (No effect)";
+                        $action['action_description'] .= " (" . clienttranslate("No effect") . ")";
                     }
                     break;
                 case ACTION_GET_MEDICINE:
                     if ($this->getAvailableResource(RESOURCE_MEDICINE) <= 0) {
-                        $action['action_description'] .= " (No effect)";
+                        $action['action_description'] .= " (" . clienttranslate("No effect") . ")";
                     }
                     break;
                 case ACTION_GET_INTEL:
                     if ($this->getAvailableResource(RESOURCE_INTEL) <= 0) {
-                        $action['action_description'] .= " (No effect)";
+                        $action['action_description'] .= " (" . clienttranslate("No effect") . ")";
                     }
                     break;
                 case ACTION_GET_MONEY:
                     if ($this->getAvailableResource(RESOURCE_MONEY) <= 0) {
-                        $action['action_description'] .= " (No effect)";
+                        $action['action_description'] .= " (" . clienttranslate("No effect") . ")";
                     }
                     break;
                 case ACTION_GET_MONEY_FOR_FOOD:
                 case ACTION_GET_MONEY_FOR_MEDICINE:
                     if ($this->getMorale() === 1) {
-                        $action['action_description'] .= " (This will result in loosing the game)";
+                        $action['action_description'] .= " (" . clienttranslate("This will result in loosing the game") . ")";
                     } 
                     break;
                 case ACTION_PAY_FOR_MORALE:
                     if ($this->getMorale() === 7) {
-                        $action['action_description'] .= " (Resources will be lost. Morale won't be gained)";
+                        $action['action_description'] .= " (" . clienttranslate("Resources will be lost. Morale won't be gained") . ")";
                     }
                     break;
             }
         }
 
-        $result[] = [
-            "action_id" => 0,
-            "action_name" => "return",
-            "action_description" => clienttranslate("Return to Safe House"),
-        ];
 
         return $result;
     }
@@ -915,10 +943,9 @@ class Game extends \Table {
             FROM board_path;
         ");
 
-        $roundNumber = $this->getRoundNumber();
         $paradeCanHappen = $this->getIsMissionSelected(MISSION_MILICE_PARADE_DAY) && !$this->getIsMissionCompleted(MISSION_MILICE_PARADE_DAY);
         
-        return array_filter($result, function ($connection) use ($roundNumber, $paradeCanHappen) {
+        return array_filter($result, function ($connection) use ($paradeCanHappen) {
             return !(
                     (($connection['space_id_start'] == '1' && $connection['space_id_end'] == '2') || ($connection['space_id_start'] == '2' && $connection['space_id_end'] == '1')) && 
                     $this->isParadeDay() &&

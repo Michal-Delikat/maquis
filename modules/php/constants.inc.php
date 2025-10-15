@@ -54,6 +54,8 @@ const ACTION_AIRDROP = 'airdrop';
 const ACTION_GET_FAKE_ID = 'getFakeId';
 const ACTION_GET_POISON = 'getPoison';
 const ACTION_COMPLETE_DOUBLE_AGENT_MISSION = 'completeDoubleAgentMission';
+const ACTION_RETURN = 'return';
+
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';

@@ -40,20 +40,18 @@ CREATE TABLE IF NOT EXISTS `patrol_card` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `action` (
-    `action_id` INT UNSIGNED NOT NULL,
     `action_name` varchar(32) NOT NULL,
-    `action_description` varchar(255) NOT NULL,
     `is_safe` BOOLEAN NOT NULL DEFAULT FALSE,
-    PRIMARY KEY (`action_id`)
+    PRIMARY KEY (`action_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `board_action` (
     `space_id` INT unsigned NOT NULL,
-    `action_id` INT unsigned NOT NULL,
+    `action_name` varchar(32) NOT NULL,
     FOREIGN KEY (`space_id`)
         REFERENCES `board`(`space_id`),
-    FOREIGN KEY (`action_id`)
-        REFERENCES `action`(`action_id`)
+    FOREIGN KEY (`action_name`)
+        REFERENCES `action`(`action_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `components` (

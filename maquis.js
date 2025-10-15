@@ -9,7 +9,7 @@
  *
  * maquis.js
  *
- * MaquisSolo user interface script
+ * Maquis user interface script
  * 
  */
 
@@ -475,16 +475,17 @@ function (dojo, declare) {
                         break;
 
                     case 'takeAction':
-                        Object.values(args.actions).forEach(action => this.addActionButton('actTakeAction_' + `${action.action_name}`, _(`${action.action_description}`), () => this.bgaPerformAction("actTakeAction", { actionName: action.action_name }), null, null, action.action_name == 'return' ? 'gray' : 'blue'));
+                        Object.values(args.actions).forEach(action => this.addActionButton(`actTakeAction_${action.action_name}`, _(action.action_description), () => this.bgaPerformAction("actTakeAction", { actionName: action.action_name }), null, null, 'blue'));
+                        this.addActionButton(`actReturn`, _('Return to Safe House'), () => this.bgaPerformAction("actTakeAction", { actionName: 'return'}), null, null, 'gray');
                         this.addActionButton('actBack', _('Back'), () => this.bgaPerformAction("actBack"), null, null, 'red');
                         break;
 
                     case 'airdropSelectSupplies':
-                        Object.values(args.options).forEach(option => this.addActionButton('actAirdropSelectSupplies_' + `${option["resourceName"]}`, _(`${option["airdropOptionDescription"]}`), () => this.bgaPerformAction("actSelectSupplies", { supplyType: option["resourceName"]}), null, null, 'blue'));
+                        Object.values(args.options).forEach(option => this.addActionButton(`actAirdropSelectSupplies_${option.resourceName}`, _(option.airdropOptionDescription), () => this.bgaPerformAction("actSelectSupplies", { supplyType: option.resourceName}), null, null, 'blue'));
                         break;
 
                     case 'selectSpareRoom':
-                        Object.values(args.availableRooms).forEach(room => this.addActionButton('actSelectRoom_' + `${room.name}`, (`${args.roomsDescriptions[room.name.replace("room_", "")]}`), () => this.bgaPerformAction("actSelectRoom", { roomID: room.name}), null, null, 'blue'));
+                        Object.values(args.availableRooms).forEach(room => this.addActionButton(`actSelectRoom_${room.name}`, args.roomsDescriptions[room.name.replace("room_", "")], () => this.bgaPerformAction("actSelectRoom", { roomID: room.name}), null, null, 'blue'));
                         break;
 
                     case 'shootMilice':
