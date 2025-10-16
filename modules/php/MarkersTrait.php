@@ -41,7 +41,7 @@ trait MarkersTrait {
             WHERE name = 'morale_marker';
         ");
 
-        $this->notify->all("moraleUpdated", clienttranslate('Morale is ${newMorale}'), array(
+        $this->notify->all("moraleUpdated", clienttranslate('Morale is ${morale}'), array(
             "morale" => $newMorale
         ));
     }

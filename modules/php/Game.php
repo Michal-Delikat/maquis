@@ -23,7 +23,7 @@ require_once("constants.inc.php");
 require_once("ComponentsTrait.php");
 require_once("BoardTrait.php");
 require_once("MissionsTrait.php");
-require_once("RoundTrait.php");
+require_once("GlobalsTrait.php");
 require_once("RoomsTrait.php");
 require_once("ResourcesTrait.php");
 require_once("PatrolCardsTrait.php");
@@ -37,7 +37,7 @@ class Game extends \Table {
     use ComponentsTrait;
     use BoardTrait;
     use MissionsTrait;
-    use RoundTrait;
+    use GlobalsTrait;
     use ResourcesTrait;
     use PatrolCardsTrait;
     use RoomsTrait;
@@ -60,17 +60,18 @@ class Game extends \Table {
      */
     public function __construct() {
         parent::__construct();
-        require('material.inc.php');
-
-        $this->PATROL_CARD_ITEMS = PATROL_CARD_ITEMS;
         
         $this->initGameStateLabels([
-            "my_first_global_variable" => 10,
-            "my_second_global_variable" => 11,
+            "active_space" => 10,
+            "selected_field" => 11,
+            "shot_today" => 12,
             "my_first_game_variant" => 100,
             "my_second_game_variant" => 101,
         ]);
 
+        require('material.inc.php');
+
+        $this->PATROL_CARD_ITEMS = PATROL_CARD_ITEMS;
         $this->patrol_cards = $this->getNew("module.common.deck");  
         $this->patrol_cards->init("patrol_card");
         $this->patrol_cards->autoreshuffle_trigger = array('obj' => $this, 'method' => 'deckAutoReshuffle');
@@ -108,7 +109,6 @@ class Game extends \Table {
         $this->reloadPlayersBasicInfos();
 
         // Add master data to DB
-        static::DbQuery(DataService::setupRoundData());
 
         static::DbQuery(DataService::setupBoard());
         static::DbQuery(DataService::setupBoardPaths());
@@ -143,8 +143,10 @@ class Game extends \Table {
             $this->configureMissions($missions[$keys[0]], $missions[$keys[1]]);
         }
 
-        // Dummy content.
-        $this->setGameStateInitialValue("my_first_global_variable", 0);
+        // Globals
+        $this->setGameStateInitialValue("active_space", 0);
+        $this->setGameStateInitialValue("selected_field", 0);
+        $this->setGameStateInitialValue("shot_today", false);
         
         // Init game statistics.
         $this->initStat("table", "turns_number", 0);

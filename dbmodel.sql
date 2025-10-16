@@ -9,12 +9,6 @@
 
 -- dbmodel.sql
 
-CREATE TABLE IF NOT EXISTS `round_data` (
-    `active_space` INT DEFAULT 0,
-    `selected_field` INT DEFAULT 0,
-    `shot_today` BOOLEAN DEFAULT FALSE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `board` (
     `space_id` INT UNSIGNED NOT NULL,
     `space_name` varchar(16) NOT NULL,

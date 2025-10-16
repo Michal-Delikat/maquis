@@ -5,13 +5,6 @@ namespace Bga\Games\Maquis;
 require_once("constants.inc.php");
 
 class DataService {
-    public static function setupRoundData(): string {
-        return '
-            INSERT INTO round_data (active_space)
-            VALUES
-            (0);
-        ';
-    }
 
     public static function setupBoard(): string {
         return '

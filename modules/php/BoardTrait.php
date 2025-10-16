@@ -22,8 +22,6 @@ trait BoardTrait {
             WHERE is_safe = 0;
         '));
 
-        //TODO: Filter out mission spaces with markers
-
         $spacesWithMarkers = array_keys($this->getSpacesWithMarkers());
 
         $spacesWithTokens = $this->getSpacesWithTokens();
