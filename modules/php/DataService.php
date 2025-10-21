@@ -30,38 +30,6 @@ class DataService {
         ';
     }
 
-    public static function setupActions(): string {
-        return '
-            INSERT INTO action (action_name, is_safe)
-            VALUES
-            (\'' . ACTION_GET_WEAPON . '\', FALSE),
-            (\'' . ACTION_GET_INTEL . '\', FALSE),
-            (\'' . ACTION_AIRDROP . '\', FALSE),
-            (\'' . ACTION_GET_MEDICINE . '\', FALSE),
-            (\'' . ACTION_PAY_FOR_MORALE . '\', TRUE),
-            (\'' . ACTION_GET_MONEY_FOR_FOOD . '\', FALSE),
-            (\'' . ACTION_GET_SPARE_ROOM . '\', TRUE),
-            (\'' . ACTION_GET_FOOD . '\', FALSE),
-            (\'' . ACTION_GET_WORKER . '\', FALSE),
-            (\'' . ACTION_GET_MONEY_FOR_MEDICINE . '\', FALSE),
-            (\'' . ACTION_COLLECT_ITEMS . '\', FALSE),
-            (\'' . ACTION_WRITE_GRAFFITI . '\', TRUE),
-            (\'' . ACTION_COMPLETE_OFFICERS_MANSION_MISSION . '\', TRUE),
-            (\'' . ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION . '\', TRUE),
-            (\'' . ACTION_GET_MONEY . '\', FALSE),
-            (\'' . ACTION_GET_EXPLOSIVES . '\', FALSE),
-            (\'' . ACTION_GET_3_FOOD . '\', FALSE),
-            (\'' . ACTION_GET_3_MEDICINE . '\', FALSE),
-            (\'' . ACTION_INCREASE_MORALE . '\', TRUE),
-            (\'' . ACTION_INFILTRATE_FACTORY . '\', TRUE),
-            (\'' . ACTION_SABOTAGE_FACTORY . '\', TRUE),
-            (\'' . ACTION_DELIVER_INTEL . '\', TRUE),
-            (\'' . ACTION_INSERT_MOLE . '\', TRUE),
-            (\'' . ACTION_RECOVER_MOLE . '\', TRUE),
-            (\'' . ACTION_POISON_SHEPARDS . '\', TRUE),
-            (\'' . ACTION_COMPLETE_DOUBLE_AGENT_MISSION . '\', TRUE);
-        ';
-    }
 
     public static function setupBoardActions(): string {
         return '

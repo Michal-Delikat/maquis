@@ -23,3 +23,34 @@ const ROOM_DESCRIPTIONS = [
     ROOM_PROPAGANDIST => 'Propagandist',
     ROOM_COUNTERFEITER => 'Counterfeiter' 
 ];
+
+const ACTIONS = [
+    ['name' => ACTION_GET_WEAPON, 'is_safe' => false],
+    ['name' => ACTION_GET_INTEL, 'is_safe' => false],
+    ['name' => ACTION_AIRDROP, 'is_safe' => false],
+    ['name' => ACTION_GET_MEDICINE, 'is_safe' => false],
+    ['name' => ACTION_PAY_FOR_MORALE, 'is_safe' => true],
+    ['name' => ACTION_GET_MONEY_FOR_FOOD, 'is_safe' => false],
+    ['name' => ACTION_GET_SPARE_ROOM, 'is_safe' => true],
+    ['name' => ACTION_GET_FOOD, 'is_safe' => false],
+    ['name' => ACTION_GET_WORKER, 'is_safe' => false],
+    ['name' => ACTION_GET_MONEY_FOR_MEDICINE, 'is_safe' => false],
+    ['name' => ACTION_COLLECT_ITEMS, 'is_safe' => false],
+    ['name' => ACTION_WRITE_GRAFFITI, 'is_safe' => true],
+    ['name' => ACTION_COMPLETE_OFFICERS_MANSION_MISSION, 'is_safe' => true],
+    ['name' => ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION, 'is_safe' => true],
+    ['name' => ACTION_GET_MONEY, 'is_safe' => false],
+    ['name' => ACTION_GET_EXPLOSIVES, 'is_safe' => false],
+    ['name' => ACTION_GET_3_FOOD, 'is_safe' => false],
+    ['name' => ACTION_GET_3_MEDICINE, 'is_safe' => false],
+    ['name' => ACTION_INCREASE_MORALE, 'is_safe' => true],
+    ['name' => ACTION_INFILTRATE_FACTORY, 'is_safe' => true],
+    ['name' => ACTION_SABOTAGE_FACTORY, 'is_safe' => true],
+    ['name' => ACTION_DELIVER_INTEL, 'is_safe' => true],
+    ['name' => ACTION_INSERT_MOLE, 'is_safe' => true],
+    ['name' => ACTION_RECOVER_MOLE, 'is_safe' => true],
+    ['name' => ACTION_POISON_SHEPARDS, 'is_safe' => true],
+    ['name' => ACTION_GET_FAKE_ID, 'is_safe' => true],
+    ['name' => ACTION_GET_POISON, 'is_safe' => true],
+    ['name' => ACTION_COMPLETE_DOUBLE_AGENT_MISSION, 'is_safe' => true]
+];

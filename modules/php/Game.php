@@ -46,6 +46,7 @@ class Game extends \Table {
     use MarkersTrait;
 
     private array $PATROL_CARD_ITEMS;
+    private array $ACTIONS;
     private mixed $patrol_cards;
 
     /**
@@ -72,6 +73,7 @@ class Game extends \Table {
         require('material.inc.php');
 
         $this->PATROL_CARD_ITEMS = PATROL_CARD_ITEMS;
+        $this->ACTIONS = ACTIONS;
         $this->patrol_cards = $this->getNew("module.common.deck");  
         $this->patrol_cards->init("patrol_card");
         $this->patrol_cards->autoreshuffle_trigger = array('obj' => $this, 'method' => 'deckAutoReshuffle');
@@ -113,7 +115,6 @@ class Game extends \Table {
         static::DbQuery(DataService::setupBoard());
         static::DbQuery(DataService::setupBoardPaths());
 
-        static::DbQuery(DataService::setupActions());
         static::DbQuery(DataService::setupBoardActions());
 
         static::DbQuery(DataService::setupComponents());
@@ -322,7 +323,7 @@ class Game extends \Table {
                 $this->gamestate->nextState("nextWorker");
             }
         } else {
-            if ($this->getIsSafe($actionName)) {
+            if ($actionName !== ACTION_RETURN && $this->getIsSafe($actionName)) {
                 $this->saveAction($actionName);
                 
                 if ($this->getPlayerScore() >= 2) {
@@ -781,27 +782,26 @@ class Game extends \Table {
 
         return $result;
     }
+
+    // ACTIONS
     
     // GET POSSIBLE ACTIONS
 
     protected function getPossibleActions($spaceID): array {
         $willNotGetArrested = $this->checkEscapeRoute($spaceID);
 
-        if ($willNotGetArrested) {
-            $result = (array) $this->getCollectionFromDb("
-                SELECT a.action_name
-                FROM board_action ba
-                JOIN action a ON ba.action_name = a.action_name
-                WHERE ba.space_id = $spaceID;
-            ");
-        } else {
-            $result = (array) $this->getCollectionFromDb("
-                SELECT a.action_name
-                FROM board_action ba
-                JOIN action a ON ba.action_name = a.action_name
-                WHERE ba.space_id = $spaceID AND a.is_safe = TRUE;
-            ");
-        }
+        $result = (array) ($this->getCollectionFromDb("
+            SELECT action_name
+            FROM board_action 
+            WHERE space_id = $spaceID;
+        "));
+
+        if (!$willNotGetArrested) {
+            $result = array_filter($result, function($action) {
+                $this->dump("action", $action); 
+                return $this->getIsSafe($action["action_name"]);
+            });
+        } 
 
         $result = array_filter($result, function($action) use ($spaceID) {
             switch ($action['action_name']) {
@@ -923,8 +923,15 @@ class Game extends \Table {
             }
         }
 
-
         return $result;
+    }
+
+    protected function getIsSafe(string $actionName): bool {
+        $actionFromMaterial = array_filter($this->ACTIONS, function($action) use ($actionName) {
+            return $action["name"] === $actionName;
+        });
+
+        return (bool) $this->ACTIONS[$actionName]['is_safe'];
     }
 
     protected function getPatrolsToPlace(): int {
@@ -960,12 +967,6 @@ class Game extends \Table {
                 );
         });
         return $result;
-    }
-
-    // ACTIONS
-
-    protected function getIsSafe(string $actionName): bool {
-        return (bool) $this->getUniqueValueFromDb("SELECT is_safe FROM action WHERE action_name = \"$actionName\";");
     }
 
     // CHECK ESCAPE ROUTE 
