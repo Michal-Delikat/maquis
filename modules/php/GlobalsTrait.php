@@ -7,7 +7,7 @@ trait GlobalsTrait {
         return $this->getGameStateValue("active_space");
     }
 
-    protected function updateActiveSpace(int $spaceID) {
+    protected function setActiveSpace(int $spaceID) {
         $this->setGameStateValue("active_space", $spaceID);
     }
 

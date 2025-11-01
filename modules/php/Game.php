@@ -261,7 +261,7 @@ class Game extends \Table {
     }
 
     public function actActivateWorker(int $spaceID): void {
-        $this->updateActiveSpace($spaceID);
+        $this->setActiveSpace($spaceID);
         
         $spaceName = $this->getSpaceNameById($spaceID);
 
@@ -927,10 +927,6 @@ class Game extends \Table {
     }
 
     protected function getIsSafe(string $actionName): bool {
-        $actionFromMaterial = array_filter($this->ACTIONS, function($action) use ($actionName) {
-            return $action["name"] === $actionName;
-        });
-
         return (bool) $this->ACTIONS[$actionName]['is_safe'];
     }
 
