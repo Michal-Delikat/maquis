@@ -235,6 +235,11 @@ function (dojo, declare) {
                             ${_('Visit all locations on the west side of the river except the Fence and Spare Room. Once completed, turn over the top patrol card; Location #1 is the location of the "Dark Lady". Visit that location again to complete the mission. Remove one Worker permanently from the game.')}
                         </p>`;
                         break;
+                    case 'aid_the_spy':
+                        description = `<p>
+                            ${_('A British spy parachuted in a few days ago and needs our help. Provide him with equipment and supplies to help him carr out his mission.')}<br><br>
+                            ${_('Deliver 2 Weapons to the spy on one day, followed by 1 Money and 2 Food on a second day.')}
+                        </p>`
                 }
                     
                 this.addTooltipHtml(mission, 

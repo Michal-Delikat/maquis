@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `patrol_card` (
 
 CREATE TABLE IF NOT EXISTS `board_action` (
     `space_id` INT unsigned NOT NULL,
-    `action_name` varchar(32) NOT NULL,
+    `action_name` varchar(64) NOT NULL,
     FOREIGN KEY (`space_id`)
         REFERENCES `board`(`space_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

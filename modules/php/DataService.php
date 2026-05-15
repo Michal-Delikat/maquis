@@ -134,6 +134,7 @@ class DataService {
             ("mission_card_' . MISSION_INFILTRATION . '", "off_board", "not_selected"),
             ("mission_card_' . MISSION_GERMAN_SHEPARDS . '", "off_board", "not_selected"),
             ("mission_card_' . MISSION_DOUBLE_AGENT . '", "off_board", "not_selected"),
+            ("mission_card_' . MISSION_AID_THE_SPY . '", "off_board", "not_selected"),
             ("mission_marker_1", "off_board", "available"),
             ("mission_marker_2", "off_board", "available"),
             ("mission_marker_3", "off_board", "available"),

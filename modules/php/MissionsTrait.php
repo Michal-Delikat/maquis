@@ -9,7 +9,8 @@ trait MissionsTrait {
             MISSION_SABOTAGE, 
             MISSION_INFILTRATION, 
             MISSION_GERMAN_SHEPARDS, 
-            MISSION_UNDERGROUND_NEWSPAPER
+            MISSION_UNDERGROUND_NEWSPAPER,
+            MISSION_AID_THE_SPY
         ];
 
         if (in_array($missionAName, $missionsWithSpaces)) {
@@ -52,6 +53,11 @@ trait MissionsTrait {
         if (in_array(MISSION_GERMAN_SHEPARDS, $missionNames)) {
             $missionSpace = $missionAName === MISSION_GERMAN_SHEPARDS ? 18 : 21;
             $this->addSpaceAction($missionSpace, ACTION_POISON_SHEPARDS);
+        }
+
+        if (in_array(MISSION_AID_THE_SPY, $missionNames)) {
+            $missionSpace = $missionAName === MISSION_AID_THE_SPY ? 18 : 21;
+            $this->addSpaceAction($missionSpace, ACTION_DELIVER_2_WEAPONS);
         }
     }
 

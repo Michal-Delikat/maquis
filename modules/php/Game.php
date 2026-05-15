@@ -133,15 +133,16 @@ class Game extends \Table {
                 MISSION_DOUBLE_AGENT,
                 MISSION_UNDERGROUND_NEWSPAPER
         );
+        $twoStarMissions = array(
+            MISSION_AID_THE_SPY
+        );
 
         if ($missionsDifficulty == 0) {
-            $this->configureMissions($zeroStarMissions[0], $zeroStarMissions[1]);
-        } else {
-            $missions = array_merge($zeroStarMissions, $oneStarMissions);
+            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+        } else if ($missionsDifficulty == 1) {
+            $keys = array_rand($oneStarMissions, 2);
 
-            $keys = array_rand($missions, 2);
-
-            $this->configureMissions($missions[$keys[0]], $missions[$keys[1]]);
+            $this->configureMissions($oneStarMissions[$keys[0]], $oneStarMissions[$keys[1]]);
         }
 
         // Globals
@@ -261,7 +262,7 @@ class Game extends \Table {
     }
 
     public function actActivateWorker(int $spaceID): void {
-        $this->updateActiveSpace($spaceID);
+        $this->setActiveSpace($spaceID);
         
         $spaceName = $this->getSpaceNameById($spaceID);
 
@@ -736,6 +737,20 @@ class Game extends \Table {
                     $this->addSpaceAction($activeSpace + 1, ACTION_POISON_SHEPARDS);
                 }
                 break;
+            case ACTION_DELIVER_2_WEAPONS:
+                $activeSpace = $this->getActiveSpace();
+                $this->spendTokens(RESOURCE_WEAPON, 2);
+                $this->returnOrArrest($activeSpace);
+                $this->placeMarker($activeSpace);
+                $this->addMissionSpace($activeSpace + 1, MISSION_AID_THE_SPY);
+                $this->addSpaceAction($activeSpace + 1, ACTION_DELIVER_MONEY_AND_2_FOOD);
+                break;
+            case ACTION_DELIVER_MONEY_AND_2_FOOD:
+                $this->spendTokens(RESOURCE_MONEY);
+                $this->spendTokens(RESOURCE_FOOD, 2);
+                $this->returnOrArrest($this->getActiveSpace());
+                $this->completeMission(MISSION_AID_THE_SPY);
+                break;
         }
     } 
 
@@ -807,52 +822,42 @@ class Game extends \Table {
             switch ($action['action_name']) {
                 case ACTION_GET_WEAPON:
                     return $this->getResource(RESOURCE_MONEY) > 0;
-                    break;
                 case ACTION_AIRDROP:
                     return count($this->getEmptyFields()) > 0;
-                    break;
                 case ACTION_PAY_FOR_MORALE:
                     return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResource(RESOURCE_MEDICINE) > 0;
-                    break;
                 case ACTION_GET_MONEY_FOR_FOOD:
                     return $this->getResource(RESOURCE_FOOD) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
-                    break;
                 case ACTION_GET_MONEY_FOR_MEDICINE:
                     return $this->getResource(RESOURCE_MEDICINE) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
                 case ACTION_WRITE_GRAFFITI:
                     return (($this->countMarkers($spaceID) === 0) || (($this->countMarkers($spaceID) === 1) && $this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT))) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
-                    break;
                 case ACTION_COMPLETE_OFFICERS_MANSION_MISSION:
                     return ((!$this->getIsMissionSelected(MISSION_DOUBLE_AGENT) || $this->getIsMissionCompleted(MISSION_DOUBLE_AGENT)) && $this->countMarkersInSpaces([1, 3, 11]) == 3) || ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && $this->countMarkersInSpaces([1, 3, 11]) == 6) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
-                    break;
                 case ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION:
                     return $this->getResource(RESOURCE_WEAPON) > 0 && $this->isParadeDay();
-                    break;
                 case ACTION_GET_WORKER:
                     return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResistanceToRecruit() > 0;
-                    break;
                 case ACTION_GET_SPARE_ROOM:
                     return !$this->getIsRoomPlaced($spaceID) && $this->getResource(RESOURCE_MONEY) >= 2;
-                    break;
                 case ACTION_GET_EXPLOSIVES:
                     return $this->getResource(RESOURCE_MEDICINE) >= 1;
-                    break;
                 case ACTION_SABOTAGE_FACTORY:
                     return $this->getResource(RESOURCE_EXPLOSIVES) >= 1;
-                    break;
                 case ACTION_DELIVER_INTEL:
                     return $this->getResource(RESOURCE_INTEL) >= 2;
-                    break;
                 case ACTION_INSERT_MOLE:
                     return $this->getResource(RESOURCE_INTEL) >= 2;
-                    break;
                 case ACTION_COMPLETE_DOUBLE_AGENT_MISSION:
                     return !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT);
                 case ACTION_RECOVER_MOLE:
                     return ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getResource(RESOURCE_EXPLOSIVES) >= 1);
+                case ACTION_DELIVER_2_WEAPONS:
+                    return ($this->getResource(RESOURCE_WEAPON) >= 2);
+                case ACTION_DELIVER_MONEY_AND_2_FOOD:
+                    return ($this->getResource(RESOURCE_FOOD) >= 2) && ($this->getResource(RESOURCE_MONEY) >= 1);
                 default:
                     return true;
-                    break;
             }
         });
 
@@ -883,6 +888,8 @@ class Game extends \Table {
             ACTION_COMPLETE_OFFICERS_MANSION_MISSION => clienttranslate("Complete Officers Mansion mission"),
             ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION => clienttranslate("Complete Milice Parade Day mission"),
             ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate("Complete the mission"),
+            ACTION_DELIVER_2_WEAPONS => clienttranslate("Deliver 2 Weapons"),
+            ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate("Deliver Money and 2 Food"),
         ];
 
         foreach($result as &$action) {
@@ -927,10 +934,6 @@ class Game extends \Table {
     }
 
     protected function getIsSafe(string $actionName): bool {
-        $actionFromMaterial = array_filter($this->ACTIONS, function($action) use ($actionName) {
-            return $action["name"] === $actionName;
-        });
-
         return (bool) $this->ACTIONS[$actionName]['is_safe'];
     }
 

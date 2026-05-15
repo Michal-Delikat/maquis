@@ -3,12 +3,16 @@
         "name": "Mission cards difficulty",
         "values": {
             "0": { 
-                "name": "0-star missions only", 
-                "tmdisplay": "0-star only" 
+                "name": "0-star missions (Introductory Game)", 
+                "tmdisplay": "0-star" 
             },
             "1": { 
-                "name": "Up to 1-star", 
+                "name": "1-star missions", 
                 "tmdisplay": "1-star missions" 
+            },
+            "2": { 
+                "name": "2-star missions", 
+                "tmdisplay": "2-star missions" 
             }
         },
         "default": 0
