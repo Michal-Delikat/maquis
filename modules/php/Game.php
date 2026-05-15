@@ -423,6 +423,14 @@ class Game extends \Table {
         }
     }
 
+    public function stPseudoGameEnd(): void {
+        $playerScore = $this->getPlayerScore();
+
+        $this->setPlayerScore((int) ($playerScore >= 2));
+
+        $this->gamestate->nextState("gameEnd");
+    }
+
     public function actDeclareShootingMilice(): void {
         $this->gamestate->nextState("shootMilice");
     }
@@ -444,11 +452,11 @@ class Game extends \Table {
         $this->updateActiveSoldiers($this->getActiveSoldiers() + 1);
         $this->updateComponent($this->getNextInactiveSoldier(), 'barracks', 'active');
         $this->updateMorale($morale - 1);
-        if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && ($this->getActiveMilice() <= 0) && ($this->getPlayerScore() === 1)) {
+        if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && (($this->getActiveMilice() + $this->getPlacedMilice()) <= 0) && ($this->getPlayerScore() === 1)) {
             $this->completeMission(MISSION_ASSASSINATION);
-            $this->gamestate->nextState("endGame");
+            $this->gamestate->nextState("gameEnd");
         } else if ($morale - 1 <= 0) {
-            $this->gamestate->nextState("endGame");
+            $this->gamestate->nextState("gameEnd");
         } else {
             $this->gamestate->nextState("nextWorker");
         }

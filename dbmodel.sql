@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS `patrol_card` (
     PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-
 CREATE TABLE IF NOT EXISTS `board_action` (
     `space_id` INT unsigned NOT NULL,
     `action_name` varchar(64) NOT NULL,

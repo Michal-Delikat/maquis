@@ -5,7 +5,6 @@ namespace Bga\Games\Maquis;
 require_once("constants.inc.php");
 
 class DataService {
-
     public static function setupBoard(): string {
         return '
             INSERT INTO board (space_id, space_name, is_safe, is_field)
@@ -29,7 +28,6 @@ class DataService {
             (17, "Field", FALSE, TRUE);
         ';
     }
-
 
     public static function setupBoardActions(): string {
         return '

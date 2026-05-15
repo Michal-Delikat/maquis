@@ -16,6 +16,7 @@ const ST_GAME_NEXT_WORKER = 63;
 
 const ST_GAME_ROUND_END = 90;
 
+const ST_PSEUDO_GAME_END = 98;
 const ST_BGA_GAME_END = 99;
 
 const MISSION_MILICE_PARADE_DAY = 'milice_parade_day';

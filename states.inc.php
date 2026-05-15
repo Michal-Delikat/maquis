@@ -67,7 +67,7 @@ $machinestates = [
             "actShootMilice",
             "actBack"
         ],
-        "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER, "endGame" => ST_BGA_GAME_END]
+        "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER, "gameEnd" => ST_PSEUDO_GAME_END]
     ],
 
     ST_PLAYER_TAKE_ACTION => [
@@ -84,7 +84,7 @@ $machinestates = [
             "airdrop" => ST_PLAYER_AIRDROP_SELECT_FIELD, 
             "selectRoom" => ST_PLAYER_SELECT_ROOM,
             "removeWorker" => ST_PLAYER_REMOVE_WORKER, 
-            "gameEnd" => ST_BGA_GAME_END]
+            "gameEnd" => ST_PSEUDO_GAME_END]
     ],
 
     ST_PLAYER_AIRDROP_SELECT_FIELD => [
@@ -144,8 +144,16 @@ $machinestates = [
         "description" => "",
         "type" => "game",
         "action" => "stRoundEnd",
-        "transitions" => ["placeWorker" => ST_PLAYER_PLACE_WORKER, "gameEnd" => ST_BGA_GAME_END],
+        "transitions" => ["placeWorker" => ST_PLAYER_PLACE_WORKER, "gameEnd" => ST_PSEUDO_GAME_END],
         "updateGameProgression" => true,
+    ],
+
+    ST_PSEUDO_GAME_END => [
+        "name" => "pseudoGameEnd",
+        "description" => "",
+        "type" => "game",
+        "action" => "stPseudoGameEnd",
+        "transitions" => ["gameEnd" => ST_BGA_GAME_END],
     ],
 
     // Final state.
@@ -159,6 +167,3 @@ $machinestates = [
     ],
 
 ];
-
-
-

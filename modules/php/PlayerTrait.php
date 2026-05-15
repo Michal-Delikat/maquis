@@ -11,6 +11,10 @@ trait PlayerTrait {
         );
     }
 
+    protected function setPlayerScore(int $playerScore): void {
+        static::DbQuery("UPDATE player SET player_score = $playerScore;");
+    }
+
     protected function incrementPlayerScore(): void {
         static::DbQuery("UPDATE player SET player_score = player_score + 1;");
     }
