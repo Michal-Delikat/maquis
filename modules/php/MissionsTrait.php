@@ -87,7 +87,7 @@ trait MissionsTrait {
         }
     }
 
-    protected function completeMission(string $missionName): void {
+    protected function completeMission(string $missionName, bool $notify = true): void {
         static::DbQuery("
             UPDATE components
             SET state = 'completed'
@@ -100,12 +100,14 @@ trait MissionsTrait {
         }
 
         $this->incrementPlayerScore();
-
-        $this->notify->all("missionCompleted", clienttranslate("Mission completed"), array(
-            "missionName" => $missionName, 
-            "playerScore" => $this->getPlayerScore(), 
-            "playerId" => $this->getActivePlayerId()
-        ));
+        
+        if ($notify) {
+            $this->notify->all("missionCompleted", clienttranslate("Mission completed"), array(
+                "missionName" => $missionName, 
+                "playerScore" => $this->getPlayerScore(),
+                "playerId" => $this->getCurrentPlayerId()
+            ));
+        }
     }
     
     protected function removeMissionSpace(int $spaceID) {

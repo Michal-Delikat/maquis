@@ -12,6 +12,6 @@ trait PlayerTrait {
     }
 
     protected function incrementPlayerScore(): void {
-        static::DbQuery("UPDATE player SET player_score = player_score + 1 WHERE player_id = " . $this->getCurrentPlayerId() . ";");
+        static::DbQuery("UPDATE player SET player_score = player_score + 1;");
     }
 }

@@ -111,46 +111,19 @@ class Game extends \Table {
         $this->reloadPlayersBasicInfos();
 
         // Add master data to DB
-
         static::DbQuery(DataService::setupBoard());
         static::DbQuery(DataService::setupBoardPaths());
-
         static::DbQuery(DataService::setupBoardActions());
-
         static::DbQuery(DataService::setupComponents());
 
         $this->patrol_cards->createCards($this->PATROL_CARD_ITEMS);
 
-        // Missions
-
-        $missionsDifficulty = (int) $this->tableOptions->get(100);
-
-        $zeroStarMissions = array(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
-        $oneStarMissions = array(
-                MISSION_SABOTAGE, 
-                MISSION_INFILTRATION, 
-                MISSION_GERMAN_SHEPARDS,
-                MISSION_DOUBLE_AGENT,
-                MISSION_UNDERGROUND_NEWSPAPER
-        );
-        $twoStarMissions = array(
-            MISSION_AID_THE_SPY
-        );
-
-        if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
-        } else if ($missionsDifficulty == 1) {
-            $keys = array_rand($oneStarMissions, 2);
-
-            $this->configureMissions($oneStarMissions[$keys[0]], $oneStarMissions[$keys[1]]);
-        }
-
-        // Globals
+        // Initialize globals
         $this->setGameStateInitialValue("active_space", 0);
         $this->setGameStateInitialValue("selected_field", 0);
         $this->setGameStateInitialValue("shot_today", false);
-        
-        // Init game statistics.
+
+         // Initalize game statistics
         $this->initStat("table", "turns_number", 0);
         $this->initStat("player", "food_aquired", 0);
         $this->initStat("player", "medicine_aquired", 0);
@@ -160,6 +133,37 @@ class Game extends \Table {
         $this->initStat("player", "explosives_aquired", 0);
         $this->initStat("player", "workers_recruited", 0);
 
+        // Configure missions
+        $missionsDifficulty = (int) $this->tableOptions->get(100);
+
+        // $zeroStarMissions = array(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+        $oneStarMissions = array(
+                MISSION_SABOTAGE, 
+                MISSION_INFILTRATION, 
+                MISSION_GERMAN_SHEPARDS,
+                MISSION_DOUBLE_AGENT,
+                MISSION_UNDERGROUND_NEWSPAPER
+        );
+        $twoStarMissions = array(
+            MISSION_AID_THE_SPY,
+            MISSION_ASSASSINATION
+        );
+
+        // if ($missionsDifficulty == 0) {
+        //     $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+        // } else if ($missionsDifficulty == 1) {
+        //     $keys = array_rand($oneStarMissions, 2);
+        //     $this->configureMissions($oneStarMissions[$keys[0]], $oneStarMissions[$keys[1]]);
+        // } else {
+        //     $keys = array_rand($twoStarMissions, 2);
+        //     $this->configureMissions($twoStarMissions[$keys[0]], $twoStarMissions[$keys[1]]);
+        // }
+
+        $this->configureMissions(MISSION_OFFICERS_MANSION, MISSION_ASSASSINATION);
+        $this->completeMission(MISSION_OFFICERS_MANSION, false);
+        
+        $this->gainTokens(RESOURCE_WEAPON, 4);
+        
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -397,7 +401,7 @@ class Game extends \Table {
         if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || $round >= 15 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
             $this->gamestate->nextstate("gameEnd");
         } else {
-            foreach (array_merge($this->getMilice(), $this->getSoldiers()) as $patrol) {
+            foreach (array_merge(array_reverse($this->getMilice()), array_reverse($this->getSoldiers())) as $patrol) {
                 if ($patrol['state'] === 'placed') {
                     $this->updateComponent($patrol['name'], 'barracks', 'active');
 
@@ -429,9 +433,10 @@ class Game extends \Table {
 
         $this->updateComponent($miliceID, 'off_board', 'NaN');
 
-        $this->notify->all("patrolRemoved", clienttranslate('Milice patrol at ${spaceName} shot'), array(
+        $this->notify->all("patrolRemoved", clienttranslate('Milice patrol at ${spaceName} shot. Active milice: ${activeMilice}'), array(
             "patrolID" => $miliceID,
-            "spaceName" => $this->getSpaceNameById($spaceID)
+            "spaceName" => $this->getSpaceNameById($spaceID),
+            "activeMilice" => $this->getActiveMilice()
         ));
 
         $this->spendTokens(RESOURCE_WEAPON, 1);
@@ -439,7 +444,10 @@ class Game extends \Table {
         $this->updateActiveSoldiers($this->getActiveSoldiers() + 1);
         $this->updateComponent($this->getNextInactiveSoldier(), 'barracks', 'active');
         $this->updateMorale($morale - 1);
-        if ($morale - 1 <= 0) {
+        if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && ($this->getActiveMilice() <= 0) && ($this->getPlayerScore() === 1)) {
+            $this->completeMission(MISSION_ASSASSINATION);
+            $this->gamestate->nextState("endGame");
+        } else if ($morale - 1 <= 0) {
             $this->gamestate->nextState("endGame");
         } else {
             $this->gamestate->nextState("nextWorker");

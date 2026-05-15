@@ -185,11 +185,9 @@ function (dojo, declare) {
             `, 'game_play_area');
 
             // FLIP MISSIONS 
-
             completedMissions.forEach(mission => this.flipMission(mission['name']));
 
             // ADD TOOLTIPS TO MISSIONS
-
             Object.values(selectedMissions).forEach(mission => {
                 let description = null;
                 switch(mission.split('_').slice(2).join("_")) {
@@ -239,7 +237,13 @@ function (dojo, declare) {
                         description = `<p>
                             ${_('A British spy parachuted in a few days ago and needs our help. Provide him with equipment and supplies to help him carr out his mission.')}<br><br>
                             ${_('Deliver 2 Weapons to the spy on one day, followed by 1 Money and 2 Food on a second day.')}
-                        </p>`
+                        </p>`;
+                        break;
+                    case 'assassination':
+                        description = `<p>
+                            ${_('The Milice is a paramilitary force of local thugs colluding with the occupiers - we need to send a message to teach these collaborators a lesson!')}<br><br>
+                            ${_('Eliminate all Milice Units. This mission MUST be completed last.')}
+                        `
                 }
                     
                 this.addTooltipHtml(mission, 
@@ -326,10 +330,10 @@ function (dojo, declare) {
             resistanceWorkers.forEach(worker => { 
                 this.placeWorker(worker.name, worker.location);
             });
-            milice.forEach(milice => {
+            [...milice].reverse().forEach(milice => {
                 if (milice.location !== 'off_board') this.placeMilice(milice.name, milice.location);
             });
-            soldiers.forEach(soldier => {
+            [...soldiers].reverse().forEach(soldier => {
                 this.placeSoldier(soldier.name, soldier.location);
             });
 
@@ -802,7 +806,7 @@ function (dojo, declare) {
         
         placeMilice: async function(miliceID, spaceID) {
             if (spaceID === 'barracks') {
-                for (let i = 1; i <= 5; i++) {
+                for (let i = 5; i >= 1; i--) {
                     const barracksSpace = dojo.byId(`barracks-milice-space-${i}`);
                     if (!barracksSpace.firstElementChild) {
                         dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `barracks-milice-space-${i}`); 
@@ -812,6 +816,21 @@ function (dojo, declare) {
                 }
             } else {
                 dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `space-${spaceID}-worker-space`);
+            }
+        },
+
+        placeSoldier: async function(soldierID, spaceID) {
+            if (spaceID === 'barracks') {
+                for (let i = 5; i >= 1; i--) {
+                    const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);
+                    if (!barracksSpace.firstElementChild) {
+                        dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `barracks-soldier-space-${i}`); 
+                        this.placeOnObject(soldierID, `barracks-soldier-space-${i}`);
+                        break; 
+                    }
+                }
+            } else {
+                dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `space-${spaceID}-worker-space`);
             }
         },
 
@@ -827,38 +846,6 @@ function (dojo, declare) {
             await this.bgaPlayDojoAnimation(animation);
         },
 
-        returnMilice: async function(miliceID) {
-            const miliceNode = dojo.byId(miliceID);
-            const parentNode = miliceNode.parentNode;
-
-            for (let i = 1; i <= 5; i++) {
-                const barracksSpace = dojo.byId(`barracks-milice-space-${i}`);
-                if (!barracksSpace.firstElementChild) {
-                    dojo.destroy(miliceID);
-                    dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `barracks-milice-space-${i}`); 
-                    this.placeOnObject(miliceID, parentNode.id);
-                    const animation = this.slideToObject(miliceID, `barracks-milice-space-${i}`);
-                    await this.bgaPlayDojoAnimation(animation);
-                    break; 
-                }
-            }
-        },
-
-        placeSoldier: async function(soldierID, spaceID) {
-            if (spaceID === 'barracks') {
-                for (let i = 1; i <= 5; i++) {
-                    const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);
-                    if (!barracksSpace.firstElementChild) {
-                        dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `barracks-soldier-space-${i}`); 
-                        this.placeOnObject(soldierID, `barracks-soldier-space-${i}`);
-                        break; 
-                    }
-                }
-            } else {
-                dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `space-${spaceID}-worker-space`);
-            }
-        },
-
         moveSoldier: async function(soldierID, spaceID) {
             const soldierNode = dojo.byId(soldierID);
             const parentNode = soldierNode.parentNode;
@@ -871,11 +858,28 @@ function (dojo, declare) {
             await this.bgaPlayDojoAnimation(animation);
         },
 
+        returnMilice: async function(miliceID) {
+            const miliceNode = dojo.byId(miliceID);
+            const parentNode = miliceNode.parentNode;
+
+            for (let i = 5; i >= 1; i--) {
+                const barracksSpace = dojo.byId(`barracks-milice-space-${i}`);
+                if (!barracksSpace.firstElementChild) {
+                    dojo.destroy(miliceID);
+                    dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `barracks-milice-space-${i}`); 
+                    this.placeOnObject(miliceID, parentNode.id);
+                    const animation = this.slideToObject(miliceID, `barracks-milice-space-${i}`);
+                    await this.bgaPlayDojoAnimation(animation);
+                    break; 
+                }
+            }
+        },
+
         returnSoldier: async function(soldierID) {
             const soldierNode = dojo.byId(soldierID);
             const parentNode = soldierNode.parentNode;
 
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 5; i >= 1; i--) {
                 const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);
                 if (!barracksSpace.firstElementChild) {
                     dojo.destroy(soldierID);

@@ -74,6 +74,14 @@ trait PawnsTrait {
         ");
     }
 
+    function getActiveMilice(): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE name LIKE 'milice%' AND state = 'active';
+        ");
+    }
+
     function getResistanceToRecruit(): int {
         return (int) $this->getUniqueValueFromDb("
             SELECT COUNT(*)

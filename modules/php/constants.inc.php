@@ -26,6 +26,7 @@ const MISSION_INFILTRATION = 'infiltration';
 const MISSION_GERMAN_SHEPARDS = 'german_shepards';
 const MISSION_DOUBLE_AGENT = 'double_agent';
 const MISSION_AID_THE_SPY = 'aid_the_spy';
+const MISSION_ASSASSINATION = 'assassination';
 
 const ACTION_INSERT_MOLE = 'insert_mole';
 const ACTION_RECOVER_MOLE = 'recover_mole';
