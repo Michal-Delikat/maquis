@@ -159,11 +159,7 @@ class Game extends \Table {
         //     $this->configureMissions($twoStarMissions[$keys[0]], $twoStarMissions[$keys[1]]);
         // }
 
-        $this->configureMissions(MISSION_OFFICERS_MANSION, MISSION_ASSASSINATION);
-        $this->completeMission(MISSION_OFFICERS_MANSION, false);
-        
-        $this->gainTokens(RESOURCE_WEAPON, 4);
-        
+                
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }

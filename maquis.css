@@ -415,7 +415,7 @@
 }
 
 #mission_card_assassination > .mission-card-front {
-    background-position-x: 33.5%;
+    background-position-x: 33%;
 }
 
 #cards {
@@ -454,14 +454,14 @@
     left: 7.5%;
     width: 85.7%;
     aspect-ratio: 2.05;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 13% 4%;
 }
 
 #morale-track {
-    top: 17%;
+    top: 17.5%;
 }
 
 #soldiers-track {
@@ -469,12 +469,9 @@
 }
 
 .morale-track-space, .soldiers-track-space {
-    width: 22%;
-    height: 43%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid green; */
 }
 
 #marker-morale {
@@ -677,16 +674,11 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-between;
     top: 3.15%;
     left: 3.1%;
     width: 2.5%;
     height: 93.5%;
-}
-
-#help-card, #morale-and-soldiers-track, #patrol-discard, #patrol-deck {
-    /* margin: 34px; */
 }
 
 .round-number-space {
@@ -695,7 +687,6 @@
     display: flex;
     align-items: center;
     justify-items: center;
-    /* border: 1px green solid; */
 }
 
 #marker-round {
