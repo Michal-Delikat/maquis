@@ -52,5 +52,8 @@ const ACTIONS = [
     ACTION_POISON_SHEPARDS => ['name' => ACTION_POISON_SHEPARDS, 'is_safe' => true],
     ACTION_GET_FAKE_ID => ['name' => ACTION_GET_FAKE_ID, 'is_safe' => true],
     ACTION_GET_POISON => ['name' => ACTION_GET_POISON, 'is_safe' => true],
-    ACTION_COMPLETE_DOUBLE_AGENT_MISSION => ['name' => ACTION_COMPLETE_DOUBLE_AGENT_MISSION, 'is_safe' => true]
+    ACTION_COMPLETE_DOUBLE_AGENT_MISSION => ['name' => ACTION_COMPLETE_DOUBLE_AGENT_MISSION, 'is_safe' => true],
+    ACTION_DELIVER_2_WEAPONS => ['name' => ACTION_DELIVER_2_WEAPONS, 'is_safe' => true],
+    ACTION_DELIVER_MONEY_AND_2_FOOD => ['name' => ACTION_DELIVER_MONEY_AND_2_FOOD, 'is_safe' => true],
+    ACTION_DELIVER_3_EXPLOSIVES => ['name' => ACTION_DELIVER_3_EXPLOSIVES, 'is_safe' => true]
 ];

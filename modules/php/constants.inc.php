@@ -28,6 +28,7 @@ const MISSION_GERMAN_SHEPARDS = 'german_shepards';
 const MISSION_DOUBLE_AGENT = 'double_agent';
 const MISSION_AID_THE_SPY = 'aid_the_spy';
 const MISSION_ASSASSINATION = 'assassination';
+const MISSION_DESTROY_THE_TRAIN = 'destroy_the_train';
 
 const ACTION_INSERT_MOLE = 'insert_mole';
 const ACTION_RECOVER_MOLE = 'recover_mole';
@@ -60,6 +61,7 @@ const ACTION_COMPLETE_DOUBLE_AGENT_MISSION = 'complete_double_agent_mission';
 const ACTION_RETURN = 'return';
 const ACTION_DELIVER_2_WEAPONS = 'deliver_2_weapons';
 const ACTION_DELIVER_MONEY_AND_2_FOOD = 'deliver_money_and_2_food';
+const ACTION_DELIVER_3_EXPLOSIVES = 'deliver_3_explosives';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';

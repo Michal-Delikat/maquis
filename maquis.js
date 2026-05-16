@@ -243,7 +243,13 @@ function (dojo, declare) {
                         description = `<p>
                             ${_('The Milice is a paramilitary force of local thugs colluding with the occupiers - we need to send a message to teach these collaborators a lesson!')}<br><br>
                             ${_('Eliminate all Milice Units. This mission MUST be completed last.')}
-                        `
+                        </p>`;
+                        break;
+                    case 'destroy_the_train':
+                        description = `<p>
+                            ${_('We\'ve recieved intelligence that the occupation are going to be transporting Panzers along the railway near your town. Plant bombs to destroy the train as it passes.')}<br><br>
+                            ${_('Deliver 5 Explosives to this location. This mission can olny be completed on Days 6, 7, 8 or 9.')}
+                        </p>`;
                 }
                     
                 this.addTooltipHtml(mission, 

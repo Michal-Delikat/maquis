@@ -12,7 +12,7 @@ trait MarkersTrait {
         ");
     }
 
-    function updateRoundNumber($round): void {
+    function setRoundNumber($round): void {
         self::DbQuery("
             UPDATE components
             SET location = $round

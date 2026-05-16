@@ -146,7 +146,8 @@ class Game extends \Table {
         );
         $twoStarMissions = array(
             MISSION_AID_THE_SPY,
-            MISSION_ASSASSINATION
+            MISSION_ASSASSINATION,
+            MISSION_DESTROY_THE_TRAIN
         );
 
         if ($missionsDifficulty == 0) {
@@ -387,7 +388,7 @@ class Game extends \Table {
     public function stRoundEnd(): void {
         $this->incStat(1, "turns_number");
         $round = $this->getRoundNumber() + 1;
-        $this->updateRoundNumber($round);
+        $this->setRoundNumber($round);
         
         if ($this->isParadeDay()) {
             $this->updateMorale($this->getMorale() - 1);
@@ -762,6 +763,10 @@ class Game extends \Table {
                 $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_AID_THE_SPY);
                 break;
+            case ACTION_DELIVER_3_EXPLOSIVES:
+                $this->spendTokens(RESOURCE_EXPLOSIVES, 3);
+                $this->returnOrArrest($this->getActiveSpace());
+                $this->completeMission(MISSION_DESTROY_THE_TRAIN);
         }
     } 
 
@@ -867,6 +872,8 @@ class Game extends \Table {
                     return ($this->getResource(RESOURCE_WEAPON) >= 2);
                 case ACTION_DELIVER_MONEY_AND_2_FOOD:
                     return ($this->getResource(RESOURCE_FOOD) >= 2) && ($this->getResource(RESOURCE_MONEY) >= 1);
+                case ACTION_DELIVER_3_EXPLOSIVES:
+                    return ($this->getResource(RESOURCE_EXPLOSIVES) >= 3) && (in_array($this->getRoundNumber(), [6, 7, 8, 9]));
                 default:
                     return true;
             }
@@ -901,6 +908,7 @@ class Game extends \Table {
             ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate("Complete the mission"),
             ACTION_DELIVER_2_WEAPONS => clienttranslate("Deliver 2 Weapons"),
             ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate("Deliver Money and 2 Food"),
+            ACTION_DELIVER_3_EXPLOSIVES => clienttranslate("Deliver 3 Explosives")
         ];
 
         foreach($result as &$action) {

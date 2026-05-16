@@ -348,11 +348,11 @@
     background-position-y: bottom;
 }
 
-#mission_card_aid_the_spy > .mission-card-face, #mission_card_assassination > .mission-card-face {
+#mission_card_aid_the_spy > .mission-card-face, #mission_card_assassination > .mission-card-face, #mission_card_destroy_the_train > .mission-card-face {
     background-image: url('img/Mission_Cards_2star.jpg');
 }
 
-#mission_card_aid_the_spy > .mission-card-back, #mission_card_assassination > .mission-card-back {
+#mission_card_aid_the_spy > .mission-card-back, #mission_card_assassination > .mission-card-back, #mission_card_destroy_the_train > .mission-card-back {
     background-position-x: 100%;
     background-position-y: bottom;
 }
@@ -397,6 +397,14 @@
     display: none;
 }
 
+#mission_card_destroy_the_train > .mission-space-1 {
+    left: 7%;
+}
+
+#mission_card_destroy_the_train > :is(.mission-space-2, .mission-space-3) {
+    display: none;
+}
+
 #mission_card_underground_newspaper > .mission-card-front {
     background-position-x: 50%;
 }
@@ -416,6 +424,10 @@
 
 #mission_card_assassination > .mission-card-front {
     background-position-x: 33%;
+}
+
+#mission_card_destroy_the_train > .mission-card-front {
+    background-position-x: 67%;
 }
 
 #cards {
