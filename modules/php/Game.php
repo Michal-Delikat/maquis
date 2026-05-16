@@ -149,16 +149,15 @@ class Game extends \Table {
             MISSION_ASSASSINATION
         );
 
-        // if ($missionsDifficulty == 0) {
-        //     $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
-        // } else if ($missionsDifficulty == 1) {
-        //     $keys = array_rand($oneStarMissions, 2);
-        //     $this->configureMissions($oneStarMissions[$keys[0]], $oneStarMissions[$keys[1]]);
-        // } else {
-        //     $keys = array_rand($twoStarMissions, 2);
-        //     $this->configureMissions($twoStarMissions[$keys[0]], $twoStarMissions[$keys[1]]);
-        // }
-
+        if ($missionsDifficulty == 0) {
+            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+        } else if ($missionsDifficulty == 1) {
+            $keys = array_rand($oneStarMissions, 2);
+            $this->configureMissions($oneStarMissions[$keys[0]], $oneStarMissions[$keys[1]]);
+        } else {
+            $keys = array_rand($twoStarMissions, 2);
+            $this->configureMissions($twoStarMissions[$keys[0]], $twoStarMissions[$keys[1]]);
+        }
                 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
@@ -167,7 +166,7 @@ class Game extends \Table {
     public function actPlaceWorker(int $spaceID): void {
         $spaceName = $this->getSpaceNameById($spaceID);
 
-        $workerID = $this->getNextAvailableWorker();
+        $workerID = $this->getLastAvailableWorker();
         $this->updateComponent($workerID, (string) $spaceID, "placed");
 
         $this->notify->all("workerMoved", clienttranslate('Worker placed at ${spaceName}'), array(

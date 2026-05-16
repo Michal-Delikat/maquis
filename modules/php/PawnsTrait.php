@@ -27,6 +27,10 @@ trait PawnsTrait {
         return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND state = 'active' LIMIT 1;");
     }
 
+    function getLastAvailableWorker(): string {
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'resistance%' AND state = 'active' ORDER BY name DESC LIMIT 1;");
+    }
+
     function getNextInactiveSoldier(): string {
         return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND state = 'inactive' LIMIT 1;");
     }
@@ -106,7 +110,7 @@ trait PawnsTrait {
         ");
     }
 
-    protected function getIsMoleInserted(): bool {
+    function getIsMoleInserted(): bool {
         return (bool) $this->getUniqueValueFromDb("
             SELECT * 
             FROM components
@@ -114,7 +118,7 @@ trait PawnsTrait {
         ");
     }
 
-    protected function getSpaceIdWithMole(): string {
+    function getSpaceIdWithMole(): string {
         return (string) $this->getUniqueValueFromDb("
             SELECT location
             FROM components
@@ -122,7 +126,7 @@ trait PawnsTrait {
         ");
     }
 
-    public function returnWorker(int $spaceID): void {
+    function returnWorker(int $spaceID): void {
         if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
             return;
         }
@@ -139,7 +143,7 @@ trait PawnsTrait {
         ));
     }
 
-    public function arrestWorker(int $spaceID): void {
+    function arrestWorker(int $spaceID): void {
         if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
             return;
         }
@@ -155,7 +159,7 @@ trait PawnsTrait {
         ));
     }
 
-    public function removeWorker(int $spaceID): void {
+    function removeWorker(int $spaceID): void {
          if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
             return;
         }
@@ -170,7 +174,7 @@ trait PawnsTrait {
         ));
     }
 
-    public function returnOrArrest(int $spaceID): void {
+    function returnOrArrest(int $spaceID): void {
         if ($this->checkEscapeRoute($spaceID)) {
             $this->returnWorker($spaceID);
         } else {

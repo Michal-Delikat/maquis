@@ -710,7 +710,6 @@ function (dojo, declare) {
                     const safeHouseSpace = dojo.byId(`safe-house-space-${i}`);
                     if (!safeHouseSpace.firstElementChild) {
                         dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `safe-house-space-${i}`); 
-                        this.placeOnObject(resistanceID, `safe-house-space-${i}`);
                         break; 
                     }
                 }
@@ -719,7 +718,6 @@ function (dojo, declare) {
                     const cafeSpace = dojo.byId(`cafe-space-${i}`);
                     if (!cafeSpace.firstElementChild) {
                         dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `cafe-space-${i}`);
-                        this.placeOnObject(resistanceID,  `cafe-space-${i}`);
                         break; 
                     }
                 }
@@ -728,7 +726,6 @@ function (dojo, declare) {
                     const arrestSpace = dojo.byId(`arrest-space-${i}`);
                     if (!arrestSpace.firstElementChild) {
                         dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `arrest-space-${i}`);
-                        this.placeOnObject(resistanceID,  `arrest-space-${i}`);
                         break; 
                     }
                 }

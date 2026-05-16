@@ -851,9 +851,11 @@
 }
 
 .safe-house-space {
-    /* border: 1px solid green; */
-    width: 3vw;
+    width: 100%;
     aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .cafe-spaces {
