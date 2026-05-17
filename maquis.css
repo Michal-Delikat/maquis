@@ -85,10 +85,6 @@
     z-index: 1;
 }
 
-.resource-icon-circle {
-
-}
-
 .resource-box {
     text-align: center;
     font-family: 'Courier New', Courier, monospace;
@@ -156,7 +152,7 @@
     transition: transform 0.5s ease;
 }
 
-.round-number-space:hover > .marker, .morale-track-space:hover > .marker, .soldiers-track-space:hover > .marker {
+:is(.round-number-space, .morale-track-space, .soldiers-track-space):hover > .marker {
     transform: translateY(-30px);
 }
 
@@ -334,38 +330,61 @@
     background-position-x: 33.3%;
 }
 
-#mission_card_officers_mansion > .mission-space-2, #mission_card_officers_mansion > .mission-space-3 {
+#mission_card_officers_mansion > :is(.mission-space-2, .mission-space-3) {
     display: none;
 }
 
-#mission_card_sabotage > .mission-card-face, #mission_card_underground_newspaper > .mission-card-face, #mission_card_infiltration > .mission-card-face, #mission_card_german_shepards > .mission-card-face, #mission_card_double_agent > .mission-card-face {
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_infiltration, #mission_card_german_shepards, #mission_card_double_agent) > .mission-card-face {
     background-image: url('img/Mission_Cards_1star.jpg');
     background-size: 300%;
 }
 
-#mission_card_sabotage > .mission-card-back, #mission_card_underground_newspaper > .mission-card-back, #mission_card_infiltration > .mission-card-back, #mission_card_german_shepards > .mission-card-back, #mission_card_double_agent > .mission-card-face {
-    background-position-x: 100%;
-    background-position-y: bottom;
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_infiltration, #mission_card_german_shepards, #mission_card_double_agent) > .mission-card-back {
+    background-position: 100% bottom;
 }
 
-#mission_card_aid_the_spy > .mission-card-face, #mission_card_assassination > .mission-card-face, #mission_card_destroy_the_train > .mission-card-face {
+:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train) > .mission-card-face {
     background-image: url('img/Mission_Cards_2star.jpg');
 }
 
-#mission_card_aid_the_spy > .mission-card-back, #mission_card_assassination > .mission-card-back, #mission_card_destroy_the_train > .mission-card-back {
+#mission_card_underground_newspaper > .mission-card-front {
+    background-position-x: 50%;
+}
+
+#mission_card_infiltration > .mission-card-front {
     background-position-x: 100%;
+}
+
+#mission_card_german_shepards > .mission-card-front {
     background-position-y: bottom;
+}
+
+#mission_card_double_agent > .mission-card-front {
+    background-position-x: center;
+    background-position-y: bottom;
+}
+
+#mission_card_assassination > .mission-card-front {
+    background-position-x: 33%;
+}
+
+#mission_card_destroy_the_train > .mission-card-front {
+    background-position-x: 67%;
+}
+
+:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train) > .mission-card-back {
+    background-position: 100% bottom;
 }
 
 #mission_card_officers_mansion > .mission-space-1 {
     left: 65%;
 }
 
-#mission_card_sabotage > .mission-space-1, #mission_card_underground_newspaper > .mission-space-1, #mission_card_german_shepards > .mission-space-1 {
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-1 {
     left: 7.5%;
 }
 
-#mission_card_sabotage > .mission-space-2, #mission_card_underground_newspaper > .mission-space-2, #mission_card_german_shepards > .mission-space-2 {
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-2 {
     left: 36%;
 }
 
@@ -403,31 +422,6 @@
 
 #mission_card_destroy_the_train > :is(.mission-space-2, .mission-space-3) {
     display: none;
-}
-
-#mission_card_underground_newspaper > .mission-card-front {
-    background-position-x: 50%;
-}
-
-#mission_card_infiltration > .mission-card-front {
-    background-position-x: 100%;
-}
-
-#mission_card_german_shepards > .mission-card-front {
-    background-position-y: bottom;
-}
-
-#mission_card_double_agent > .mission-card-front {
-    background-position-x: center;
-    background-position-y: bottom;
-}
-
-#mission_card_assassination > .mission-card-front {
-    background-position-x: 33%;
-}
-
-#mission_card_destroy_the_train > .mission-card-front {
-    background-position-x: 67%;
 }
 
 #cards {
@@ -560,7 +554,6 @@
 .token-spaces {
     width: 50%;
     height: 100%;
-    /* border: 1px red solid; */
 }
 
 .token-space {
@@ -568,7 +561,6 @@
     z-index: 4;
     width: 50%;
     height: 20%;
-    /* border: 1px green solid; */
 }
 
 .worker-space {
@@ -880,7 +872,6 @@
 }
 
 .cafe-space {
-    /* border: 1px solid blue; */
     width: 3vw;
     aspect-ratio: 1;
 }

@@ -612,11 +612,11 @@ function (dojo, declare) {
             this.removePatrol(patrolID);
         },
 
-        notif_roundNumberUpdated: function({round}) {
+        notif_roundNumberSet: function({round}) {
             this.moveRoundMarker(round);
         },
 
-        notif_moraleUpdated: function({morale}) {
+        notif_moraleSet: function({morale}) {
             this.moveMoraleMarker(morale);
         },
 
@@ -633,7 +633,7 @@ function (dojo, declare) {
             this.removeTokens(tokenType, location);
         },
 
-        notif_activeSoldiersUpdated: function({soldierNumber}) {
+        notif_activeSoldiersSet: function({soldierNumber}) {
             this.moveSoldiersMarker(soldierNumber);
         },
 

@@ -19,7 +19,7 @@ trait MarkersTrait {
             WHERE name = 'round_marker';  
         ");
 
-        $this->notify->all("roundNumberUpdated", clienttranslate('Round ${round} begins.'), array(
+        $this->notify->all("roundNumberSet", clienttranslate('Round ${round} begins.'), array(
             "round" => $round,
         ));
     }
@@ -34,24 +34,24 @@ trait MarkersTrait {
         ");
     }
 
-    function updateMorale(int $newMorale): void {
+    function setMorale(int $newMorale): void {
         self::DbQuery("
             UPDATE components
             SET location = $newMorale
             WHERE name = 'morale_marker';
         ");
 
-        $this->notify->all("moraleUpdated", clienttranslate('Morale is ${morale}'), array(
+        $this->notify->all("moraleSet", clienttranslate('Morale is ${morale}'), array(
             "morale" => $newMorale
         ));
     }
 
     function incrementMorale(): void {
-       $this->updateMorale($this->getMorale() + 1);
+       $this->setMorale($this->getMorale() + 1);
     }
 
     function decrementMorale(): void {
-       $this->updateMorale($this->getMorale() - 1);
+       $this->setMorale($this->getMorale() - 1);
     }
 
     // SOLDIERS
@@ -64,14 +64,14 @@ trait MarkersTrait {
         ");
     }
 
-    function updateActiveSoldiers(int $soldierNumber): void {
+    function setActiveSoldiers(int $soldierNumber): void {
         self::DbQuery("
             UPDATE components
             SET location = $soldierNumber
             WHERE name = 'soldier_marker';
         ");
 
-        $this->notify->all("activeSoldiersUpdated", clienttranslate('There are ${soldierNumber} active soldiers now'), array(
+        $this->notify->all("activeSoldiersSet", clienttranslate('There are ${soldierNumber} active soldiers now'), array(
             "soldierNumber" => $soldierNumber
         ));
     }
@@ -154,7 +154,7 @@ trait MarkersTrait {
         ");
     }
 
-    protected function updateDarkLadyLocation(string $spaceID, string $state): void {
+    protected function setDarkLadyLocation(string $spaceID, string $state): void {
         self::DbQuery("
             UPDATE components
             SET location = '$spaceID', state = '$state'

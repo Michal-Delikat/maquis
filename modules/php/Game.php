@@ -184,7 +184,7 @@ class Game extends \Table {
                 $card = $this->PATROL_CARD_ITEMS[$cardID - 1];
                 $doubleAgentLocation = $card['space_a'];
                 $this->addSpaceAction($doubleAgentLocation, ACTION_COMPLETE_DOUBLE_AGENT_MISSION);
-                $this->updateDarkLadyLocation((string) $doubleAgentLocation, 'placed');
+                $this->setDarkLadyLocation((string) $doubleAgentLocation, 'placed');
 
                 $this->notify->all("darkLadyFound", clienttranslate('Dark Lady found at ${locationName}'), array(
                     "cardId" => $cardID,
@@ -292,7 +292,7 @@ class Game extends \Table {
 
             $this->gamestate->nextState("nextWorker");
         } else if ($actionName === ACTION_COMPLETE_DOUBLE_AGENT_MISSION) {
-            $this->updateDarkLadyLocation('off_board', 'NaN');
+            $this->setDarkLadyLocation('off_board', 'NaN');
             $this->completeMission(MISSION_DOUBLE_AGENT);
             foreach([1, 3, 5, 6, 9, 11] as $space) {
                 $this->removeMarker($space);
@@ -391,7 +391,7 @@ class Game extends \Table {
         $this->setRoundNumber($round);
         
         if ($this->isParadeDay()) {
-            $this->updateMorale($this->getMorale() - 1);
+            $this->setMorale($this->getMorale() - 1);
         }
 
         if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || $round >= 15 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
@@ -445,9 +445,9 @@ class Game extends \Table {
 
         $this->spendTokens(RESOURCE_WEAPON, 1);
         $this->setShotToday(true);
-        $this->updateActiveSoldiers($this->getActiveSoldiers() + 1);
+        $this->setActiveSoldiers($this->getActiveSoldiers() + 1);
         $this->updateComponent($this->getNextInactiveSoldier(), 'barracks', 'active');
-        $this->updateMorale($morale - 1);
+        $this->setMorale($morale - 1);
         if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && (($this->getActiveMilice() + $this->getPlacedMilice()) <= 0) && ($this->getPlayerScore() === 1)) {
             $this->completeMission(MISSION_ASSASSINATION);
             $this->gamestate->nextState("gameEnd");
@@ -689,7 +689,7 @@ class Game extends \Table {
                 break;
             case ACTION_INCREASE_MORALE:
                 $morale = $this->getMorale();
-                $this->updateMorale($morale + 1);
+                $this->setMorale($morale + 1);
                 break;
             case ACTION_INFILTRATE_FACTORY:
                 $activeSpace = $this->getActiveSpace();
