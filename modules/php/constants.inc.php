@@ -32,6 +32,7 @@ const MISSION_AID_THE_SPY = 'aid_the_spy';
 const MISSION_ASSASSINATION = 'assassination';
 const MISSION_DESTROY_THE_TRAIN = 'destroy_the_train';
 const MISSION_LIBERATE_THE_TOWN = 'liberate_the_town';
+const MISSION_CODED_MESSAGES = 'coded_messages';
 
 const ACTION_INSERT_MOLE = 'insert_mole';
 const ACTION_RECOVER_MOLE = 'recover_mole';
@@ -65,6 +66,7 @@ const ACTION_RETURN = 'return';
 const ACTION_DELIVER_2_WEAPONS = 'deliver_2_weapons';
 const ACTION_DELIVER_MONEY_AND_2_FOOD = 'deliver_money_and_2_food';
 const ACTION_DELIVER_3_EXPLOSIVES = 'deliver_3_explosives';
+const ACTION_TRAIN_A_CRYPTOGRAPHER = 'train_a_cryptographer';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';

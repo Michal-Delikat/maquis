@@ -118,11 +118,27 @@ trait PawnsTrait {
         ");
     }
 
+    function getIsCryptographerPlaced(): bool {
+        return (bool) $this->getUniqueValueFromDb("
+            SELECT * 
+            FROM components
+            WHERE name LIKE 'resistance%' AND state = 'cryptographer';
+        ");
+    }
+
     function getSpaceIdWithMole(): string {
         return (string) $this->getUniqueValueFromDb("
             SELECT location
             FROM components
             WHERE name LIKE 'resistance%' AND state = 'mole';
+        ");
+    }
+
+    function getSpaceIdWithCryptographer(): string {
+        return (string) $this->getUniqueValueFromDb("
+            SELECT location
+            FROM components
+            WHERE name LIKE 'resistance%' AND state = 'cryptographer';
         ");
     }
 

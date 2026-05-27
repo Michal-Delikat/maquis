@@ -257,6 +257,12 @@ function (dojo, declare) {
                             ${_('Posses at least 3 Weapons and 4 Morale at the point the Day Track marker moves to \'END\' space.')}
                         </p>`;
                         break;
+                    case 'coded_messages':
+                        description = `<p>
+                            ${_('Knowledge is power. Work with other Resistance Fighters from other cities to monitor the Occupation. Train a cryptographer, then have them communicate with other Resistance operatives.')}<br><br>
+                            ${_('A Worker must be placed here by end of Day 6 and must remain until the end of Day 10.')}
+                        </p>`;
+                        break;
                 }
                     
                 this.addTooltipHtml(mission, 

@@ -149,7 +149,8 @@ class Game extends \Table {
             MISSION_AID_THE_SPY,
             MISSION_ASSASSINATION,
             MISSION_DESTROY_THE_TRAIN,
-            MISSION_LIBERATE_THE_TOWN
+            MISSION_LIBERATE_THE_TOWN,
+            MISSION_CODED_MESSAGES
         );
 
         while ($missionA === $missionB) {
@@ -296,6 +297,10 @@ class Game extends \Table {
             $this->saveAction(ACTION_INSERT_MOLE);
 
             $this->gamestate->nextState("nextWorker");
+        } else if ($actionName === ACTION_TRAIN_A_CRYPTOGRAPHER) {
+            $this->saveAction(ACTION_TRAIN_A_CRYPTOGRAPHER);
+
+            $this->gamestate->nextState("nextWorker");
         } else if ($actionName === ACTION_COMPLETE_DOUBLE_AGENT_MISSION) {
             $this->setDarkLadyLocation('off_board', 'NaN');
             $this->completeMission(MISSION_DOUBLE_AGENT);
@@ -412,6 +417,11 @@ class Game extends \Table {
                 }
             }
 
+            if ($this->getIsCryptographerPlaced() && $round === 11) {
+                $this->returnWorker((int) $this->getSpaceIdWithCryptographer());
+                $this->completeMission(MISSION_CODED_MESSAGES);
+            } 
+
             if ($this->getIsMoleInserted()) {
                 $cardId = $this->peekTopPatrolCardId();
 
@@ -508,11 +518,12 @@ class Game extends \Table {
 
     public function argActivateWorker(): array {
         $resistanceWorkersLocations = $this->getSpacesWithResistanceWorkers();
-        if ($this->getIsMoleInserted()) {
+        if ($this->getIsMoleInserted() || $this->getIsCryptographerPlaced()) {
             $spaceIdWithMole = $this->getSpaceIdWithMole();
+            $spaceIdWithCryptographer = $this->getSpaceIdWithCryptographer();
 
-            $resistanceWorkersLocations = array_filter($resistanceWorkersLocations, function($spaceId) use ($spaceIdWithMole) {
-                return $spaceId !== $spaceIdWithMole;
+            $resistanceWorkersLocations = array_filter($resistanceWorkersLocations, function($spaceId) use ($spaceIdWithMole, $spaceIdWithCryptographer) {
+                return $spaceId !== $spaceIdWithMole && $spaceId !== $spaceIdWithCryptographer;
             });
         }
 
@@ -776,6 +787,15 @@ class Game extends \Table {
                 $this->spendTokens(RESOURCE_EXPLOSIVES, 3);
                 $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_DESTROY_THE_TRAIN);
+            case ACTION_TRAIN_A_CRYPTOGRAPHER:
+                $this->spendTokens(RESOURCE_FOOD);
+                $this->spendTokens(RESOURCE_MONEY);
+                $this->spendTokens(RESOURCE_WEAPON);
+
+                $activeSpace = (string) $this->getActiveSpace();
+                $cryptographerID = $this->getWorkerIdByLocation($activeSpace);
+                $this->updateComponent($cryptographerID, $activeSpace, 'cryptographer');
+                break;
         }
     } 
 
@@ -882,6 +902,8 @@ class Game extends \Table {
                     return ($this->getResource(RESOURCE_FOOD) >= 2) && ($this->getResource(RESOURCE_MONEY) >= 1);
                 case ACTION_DELIVER_3_EXPLOSIVES:
                     return ($this->getResource(RESOURCE_EXPLOSIVES) >= 3) && (in_array($this->getRoundNumber(), [6, 7, 8, 9]));
+                case ACTION_TRAIN_A_CRYPTOGRAPHER:
+                    return ($this->getResource(RESOURCE_FOOD) >= 1) && ($this->getResource(RESOURCE_MONEY) >= 1) && ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getRoundNumber() <= 6);
                 default:
                     return true;
             }
@@ -916,7 +938,8 @@ class Game extends \Table {
             ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate("Complete the mission"),
             ACTION_DELIVER_2_WEAPONS => clienttranslate("Deliver 2 Weapons"),
             ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate("Deliver Money and 2 Food"),
-            ACTION_DELIVER_3_EXPLOSIVES => clienttranslate("Deliver 3 Explosives")
+            ACTION_DELIVER_3_EXPLOSIVES => clienttranslate("Deliver 3 Explosives"),
+            ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate("Train a Cryptographer")
         ];
 
         foreach($result as &$action) {
