@@ -21,11 +21,13 @@ const ST_BGA_GAME_END = 99;
 
 const MISSION_MILICE_PARADE_DAY = 'milice_parade_day';
 const MISSION_OFFICERS_MANSION = 'officers_mansion';
+
 const MISSION_SABOTAGE = 'sabotage';
 const MISSION_UNDERGROUND_NEWSPAPER = 'underground_newspaper';
 const MISSION_INFILTRATION = 'infiltration';
 const MISSION_GERMAN_SHEPARDS = 'german_shepards';
 const MISSION_DOUBLE_AGENT = 'double_agent';
+
 const MISSION_AID_THE_SPY = 'aid_the_spy';
 const MISSION_ASSASSINATION = 'assassination';
 const MISSION_DESTROY_THE_TRAIN = 'destroy_the_train';

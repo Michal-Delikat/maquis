@@ -1,20 +1,94 @@
 {
     "100": { 
-        "name": "Mission cards difficulty",
+        "name": "Mission A",
         "values": {
             "0": { 
-                "name": "0-star missions (Introductory Game)", 
-                "tmdisplay": "0-star" 
+                "name": "Milice Parade Day", 
+                "tmdisplay": "0-star mission" 
             },
             "1": { 
-                "name": "1-star missions", 
-                "tmdisplay": "1-star missions" 
+                "name": "Officer's Mansion", 
+                "tmdisplay": "0-star mission" 
             },
             "2": { 
-                "name": "2-star missions", 
-                "tmdisplay": "2-star missions" 
+                "name": "Sabotage", 
+                "tmdisplay": "1-star mission" 
+            },
+            "3": {
+                "name": "Underground Newspaper",
+                "tmdisplay": "1-star mission"
+            },
+            "4": {
+                "name": "Infiltration",
+                "tmdisplay": "1-star mission"
+            },
+            "5": {
+                "name": "German Shepards",
+                "tmdisplay": "1-star mission"
+            },
+            "6": {
+                "name": "Double Agent",
+                "tmdisplay": "1-star mission"
+            },
+            "7": {
+                "name": "Aid the Spy",
+                "tmdisplay": "2-star mission"
+            },
+            "8": {
+                "name": "Assassination",
+                "tmdisplay": "2-star mission"
+            },
+            "9": {
+                "name": "Destroy the Train",
+                "tmdisplay": "2-star mission"
             }
         },
         "default": 0
+    },
+    "101": { 
+        "name": "Mission B",
+        "values": {
+            "0": { 
+                "name": "Milice Parade Day", 
+                "tmdisplay": "0-star mission" 
+            },
+            "1": { 
+                "name": "Officer's Mansion", 
+                "tmdisplay": "0-star mission" 
+            },
+            "2": { 
+                "name": "Sabotage", 
+                "tmdisplay": "1-star mission" 
+            },
+            "3": {
+                "name": "Underground Newspaper",
+                "tmdisplay": "1-star mission"
+            },
+            "4": {
+                "name": "Infiltration",
+                "tmdisplay": "1-star mission"
+            },
+            "5": {
+                "name": "German Shepards",
+                "tmdisplay": "1-star mission"
+            },
+            "6": {
+                "name": "Double Agent",
+                "tmdisplay": "1-star mission"
+            },
+            "7": {
+                "name": "Aid the Spy",
+                "tmdisplay": "2-star mission"
+            },
+            "8": {
+                "name": "Assassination",
+                "tmdisplay": "2-star mission"
+            },
+            "9": {
+                "name": "Destroy the Train",
+                "tmdisplay": "2-star mission"
+            }
+        },
+        "default": 1
     }
 }

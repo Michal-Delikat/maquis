@@ -134,15 +134,16 @@ class Game extends \Table {
         $this->initStat("player", "workers_recruited", 0);
 
         // Configure missions
-        $missionsDifficulty = (int) $this->tableOptions->get(100);
+        $missionA = (int) $this->tableOptions->get(100);
+        $missionB = (int) $this->tableOptions->get(101);
 
-        // $zeroStarMissions = array(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
+        $zeroStarMissions = array(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
         $oneStarMissions = array(
                 MISSION_SABOTAGE, 
+                MISSION_UNDERGROUND_NEWSPAPER,
                 MISSION_INFILTRATION, 
                 MISSION_GERMAN_SHEPARDS,
-                MISSION_DOUBLE_AGENT,
-                MISSION_UNDERGROUND_NEWSPAPER
+                MISSION_DOUBLE_AGENT
         );
         $twoStarMissions = array(
             MISSION_AID_THE_SPY,
@@ -150,16 +151,19 @@ class Game extends \Table {
             MISSION_DESTROY_THE_TRAIN
         );
 
-        if ($missionsDifficulty == 0) {
-            $this->configureMissions(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
-        } else if ($missionsDifficulty == 1) {
-            $keys = array_rand($oneStarMissions, 2);
-            $this->configureMissions($oneStarMissions[$keys[0]], $oneStarMissions[$keys[1]]);
-        } else {
-            $keys = array_rand($twoStarMissions, 2);
-            $this->configureMissions($twoStarMissions[$keys[0]], $twoStarMissions[$keys[1]]);
+        while ($missionA === $missionB) {
+            if ($missionA <= 1) {
+                $missionB = array_rand($zeroStarMissions);
+            } else if ($missionA <= 6) {
+                $missionB = array_rand($oneStarMissions) + 2;
+            } else {
+                $missionB = array_rand($twoStarMissions) + 7;
+            }
         }
-                
+        
+        $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions);
+        $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
+
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -829,7 +833,6 @@ class Game extends \Table {
 
         if (!$willNotGetArrested) {
             $result = array_filter($result, function($action) {
-                $this->dump("action", $action); 
                 return $this->getIsSafe($action["action_name"]);
             });
         } 
