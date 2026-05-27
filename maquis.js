@@ -250,6 +250,13 @@ function (dojo, declare) {
                             ${_('We\'ve recieved intelligence that the occupation are going to be transporting Panzers along the railway near your town. Plant bombs to destroy the train as it passes.')}<br><br>
                             ${_('Deliver 5 Explosives to this location. This mission can olny be completed on Days 6, 7, 8 or 9.')}
                         </p>`;
+                        break;
+                    case 'liberate_the_town':
+                        description = `<p>
+                            ${_('The Allies are pushing forward. If we rise up the right time, our town could emerge unscathed. For that, we will need weapons and courage!')}<br><br>
+                            ${_('Posses at least 3 Weapons and 4 Morale at the point the Day Track marker moves to \'END\' space.')}
+                        </p>`;
+                        break;
                 }
                     
                 this.addTooltipHtml(mission, 

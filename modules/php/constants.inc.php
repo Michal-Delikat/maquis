@@ -31,6 +31,7 @@ const MISSION_DOUBLE_AGENT = 'double_agent';
 const MISSION_AID_THE_SPY = 'aid_the_spy';
 const MISSION_ASSASSINATION = 'assassination';
 const MISSION_DESTROY_THE_TRAIN = 'destroy_the_train';
+const MISSION_LIBERATE_THE_TOWN = 'liberate_the_town';
 
 const ACTION_INSERT_MOLE = 'insert_mole';
 const ACTION_RECOVER_MOLE = 'recover_mole';

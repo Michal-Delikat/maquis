@@ -41,6 +41,9 @@
             "9": {
                 "name": "Destroy the Train",
                 "tmdisplay": "2-star mission"
+            },
+            "10": {
+                "name": "Liberate the Town"
             }
         },
         "default": 0
@@ -87,6 +90,9 @@
             "9": {
                 "name": "Destroy the Train",
                 "tmdisplay": "2-star mission"
+            },
+            "10": {
+                "name": "Liberate the Town"
             }
         },
         "default": 1

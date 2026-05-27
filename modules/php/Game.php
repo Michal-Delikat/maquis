@@ -148,7 +148,8 @@ class Game extends \Table {
         $twoStarMissions = array(
             MISSION_AID_THE_SPY,
             MISSION_ASSASSINATION,
-            MISSION_DESTROY_THE_TRAIN
+            MISSION_DESTROY_THE_TRAIN,
+            MISSION_LIBERATE_THE_TOWN
         );
 
         while ($missionA === $missionB) {
@@ -157,10 +158,10 @@ class Game extends \Table {
             } else if ($missionA <= 6) {
                 $missionB = array_rand($oneStarMissions) + 2;
             } else {
-                $missionB = array_rand($twoStarMissions) + 7;
+                $missionB = array_rand($twoStarMissions) + 2 + 5;
             }
         }
-        
+
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
@@ -424,6 +425,10 @@ class Game extends \Table {
     }
 
     public function stPseudoGameEnd(): void {
+        if ($this->getIsMissionSelected(MISSION_LIBERATE_THE_TOWN) && ($this->getMorale() >= 4) && ($this->getResource(RESOURCE_WEAPON) >= 3)) {
+            $this->completeMission(MISSION_LIBERATE_THE_TOWN);
+        }
+
         $playerScore = $this->getPlayerScore();
 
         $this->setPlayerScore((int) ($playerScore >= 2));
