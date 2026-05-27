@@ -150,7 +150,8 @@ class Game extends \Table {
             MISSION_ASSASSINATION,
             MISSION_DESTROY_THE_TRAIN,
             MISSION_LIBERATE_THE_TOWN,
-            MISSION_CODED_MESSAGES
+            MISSION_CODED_MESSAGES,
+            MISSION_TAKE_OUT_THE_BRIDGES
         );
 
         while ($missionA === $missionB) {

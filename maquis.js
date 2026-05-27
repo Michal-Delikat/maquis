@@ -263,6 +263,12 @@ function (dojo, declare) {
                             ${_('A Worker must be placed here by end of Day 6 and must remain until the end of Day 10.')}
                         </p>`;
                         break;
+                    case 'take_out_the_bridges':
+                        description = `<p>
+                            ${_('The Occupation has enjoyed unfettered access to the city for too long. Slow them down!')}<br><br>
+                            ${_('To destroy a bridge, deliver 2 Explosives to the Black Market. Ath the end of the day, place a marker on a bridge of you choice connected to The Black Market. Workers may not pass destroyed bridges for the rest of the game.')}
+                        </p>`;
+                        break;
                 }
                     
                 this.addTooltipHtml(mission, 

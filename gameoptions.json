@@ -47,6 +47,9 @@
             },
             "11": {
                 "name": "Coded Messages"
+            },
+            "12": {
+                "name": "Take out the Bridges"
             }
         },
         "default": 0
@@ -99,6 +102,9 @@
             },
             "11": {
                 "name": "Coded Messages"
+            },
+            "12": {
+                "name": "Take out the Bridges"
             }
         },
         "default": 1
