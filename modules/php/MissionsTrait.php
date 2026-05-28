@@ -12,7 +12,8 @@ trait MissionsTrait {
             MISSION_UNDERGROUND_NEWSPAPER,
             MISSION_AID_THE_SPY,
             MISSION_DESTROY_THE_TRAIN,
-            MISSION_CODED_MESSAGES
+            MISSION_CODED_MESSAGES,
+            MISSION_BOMB_FOR_THE_OFFICER
         ];
 
         if (in_array($missionAName, $missionsWithSpaces)) {
@@ -74,6 +75,11 @@ trait MissionsTrait {
 
         if (in_array(MISSION_TAKE_OUT_THE_BRIDGES, $missionNames)) {
             $this->addSpaceAction(7, ACTION_DELIVER_2_EXPLOSIVES);
+        }
+
+         if (in_array(MISSION_BOMB_FOR_THE_OFFICER, $missionNames)) {
+            $missionSpace = $missionAName === MISSION_BOMB_FOR_THE_OFFICER? 18 : 21;
+            $this->addSpaceAction($missionSpace, ACTION_DELIVER_EXPLOSIVES_AND_WEAPON);
         }
     }
 

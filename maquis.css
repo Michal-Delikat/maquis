@@ -380,7 +380,7 @@
     background-position-y: 100%;
 }
 
-:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_bomb_for_the_officer) > .mission-card-back {
+:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-back {
     background-position: 100% bottom;
 }
 
@@ -436,8 +436,12 @@
     left: 34%;
 }
 
-#mission_card_coded_messages > :is(.mission-space-2, .mission-space-3) {
+:is(#mission_card_coded_messages, #mission_card_bomb_for_the_officer) > :is(.mission-space-2, .mission-space-3) {
     display: none;
+}
+
+#mission_card_bomb_for_the_officer > .mission-space-1 {
+    left: 58%
 }
 
 #cards {

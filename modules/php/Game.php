@@ -831,6 +831,12 @@ class Game extends \Table {
 
                 $this->setExplosivesAtBridgePlanted(true);
                 break;
+            case ACTION_DELIVER_EXPLOSIVES_AND_WEAPON:
+                $this->spendTokens(RESOURCE_EXPLOSIVES);
+                $this->spendTokens(RESOURCE_WEAPON);
+
+                $this->completeMission(MISSION_BOMB_FOR_THE_OFFICER);
+                break;
         }
     } 
 
@@ -941,6 +947,8 @@ class Game extends \Table {
                     return ($this->getResource(RESOURCE_FOOD) >= 1) && ($this->getResource(RESOURCE_MONEY) >= 1) && ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getRoundNumber() <= 6);
                 case ACTION_DELIVER_2_EXPLOSIVES:
                     return ($this->getResource(RESOURCE_EXPLOSIVES) >= 2) && !$this->getIsMissionCompleted(MISSION_TAKE_OUT_THE_BRIDGES);
+                case ACTION_DELIVER_EXPLOSIVES_AND_WEAPON:
+                    return $this->getMorale() >= 5 && $this->getResource(RESOURCE_EXPLOSIVES) >= 1 && $this->getResource(RESOURCE_WEAPON) >= 1;
                 default:
                     return true;
             }
@@ -978,6 +986,7 @@ class Game extends \Table {
             ACTION_DELIVER_3_EXPLOSIVES => clienttranslate("Deliver 3 Explosives"),
             ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate("Train a Cryptographer"),
             ACTION_DELIVER_2_EXPLOSIVES => clienttranslate("Deliver 2 Explosives"),
+            ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate("Deliver Explosives and Weapon")
         ];
 
         foreach($result as &$action) {
