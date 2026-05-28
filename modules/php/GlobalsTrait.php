@@ -37,4 +37,11 @@ trait GlobalsTrait {
         $this->setGameStateValue("selected_field", $spaceID);
     }
 
+    protected function getExplosivesAtBridgePlanted(): bool {
+        return $this->getGameStateValue("explosives_at_bridge_planted");
+    }
+
+    protected function setExplosivesAtBridgePlanted(bool $explosivesAtBridgePlanted): void {
+        $this->setGameStateValue("explosives_at_bridge_planted", $explosivesAtBridgePlanted);
+    }
 }

@@ -111,4 +111,12 @@ trait BoardTrait {
             WHERE space_id = ' . $spaceID . ';'
         );
     }
+
+    public static function removePath(int $startId, int $endId): void {
+        self::DbQuery("
+            DELETE FROM board_path
+            WHERE (space_id_start = $startId AND space_id_end = $endId)
+                OR (space_id_start = $endId AND space_id_end = $startId);
+        ");
+    }
 }

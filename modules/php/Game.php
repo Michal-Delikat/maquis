@@ -66,6 +66,7 @@ class Game extends \Table {
             "active_space" => 10,
             "selected_field" => 11,
             "shot_today" => 12,
+            "explosives_at_bridge_planted" => 13,
             "my_first_game_variant" => 100,
             "my_second_game_variant" => 101,
         ]);
@@ -122,6 +123,7 @@ class Game extends \Table {
         $this->setGameStateInitialValue("active_space", 0);
         $this->setGameStateInitialValue("selected_field", 0);
         $this->setGameStateInitialValue("shot_today", false);
+        $this->setGameStateInitialValue("explosives_at_bridge_planted", false);
 
          // Initalize game statistics
         $this->initStat("table", "turns_number", 0);
@@ -372,6 +374,8 @@ class Game extends \Table {
         // }
         else if ($this->getPlacedResistance() > 0) {
             $this->gamestate->nextState("activateWorker");
+        } else if ($this->getExplosivesAtBridgePlanted()) {
+            $this->gamestate->nextState("removeBridge");
         }
         else {
             $this->gamestate->nextState("roundEnd");
@@ -509,6 +513,28 @@ class Game extends \Table {
         $this->gamestate->nextState("nextWorker");
     }
 
+    public function actRemoveBridge(int $spaceID): void {
+        $this->placeMarker($spaceID);
+
+        if ($spaceID === 24) {
+            $this->removePath(3, 7);
+        } else {
+            $this->removePath(6, 7);
+        }
+
+        $this->notify->all("bridgeRemoved", clienttranslate('Bridge removed'), array(
+            "spaceID" => $spaceID
+        ));
+
+        $this->setExplosivesAtBridgePlanted(false);
+
+        if ($this->countMarkersInSpaces([24, 25]) === 2) {
+            $this->completeMission(MISSION_TAKE_OUT_THE_BRIDGES);
+        }
+
+        $this->gamestate->nextState("roundEnd");
+    }
+
     // ARGS
 
     public function argPlaceWorker(): array {
@@ -589,6 +615,10 @@ class Game extends \Table {
         return $this->getSpacesWithResistanceWorkers();
     }
 
+    public function argRemoveBridge(): array {
+        return $this->getBridgesWithMarkers();
+    }
+
     protected function addSpaceAction(int $spaceID, string $actionName): void {
         self::DbQuery("
             INSERT INTO board_action (space_id, action_name)
@@ -619,8 +649,6 @@ class Game extends \Table {
                 break;
         }
     } 
-
-    // SAVE ACTION
 
     protected function saveAction(string $actionName): void {
         switch($actionName) {
@@ -797,6 +825,11 @@ class Game extends \Table {
                 $cryptographerID = $this->getWorkerIdByLocation($activeSpace);
                 $this->updateComponent($cryptographerID, $activeSpace, 'cryptographer');
                 break;
+            case ACTION_DELIVER_2_EXPLOSIVES:
+                $this->spendTokens(RESOURCE_EXPLOSIVES, 2);
+
+                $this->setExplosivesAtBridgePlanted(true);
+                break;
         }
     } 
 
@@ -905,6 +938,8 @@ class Game extends \Table {
                     return ($this->getResource(RESOURCE_EXPLOSIVES) >= 3) && (in_array($this->getRoundNumber(), [6, 7, 8, 9]));
                 case ACTION_TRAIN_A_CRYPTOGRAPHER:
                     return ($this->getResource(RESOURCE_FOOD) >= 1) && ($this->getResource(RESOURCE_MONEY) >= 1) && ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getRoundNumber() <= 6);
+                case ACTION_DELIVER_2_EXPLOSIVES:
+                    return ($this->getResource(RESOURCE_EXPLOSIVES) >= 2) && !$this->getIsMissionCompleted(MISSION_TAKE_OUT_THE_BRIDGES);
                 default:
                     return true;
             }
@@ -940,7 +975,8 @@ class Game extends \Table {
             ACTION_DELIVER_2_WEAPONS => clienttranslate("Deliver 2 Weapons"),
             ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate("Deliver Money and 2 Food"),
             ACTION_DELIVER_3_EXPLOSIVES => clienttranslate("Deliver 3 Explosives"),
-            ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate("Train a Cryptographer")
+            ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate("Train a Cryptographer"),
+            ACTION_DELIVER_2_EXPLOSIVES => clienttranslate("Deliver 2 Explosives"),
         ];
 
         foreach($result as &$action) {

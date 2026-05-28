@@ -131,12 +131,23 @@ $machinestates = [
         "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER],
     ],
 
+    ST_PLAYER_REMOVE_BRIDGE => [
+        "name" => "removeBridge",
+        "descriptionmyturn" => clienttranslate('${you} must choose a bridge to be removed'),
+        "type" => "activeplayer",
+        "args" => "argRemoveBridge",
+        "possibleactions" => [
+            "actRemoveBridge"
+        ],
+        "transitions" => ["roundEnd" => ST_GAME_ROUND_END],
+    ],
+
     ST_GAME_NEXT_WORKER => [
         "name" => "nextWorker",
         "description" => "",
         "type" => "game",
         "action" => "stNextWorker",
-        "transitions" => ["activateWorker" => ST_PLAYER_ACTIVATE_WORKER, "takeAction" => ST_PLAYER_TAKE_ACTION, "nextWorker" => ST_GAME_NEXT_WORKER, "roundEnd" => ST_GAME_ROUND_END],
+        "transitions" => ["activateWorker" => ST_PLAYER_ACTIVATE_WORKER, "takeAction" => ST_PLAYER_TAKE_ACTION, "nextWorker" => ST_GAME_NEXT_WORKER, "roundEnd" => ST_GAME_ROUND_END, "removeBridge" => ST_PLAYER_REMOVE_BRIDGE],
     ],  
 
     ST_GAME_ROUND_END => [

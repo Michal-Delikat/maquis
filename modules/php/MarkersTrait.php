@@ -170,4 +170,16 @@ trait MarkersTrait {
             GROUP BY location;
         ");
     }
+
+    protected function getBridgesWithMarkers(): array {
+        $spacesWithMarkers = (array) $this->getCollectionFromDb("
+            SELECT location 
+            FROM components 
+            WHERE name like 'mission_marker%' AND location IN (24, 25);
+        ");
+
+        return array_map(function ($space) {
+            return $space['location'];
+        }, $spacesWithMarkers);
+    }
 }

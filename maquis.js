@@ -350,6 +350,22 @@ function (dojo, declare) {
                     <div id="cafe-space-2" class="cafe-space"></div>
                 </div>
                 `, 'spaces');
+
+            // ADDITIONAL SPACES AT BRIDGES
+            dojo.place(`
+                <div id="space-24" class="space board-space bridge-space">
+                    <div id="space-24-marker-space">
+                        <div id="space-24-marker-space-1" class="marker-space"></div>
+                    </div>
+                    <div id="space-24-background-space" class="background-space"></div>
+                </div>
+                <div id="space-25" class="space board-space bridge-space">
+                    <div id="space-25-marker-space">
+                        <div id="space-25-marker-space-1" class="marker-space"></div>
+                    </div>
+                    <div id="space-25-background-space" class="background-space"></div>
+                </div>
+                `, 'spaces');
                 
             // PAWNS
             resistanceWorkers.forEach(worker => { 
@@ -461,6 +477,16 @@ function (dojo, declare) {
                         if (space) dojo.addClass(space, 'space-with-worker-to-remove');
                     });
                     break;
+
+                case 'removeBridge':
+                    const bridgesWithMarkers = Object.values(args.args);
+
+                    console.log(bridgesWithMarkers);
+
+                    ['24', '25'].filter(x => !bridgesWithMarkers.includes(x)).forEach(spaceID => {
+                        let space = dojo.byId(`space-${spaceID}-background-space`);
+                        if (space) dojo.addClass(space, 'space-with-bridge-to-remove');
+                    })
             }   
         },
 
@@ -492,6 +518,10 @@ function (dojo, declare) {
 
                 case 'removeWorker':
                     dojo.query('.space-with-worker-to-remove').removeClass('space-with-worker-to-remove');
+                    break;
+
+                case 'removeBridge':
+                    dojo.query('.space-with-bridge-to-remove').removeClass('space-with-bridge-to-remove');
                     break;
             }          
         }, 
@@ -562,7 +592,12 @@ function (dojo, declare) {
             else if (evt.currentTarget.classList.contains('space-with-worker-to-remove')) {
                 this.bgaPerformAction("actRemoveWorker", {
                     spaceID: spaceID
-                })
+                });
+            }
+            else if (evt.currentTarget.classList.contains('space-with-bridge-to-remove')) {
+                this.bgaPerformAction("actRemoveBridge", {
+                    spaceID: spaceID
+                });
             }
         },
         
@@ -984,14 +1019,14 @@ function (dojo, declare) {
             await this.bgaPlayDojoAnimation(animation);
         },
 
-        placeMissionMarker: async function(spaceID, marker_number, animate = true) {
+        placeMissionMarker: async function(spaceID, markerNumber, animate = true) {
             const markerIDs = dojo.query(".marker-mission").map(node => node.id);
             const markerID = markerIDs.length
 
-            dojo.place(`<div id="mission-marker-${markerID}" class="marker marker-mission"></div>`, `space-${spaceID}-marker-space-${marker_number}`);
+            dojo.place(`<div id="mission-marker-${markerID}" class="marker marker-mission"></div>`, `space-${spaceID}-marker-space-${markerNumber}`);
             if (animate) {
                 this.placeOnObject(`mission-marker-${markerID}`, 'player_boards');
-                const animation = this.slideToObject(`mission-marker-${markerID}`, `space-${spaceID}-marker-space-${marker_number}`);
+                const animation = this.slideToObject(`mission-marker-${markerID}`, `space-${spaceID}-marker-space-${markerNumber}`);
                 await this.bgaPlayDojoAnimation(animation);
             }
         },

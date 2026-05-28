@@ -56,5 +56,6 @@ const ACTIONS = [
     ACTION_DELIVER_2_WEAPONS => ['name' => ACTION_DELIVER_2_WEAPONS, 'is_safe' => true],
     ACTION_DELIVER_MONEY_AND_2_FOOD => ['name' => ACTION_DELIVER_MONEY_AND_2_FOOD, 'is_safe' => true],
     ACTION_DELIVER_3_EXPLOSIVES => ['name' => ACTION_DELIVER_3_EXPLOSIVES, 'is_safe' => true],
-    ACTION_TRAIN_A_CRYPTOGRAPHER => ['name' => ACTION_TRAIN_A_CRYPTOGRAPHER, 'is_safe' => false]
+    ACTION_TRAIN_A_CRYPTOGRAPHER => ['name' => ACTION_TRAIN_A_CRYPTOGRAPHER, 'is_safe' => false],
+    ACTION_DELIVER_2_EXPLOSIVES => ['name' => ACTION_DELIVER_2_EXPLOSIVES, 'is_safe' => true],
 ];

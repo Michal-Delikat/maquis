@@ -71,6 +71,10 @@ trait MissionsTrait {
             $missionSpace = $missionAName === MISSION_CODED_MESSAGES? 18 : 21;
             $this->addSpaceAction($missionSpace, ACTION_TRAIN_A_CRYPTOGRAPHER);
         }
+
+        if (in_array(MISSION_TAKE_OUT_THE_BRIDGES, $missionNames)) {
+            $this->addSpaceAction(7, ACTION_DELIVER_2_EXPLOSIVES);
+        }
     }
 
     protected function addMissionSpace(int $spaceID, string $missionName): void {

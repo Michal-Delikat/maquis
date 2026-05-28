@@ -10,6 +10,7 @@ const ST_PLAYER_AIRDROP_SELECT_FIELD = 6;
 const ST_PLAYER_SELECT_ROOM = 7;
 const ST_PLAYER_SHOOT_MILICE = 8;
 const ST_PLAYER_REMOVE_WORKER = 9;
+const ST_PLAYER_REMOVE_BRIDGE = 10;
 
 const ST_GAME_PLACE_PATROL = 60;
 const ST_GAME_NEXT_WORKER = 63;
@@ -68,6 +69,7 @@ const ACTION_DELIVER_2_WEAPONS = 'deliver_2_weapons';
 const ACTION_DELIVER_MONEY_AND_2_FOOD = 'deliver_money_and_2_food';
 const ACTION_DELIVER_3_EXPLOSIVES = 'deliver_3_explosives';
 const ACTION_TRAIN_A_CRYPTOGRAPHER = 'train_a_cryptographer';
+const ACTION_DELIVER_2_EXPLOSIVES = 'deliver_2_explosives';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';

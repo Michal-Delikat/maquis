@@ -630,6 +630,30 @@
     height: 50%;
 }
 
+.bridge-space {
+    position: absolute;
+    width: 6%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
+
+.bridge-space .marker-space {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+#space-24 {
+    left: 62%;
+    top: 19%;
+}
+
+#space-25 {
+    left: 57.7%;
+    top: 30%;
+}
+
 .marker-mission {
     background-position: 64%;
 }
@@ -678,6 +702,17 @@
 
 .space-with-milice:hover {
     background-color: rgba(206, 3, 30, 0.5);
+}
+
+.space-with-bridge-to-remove {
+    background-color: rgba(240, 2, 34, 0.5);
+    border: 4px solid rgba(163, 22, 41, 0.5);
+    cursor: pointer;
+}
+
+.space-with-bridge-to-remove:hover {
+    background-color: rgba(234, 50, 75, 0.5);
+    border: 4px solid rgba(160, 54, 68, 0.5);
 }
 
 #dark-lady-location {
