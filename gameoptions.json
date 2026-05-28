@@ -50,6 +50,9 @@
             },
             "12": {
                 "name": "Take out the Bridges"
+            },
+            "13": {
+                "name": "Bomb for the Officer"
             }
         },
         "default": 0
@@ -105,6 +108,9 @@
             },
             "12": {
                 "name": "Take out the Bridges"
+            },
+            "13": {
+                "name": "Bomb for the Officer"
             }
         },
         "default": 1

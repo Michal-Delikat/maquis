@@ -269,6 +269,12 @@ function (dojo, declare) {
                             ${_('To destroy a bridge, deliver 2 Explosives to the Black Market. Ath the end of the day, place a marker on a bridge of you choice connected to The Black Market. Workers may not pass destroyed bridges for the rest of the game.')}
                         </p>`;
                         break;
+                    case 'bomb_for_the_officer':
+                        description = `<p>
+                            ${_('A German plane landed in the field southeast of town. The pilot is in a hotel nearby. A perfect time to strike!')}<br><br>
+                            ${_('You must have at least 5 Morale to carry out this mission. Deliver 1 Weapon and 1 Explosive to this location. Before this mission is completed, the East field and the Southeast Spare Room are unusable.')}
+                        </p>`;
+                        break;
                 }
                     
                 this.addTooltipHtml(mission, 

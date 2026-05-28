@@ -35,6 +35,7 @@ const MISSION_DESTROY_THE_TRAIN = 'destroy_the_train';
 const MISSION_LIBERATE_THE_TOWN = 'liberate_the_town';
 const MISSION_CODED_MESSAGES = 'coded_messages';
 const MISSION_TAKE_OUT_THE_BRIDGES = 'take_out_the_bridges';
+const MISSION_BOMB_FOR_THE_OFFICER = 'bomb_for_the_officer';
 
 const ACTION_INSERT_MOLE = 'insert_mole';
 const ACTION_RECOVER_MOLE = 'recover_mole';
