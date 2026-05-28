@@ -36,9 +36,11 @@ trait BoardTrait {
         $spaceWithMole = $this->getSpaceIdWithMole();
 
         return array_filter($result, function($space) use ($spacesWithPawns, $spacesWithTokens, $fieldSpaces, $spacesWithMarkers, $spaceWithMole) {
-            return !in_array($space, $spacesWithPawns) && (string) $space !== (string) $spaceWithMole && 
+            return !in_array($space, $spacesWithPawns) && 
+                    (string) $space !== (string) $spaceWithMole && 
                     (!in_array($space, $fieldSpaces) || (in_array($space, $fieldSpaces) && in_array($space, $spacesWithTokens))) && 
-                    ((!in_array($space, $spacesWithMarkers) && in_array((int) $space, [18, 19, 20, 21, 22, 23])) || !in_array((int) $space, [18, 19, 20, 21, 22, 23]));
+                    ((!in_array($space, $spacesWithMarkers) && in_array((int) $space, [18, 19, 20, 21, 22, 23])) || !in_array((int) $space, [18, 19, 20, 21, 22, 23])) &&
+                    !((string) $space === '13' && $this->getIsMissionSelected(MISSION_BOMB_FOR_THE_OFFICER) && !$this->getIsMissionCompleted(MISSION_BOMB_FOR_THE_OFFICER));
         });
     }
 
@@ -58,7 +60,7 @@ trait BoardTrait {
         $fieldsWithTokens = array_map('intval', $this->getSpacesWithTokens());
 
         $fields = array_filter($fields, function($field) use ($fieldsWithTokens) {
-            return !in_array((int) $field, $fieldsWithTokens);
+            return !in_array((int) $field, $fieldsWithTokens) && !((string) $field === '17' && $this->getIsMissionSelected(MISSION_BOMB_FOR_THE_OFFICER) && !$this->getIsMissionCompleted(MISSION_BOMB_FOR_THE_OFFICER));
         });
 
         return $fields;
