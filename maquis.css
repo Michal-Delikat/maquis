@@ -216,20 +216,20 @@
 
 #top-area {
     margin-bottom: 8px;
-    height: 31vw;
+    height: 38vw;
     display: flex;
     position: relative;
 }
 
 @media (min-width: 995px) {
     #top-area {
-        height: 21vw;
+        height: 26vw;
     }
 }
 
 @media (min-width: 1400px) {
     #top-area {
-        height: 14vw;
+        height: 17vw;
     }
 }
 
@@ -287,6 +287,7 @@
 .mission-slot {
     width: fit-content;
     position: absolute;
+    bottom: 0;
     perspective: 1000px;
     transform: translateX(-50%);
 }
@@ -345,6 +346,15 @@
 
 :is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-face {
     background-image: url('img/Mission_Cards_2star.jpg');
+}
+
+:is(#mission_card_milice_hq) {
+    aspect-ratio: .585;
+}
+
+:is(#mission_card_milice_hq) > .mission-card-front {
+    background-image: url('img/Mission_Cards_3star.jpg');
+    background-size: 500%;
 }
 
 #mission_card_underground_newspaper > .mission-card-front {

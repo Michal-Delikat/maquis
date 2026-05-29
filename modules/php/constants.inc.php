@@ -37,6 +37,8 @@ const MISSION_CODED_MESSAGES = 'coded_messages';
 const MISSION_TAKE_OUT_THE_BRIDGES = 'take_out_the_bridges';
 const MISSION_BOMB_FOR_THE_OFFICER = 'bomb_for_the_officer';
 
+const MISSION_MILICE_HQ = 'milice_hq';
+
 const ACTION_INSERT_MOLE = 'insert_mole';
 const ACTION_RECOVER_MOLE = 'recover_mole';
 const ACTION_POISON_SHEPARDS = 'poison_shepards';

@@ -53,6 +53,9 @@
             },
             "13": {
                 "name": "Bomb for the Officer"
+            },
+            "14": {
+                "name": "Milice HQ"
             }
         },
         "default": 0
@@ -111,6 +114,9 @@
             },
             "13": {
                 "name": "Bomb for the Officer"
+            },
+            "14": {
+                "name": "Milice HQ"
             }
         },
         "default": 1

@@ -156,18 +156,23 @@ class Game extends \Table {
             MISSION_TAKE_OUT_THE_BRIDGES,
             MISSION_BOMB_FOR_THE_OFFICER
         );
+        $threeStarMissions = array(
+            MISSION_MILICE_HQ
+        );
 
         while ($missionA === $missionB) {
             if ($missionA <= 1) {
                 $missionB = array_rand($zeroStarMissions);
             } else if ($missionA <= 6) {
                 $missionB = array_rand($oneStarMissions) + 2;
-            } else {
+            } else if ($missionA <= 13) {
                 $missionB = array_rand($twoStarMissions) + 2 + 5;
+            } else {
+                $missionB = array_rand($threeStarMissions) + 2 + 5 + 7;
             }
         }
 
-        $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions);
+        $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
         // Activate first player once everything has been initialized and ready.

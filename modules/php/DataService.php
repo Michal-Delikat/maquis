@@ -139,6 +139,7 @@ class DataService {
             ("mission_card_' . MISSION_CODED_MESSAGES . '", "off_board", "not_selected"),
             ("mission_card_' . MISSION_TAKE_OUT_THE_BRIDGES . '", "off_board", "not_selected"),
             ("mission_card_' . MISSION_BOMB_FOR_THE_OFFICER . '", "off_board", "not_selected"),
+            ("mission_card_' . MISSION_MILICE_HQ . '", "off_board", "not_selected"),
             ("mission_marker_1", "off_board", "available"),
             ("mission_marker_2", "off_board", "available"),
             ("mission_marker_3", "off_board", "available"),
