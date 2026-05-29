@@ -69,8 +69,6 @@
 
 #resources {
     display: flex;
-    width: 200px;
-    height: 170px;
     flex-wrap: wrap;
     justify-content: space-between;
 }
@@ -352,9 +350,13 @@
     aspect-ratio: .585;
 }
 
-:is(#mission_card_milice_hq) > .mission-card-front {
+:is(#mission_card_milice_hq) > .mission-card-face {
     background-image: url('img/Mission_Cards_3star.jpg');
     background-size: 500%;
+}
+
+:is(#mission_card_milice_hq) > .mission-card-back {
+    background-position-x: right;
 }
 
 #mission_card_underground_newspaper > .mission-card-front {

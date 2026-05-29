@@ -83,6 +83,7 @@ const RESOURCE_WEAPON = 'weapon';
 const RESOURCE_INTEL = 'intel';
 const RESOURCE_MONEY = 'money';
 const RESOURCE_EXPLOSIVES = 'explosives';
+const RESOURCE_POISON = 'poison';
 
 const ROOM_INFORMANT = 'informant';
 const ROOM_COUNTERFEITER = 'counterfeiter';

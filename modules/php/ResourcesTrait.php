@@ -107,7 +107,8 @@ trait ResourcesTrait {
             RESOURCE_MONEY => [RESOURCE_MONEY, $this->getResource(RESOURCE_MONEY), $this->getAvailableResource(RESOURCE_MONEY)],
             RESOURCE_EXPLOSIVES => [RESOURCE_EXPLOSIVES, $this->getResource(RESOURCE_EXPLOSIVES), $this->getAvailableResource(RESOURCE_EXPLOSIVES)],
             RESOURCE_WEAPON => [RESOURCE_WEAPON, $this->getResource(RESOURCE_WEAPON), $this->getAvailableResource(RESOURCE_WEAPON)],
-            RESOURCE_INTEL => [RESOURCE_INTEL, $this->getResource(RESOURCE_INTEL), $this->getAvailableResource(RESOURCE_INTEL)]
+            RESOURCE_INTEL => [RESOURCE_INTEL, $this->getResource(RESOURCE_INTEL), $this->getAvailableResource(RESOURCE_INTEL)],
+            RESOURCE_POISON => [RESOURCE_POISON, $this->getResource(RESOURCE_POISON), $this->getAvailableResource(RESOURCE_POISON)],
         ];
     }
 

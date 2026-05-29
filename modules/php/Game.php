@@ -837,13 +837,12 @@ class Game extends \Table {
                 break;
             case ACTION_DELIVER_2_EXPLOSIVES:
                 $this->spendTokens(RESOURCE_EXPLOSIVES, 2);
-
                 $this->setExplosivesAtBridgePlanted(true);
                 break;
             case ACTION_DELIVER_EXPLOSIVES_AND_WEAPON:
                 $this->spendTokens(RESOURCE_EXPLOSIVES);
                 $this->spendTokens(RESOURCE_WEAPON);
-
+                $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_BOMB_FOR_THE_OFFICER);
                 break;
             case ACTION_DISCOVER_THE_PLANS:
@@ -856,7 +855,11 @@ class Game extends \Table {
                     $this->addMissionSpace(22);
                     $this->addSpaceAction(22, ACTION_DELIVER_2_POISON);
                 }
-                
+                break;
+            case ACTION_DELIVER_2_POISON:
+                $this->spendTokens(RESOURCE_POISON, 2);
+                $this->returnOrArrest($this->getActiveSpace());
+                $this->completeMission(MISSION_MILICE_HQ);
                 break;
         }
     } 
@@ -970,6 +973,8 @@ class Game extends \Table {
                     return ($this->getResource(RESOURCE_EXPLOSIVES) >= 2) && !$this->getIsMissionCompleted(MISSION_TAKE_OUT_THE_BRIDGES);
                 case ACTION_DELIVER_EXPLOSIVES_AND_WEAPON:
                     return $this->getMorale() >= 5 && $this->getResource(RESOURCE_EXPLOSIVES) >= 1 && $this->getResource(RESOURCE_WEAPON) >= 1;
+                case ACTION_DELIVER_2_POISON:
+                    return $this->getResource(RESOURCE_POISON) >= 2;
                 default:
                     return true;
             }
@@ -1008,7 +1013,8 @@ class Game extends \Table {
             ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate("Train a Cryptographer"),
             ACTION_DELIVER_2_EXPLOSIVES => clienttranslate("Deliver 2 Explosives"),
             ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate("Deliver Explosives and Weapon"),
-            ACTION_DISCOVER_THE_PLANS => clienttranslate("Discover the Plans")
+            ACTION_DISCOVER_THE_PLANS => clienttranslate("Discover the Plans"),
+            ACTION_DELIVER_2_POISON => clienttranslate("Deliver 2 Poison")
         ];
 
         foreach($result as &$action) {
