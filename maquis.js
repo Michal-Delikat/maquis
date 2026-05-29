@@ -275,6 +275,17 @@ function (dojo, declare) {
                             ${_('You must have at least 5 Morale to carry out this mission. Deliver 1 Weapon and 1 Explosive to this location. Before this mission is completed, the East field and the Southeast Spare Room are unusable.')}
                         </p>`;
                         break;
+                    case 'milice_hq':
+                        description = `<p>
+                            ${_('The Milice have established their regional HQ on the edge of town, and nobody knows who to trust. We need to clear out the rats to let the town feel safe again.')}<br><br>
+                            ${_('Morale starts on 4')}<br><br>
+                            ${_('Objective 1:')}<br>
+                            ${_('Discover the plans of the building at the public records office on Rue Baradat.')}<br><br>
+                            ${_('Objective 2:')}<br>
+                            ${_('[SAFE] Spend 2 Poison on this location to spike the Milice\'s water supply, gain 2 on the Morale track and 3 on the Soldier track')}<br><br>
+                            ${_('If the soldier track was on 3+ already, success; otherwise, major success.')}
+                        </p>`;
+                        break;
                 }
                     
                 this.addTooltipHtml(mission, 

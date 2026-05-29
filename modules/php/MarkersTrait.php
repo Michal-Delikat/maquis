@@ -34,16 +34,18 @@ trait MarkersTrait {
         ");
     }
 
-    function setMorale(int $newMorale): void {
+    function setMorale(int $newMorale, bool $notify = true): void {
         self::DbQuery("
             UPDATE components
             SET location = $newMorale
             WHERE name = 'morale_marker';
         ");
 
-        $this->notify->all("moraleSet", clienttranslate('Morale is ${morale}'), array(
-            "morale" => $newMorale
-        ));
+        if ($notify) {
+            $this->notify->all("moraleSet", clienttranslate('Morale is ${morale}'), array(
+                "morale" => $newMorale
+            ));
+        }
     }
 
     function incrementMorale(): void {
@@ -93,12 +95,13 @@ trait MarkersTrait {
         static::DbQuery("
             UPDATE components
             SET location = $spaceID, state = 'placed'
-            WHERE name = '$markerID' AND name LIKE 'mission_marker%';
+            WHERE name = '$markerID';
         ");
 
-        $this->notify->all("markerPlaced", clienttranslate("Marker placed at " . $this->getSpaceNameById($spaceID)), array(
+        $this->notify->all("markerPlaced", clienttranslate('Marker placed at ${spaceName}'), array(
             "spaceID" => $spaceID,
-            "markerNumber" => $this->countMarkers($spaceID)
+            "markerNumber" => $this->countMarkers($spaceID),
+            "spaceName" => $this->getSpaceNameById($spaceID)
         ));
     }
 
@@ -117,7 +120,7 @@ trait MarkersTrait {
         ));
     }
 
-    protected function checkMarkersInSpaces($spaces): bool {
+    protected function checkMarkersInSpaces(array $spaces): bool {
         $allSpacesHaveMarkers = true;
         foreach ($spaces as $space) {
             if ((int) $this->countMarkers($space) <= 0) {

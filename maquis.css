@@ -454,6 +454,23 @@
     left: 58%
 }
 
+#mission_card_milice_hq .mission-space {
+    width: 25%;
+    height: 10%;
+}
+
+#mission_card_milice_hq > :is(.mission-space-1, .mission-space-2) {
+    top: 37%;
+}
+
+#mission_card_milice_hq > .mission-space-1 {
+    left: 45%;
+}
+
+#mission_card_milice_hq > .mission-space-2 {
+    left: 72%;
+}
+
 #cards {
     display: flex;
     justify-content: space-around;

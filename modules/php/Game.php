@@ -175,6 +175,10 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
+        if ($this->getIsMissionSelected(MISSION_MILICE_HQ)) {
+            $this->setMorale(4, false);
+        }
+
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -842,6 +846,18 @@ class Game extends \Table {
 
                 $this->completeMission(MISSION_BOMB_FOR_THE_OFFICER);
                 break;
+            case ACTION_DISCOVER_THE_PLANS:
+                if ($this->getLocationByMissionName(MISSION_MILICE_HQ) === 'mission_card_a') {
+                    $this->placeMarker(18);
+                    $this->addMissionSpace(19);
+                    $this->addSpaceAction(19, ACTION_DELIVER_2_POISON);
+                } else {
+                    $this->placeMarker(21);
+                    $this->addMissionSpace(22);
+                    $this->addSpaceAction(22, ACTION_DELIVER_2_POISON);
+                }
+                
+                break;
         }
     } 
 
@@ -991,7 +1007,8 @@ class Game extends \Table {
             ACTION_DELIVER_3_EXPLOSIVES => clienttranslate("Deliver 3 Explosives"),
             ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate("Train a Cryptographer"),
             ACTION_DELIVER_2_EXPLOSIVES => clienttranslate("Deliver 2 Explosives"),
-            ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate("Deliver Explosives and Weapon")
+            ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate("Deliver Explosives and Weapon"),
+            ACTION_DISCOVER_THE_PLANS => clienttranslate("Discover the Plans")
         ];
 
         foreach($result as &$action) {

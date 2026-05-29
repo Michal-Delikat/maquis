@@ -59,4 +59,6 @@ const ACTIONS = [
     ACTION_TRAIN_A_CRYPTOGRAPHER => ['name' => ACTION_TRAIN_A_CRYPTOGRAPHER, 'is_safe' => false],
     ACTION_DELIVER_2_EXPLOSIVES => ['name' => ACTION_DELIVER_2_EXPLOSIVES, 'is_safe' => true],
     ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => ['name' => ACTION_DELIVER_EXPLOSIVES_AND_WEAPON, 'is_safe' => true],
+    ACTION_DISCOVER_THE_PLANS => ['name' => ACTION_DISCOVER_THE_PLANS, 'is_safe' => false],
+    ACTION_DELIVER_2_POISON => ['name' => ACTION_DELIVER_2_POISON, 'is_safe' => true],
 ];

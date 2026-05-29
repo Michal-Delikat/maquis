@@ -77,15 +77,17 @@ trait MissionsTrait {
             $this->addSpaceAction(7, ACTION_DELIVER_2_EXPLOSIVES);
         }
 
-         if (in_array(MISSION_BOMB_FOR_THE_OFFICER, $missionNames)) {
+        if (in_array(MISSION_BOMB_FOR_THE_OFFICER, $missionNames)) {
             $missionSpace = $missionAName === MISSION_BOMB_FOR_THE_OFFICER? 18 : 21;
             $this->addSpaceAction($missionSpace, ACTION_DELIVER_EXPLOSIVES_AND_WEAPON);
         }
+
+        if (in_array(MISSION_MILICE_HQ, $missionNames)) {
+            $this->addSpaceAction(1, ACTION_DISCOVER_THE_PLANS);
+        }
     }
 
-    protected function addMissionSpace(int $spaceID, string $missionName): void {
-        // $missionID = $this->getMissionIdByMissionName($missionName);
-
+    protected function addMissionSpace(int $spaceID): void {
         if (in_array((int) $spaceID, [18, 19, 20])) {
             static::DbQuery("
                 INSERT INTO board (`space_id`, `space_name`) 
@@ -184,6 +186,14 @@ trait MissionsTrait {
             UPDATE components
             SET location = 'mission_card_b'
             WHERE name = 'mission_card_$missionBName';
+        ");
+    }
+
+    protected function getLocationByMissionName(string $missionName): string {
+        return self::getUniqueValueFromDB("
+            SELECT location
+            FROM components
+            WHERE name = 'mission_card_$missionName';
         ");
     }
 
