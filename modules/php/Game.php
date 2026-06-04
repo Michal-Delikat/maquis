@@ -657,6 +657,9 @@ class Game extends \Table {
             case ROOM_PROPAGANDIST:
                 $this->addSpaceAction($spaceID, ACTION_INCREASE_MORALE);
                 break;
+            case ROOM_PHARMACIST:
+                $this->addSpaceAction($spaceID, ACTION_BUY_POISON);
+                break;
         }
     } 
 
@@ -861,6 +864,10 @@ class Game extends \Table {
                 $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_MILICE_HQ);
                 break;
+            case ACTION_BUY_POISON:
+                $this->spendTokens(RESOURCE_MEDICINE, 2);
+                $this->gainTokens(RESOURCE_POISON);
+                break;
         }
     } 
 
@@ -975,6 +982,8 @@ class Game extends \Table {
                     return $this->getMorale() >= 5 && $this->getResource(RESOURCE_EXPLOSIVES) >= 1 && $this->getResource(RESOURCE_WEAPON) >= 1;
                 case ACTION_DELIVER_2_POISON:
                     return $this->getResource(RESOURCE_POISON) >= 2;
+                case ACTION_BUY_POISON:
+                    return $this->getResource(RESOURCE_MEDICINE) >= 2;
                 default:
                     return true;
             }
@@ -1014,7 +1023,8 @@ class Game extends \Table {
             ACTION_DELIVER_2_EXPLOSIVES => clienttranslate("Deliver 2 Explosives"),
             ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate("Deliver Explosives and Weapon"),
             ACTION_DISCOVER_THE_PLANS => clienttranslate("Discover the Plans"),
-            ACTION_DELIVER_2_POISON => clienttranslate("Deliver 2 Poison")
+            ACTION_DELIVER_2_POISON => clienttranslate("Deliver 2 Poison"),
+            ACTION_BUY_POISON => clienttranslate("Buy poison")
         ];
 
         foreach($result as &$action) {

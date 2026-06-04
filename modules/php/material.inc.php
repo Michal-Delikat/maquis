@@ -21,7 +21,10 @@ const ROOM_DESCRIPTIONS = [
     ROOM_SAFE_HOUSE => 'Safe House',
     ROOM_CHEMISTS_LAB => 'Chemist\'s Lab',
     ROOM_PROPAGANDIST => 'Propagandist',
-    ROOM_COUNTERFEITER => 'Counterfeiter' 
+    ROOM_COUNTERFEITER => 'Counterfeiter',
+    ROOM_FIXER => 'Fixer',
+    ROOM_PHARMACIST => 'Pharmacist',
+    ROOM_FORGER => 'Forger'
 ];
 
 const ACTIONS = [

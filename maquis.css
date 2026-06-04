@@ -963,10 +963,10 @@
 #room-tiles {
     position: relative;
     width: 100%;
-    height: 15vw;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    row-gap: 2vh;
 }
 
 .room-tile-container {
@@ -1029,7 +1029,7 @@
     background-position-x: center;
 }
 
-#room-tile-room_counterfeiter > .rectangle-shape, #room-tile-room_smuggler > .rectangle-shape {
+:is(#room-tile-room_counterfeiter, #room-tile-room_smuggler, #room-tile-room_pharmacist) > .rectangle-shape {
     background-position-x: 49.9%;
 }
 
@@ -1037,7 +1037,7 @@
     background-position-x: right;
 }
 
-#room-tile-room_safe_house > .rectangle-shape, #room-tile-room_propagandist > .rectangle-shape {
+:is(#room-tile-room_safe_house, #room-tile-room_propagandist, #room-tile-room_forger) > .rectangle-shape {
     background-position-x: 93%;
 }
 
@@ -1055,24 +1055,24 @@
     background-position-x: right;
 }
 
-#room-tile-room_chemists_lab > .rectangle-shape, #room-tile-room_smuggler > .rectangle-shape, #room-tile-room_propagandist > .rectangle-shape {
+:is(#room-tile-room_chemists_lab, #room-tile-room_smuggler, #room-tile-room_propagandist) > .rectangle-shape {
     background-position-y: 63.5%;
 }
 
-/* #room-tile-7 {
+#room-tile-room_fixer {
     background-position-y: bottom;
 }
 
-#room-tile-8 {
+#room-tile-room_pharmacist {
     background-position-y: bottom;
     background-position-x: center;
 }
 
-#room-tile-9 {
+#room-tile-room_forger {
     background-position-y: bottom;
     background-position-x: right;
 }
 
-#room-tile-7 > .rectangle-shape, #room-tile-8 > .rectangle-shape, #room-tile-9 > .rectangle-shape {
-    background-position-y: 63.5%;
-} */
+:is(#room-tile-room_fixer, #room-tile-room_pharmacist, #room-tile-room_forger ) > .rectangle-shape {
+    background-position-y: 99.25%;
+}
