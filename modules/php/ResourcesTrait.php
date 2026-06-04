@@ -109,6 +109,7 @@ trait ResourcesTrait {
             RESOURCE_WEAPON => [RESOURCE_WEAPON, $this->getResource(RESOURCE_WEAPON), $this->getAvailableResource(RESOURCE_WEAPON)],
             RESOURCE_INTEL => [RESOURCE_INTEL, $this->getResource(RESOURCE_INTEL), $this->getAvailableResource(RESOURCE_INTEL)],
             RESOURCE_POISON => [RESOURCE_POISON, $this->getResource(RESOURCE_POISON), $this->getAvailableResource(RESOURCE_POISON)],
+            RESOURCE_FAKE_ID => [RESOURCE_FAKE_ID, $this->getResource(RESOURCE_FAKE_ID), $this->getAvailableResource(RESOURCE_FAKE_ID)],
         ];
     }
 

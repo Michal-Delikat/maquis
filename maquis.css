@@ -70,7 +70,7 @@
 #resources {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .resource-icon {
@@ -196,7 +196,7 @@
     background-position-y: top;
 }
 
-#fakeID-icon {
+#fake_id-icon {
     background-position-y: bottom;
     background-position-x: -50%;
 }
@@ -965,7 +965,7 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     row-gap: 2vh;
 }
 

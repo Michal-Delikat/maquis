@@ -85,6 +85,7 @@ const RESOURCE_INTEL = 'intel';
 const RESOURCE_MONEY = 'money';
 const RESOURCE_EXPLOSIVES = 'explosives';
 const RESOURCE_POISON = 'poison';
+const RESOURCE_FAKE_ID = 'fake_id';
 
 const ROOM_INFORMANT = 'informant';
 const ROOM_COUNTERFEITER = 'counterfeiter';
