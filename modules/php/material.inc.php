@@ -64,4 +64,6 @@ const ACTIONS = [
     ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => ['name' => ACTION_DELIVER_EXPLOSIVES_AND_WEAPON, 'is_safe' => true],
     ACTION_DISCOVER_THE_PLANS => ['name' => ACTION_DISCOVER_THE_PLANS, 'is_safe' => false],
     ACTION_DELIVER_2_POISON => ['name' => ACTION_DELIVER_2_POISON, 'is_safe' => true],
+    ACTION_BUY_POISON => ['name' => ACTION_BUY_POISON, 'is_safe' => false],
+    ACTION_FORGE_FAKE_ID => ['name' => ACTION_FORGE_FAKE_ID, 'is_safe' => false],
 ];

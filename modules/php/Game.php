@@ -660,6 +660,9 @@ class Game extends \Table {
             case ROOM_PHARMACIST:
                 $this->addSpaceAction($spaceID, ACTION_BUY_POISON);
                 break;
+            case ROOM_FORGER:
+                $this->addSpaceAction($spaceID, ACTION_FORGE_FAKE_ID);
+                break;
         }
     } 
 
@@ -868,6 +871,11 @@ class Game extends \Table {
                 $this->spendTokens(RESOURCE_MEDICINE, 2);
                 $this->gainTokens(RESOURCE_POISON);
                 break;
+            case ACTION_FORGE_FAKE_ID:
+                $this->spendTokens(RESOURCE_MONEY, 2);
+                $this->spendTokens(RESOURCE_INTEL);
+                $this->gainTokens(RESOURCE_FAKE_ID);
+                break;
         }
     } 
 
@@ -984,6 +992,8 @@ class Game extends \Table {
                     return $this->getResource(RESOURCE_POISON) >= 2;
                 case ACTION_BUY_POISON:
                     return $this->getResource(RESOURCE_MEDICINE) >= 2;
+                case ACTION_FORGE_FAKE_ID:
+                    return $this->getResource(RESOURCE_MONEY) >= 2 && $this->getResource(RESOURCE_INTEL);
                 default:
                     return true;
             }
@@ -1024,7 +1034,8 @@ class Game extends \Table {
             ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate("Deliver Explosives and Weapon"),
             ACTION_DISCOVER_THE_PLANS => clienttranslate("Discover the Plans"),
             ACTION_DELIVER_2_POISON => clienttranslate("Deliver 2 Poison"),
-            ACTION_BUY_POISON => clienttranslate("Buy poison")
+            ACTION_BUY_POISON => clienttranslate("Buy poison"),
+            ACTION_FORGE_FAKE_ID => clienttranslate("Forge fake ID")
         ];
 
         foreach($result as &$action) {

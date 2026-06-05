@@ -77,6 +77,7 @@ const ACTION_DELIVER_EXPLOSIVES_AND_WEAPON = 'deliver_explosives_and_weapon';
 const ACTION_DISCOVER_THE_PLANS = 'discover_the_plans';
 const ACTION_DELIVER_2_POISON = 'deliver_2_poison';
 const ACTION_BUY_POISON = 'buy_poison';
+const ACTION_FORGE_FAKE_ID = 'forge_fake_id';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';
