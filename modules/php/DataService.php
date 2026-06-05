@@ -33,7 +33,7 @@ class DataService {
         return '
             INSERT INTO board_action (space_id, action_name)
             VALUES
-            (2, \'' . ACTION_GET_WEAPON . '\'),
+            (2, \'' . ACTION_BUY_WEAPON . '\'),
             (4, \'' . ACTION_GET_INTEL . '\'),(4, \'' . ACTION_AIRDROP . '\'),
             (5, \'' . ACTION_GET_MEDICINE . '\'),
             (6, \'' . ACTION_PAY_FOR_MORALE . '\'),

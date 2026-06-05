@@ -519,7 +519,8 @@
 }
 
 #mission_card_bomb_the_barracks > .mission-space-3 {
-    left: 60.6%;
+    width: 25%;
+    left: 51.6%;
 }
 
 /* Right panel */

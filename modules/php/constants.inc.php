@@ -40,46 +40,50 @@ const MISSION_BOMB_FOR_THE_OFFICER = 'bomb_for_the_officer';
 const MISSION_MILICE_HQ = 'milice_hq';
 const MISSION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
 
-const ACTION_INSERT_MOLE = 'insert_mole';
-const ACTION_RECOVER_MOLE = 'recover_mole';
-const ACTION_POISON_SHEPARDS = 'poison_shepards';
-const ACTION_GET_SPARE_ROOM = 'get_spare_room';
-const ACTION_GET_WEAPON = 'get_weapon';
 const ACTION_GET_FOOD = 'get_food';
 const ACTION_GET_MEDICINE = 'get_medicine';
-const ACTION_GET_INTEL = 'get_intel';
 const ACTION_GET_MONEY_FOR_FOOD = 'get_money_for_food';
 const ACTION_GET_MONEY_FOR_MEDICINE = 'get_money_for_medicine';
 const ACTION_PAY_FOR_MORALE = 'pay_for_morale';
+const ACTION_AIRDROP = 'airdrop';
+const ACTION_GET_INTEL = 'get_intel';
+const ACTION_BUY_WEAPON = 'buy_weapon';
 const ACTION_GET_WORKER = 'get_worker';
 const ACTION_COLLECT_ITEMS = 'collect_items';
-const ACTION_WRITE_GRAFFITI = 'write_graffiti';
-const ACTION_COMPLETE_OFFICERS_MANSION_MISSION = 'complete_officers_mansion_mission';
-const ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION = 'complete_milice_parade_day_mission';
+const ACTION_GET_SPARE_ROOM = 'get_spare_room';
+const ACTION_RETURN = 'return';
+
 const ACTION_GET_MONEY = 'get_money';
-const ACTION_GET_EXPLOSIVES = 'get_explosives';
+const ACTION_BUY_EXPLOSIVES = 'buy_explosives';
 const ACTION_GET_3_FOOD = 'get_3_food';
 const ACTION_GET_3_MEDICINE = 'get_3_medicine';
 const ACTION_INCREASE_MORALE = 'increase_morale';
+const ACTION_BUY_POISON = 'buy_poison';
+const ACTION_FORGE_FAKE_ID = 'forge_fake_id';
+
+const ACTION_WRITE_GRAFFITI = 'write_graffiti';
+const ACTION_COMPLETE_OFFICERS_MANSION_MISSION = 'complete_officers_mansion_mission';
+const ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION = 'complete_milice_parade_day_mission';
+
 const ACTION_INFILTRATE_FACTORY = 'infiltrate_factory';
 const ACTION_SABOTAGE_FACTORY = 'sabotage_factory';
 const ACTION_DELIVER_INTEL = 'deliver_intel';
-const ACTION_AIRDROP = 'airdrop';
-const ACTION_GET_FAKE_ID = 'get_fake_id';
-const ACTION_GET_POISON = 'get_poison';
+const ACTION_INSERT_MOLE = 'insert_mole';
+const ACTION_RECOVER_MOLE = 'recover_mole';
+const ACTION_POISON_SHEPARDS = 'poison_shepards';
 const ACTION_COMPLETE_DOUBLE_AGENT_MISSION = 'complete_double_agent_mission';
-const ACTION_RETURN = 'return';
+
 const ACTION_DELIVER_2_WEAPONS = 'deliver_2_weapons';
 const ACTION_DELIVER_MONEY_AND_2_FOOD = 'deliver_money_and_2_food';
 const ACTION_DELIVER_3_EXPLOSIVES = 'deliver_3_explosives';
 const ACTION_TRAIN_A_CRYPTOGRAPHER = 'train_a_cryptographer';
 const ACTION_DELIVER_2_EXPLOSIVES = 'deliver_2_explosives';
 const ACTION_DELIVER_EXPLOSIVES_AND_WEAPON = 'deliver_explosives_and_weapon';
+
 const ACTION_DISCOVER_THE_PLANS = 'discover_the_plans';
 const ACTION_DELIVER_2_POISON = 'deliver_2_poison';
-const ACTION_BUY_POISON = 'buy_poison';
-const ACTION_FORGE_FAKE_ID = 'forge_fake_id';
-const ACTION_RECON_THE_BARRACKS = 'recond_the_barracks';
+const ACTION_RECON_THE_BARRACKS = 'recon_the_barracks';
+const ACTION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';
