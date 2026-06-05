@@ -157,7 +157,8 @@ class Game extends \Table {
             MISSION_BOMB_FOR_THE_OFFICER
         );
         $threeStarMissions = array(
-            MISSION_MILICE_HQ
+            MISSION_MILICE_HQ,
+            MISSION_BOMB_THE_BARRACKS
         );
 
         while ($missionA === $missionB) {
@@ -177,6 +178,9 @@ class Game extends \Table {
 
         if ($this->getIsMissionSelected(MISSION_MILICE_HQ)) {
             $this->setMorale(4, false);
+        }
+        if ($this->getIsMissionSelected(MISSION_BOMB_THE_BARRACKS)) {
+            $this->setActiveSoldiers(3);
         }
 
         // Activate first player once everything has been initialized and ready.

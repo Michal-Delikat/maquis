@@ -306,20 +306,37 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    background-image: url('img/Mission_Cards_0star.jpg');
-    background-size: 400%;
     border-radius: 10px;
     backface-visibility: hidden;
 }
 
 .mission-card-back {
-    background-position-x: 66.7%;
     transform: rotateY(180deg);
+}
+
+.mission-space {
+    width: 26.7%;
+    height: 14%;
+}
+
+.mission-space > .worker-space {
+    top: -30%;
 }
 
 .flipped > .mission-space {
     display: none;
-} 
+}
+
+/* 0-star missions */
+
+:is(#mission_card_milice_parade_day, #mission_card_officers_mansion) > .mission-card-face {
+    background-image: url('img/Mission_Cards_0star.jpg');
+    background-size: 400%;
+}
+
+:is(#mission_card_milice_parade_day, #mission_card_officers_mansion) > .mission-card-back {
+    background-position-x: 66.7%;
+}
 
 #mission_card_milice_parade_day > .mission-card-front {
     background-position-x: 0;
@@ -329,9 +346,16 @@
     background-position-x: 33.3%;
 }
 
+#mission_card_officers_mansion > .mission-space-1 {
+    left: 65%;
+    top: 50%;
+}
+
 #mission_card_officers_mansion > :is(.mission-space-2, .mission-space-3) {
     display: none;
 }
+
+/* 1-star missions */
 
 :is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_infiltration, #mission_card_german_shepards, #mission_card_double_agent) > .mission-card-face {
     background-image: url('img/Mission_Cards_1star.jpg');
@@ -342,23 +366,6 @@
     background-position: 100% bottom;
 }
 
-:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-face {
-    background-image: url('img/Mission_Cards_2star.jpg');
-}
-
-:is(#mission_card_milice_hq) {
-    aspect-ratio: .585;
-}
-
-:is(#mission_card_milice_hq) > .mission-card-face {
-    background-image: url('img/Mission_Cards_3star.jpg');
-    background-size: 500%;
-}
-
-:is(#mission_card_milice_hq) > .mission-card-back {
-    background-position-x: right;
-}
-
 #mission_card_underground_newspaper > .mission-card-front {
     background-position-x: 50%;
 }
@@ -367,37 +374,12 @@
     background-position-x: 100%;
 }
 
-#mission_card_german_shepards > .mission-card-front {
+:is(#mission_card_german_shepards, #mission_card_double_agent) > .mission-card-face {
     background-position-y: bottom;
 }
 
 #mission_card_double_agent > .mission-card-front {
     background-position-x: center;
-    background-position-y: bottom;
-}
-
-:is(#mission_card_assassination, #mission_card_take_out_the_bridges) > .mission-card-front {
-    background-position-x: 33%;
-}
-
-:is(#mission_card_destroy_the_train, #mission_card_bomb_for_the_officer) > .mission-card-front {
-    background-position-x: 66.7%;
-}
-
-#mission_card_liberate_the_town > .mission-card-front {
-    background-position-x: 100%;
-}
-
-:is(#mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-front {
-    background-position-y: 100%;
-}
-
-:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-back {
-    background-position: 100% bottom;
-}
-
-#mission_card_officers_mansion > .mission-space-1 {
-    left: 65%;
 }
 
 :is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-1 {
@@ -428,6 +410,33 @@
     left: 22%;
 }
 
+/* 2-star missions  */
+
+:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-face {
+    background-image: url('img/Mission_Cards_2star.jpg');
+    background-size: 400%;
+}
+
+:is(#mission_card_assassination, #mission_card_take_out_the_bridges) > .mission-card-front {
+    background-position-x: 33%;
+}
+
+:is(#mission_card_destroy_the_train, #mission_card_bomb_for_the_officer) > .mission-card-front {
+    background-position-x: 66.7%;
+}
+
+#mission_card_liberate_the_town > .mission-card-front {
+    background-position-x: 100%;
+}
+
+:is(#mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-front {
+    background-position-y: 100%;
+}
+
+:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-back {
+    background-position: 100% bottom;
+}
+
 #mission_card_aid_the_spy > .mission-space-2 {
     left: 51%;
 }
@@ -456,7 +465,22 @@
     left: 58%
 }
 
-#mission_card_milice_hq .mission-space {
+/* 3-star missions */
+
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks) {
+    aspect-ratio: .585;
+}
+
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks) > .mission-card-face {
+    background-image: url('img/Mission_Cards_3star.jpg');
+    background-size: 500%;
+}
+
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks) > .mission-card-back {
+    background-position-x: right;
+}
+
+#mission_card_milice_hq > .mission-space {
     width: 25%;
     height: 10%;
 }
@@ -473,10 +497,32 @@
     left: 72%;
 }
 
-#cards {
-    display: flex;
-    justify-content: space-around;
+#mission_card_bomb_the_barracks > .mission-card-face {
+    background-position-x: 25%;
 }
+
+#mission_card_bomb_the_barracks > .mission-space {
+    top: 37%;
+    height: 10%;
+}
+
+#mission_card_bomb_the_barracks > :is(.mission-space-1, .mission-space-2) {
+    width: 20%;
+}
+
+#mission_card_bomb_the_barracks > .mission-space-1 {
+    left: 7.6%;
+}
+
+#mission_card_bomb_the_barracks > .mission-space-2 {
+    left: 29.6%;
+}
+
+#mission_card_bomb_the_barracks > .mission-space-3 {
+    left: 60.6%;
+}
+
+/* Right panel */
 
 #right-panel {
     width: 100%;
@@ -486,6 +532,11 @@
     #right-panel {
         width: 45%;
     }
+}
+
+#cards {
+    display: flex;
+    justify-content: space-around;
 }
 
 #cards > * {
@@ -572,17 +623,6 @@
 .board-space {
     width: 14%;
     aspect-ratio: 1;
-}
-
-.mission-space {
-    width: 26.7%;
-    height: 13.5%;
-    top: 50.5%;
-    left: 66%
-}
-
-.mission-space > .worker-space {
-    top: -30%;
 }
 
 .room-tile-space {

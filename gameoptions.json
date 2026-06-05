@@ -53,9 +53,6 @@
             },
             "13": {
                 "name": "Bomb for the Officer"
-            },
-            "14": {
-                "name": "Milice HQ"
             }
         },
         "default": 0
@@ -117,6 +114,9 @@
             },
             "14": {
                 "name": "Milice HQ"
+            },
+            "15": {
+                "name": "Bomb the Barracks"
             }
         },
         "default": 1

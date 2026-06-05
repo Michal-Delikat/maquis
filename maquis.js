@@ -286,6 +286,18 @@ function (dojo, declare) {
                             ${_('If the soldier track was on 3+ already, success; otherwise, major success.')}
                         </p>`;
                         break;
+                    case 'bomb_the_barracks':
+                        description = `<p>
+                            ${_('German soldiers are stationed right outside town. Draw them out with distraction and bomb the barracks to slow the Nazi war machine.')}<br><br>
+                            ${_('Soldier track starts on 3')}<br><br>
+                            ${_('Objective 1:')}<br>
+                            ${_('Visit this location to recon the barracks')}<br><br>
+                            ${_('Objective 2:')}<br>
+                            ${_('Visit this location to recon the barracks')}<br><br>
+                            ${_('Objective 3:')}<br>
+                            ${_('[SAFE] Spend a Fake ID and Two Explosives on this location AND, on the same day, send a second worker to an empty field and spend a Weapon to distract the soldiers to achieve a major success.')}
+                        </p>`;
+                        break;
                 }
                     
                 this.addTooltipHtml(mission, 

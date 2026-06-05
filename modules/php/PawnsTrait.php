@@ -24,7 +24,7 @@ trait PawnsTrait {
     }
 
     function getNextActiveSoldier(): string {
-        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND state = 'active' LIMIT 1;");
+        return $this->getUniqueValueFromDb("SELECT name FROM components WHERE name LIKE 'soldier%' AND NOT state = 'placed' LIMIT 1;");
     }
 
     function getLastAvailableWorker(): string {

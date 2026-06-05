@@ -38,6 +38,7 @@ const MISSION_TAKE_OUT_THE_BRIDGES = 'take_out_the_bridges';
 const MISSION_BOMB_FOR_THE_OFFICER = 'bomb_for_the_officer';
 
 const MISSION_MILICE_HQ = 'milice_hq';
+const MISSION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
 
 const ACTION_INSERT_MOLE = 'insert_mole';
 const ACTION_RECOVER_MOLE = 'recover_mole';
@@ -78,6 +79,7 @@ const ACTION_DISCOVER_THE_PLANS = 'discover_the_plans';
 const ACTION_DELIVER_2_POISON = 'deliver_2_poison';
 const ACTION_BUY_POISON = 'buy_poison';
 const ACTION_FORGE_FAKE_ID = 'forge_fake_id';
+const ACTION_RECON_THE_BARRACKS = 'recond_the_barracks';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';
