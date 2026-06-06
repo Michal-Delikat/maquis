@@ -67,6 +67,10 @@ trait MarkersTrait {
     }
 
     function setActiveSoldiers(int $soldierNumber): void {
+        if ($soldierNumber > 5) {
+            $soldierNumber = 5;
+        }
+
         self::DbQuery("
             UPDATE components
             SET location = $soldierNumber

@@ -71,5 +71,7 @@ const ACTIONS = [
     ACTION_DELIVER_2_POISON => ['name' => ACTION_DELIVER_2_POISON, 'is_safe' => true],
     ACTION_RECON_THE_BARRACKS => ['name' => ACTION_RECON_THE_BARRACKS, 'is_safe' => false],
     ACTION_BOMB_THE_BARRACKS => ['name' => ACTION_BOMB_THE_BARRACKS, 'is_safe' => true],
-    ACTION_BRIBE_THE_CLERK => ['name' => ACTION_BRIBE_THE_CLERK, 'is_safe' => false]
+    ACTION_BRIBE_THE_CLERK => ['name' => ACTION_BRIBE_THE_CLERK, 'is_safe' => false],
+    ACTION_KILL_THE_RESISTANCE_LEADER => ['name' => ACTION_KILL_THE_RESISTANCE_LEADER, 'is_safe' => true],
+    ACTION_FREE_THE_RESISTANCE_LEADER => ['name' => ACTION_FREE_THE_RESISTANCE_LEADER, 'is_safe' => true],
 ];

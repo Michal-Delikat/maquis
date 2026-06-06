@@ -86,6 +86,8 @@ const ACTION_DELIVER_2_POISON = 'deliver_2_poison';
 const ACTION_RECON_THE_BARRACKS = 'recon_the_barracks';
 const ACTION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
 const ACTION_BRIBE_THE_CLERK = 'bribe_the_clerk';
+const ACTION_KILL_THE_RESISTANCE_LEADER = 'kill_the_resistance_leader';
+const ACTION_FREE_THE_RESISTANCE_LEADER = 'free_the_resistance_leader';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';

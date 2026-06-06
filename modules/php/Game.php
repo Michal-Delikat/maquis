@@ -184,9 +184,6 @@ class Game extends \Table {
             $this->setActiveSoldiers(3);
         }
 
-        $this->gainResources(RESOURCE_EXPLOSIVES, 2);
-        $this->gainResources(RESOURCE_FAKE_ID);
-
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -900,6 +897,27 @@ class Game extends \Table {
                 $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_BOMB_THE_BARRACKS);
                 break;
+            case ACTION_BRIBE_THE_CLERK:
+                $this->spendResources(RESOURCE_INTEL);
+                $this->spendResources(RESOURCE_MONEY);
+                $this->placeMarker(21);
+                $this->addMissionSpace(22);
+                $this->addSpaceAction(22, ACTION_KILL_THE_RESISTANCE_LEADER);
+                $this->addSpaceAction(22, ACTION_FREE_THE_RESISTANCE_LEADER);
+                break;
+            case ACTION_KILL_THE_RESISTANCE_LEADER:
+                $this->spendResources(RESOURCE_POISON);
+                $this->returnOrArrest($this->getActiveSpace());
+                $this->completeMission(MISSION_FREE_THE_RESISTANCE_LEADER);
+                break;
+            case ACTION_FREE_THE_RESISTANCE_LEADER:
+                $this->spendResources(RESOURCE_FAKE_ID);
+                $this->spendResources(RESOURCE_WEAPON, 2);
+                $this->spendResources(RESOURCE_MEDICINE);
+                $this->returnOrArrest(22);
+                $this->setActiveSoldiers($this->getActiveSoldiers() + 2);
+                $this->completeMission(MISSION_FREE_THE_RESISTANCE_LEADER);
+                break;
         }
     } 
 
@@ -1020,6 +1038,12 @@ class Game extends \Table {
                     return $this->getResource(RESOURCE_MONEY) >= 2 && $this->getResource(RESOURCE_INTEL);
                 case ACTION_BOMB_THE_BARRACKS:
                     return $this->getResource(RESOURCE_EXPLOSIVES) >= 2 && $this->getResource(RESOURCE_FAKE_ID);
+                case ACTION_BRIBE_THE_CLERK:
+                    return $this->getRoundNumber() <= 5 && $this->getResource(RESOURCE_MONEY) && $this->getResource(RESOURCE_INTEL);
+                case ACTION_KILL_THE_RESISTANCE_LEADER:
+                    return $this->getRoundNumber() <= 9 && $this->getResource(RESOURCE_POISON);
+                case ACTION_FREE_THE_RESISTANCE_LEADER:
+                    return $this->getRoundNumber() === 10 && $this->getResource(RESOURCE_FAKE_ID) && $this->getResource(RESOURCE_WEAPON) >= 2 && $this->getResource(RESOURCE_MEDICINE);
                 default:
                     return true;
             }
@@ -1063,7 +1087,10 @@ class Game extends \Table {
             ACTION_BUY_POISON => clienttranslate("Buy poison"),
             ACTION_FORGE_FAKE_ID => clienttranslate("Forge fake ID"),
             ACTION_RECON_THE_BARRACKS => clienttranslate("Recon the Barracks"),
-            ACTION_BOMB_THE_BARRACKS => clienttranslate("Bomb the Barracks")
+            ACTION_BOMB_THE_BARRACKS => clienttranslate("Bomb the Barracks"),
+            ACTION_BRIBE_THE_CLERK => clienttranslate("Bribe the clerk"),
+            ACTION_FREE_THE_RESISTANCE_LEADER => clienttranslate("Free the resistance leader"),
+            ACTION_KILL_THE_RESISTANCE_LEADER => clienttranslate("Kill the resistance leader"),
         ];
 
         foreach($result as &$action) {
