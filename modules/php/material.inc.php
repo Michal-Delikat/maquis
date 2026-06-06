@@ -69,5 +69,7 @@ const ACTIONS = [
 
     ACTION_DISCOVER_THE_PLANS => ['name' => ACTION_DISCOVER_THE_PLANS, 'is_safe' => false],
     ACTION_DELIVER_2_POISON => ['name' => ACTION_DELIVER_2_POISON, 'is_safe' => true],
-    ACTION_RECON_THE_BARRACKS => ['name' => ACTION_RECON_THE_BARRACKS, 'is_safe' => false]
+    ACTION_RECON_THE_BARRACKS => ['name' => ACTION_RECON_THE_BARRACKS, 'is_safe' => false],
+    ACTION_BOMB_THE_BARRACKS => ['name' => ACTION_BOMB_THE_BARRACKS, 'is_safe' => true],
+    ACTION_BRIBE_THE_CLERK => ['name' => ACTION_BRIBE_THE_CLERK, 'is_safe' => false]
 ];

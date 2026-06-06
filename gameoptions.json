@@ -117,6 +117,9 @@
             },
             "15": {
                 "name": "Bomb the Barracks"
+            },
+            "16": {
+                "name": "Free the Resistance Leader"
             }
         },
         "default": 1

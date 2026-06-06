@@ -158,7 +158,8 @@ class Game extends \Table {
         );
         $threeStarMissions = array(
             MISSION_MILICE_HQ,
-            MISSION_BOMB_THE_BARRACKS
+            MISSION_BOMB_THE_BARRACKS,
+            MISSION_FREE_THE_RESISTANCE_LEADER
         );
 
         while ($missionA === $missionB) {
@@ -182,6 +183,9 @@ class Game extends \Table {
         if ($this->getIsMissionSelected(MISSION_BOMB_THE_BARRACKS)) {
             $this->setActiveSoldiers(3);
         }
+
+        $this->gainResources(RESOURCE_EXPLOSIVES, 2);
+        $this->gainResources(RESOURCE_FAKE_ID);
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
@@ -890,6 +894,12 @@ class Game extends \Table {
                     $this->addSpaceAction($activeSpace + 1, ACTION_BOMB_THE_BARRACKS);
                 }
                 break;
+            case ACTION_BOMB_THE_BARRACKS:
+                $this->spendResources(RESOURCE_EXPLOSIVES, 2);
+                $this->spendResources(RESOURCE_FAKE_ID);
+                $this->returnOrArrest($this->getActiveSpace());
+                $this->completeMission(MISSION_BOMB_THE_BARRACKS);
+                break;
         }
     } 
 
@@ -1008,6 +1018,8 @@ class Game extends \Table {
                     return $this->getResource(RESOURCE_MEDICINE) >= 2;
                 case ACTION_FORGE_FAKE_ID:
                     return $this->getResource(RESOURCE_MONEY) >= 2 && $this->getResource(RESOURCE_INTEL);
+                case ACTION_BOMB_THE_BARRACKS:
+                    return $this->getResource(RESOURCE_EXPLOSIVES) >= 2 && $this->getResource(RESOURCE_FAKE_ID);
                 default:
                     return true;
             }
@@ -1050,7 +1062,8 @@ class Game extends \Table {
             ACTION_DELIVER_2_POISON => clienttranslate("Deliver 2 Poison"),
             ACTION_BUY_POISON => clienttranslate("Buy poison"),
             ACTION_FORGE_FAKE_ID => clienttranslate("Forge fake ID"),
-            ACTION_RECON_THE_BARRACKS => clienttranslate("Recon the Barracks")
+            ACTION_RECON_THE_BARRACKS => clienttranslate("Recon the Barracks"),
+            ACTION_BOMB_THE_BARRACKS => clienttranslate("Bomb the Barracks")
         ];
 
         foreach($result as &$action) {

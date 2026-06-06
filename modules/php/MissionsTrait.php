@@ -14,7 +14,8 @@ trait MissionsTrait {
             MISSION_DESTROY_THE_TRAIN,
             MISSION_CODED_MESSAGES,
             MISSION_BOMB_FOR_THE_OFFICER,
-            MISSION_BOMB_THE_BARRACKS
+            MISSION_BOMB_THE_BARRACKS,
+            MISSION_FREE_THE_RESISTANCE_LEADER
         ];
 
         if (in_array($missionAName, $missionsWithSpaces)) {
@@ -83,12 +84,16 @@ trait MissionsTrait {
             $this->addSpaceAction($missionSpace, ACTION_DELIVER_EXPLOSIVES_AND_WEAPON);
         }
 
-        if (in_array(MISSION_MILICE_HQ, $missionNames)) {
+        if ($missionBName === MISSION_MILICE_HQ) {
             $this->addSpaceAction(1, ACTION_DISCOVER_THE_PLANS);
         }
 
-        if (in_array(MISSION_BOMB_THE_BARRACKS, $missionNames)) {
+        if ($missionBName === MISSION_BOMB_THE_BARRACKS) {
             $this->addSpaceAction(21, ACTION_RECON_THE_BARRACKS);
+        }
+
+        if ($missionBName === MISSION_FREE_THE_RESISTANCE_LEADER) {
+            $this->addSpaceAction(21, ACTION_BRIBE_THE_CLERK);
         }
     }
 

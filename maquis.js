@@ -298,6 +298,15 @@ function (dojo, declare) {
                             ${_('[SAFE] Spend a Fake ID and Two Explosives on this location AND, on the same day, send a second worker to an empty field and spend a Weapon to distract the soldiers to achieve a major success.')}
                         </p>`;
                         break;
+                    case 'free_the_resistance_leader':
+                        description = `<p>
+                            ${_('A resistance leader has been captured and will be transported away from town soon. Free him from the occupiers... or make sure he at least can\'t tell them his secrets.')}<br><br>
+                            ${_('Objective 1:')}<br>
+                            ${_('Spend Info and Money on this location before end of day 5 to bribe a clerk to discover the location of the prisoner.')}<br><br>
+                            ${_('Objective 2:')}<br>
+                            ${_('[SAFE] Spend a Poison on this location before end of day 9 to succeed the mission OR spend a Fake ID, two Weapons and a Medicine to increase the soldier track by 2 on day 10 to achieve a major success.')}
+                        </p>`;
+                        break;
                 }
                     
                 this.addTooltipHtml(mission, 

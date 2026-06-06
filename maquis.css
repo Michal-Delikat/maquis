@@ -467,16 +467,16 @@
 
 /* 3-star missions */
 
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks) {
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) {
     aspect-ratio: .585;
 }
 
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks) > .mission-card-face {
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) > .mission-card-face {
     background-image: url('img/Mission_Cards_3star.jpg');
     background-size: 500%;
 }
 
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks) > .mission-card-back {
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) > .mission-card-back {
     background-position-x: right;
 }
 
@@ -497,11 +497,11 @@
     left: 72%;
 }
 
-#mission_card_bomb_the_barracks > .mission-card-face {
+#mission_card_bomb_the_barracks > .mission-card-front {
     background-position-x: 25%;
 }
 
-#mission_card_bomb_the_barracks > .mission-space {
+:is(#mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) > .mission-space {
     top: 37%;
     height: 10%;
 }
@@ -521,6 +521,24 @@
 #mission_card_bomb_the_barracks > .mission-space-3 {
     width: 25%;
     left: 51.6%;
+}
+
+#mission_card_free_the_resistance_leader > .mission-card-front {
+    background-position-x: 50%;
+}
+
+#mission_card_free_the_resistance_leader > .mission-space-1 {
+    left: 4%;
+    width: 24%;
+}
+
+#mission_card_free_the_resistance_leader > .mission-space-2 {
+    left: 25%;
+    width: 20%
+}
+
+#mission_card_free_the_resistance_leader > .mission-space-3 {
+    display: none;
 }
 
 /* Right panel */

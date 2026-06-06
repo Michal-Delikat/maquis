@@ -39,6 +39,7 @@ const MISSION_BOMB_FOR_THE_OFFICER = 'bomb_for_the_officer';
 
 const MISSION_MILICE_HQ = 'milice_hq';
 const MISSION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
+const MISSION_FREE_THE_RESISTANCE_LEADER = 'free_the_resistance_leader';
 
 const ACTION_GET_FOOD = 'get_food';
 const ACTION_GET_MEDICINE = 'get_medicine';
@@ -84,6 +85,7 @@ const ACTION_DISCOVER_THE_PLANS = 'discover_the_plans';
 const ACTION_DELIVER_2_POISON = 'deliver_2_poison';
 const ACTION_RECON_THE_BARRACKS = 'recon_the_barracks';
 const ACTION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
+const ACTION_BRIBE_THE_CLERK = 'bribe_the_clerk';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';
