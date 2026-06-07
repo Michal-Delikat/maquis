@@ -120,6 +120,9 @@
             },
             "16": {
                 "name": "Free the Resistance Leader"
+            },
+            "17": {
+                "name": "Destroy AA Guns"
             }
         },
         "default": 1

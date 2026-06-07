@@ -206,6 +206,11 @@
     background-position-x: center;
 }
 
+.aa-gun-token {
+    background-position-y: bottom;
+    background-position-x: left; 
+}
+
 #board-and-missions {
     width: 100%;
     margin-bottom: 32px;
@@ -467,16 +472,16 @@
 
 /* 3-star missions */
 
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) {
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) {
     aspect-ratio: .585;
 }
 
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) > .mission-card-face {
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) > .mission-card-face {
     background-image: url('img/Mission_Cards_3star.jpg');
     background-size: 500%;
 }
 
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) > .mission-card-back {
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) > .mission-card-back {
     background-position-x: right;
 }
 
@@ -538,6 +543,21 @@
 }
 
 #mission_card_free_the_resistance_leader > .mission-space-3 {
+    display: none;
+}
+
+#mission_card_destroy_aa_guns > .mission-card-front {
+    background-position-x: 75%;
+}
+
+#mission_card_destroy_aa_guns > .mission-space-1 {
+    width: 25.6%;
+    height: 10%;
+    left: 4%;
+    top: 36.6%;
+}
+
+#mission_card_destroy_aa_guns > :is(.mission-space-2, .mission-space-3) {
     display: none;
 }
 

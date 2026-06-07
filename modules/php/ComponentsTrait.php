@@ -10,4 +10,14 @@ trait ComponentsTrait {
             WHERE name = '$componentID';
         ");
     }
+
+    function removeToken(int $spaceID, string $tokenType): void {
+        static::DbQuery("
+            UPDATE components
+            SET location = 'off_board', state = 'available'
+            WHERE name LIKE $tokenType AND location = '$spaceID';
+        ");
+
+        $this->notify->all()
+    }
 }

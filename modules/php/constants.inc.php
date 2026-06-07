@@ -40,6 +40,7 @@ const MISSION_BOMB_FOR_THE_OFFICER = 'bomb_for_the_officer';
 const MISSION_MILICE_HQ = 'milice_hq';
 const MISSION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
 const MISSION_FREE_THE_RESISTANCE_LEADER = 'free_the_resistance_leader';
+const MISSION_DESTROY_AA_GUNS = 'destroy_aa_guns';
 
 const ACTION_GET_FOOD = 'get_food';
 const ACTION_GET_MEDICINE = 'get_medicine';
@@ -88,6 +89,8 @@ const ACTION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
 const ACTION_BRIBE_THE_CLERK = 'bribe_the_clerk';
 const ACTION_KILL_THE_RESISTANCE_LEADER = 'kill_the_resistance_leader';
 const ACTION_FREE_THE_RESISTANCE_LEADER = 'free_the_resistance_leader';
+const ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES = 'destroy_aa_gun_with_explosives';
+const ACTION_DESTROY_AA_GUN_WITH_WEAPON = 'destroy_aa_gun_with_weapon';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';
@@ -107,5 +110,7 @@ const ROOM_PROPAGANDIST = 'propagandist';
 const ROOM_FIXER = 'fixer';
 const ROOM_PHARMACIST = 'pharmacist';
 const ROOM_FORGER = 'forger';
+
+const TOKEN_AA_GUN = 'aa';
 
 ?>

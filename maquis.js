@@ -307,6 +307,16 @@ function (dojo, declare) {
                             ${_('[SAFE] Spend a Poison on this location before end of day 9 to succeed the mission OR spend a Fake ID, two Weapons and a Medicine to increase the soldier track by 2 on day 10 to achieve a major success.')}
                         </p>`;
                         break;
+                    case 'destroy_aa_guns':
+                        description = `<p>
+                            ${_('The Liberation of France approaches adn the Allies must surely be near. Take out the AA guns that the occupiers have positioned in and around town to ensure air support.')}<br><br>
+                            ${_('Place AA gun tokens on both fields, Rue Baradat, and the Black Market. A fifth gun emplacement is on this location.')}<br><br>
+                            ${_('Objective:')}<br>
+                            ${_('[SAFE] Spend an explosive or a weapon in a AA gun emplacement\'s position to destroy it.')}<br><br>
+                            ${_('No airdrops can be made at a field with a AA gun in place.')}<br><br>
+                            ${_('If 3 AA guns are disabled the mission is a success; if all 5 are disabled the mission is a major success.')}
+                        </p>`;
+                        break;
                 }
                     
                 this.addTooltipHtml(mission, 

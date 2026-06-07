@@ -15,7 +15,8 @@ trait MissionsTrait {
             MISSION_CODED_MESSAGES,
             MISSION_BOMB_FOR_THE_OFFICER,
             MISSION_BOMB_THE_BARRACKS,
-            MISSION_FREE_THE_RESISTANCE_LEADER
+            MISSION_FREE_THE_RESISTANCE_LEADER,
+            MISSION_DESTROY_AA_GUNS
         ];
 
         if (in_array($missionAName, $missionsWithSpaces)) {
@@ -86,14 +87,19 @@ trait MissionsTrait {
 
         if ($missionBName === MISSION_MILICE_HQ) {
             $this->addSpaceAction(1, ACTION_DISCOVER_THE_PLANS);
-        }
-
-        if ($missionBName === MISSION_BOMB_THE_BARRACKS) {
+            $this->setMorale(4, false);
+        } else if ($missionBName === MISSION_BOMB_THE_BARRACKS) {
             $this->addSpaceAction(21, ACTION_RECON_THE_BARRACKS);
-        }
-
-        if ($missionBName === MISSION_FREE_THE_RESISTANCE_LEADER) {
+            $this->setActiveSoldiers(3);
+        } else if ($missionBName === MISSION_FREE_THE_RESISTANCE_LEADER) {
             $this->addSpaceAction(21, ACTION_BRIBE_THE_CLERK);
+        } else if ($missionBName === MISSION_DESTROY_AA_GUNS) {
+            $this->placeTokens(1, 'aa_gun');
+            $this->placeTokens(7, 'aa_gun');
+            $this->placeTokens(14, 'aa_gun');
+            $this->placetokens(17, 'aa_gun');
+            $this->addSpaceAction([1, 7, 14, 17, 21], ACTION_DESTROY_AA_GUN_WITH_WEAPON);
+            $this->addSpaceAction([1, 7, 14, 17, 21], ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES);
         }
     }
 

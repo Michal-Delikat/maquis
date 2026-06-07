@@ -159,7 +159,8 @@ class Game extends \Table {
         $threeStarMissions = array(
             MISSION_MILICE_HQ,
             MISSION_BOMB_THE_BARRACKS,
-            MISSION_FREE_THE_RESISTANCE_LEADER
+            MISSION_FREE_THE_RESISTANCE_LEADER,
+            MISSION_DESTROY_AA_GUNS
         );
 
         while ($missionA === $missionB) {
@@ -176,13 +177,6 @@ class Game extends \Table {
 
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
-
-        if ($this->getIsMissionSelected(MISSION_MILICE_HQ)) {
-            $this->setMorale(4, false);
-        }
-        if ($this->getIsMissionSelected(MISSION_BOMB_THE_BARRACKS)) {
-            $this->setActiveSoldiers(3);
-        }
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
@@ -634,10 +628,13 @@ class Game extends \Table {
         return $this->getBridgesWithMarkers();
     }
 
-    protected function addSpaceAction(int $spaceID, string $actionName): void {
+    protected function addSpaceAction(int|array $spaceID, string $actionName): void {
+        $spaceIDs = is_array($spaceID) ? $spaceID : [$spaceID];
+        $values = implode(', ', array_map(fn($id) => "($id, '$actionName')", $spaceIDs));
+        
         self::DbQuery("
             INSERT INTO board_action (space_id, action_name)
-            VALUES ($spaceID, '$actionName');
+            VALUES $values;
         ");
     }
 
@@ -918,6 +915,15 @@ class Game extends \Table {
                 $this->setActiveSoldiers($this->getActiveSoldiers() + 2);
                 $this->completeMission(MISSION_FREE_THE_RESISTANCE_LEADER);
                 break;
+            case ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES:
+                $this->spendResources(RESOURCE_EXPLOSIVES);
+                $activeSpace = $this->getActiveSpace();
+                if ($activeSpace === 21) {
+                    $this->placeMarker(21);
+                    $this->returnOrArrest(21);
+                } else {
+                    $this->removeToken($activeSpace, TOKEN_AA_GUN);
+                }
         }
     } 
 
@@ -1004,6 +1010,8 @@ class Game extends \Table {
                     return $this->getResource(RESOURCE_WEAPON) > 0 && $this->isParadeDay();
                 case ACTION_GET_WORKER:
                     return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResistanceToRecruit() > 0;
+                case ACTION_COLLECT_ITEMS:
+                    return $this->getTokenTypeInSpace($this->getActiveSpace()) !== TOKEN_AA_GUN;
                 case ACTION_GET_SPARE_ROOM:
                     return !$this->getIsRoomPlaced($spaceID) && $this->getResource(RESOURCE_MONEY) >= 2;
                 case ACTION_BUY_EXPLOSIVES:
@@ -1044,6 +1052,10 @@ class Game extends \Table {
                     return $this->getRoundNumber() <= 9 && $this->getResource(RESOURCE_POISON);
                 case ACTION_FREE_THE_RESISTANCE_LEADER:
                     return $this->getRoundNumber() === 10 && $this->getResource(RESOURCE_FAKE_ID) && $this->getResource(RESOURCE_WEAPON) >= 2 && $this->getResource(RESOURCE_MEDICINE);
+                case ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES:
+                    return $this->getResource(RESOURCE_EXPLOSIVES) && $this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN;
+                case ACTION_DESTROY_AA_GUN_WITH_WEAPON:
+                    return $this->getResource(RESOURCE_WEAPON) && $this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN;
                 default:
                     return true;
             }
@@ -1091,6 +1103,8 @@ class Game extends \Table {
             ACTION_BRIBE_THE_CLERK => clienttranslate("Bribe the clerk"),
             ACTION_FREE_THE_RESISTANCE_LEADER => clienttranslate("Free the resistance leader"),
             ACTION_KILL_THE_RESISTANCE_LEADER => clienttranslate("Kill the resistance leader"),
+            ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES => clienttranslate("Destroy AA gun with explosives"),
+            ACTION_DESTROY_AA_GUN_WITH_WEAPON => clienttranslate("Destroy AA gun with weapon"),
         ];
 
         foreach($result as &$action) {

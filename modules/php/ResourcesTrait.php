@@ -44,7 +44,7 @@ trait ResourcesTrait {
         ");
     }
 
-    protected function placeTokens(int $spaceID, string $tokenType, int $quantity): void {
+    protected function placeTokens(int $spaceID, string $tokenType, int $quantity = 1): void {
         $quantity = min($quantity, $this->getAvailableResource($tokenType));
 
         for ($i = 1; $i <= $quantity; $i++) {
