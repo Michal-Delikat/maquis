@@ -17,7 +17,5 @@ trait ComponentsTrait {
             SET location = 'off_board', state = 'available'
             WHERE name LIKE $tokenType AND location = '$spaceID';
         ");
-
-        $this->notify->all()
     }
 }
