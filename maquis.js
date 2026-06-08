@@ -731,6 +731,10 @@ function (dojo, declare) {
             this.placeTokens(tokens);
         },
 
+        notif_aaGunRemoved: function({location}) {
+            this.removeAAGun(location);
+        },
+
         notif_tokensCollected: function({tokenType, location}) {
             this.removeTokens(tokenType, location);
         },
@@ -1130,5 +1134,15 @@ function (dojo, declare) {
 
             this.addTooltipHtml(`space-${spaceID}`, `Dark Lady's Location`);
         },
+
+        removeAAGun: async function(location) {
+            let space = dojo.byId(`space-${location}-token-space-1`);
+            if (space.firstElementChild) {
+                let tokenID = space.firstElementChild.id;
+                const animation = this.slideToObject(`${tokenID}`, "player_boards");
+                await this.bgaPlayDojoAnimation(animation);
+                dojo.destroy(`${tokenID}`);
+            }            
+        }
     });
 });

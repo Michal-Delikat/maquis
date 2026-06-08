@@ -178,6 +178,8 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
+        $this->gainResources(RESOURCE_EXPLOSIVES, 4);
+
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -922,7 +924,7 @@ class Game extends \Table {
                     $this->placeMarker(21);
                     $this->returnOrArrest(21);
                 } else {
-                    $this->removeToken($activeSpace, TOKEN_AA_GUN);
+                    $this->removeAAGun($activeSpace);
                 }
         }
     } 
