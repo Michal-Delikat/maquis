@@ -58,4 +58,12 @@ trait ComponentsTrait {
             "location" => $spaceID
         ));
     }
+
+    function countAAGunsPlaced(): int {
+        return (int) static::getUniqueValueFromDb("
+            SELECT COUNT(*) 
+            FROM components 
+            WHERE name LIKE 'aa_gun_token%' AND state = 'placed';
+        ");
+    }
 }

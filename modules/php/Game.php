@@ -454,6 +454,9 @@ class Game extends \Table {
         if ($this->getIsMissionSelected(MISSION_LIBERATE_THE_TOWN) && ($this->getMorale() >= 4) && ($this->getResource(RESOURCE_WEAPON) >= 3)) {
             $this->completeMission(MISSION_LIBERATE_THE_TOWN);
         }
+        if ($this->getIsMissionSelected(MISSION_DESTROY_AA_GUNS) && (($this->countAAGunsPlaced() - (int) $this->checkMarkersInSpaces([21])) <= 2)) {
+            $this->completeMission(MISSION_DESTROY_AA_GUNS);
+        } 
 
         $playerScore = $this->getPlayerScore();
 
@@ -918,7 +921,11 @@ class Game extends \Table {
                 $this->completeMission(MISSION_FREE_THE_RESISTANCE_LEADER);
                 break;
             case ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES:
-                $this->spendResources(RESOURCE_EXPLOSIVES);
+            case ACTION_DESTROY_AA_GUN_WITH_WEAPON:
+                $resource = $actionName === ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES 
+                    ? RESOURCE_EXPLOSIVES 
+                    : RESOURCE_WEAPON;
+                $this->spendResources($resource);
                 $activeSpace = $this->getActiveSpace();
                 if ($activeSpace === 21) {
                     $this->placeMarker(21);
@@ -926,6 +933,11 @@ class Game extends \Table {
                 } else {
                     $this->removeAAGun($activeSpace);
                 }
+                if ($this->countAAGunsPlaced() <= 0 && $this->checkMarkersInSpaces([21])) {
+                    $this->completeMission(MISSION_DESTROY_AA_GUNS);
+                }
+
+                break;
         }
     } 
 
@@ -1055,9 +1067,9 @@ class Game extends \Table {
                 case ACTION_FREE_THE_RESISTANCE_LEADER:
                     return $this->getRoundNumber() === 10 && $this->getResource(RESOURCE_FAKE_ID) && $this->getResource(RESOURCE_WEAPON) >= 2 && $this->getResource(RESOURCE_MEDICINE);
                 case ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES:
-                    return $this->getResource(RESOURCE_EXPLOSIVES) && $this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN;
+                    return $this->getResource(RESOURCE_EXPLOSIVES) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === 21);
                 case ACTION_DESTROY_AA_GUN_WITH_WEAPON:
-                    return $this->getResource(RESOURCE_WEAPON) && $this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN;
+                    return $this->getResource(RESOURCE_WEAPON) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === 21);
                 default:
                     return true;
             }
