@@ -178,8 +178,6 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
-        $this->gainResources(RESOURCE_EXPLOSIVES, 4);
-
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
