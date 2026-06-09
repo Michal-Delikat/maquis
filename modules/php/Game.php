@@ -194,7 +194,7 @@ class Game extends \Table {
             "spaceName" => $spaceName
         ));
 
-        if ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && in_array($spaceID, [1, 3, 5, 6, 9, 11]) && $this->countMarkers($spaceID) <= 0) {
+        if ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && in_array($spaceID, [SPACE_RUE_BARADAT, 3, 5, 6, 9, 11]) && $this->countMarkers($spaceID) <= 0) {
             $this->placeMarker($spaceID);
 
             if ($this->checkMarkersInSpaces([1, 3, 5, 6, 9, 11])) {
