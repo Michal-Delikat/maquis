@@ -43,6 +43,8 @@ const MISSION_A_SPACE_C = 20;
 const MISSION_B_SPACE_A = 21;
 const MISSION_B_SPACE_B = 22;
 const MISSION_B_SPACE_C = 23; 
+const TOP_BRIDGE = 24;
+const BOTTOM_BRIDGE = 25;
 
 const MISSION_MILICE_PARADE_DAY = 'milice_parade_day';
 const MISSION_OFFICERS_MANSION = 'officers_mansion';

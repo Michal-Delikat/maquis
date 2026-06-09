@@ -194,10 +194,11 @@ class Game extends \Table {
             "spaceName" => $spaceName
         ));
 
-        if ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && in_array($spaceID, [SPACE_RUE_BARADAT, 3, 5, 6, 9, 11]) && $this->countMarkers($spaceID) <= 0) {
+        $doubleAgentSpaces = [RUE_BARADAT, PONT_DU_NORD, DOCTOR, POOR_DISTRICT, RADIO_A, PONT_LEVEQUE];
+        if ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && in_array($spaceID, $doubleAgentSpaces) && $this->countMarkers($spaceID) <= 0) {
             $this->placeMarker($spaceID);
 
-            if ($this->checkMarkersInSpaces([1, 3, 5, 6, 9, 11])) {
+            if ($this->checkMarkersInSpaces($doubleAgentSpaces)) {
                 $cardID = $this->drawPatrolCard();
                 $card = $this->PATROL_CARD_ITEMS[$cardID - 1];
                 $doubleAgentLocation = $card['space_a'];
@@ -316,7 +317,7 @@ class Game extends \Table {
         } else if ($actionName === ACTION_COMPLETE_DOUBLE_AGENT_MISSION) {
             $this->setDarkLadyLocation('off_board', 'NaN');
             $this->completeMission(MISSION_DOUBLE_AGENT);
-            foreach([1, 3, 5, 6, 9, 11] as $space) {
+            foreach([RUE_BARADAT, PONT_DU_NORD, DOCTOR, POOR_DISTRICT, RADIO_A, PONT_LEVEQUE] as $space) {
                 $this->removeMarker($space);
             }
 
@@ -452,7 +453,7 @@ class Game extends \Table {
         if ($this->getIsMissionSelected(MISSION_LIBERATE_THE_TOWN) && ($this->getMorale() >= 4) && ($this->getResource(RESOURCE_WEAPON) >= 3)) {
             $this->completeMission(MISSION_LIBERATE_THE_TOWN);
         }
-        if ($this->getIsMissionSelected(MISSION_DESTROY_AA_GUNS) && (($this->countAAGunsPlaced() - (int) $this->checkMarkersInSpaces([21])) <= 2)) {
+        if ($this->getIsMissionSelected(MISSION_DESTROY_AA_GUNS) && (($this->countAAGunsPlaced() - (int) $this->checkMarkersInSpaces([MISSION_B_SPACE_A])) <= 2)) {
             $this->completeMission(MISSION_DESTROY_AA_GUNS);
         } 
 
@@ -528,10 +529,10 @@ class Game extends \Table {
     public function actRemoveBridge(int $spaceID): void {
         $this->placeMarker($spaceID);
 
-        if ($spaceID === 24) {
-            $this->removePath(3, 7);
+        if ($spaceID === TOP_BRIDGE) {
+            $this->removePath(PONT_DU_NORD, BLACK_MARKET);
         } else {
-            $this->removePath(6, 7);
+            $this->removePath(POOR_DISTRICT, BLACK_MARKET);
         }
 
         $this->notify->all("bridgeRemoved", clienttranslate('Bridge removed'), array(
@@ -540,7 +541,7 @@ class Game extends \Table {
 
         $this->setExplosivesAtBridgePlanted(false);
 
-        if ($this->countMarkersInSpaces([24, 25]) === 2) {
+        if ($this->countMarkersInSpaces([TOP_BRIDGE, BOTTOM_BRIDGE]) === 2) {
             $this->completeMission(MISSION_TAKE_OUT_THE_BRIDGES);
         }
 
@@ -673,6 +674,7 @@ class Game extends \Table {
 
     protected function saveAction(string $actionName): void {
         switch($actionName) {
+            // TODO: remove stats
             case ACTION_BUY_WEAPON:
                 $this->spendResources(RESOURCE_MONEY);
                 $this->gainResources(RESOURCE_WEAPON);
@@ -690,6 +692,7 @@ class Game extends \Table {
                 $this->gainResources(RESOURCE_INTEL);
                 $this->incStat(1, "intel_aquired", $this->getActivePlayerId());
                 break;
+            // TODO: remove conditions
             case ACTION_GET_MONEY_FOR_FOOD:
                 if ($this->getAvailableResource(RESOURCE_MONEY) > 0) {
                     $this->spendResources(RESOURCE_FOOD);
@@ -731,12 +734,12 @@ class Game extends \Table {
                 $this->completeMission(MISSION_MILICE_PARADE_DAY);
                 $this->spendResources(RESOURCE_WEAPON);
                 $this->incrementMorale($this->getMorale());
-                $this->arrestWorker(1);
+                $this->arrestWorker(RUE_BARADAT);
                 break;
             case ACTION_COMPLETE_OFFICERS_MANSION_MISSION:
                 $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_OFFICERS_MANSION);
-                foreach([1, 3, 11] as $space) {
+                foreach([RUE_BARADAT, PONT_DU_NORD, PONT_LEVEQUE] as $space) {
                     $this->removeMarker($space);
                 }
                 break;
@@ -764,8 +767,8 @@ class Game extends \Table {
             case ACTION_INFILTRATE_FACTORY:
                 $activeSpace = $this->getActiveSpace();
                 $this->placeMarker($activeSpace);
-                $this->addMissionSpace($activeSpace + 1, MISSION_SABOTAGE);
-                if ($activeSpace == 19 || $activeSpace == 22) {
+                $this->addMissionSpace($activeSpace + 1);
+                if ($activeSpace === MISSION_A_SPACE_B || $activeSpace === MISSION_B_SPACE_B) {
                     $this->addSpaceAction($activeSpace + 1, ACTION_SABOTAGE_FACTORY);
                 } else {
                     $this->addSpaceAction($activeSpace + 1, ACTION_INFILTRATE_FACTORY);
@@ -779,12 +782,12 @@ class Game extends \Table {
             case ACTION_DELIVER_INTEL:
                 $activeSpace = $this->getActiveSpace();
                 $this->spendResources(RESOURCE_INTEL, 2);
-                if ($activeSpace == 20 || $activeSpace == 23) {
+                if ($activeSpace === MISSION_A_SPACE_C || $activeSpace === MISSION_B_SPACE_C) {
                     $this->returnOrArrest($activeSpace);
                     $this->completeMission(MISSION_UNDERGROUND_NEWSPAPER);
                 } else {
                     $this->placeMarker($activeSpace);
-                    $this->addMissionSpace($activeSpace + 1, MISSION_UNDERGROUND_NEWSPAPER);
+                    $this->addMissionSpace($activeSpace + 1);
                     $this->addSpaceAction($activeSpace + 1, ACTION_DELIVER_INTEL);
                 }
                 break;
@@ -795,7 +798,7 @@ class Game extends \Table {
                 $moleID = $this->getWorkerIdByLocation((string) $activeSpace);
                 $this->updateComponent($moleID, (string) $activeSpace, 'mole');
 
-                $this->addMissionSpace($activeSpace + 1, MISSION_INFILTRATION);
+                $this->addMissionSpace($activeSpace + 1);
                 $this->addSpaceAction($activeSpace + 1, ACTION_RECOVER_MOLE);
                 break;
             case ACTION_RECOVER_MOLE:
@@ -810,12 +813,12 @@ class Game extends \Table {
                 $activeSpace = $this->getActiveSpace();
                 $this->spendResources(RESOURCE_FOOD, 1);
                 $this->spendResources(RESOURCE_MEDICINE, 1);
-                if ($activeSpace == 20 || $activeSpace == 23) {
+                if ($activeSpace === MISSION_A_SPACE_C || $activeSpace === MISSION_B_SPACE_C) {
                     $this->returnOrArrest($activeSpace);
                     $this->completeMission(MISSION_GERMAN_SHEPARDS);
                 } else {
                     $this->placeMarker($activeSpace);
-                    $this->addMissionSpace($activeSpace + 1, MISSION_GERMAN_SHEPARDS);
+                    $this->addMissionSpace($activeSpace + 1);
                     $this->addSpaceAction($activeSpace + 1, ACTION_POISON_SHEPARDS);
                 }
                 break;
@@ -824,7 +827,7 @@ class Game extends \Table {
                 $this->spendResources(RESOURCE_WEAPON, 2);
                 $this->returnOrArrest($activeSpace);
                 $this->placeMarker($activeSpace);
-                $this->addMissionSpace($activeSpace + 1, MISSION_AID_THE_SPY);
+                $this->addMissionSpace($activeSpace + 1);
                 $this->addSpaceAction($activeSpace + 1, ACTION_DELIVER_MONEY_AND_2_FOOD);
                 break;
             case ACTION_DELIVER_MONEY_AND_2_FOOD:
@@ -858,13 +861,13 @@ class Game extends \Table {
                 break;
             case ACTION_DISCOVER_THE_PLANS:
                 if ($this->getLocationByMissionName(MISSION_MILICE_HQ) === 'mission_card_a') {
-                    $this->placeMarker(18);
-                    $this->addMissionSpace(19);
-                    $this->addSpaceAction(19, ACTION_DELIVER_2_POISON);
+                    $this->placeMarker(MISSION_A_SPACE_A);
+                    $this->addMissionSpace(MISSION_A_SPACE_B);
+                    $this->addSpaceAction(MISSION_A_SPACE_B, ACTION_DELIVER_2_POISON);
                 } else {
-                    $this->placeMarker(21);
-                    $this->addMissionSpace(22);
-                    $this->addSpaceAction(22, ACTION_DELIVER_2_POISON);
+                    $this->placeMarker(MISSION_B_SPACE_A);
+                    $this->addMissionSpace(MISSION_B_SPACE_B);
+                    $this->addSpaceAction(MISSION_B_SPACE_B, ACTION_DELIVER_2_POISON);
                 }
                 break;
             case ACTION_DELIVER_2_POISON:
@@ -884,8 +887,8 @@ class Game extends \Table {
             case ACTION_RECON_THE_BARRACKS:
                 $activeSpace = $this->getActiveSpace();
                 $this->placeMarker($activeSpace);
-                $this->addMissionSpace($activeSpace + 1, MISSION_BOMB_THE_BARRACKS);
-                if ($activeSpace === 21) {
+                $this->addMissionSpace($activeSpace + 1);
+                if ($activeSpace === MISSION_B_SPACE_A) {
                     $this->addSpaceAction($activeSpace + 1, ACTION_RECON_THE_BARRACKS);
                 } else {
                     $this->addSpaceAction($activeSpace + 1, ACTION_BOMB_THE_BARRACKS);
@@ -900,10 +903,10 @@ class Game extends \Table {
             case ACTION_BRIBE_THE_CLERK:
                 $this->spendResources(RESOURCE_INTEL);
                 $this->spendResources(RESOURCE_MONEY);
-                $this->placeMarker(21);
-                $this->addMissionSpace(22);
-                $this->addSpaceAction(22, ACTION_KILL_THE_RESISTANCE_LEADER);
-                $this->addSpaceAction(22, ACTION_FREE_THE_RESISTANCE_LEADER);
+                $this->placeMarker(MISSION_B_SPACE_A);
+                $this->addMissionSpace(MISSION_B_SPACE_B);
+                $this->addSpaceAction(MISSION_B_SPACE_B, ACTION_KILL_THE_RESISTANCE_LEADER);
+                $this->addSpaceAction(MISSION_B_SPACE_B, ACTION_FREE_THE_RESISTANCE_LEADER);
                 break;
             case ACTION_KILL_THE_RESISTANCE_LEADER:
                 $this->spendResources(RESOURCE_POISON);
@@ -914,7 +917,7 @@ class Game extends \Table {
                 $this->spendResources(RESOURCE_FAKE_ID);
                 $this->spendResources(RESOURCE_WEAPON, 2);
                 $this->spendResources(RESOURCE_MEDICINE);
-                $this->returnOrArrest(22);
+                $this->returnOrArrest(MISSION_B_SPACE_B);
                 $this->setActiveSoldiers($this->getActiveSoldiers() + 2);
                 $this->completeMission(MISSION_FREE_THE_RESISTANCE_LEADER);
                 break;
@@ -925,13 +928,13 @@ class Game extends \Table {
                     : RESOURCE_WEAPON;
                 $this->spendResources($resource);
                 $activeSpace = $this->getActiveSpace();
-                if ($activeSpace === 21) {
-                    $this->placeMarker(21);
-                    $this->returnOrArrest(21);
+                if ($activeSpace === MISSION_B_SPACE_A) {
+                    $this->placeMarker(MISSION_B_SPACE_A);
+                    $this->returnOrArrest(MISSION_B_SPACE_A);
                 } else {
                     $this->removeAAGun($activeSpace);
                 }
-                if ($this->countAAGunsPlaced() <= 0 && $this->checkMarkersInSpaces([21])) {
+                if ($this->countAAGunsPlaced() <= 0 && $this->checkMarkersInSpaces([MISSION_B_SPACE_A])) {
                     $this->completeMission(MISSION_DESTROY_AA_GUNS);
                 }
 
@@ -987,8 +990,8 @@ class Game extends \Table {
     
     // GET POSSIBLE ACTIONS
 
-    protected function getPossibleActions($spaceID): array {
-        $willNotGetArrested = $this->checkEscapeRoute($spaceID);
+    protected function getPossibleActions(int $spaceID): array {
+        $willNotGetArrested = $this->checkEscapeRoute();
 
         $result = (array) ($this->getCollectionFromDb("
             SELECT action_name
@@ -1017,7 +1020,7 @@ class Game extends \Table {
                 case ACTION_WRITE_GRAFFITI:
                     return (($this->countMarkers($spaceID) === 0) || (($this->countMarkers($spaceID) === 1) && $this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT))) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
                 case ACTION_COMPLETE_OFFICERS_MANSION_MISSION:
-                    return ((!$this->getIsMissionSelected(MISSION_DOUBLE_AGENT) || $this->getIsMissionCompleted(MISSION_DOUBLE_AGENT)) && $this->countMarkersInSpaces([1, 3, 11]) == 3) || ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && $this->countMarkersInSpaces([1, 3, 11]) == 6) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
+                    return ((!$this->getIsMissionSelected(MISSION_DOUBLE_AGENT) || $this->getIsMissionCompleted(MISSION_DOUBLE_AGENT)) && $this->countMarkersInSpaces([RUE_BARADAT, PONT_DU_NORD, PONT_LEVEQUE]) == 3) || ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && $this->countMarkersInSpaces([RUE_BARADAT, PONT_DU_NORD, PONT_LEVEQUE]) == 6) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
                 case ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION:
                     return $this->getResource(RESOURCE_WEAPON) > 0 && $this->isParadeDay();
                 case ACTION_GET_WORKER:
@@ -1065,9 +1068,9 @@ class Game extends \Table {
                 case ACTION_FREE_THE_RESISTANCE_LEADER:
                     return $this->getRoundNumber() === 10 && $this->getResource(RESOURCE_FAKE_ID) && $this->getResource(RESOURCE_WEAPON) >= 2 && $this->getResource(RESOURCE_MEDICINE);
                 case ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES:
-                    return $this->getResource(RESOURCE_EXPLOSIVES) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === 21);
+                    return $this->getResource(RESOURCE_EXPLOSIVES) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === MISSION_B_SPACE_A);
                 case ACTION_DESTROY_AA_GUN_WITH_WEAPON:
-                    return $this->getResource(RESOURCE_WEAPON) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === 21);
+                    return $this->getResource(RESOURCE_WEAPON) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === MISSION_B_SPACE_A);
                 default:
                     return true;
             }

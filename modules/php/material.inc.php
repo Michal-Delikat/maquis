@@ -3,16 +3,16 @@
 require_once("constants.inc.php");
 
 const PATROL_CARD_ITEMS = [
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 1, 'space_a' => 12, 'space_b' => 6, 'space_c' => 5], // 1. Grocer / Poor District
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 2, 'space_a' => 4, 'space_b' => 12, 'space_c' => 7], // 2. Radio B / Grocer
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 3, 'space_a' => 11, 'space_b' => 3, 'space_c' => 5], // 3. Pont Levaque / Pont Du Nord
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 4, 'space_a' => 4, 'space_b' => 1, 'space_c' => 11], // 4. Radio B / Rue Baradat
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 5, 'space_a' => 11, 'space_b' => 7, 'space_c' => 5], // 5. Pont Levaque / Black Market
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 6, 'space_a' => 9, 'space_b' => 1, 'space_c' => 12], // 6. Radio A / Rue Baradat
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 7, 'space_a' => 9, 'space_b' => 11, 'space_c' => 7], // 7. Radio A / Pont Levaque
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 8, 'space_a' => 2, 'space_b' => 1, 'space_c' => 6],  // 8. Fence / Rue Baradat
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 9, 'space_a' => 12, 'space_b' => 3, 'space_c' => 2], // 9. Grocer / Pont Du Nord
-    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 10, 'space_a' => 2, 'space_b' => 3, 'space_c' => 11] // 10. Fence / Pont Du Nord
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 1, 'space_a' => GROCER, 'space_b' => POOR_DISTRICT, 'space_c' => DOCTOR],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 2, 'space_a' => RADIO_B, 'space_b' => GROCER, 'space_c' => BLACK_MARKET],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 3, 'space_a' => PONT_LEVEQUE, 'space_b' => PONT_DU_NORD, 'space_c' => DOCTOR],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 4, 'space_a' => RADIO_B, 'space_b' => RUE_BARADAT, 'space_c' => PONT_LEVEQUE],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 5, 'space_a' => PONT_LEVEQUE, 'space_b' => BLACK_MARKET, 'space_c' => DOCTOR],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 6, 'space_a' => RADIO_A, 'space_b' => RUE_BARADAT, 'space_c' => GROCER],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 7, 'space_a' => RADIO_A, 'space_b' => PONT_LEVEQUE, 'space_c' => BLACK_MARKET],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 8, 'space_a' => FENCE, 'space_b' => RUE_BARADAT, 'space_c' => POOR_DISTRICT],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 9, 'space_a' => GROCER, 'space_b' => PONT_DU_NORD, 'space_c' => FENCE],
+    ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 10, 'space_a' => FENCE, 'space_b' => PONT_DU_NORD, 'space_c' => PONT_LEVEQUE]
 ];
 
 const ROOM_DESCRIPTIONS = [
