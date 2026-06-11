@@ -47,6 +47,7 @@ const ACTIONS = [
     ACTION_INCREASE_MORALE => ['name' => ACTION_INCREASE_MORALE, 'is_safe' => true],
     ACTION_BUY_POISON => ['name' => ACTION_BUY_POISON, 'is_safe' => false],
     ACTION_FORGE_FAKE_ID => ['name' => ACTION_FORGE_FAKE_ID, 'is_safe' => false],
+    ACTION_USE_FIXER => ['name' => ACTION_USE_FIXER, 'is_safe' => false],
 
     ACTION_WRITE_GRAFFITI => ['name' => ACTION_WRITE_GRAFFITI, 'is_safe' => true],
     ACTION_COMPLETE_OFFICERS_MANSION_MISSION => ['name' => ACTION_COMPLETE_OFFICERS_MANSION_MISSION, 'is_safe' => true],

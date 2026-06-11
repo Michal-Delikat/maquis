@@ -336,6 +336,8 @@ class Game extends \Table {
 
                     $this->gamestate->nextstate("nextWorker");
                 }
+            } else if ($actionName === ACTION_USE_FIXER) {
+                $this->gamestate->nextState("useFixer");
             } else {
                 $this->saveAction($actionName);
                 $this->returnWorker($activeSpace);
@@ -365,29 +367,11 @@ class Game extends \Table {
 
         if ($this->getIsMoleInserted() && ($this->getPlacedResistance() === 1)) {
             $this->gamestate->nextState("roundEnd");
-        } 
-        // else if ($this->getPlacedResistance() === 1) {
-        //     $spacesWithResistanceWorkers = array_filter($this->getSpacesWithResistanceWorkers(), function ($space) {
-        //         return $space !== 'cafe' && $space !== 'safe_house';
-        //     });
-        //     $this->dump("spacesWithResistanceWorkers", $spacesWithResistanceWorkers);
-        //     $spaceID = (int) $spacesWithResistanceWorkers[0];
-        //     $this->updateActiveSpace($spaceID);
-        //     // $possibleActions = $this->getPossibleActions($spaceID);
-
-        //     // if (count($possibleActions) === 1) {
-        //     //     $this->actTakeAction($possibleActions[0]['action_name']);
-        //     // } else {
-        //     //     $this->gamestate->nextState("takeAction");
-        //     // }
-        //     $this->gamestate->nextState("takeAction");
-        // }
-        else if ($this->getPlacedResistance() > 0) {
+        } else if ($this->getPlacedResistance() > 0) {
             $this->gamestate->nextState("activateWorker");
         } else if ($this->getExplosivesAtBridgePlanted()) {
             $this->gamestate->nextState("removeBridge");
-        }
-        else {
+        } else {
             $this->gamestate->nextState("roundEnd");
         }
     }
@@ -548,6 +532,11 @@ class Game extends \Table {
         $this->gamestate->nextState("roundEnd");
     }
 
+    public function actUseFixer(string $actionName) {
+        $this->spendResources(RESOURCE_MONEY);
+        $this->actTakeAction($actionName);
+    }
+
     // ARGS
 
     public function argPlaceWorker(): array {
@@ -624,6 +613,12 @@ class Game extends \Table {
         ];
     }
 
+    public function argUseFixer(): array {
+        return [
+            "actions" => $this->getPossibleActions(FIXER)
+        ];
+    }
+
     public function argRemoveWorker(): array {
         return $this->getSpacesWithResistanceWorkers();
     }
@@ -668,6 +663,9 @@ class Game extends \Table {
                 break;
             case ROOM_FORGER:
                 $this->addSpaceAction($spaceID, ACTION_FORGE_FAKE_ID);
+                break;
+            case ROOM_FIXER:
+                $this->addSpaceAction($spaceID, ACTION_USE_FIXER);
                 break;
         }
     } 
@@ -986,10 +984,6 @@ class Game extends \Table {
         return $result;
     }
 
-    // ACTIONS
-    
-    // GET POSSIBLE ACTIONS
-
     protected function getPossibleActions(int $spaceID): array {
         $willNotGetArrested = $this->checkEscapeRoute();
 
@@ -1071,6 +1065,8 @@ class Game extends \Table {
                     return $this->getResource(RESOURCE_EXPLOSIVES) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === MISSION_B_SPACE_A);
                 case ACTION_DESTROY_AA_GUN_WITH_WEAPON:
                     return $this->getResource(RESOURCE_WEAPON) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === MISSION_B_SPACE_A);
+                case ACTION_USE_FIXER:
+                    return $this->getResource(RESOURCE_MONEY);
                 default:
                     return true;
             }
@@ -1120,6 +1116,7 @@ class Game extends \Table {
             ACTION_KILL_THE_RESISTANCE_LEADER => clienttranslate("Kill the resistance leader"),
             ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES => clienttranslate("Destroy AA gun with explosives"),
             ACTION_DESTROY_AA_GUN_WITH_WEAPON => clienttranslate("Destroy AA gun with weapon"),
+            ACTION_USE_FIXER => clienttranslate("Use fixer"),
         ];
 
         foreach($result as &$action) {

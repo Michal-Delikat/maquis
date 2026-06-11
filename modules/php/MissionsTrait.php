@@ -94,10 +94,10 @@ trait MissionsTrait {
         } else if ($missionBName === MISSION_FREE_THE_RESISTANCE_LEADER) {
             $this->addSpaceAction(MISSION_B_SPACE_A, ACTION_BRIBE_THE_CLERK);
         } else if ($missionBName === MISSION_DESTROY_AA_GUNS) {
-            $this->placeTokens(RUE_BARADAT, 'aa_gun');
-            $this->placeTokens(BLACK_MARKET, 'aa_gun');
-            $this->placeTokens(LEFT_FIELD, 'aa_gun');
-            $this->placetokens(RIGHT_FIELD, 'aa_gun');
+            $this->placeTokens(RUE_BARADAT, 'aa_gun', 1, false);
+            $this->placeTokens(BLACK_MARKET, 'aa_gun', 1, false);
+            $this->placeTokens(LEFT_FIELD, 'aa_gun', 1, false);
+            $this->placetokens(RIGHT_FIELD, 'aa_gun', 1, false);
             $this->addSpaceAction([RUE_BARADAT, BLACK_MARKET, LEFT_FIELD, RIGHT_FIELD, MISSION_B_SPACE_A], ACTION_DESTROY_AA_GUN_WITH_WEAPON);
             $this->addSpaceAction([RUE_BARADAT, BLACK_MARKET, LEFT_FIELD, RIGHT_FIELD, MISSION_B_SPACE_A], ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES);
         }

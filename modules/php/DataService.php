@@ -25,11 +25,21 @@ class DataService {
             (14, "Field", FALSE, TRUE),
             (15, "Cafe", FALSE, FALSE),
             (16, "Safe House", TRUE, FALSE),
-            (17, "Field", FALSE, TRUE);
+            (17, "Field", FALSE, TRUE),
+            (26, "Fixer", FALSE, FALSE);
         ';
     }
 
     public static function setupBoardActions(): string {
+        $fixerActions = [ACTION_BUY_EXPLOSIVES, ACTION_GET_MONEY, ACTION_FORGE_FAKE_ID, ACTION_GET_INTEL, ACTION_BUY_POISON, ACTION_INCREASE_MORALE, ACTION_GET_3_FOOD, ACTION_GET_3_MEDICINE];
+
+        $fixerRoomValues = array_map(
+            fn($action) => "(26, '" . $action . "')",
+            $fixerActions
+        );
+
+        $fixerRoomSql = implode(',', $fixerRoomValues);
+
         return '
             INSERT INTO board_action (space_id, action_name)
             VALUES
@@ -45,7 +55,8 @@ class DataService {
             (13, \'' . ACTION_GET_SPARE_ROOM . '\'),
             (14, \'' . ACTION_COLLECT_ITEMS . '\'),
             (15, \'' . ACTION_GET_WORKER . '\'),
-            (17, \'' . ACTION_COLLECT_ITEMS . '\');
+            (17, \'' . ACTION_COLLECT_ITEMS . '\'),
+            ' . $fixerRoomSql . ';
         ';
     }
 

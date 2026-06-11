@@ -11,7 +11,7 @@ trait ComponentsTrait {
         ");
     }
 
-    protected function placeTokens(int $spaceID, string $tokenType, int $quantity = 1): void {
+    protected function placeTokens(int $spaceID, string $tokenType, int $quantity = 1, bool $notify = true): void {
         $quantity = min($quantity, $this->getAvailableResource($tokenType));
 
         for ($i = 1; $i <= $quantity; $i++) {
@@ -33,18 +33,20 @@ trait ComponentsTrait {
             WHERE name LIKE '$tokenType%' AND state = 'placed' AND location LIKE '$spaceID%';
         ");
 
-        $this->notify->all("tokensPlaced", clienttranslate('${quantity} ${tokenType} airdropped onto field'), array(
-            "tokens" => $tokens,
-            "tokenType" => $tokenType,
-            "quantity" => $quantity
-        ));
+        if ($notify) { 
+            $this->notify->all("tokensPlaced", clienttranslate('${quantity} ${tokenType} airdropped onto field'), array(
+                "tokens" => $tokens,
+                "tokenType" => $tokenType,
+                "quantity" => $quantity
+            ));
 
-        $quantityPossesed = $this->getResource($tokenType);
-        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
-            "resource_name" => $tokenType,
-            "quantity" => $quantityPossesed,
-            "available" => $this->getAvailableResource($tokenType)
-        ));
+            $quantityPossesed = $this->getResource($tokenType);
+            $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
+                "resource_name" => $tokenType,
+                "quantity" => $quantityPossesed,
+                "available" => $this->getAvailableResource($tokenType)
+            ));
+        }
     }
 
     function removeAAGun(int $spaceID): void {

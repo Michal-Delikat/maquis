@@ -11,6 +11,7 @@ const ST_PLAYER_SELECT_ROOM = 7;
 const ST_PLAYER_SHOOT_MILICE = 8;
 const ST_PLAYER_REMOVE_WORKER = 9;
 const ST_PLAYER_REMOVE_BRIDGE = 10;
+const ST_PLAYER_USE_FIXER = 11;
 
 const ST_GAME_PLACE_PATROL = 60;
 const ST_GAME_NEXT_WORKER = 63;
@@ -45,6 +46,7 @@ const MISSION_B_SPACE_B = 22;
 const MISSION_B_SPACE_C = 23; 
 const TOP_BRIDGE = 24;
 const BOTTOM_BRIDGE = 25;
+const FIXER = 26;
 
 const MISSION_MILICE_PARADE_DAY = 'milice_parade_day';
 const MISSION_OFFICERS_MANSION = 'officers_mansion';
@@ -88,6 +90,7 @@ const ACTION_GET_3_MEDICINE = 'get_3_medicine';
 const ACTION_INCREASE_MORALE = 'increase_morale';
 const ACTION_BUY_POISON = 'buy_poison';
 const ACTION_FORGE_FAKE_ID = 'forge_fake_id';
+const ACTION_USE_FIXER = 'use_fixer';
 
 const ACTION_WRITE_GRAFFITI = 'write_graffiti';
 const ACTION_COMPLETE_OFFICERS_MANSION_MISSION = 'complete_officers_mansion_mission';

@@ -83,7 +83,8 @@ $machinestates = [
             "nextWorker" => ST_GAME_NEXT_WORKER, 
             "airdrop" => ST_PLAYER_AIRDROP_SELECT_FIELD, 
             "selectRoom" => ST_PLAYER_SELECT_ROOM,
-            "removeWorker" => ST_PLAYER_REMOVE_WORKER, 
+            "removeWorker" => ST_PLAYER_REMOVE_WORKER,
+            "useFixer" => ST_PLAYER_USE_FIXER,
             "gameEnd" => ST_PSEUDO_GAME_END]
     ],
 
@@ -116,6 +117,17 @@ $machinestates = [
         "args" => "argSelectRoom",
         "possibleactions" => [
             "actSelectRoom"
+        ],
+        "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER],
+    ],
+
+    ST_PLAYER_USE_FIXER => [
+        "name" => "useFixer",
+        "descriptionmyturn" => clienttranslate('${you} must select an action from off board spare room tile'),
+        "type" => "activeplayer",
+        "args" => "argUseFixer",
+        "possibleactions" => [
+            "actUseFixer"
         ],
         "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER],
     ],

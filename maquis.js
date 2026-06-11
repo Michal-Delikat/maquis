@@ -587,13 +587,13 @@ function (dojo, declare) {
                         break;
 
                     case 'takeAction':
-                        Object.values(args.actions).forEach(action => this.addActionButton(`actTakeAction_${action.action_name}`, _(action.action_description), () => this.bgaPerformAction("actTakeAction", { actionName: action.action_name }), null, null, 'blue'));
+                        Object.values(args.actions).forEach(action => this.addActionButton(`actTakeAction_${action.action_name}`, action.action_description, () => this.bgaPerformAction("actTakeAction", { actionName: action.action_name }), null, null, 'blue'));
                         this.addActionButton(`actReturn`, _('Return to Safe House'), () => this.bgaPerformAction("actTakeAction", { actionName: 'return'}), null, null, 'gray');
                         this.addActionButton('actBack', _('Back'), () => this.bgaPerformAction("actBack"), null, null, 'red');
                         break;
 
                     case 'airdropSelectSupplies':
-                        Object.values(args.options).forEach(option => this.addActionButton(`actAirdropSelectSupplies_${option.resourceName}`, _(option.airdropOptionDescription), () => this.bgaPerformAction("actSelectSupplies", { supplyType: option.resourceName}), null, null, 'blue'));
+                        Object.values(args.options).forEach(option => this.addActionButton(`actAirdropSelectSupplies_${option.resourceName}`, option.airdropOptionDescription, () => this.bgaPerformAction("actSelectSupplies", { supplyType: option.resourceName}), null, null, 'blue'));
                         break;
 
                     case 'selectSpareRoom':
@@ -602,6 +602,10 @@ function (dojo, declare) {
 
                     case 'shootMilice':
                         this.addActionButton('actReturn', _('Back'), () => this.bgaPerformAction("actBack"), null, null, 'red');
+                        break;
+
+                    case 'useFixer':
+                        Object.values(args.actions).forEach(action => this.addActionButton(`actUseFixer_${action.action_name}`, action.action_description, () => this.bgaPerformAction("actUseFixer", { actionName: action.action_name }), null, null, 'blue'));
                         break;
                 }
             }
