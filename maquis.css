@@ -395,6 +395,10 @@
     left: 36%;
 }
 
+#mission_card_infiltration > :is(.mission-space-1, .mission-space-2) {
+    top: 50%;
+}
+
 #mission_card_infiltration > .mission-space-1 {
     left: 22%;
 }

@@ -122,4 +122,63 @@ trait BoardTrait {
                 OR (space_id_start = $endId AND space_id_end = $startId);
         ");
     }
+
+    protected function getBoardPaths(): array {
+        $result = (array) $this->getCollectionFromDb("
+            SELECT path_id, space_id_start, space_id_end
+            FROM board_path;
+        ");
+
+        $paradeCanHappen = $this->getIsMissionSelected(MISSION_MILICE_PARADE_DAY) && !$this->getIsMissionCompleted(MISSION_MILICE_PARADE_DAY);
+        
+        return array_filter($result, function ($connection) use ($paradeCanHappen) {
+            return !(
+                    (($connection['space_id_start'] == '1' && $connection['space_id_end'] == '2') || ($connection['space_id_start'] == '2' && $connection['space_id_end'] == '1')) && 
+                    $this->isParadeDay() &&
+                    $paradeCanHappen
+                );
+        });
+    }
+
+    protected function checkEscapeRoute(): bool {
+        $activeSpace = $this->getActiveSpace();
+        $board = $this->getBoard();
+        $boardPaths = $this->getBoardPaths();
+
+        $spacesToCheck = array();
+
+        foreach ($boardPaths as $boardPath) {
+            if ($boardPath['space_id_start'] == $activeSpace) {
+                $spacesToCheck[] = $boardPath["space_id_end"];
+            }
+        }
+
+        $spacesWithMilice = $this->getSpacesWithMilice();
+        $spacesWithSoldiers = $this->getSpacesWithSoldiers();
+
+        for ($i = 0; $i < count($spacesToCheck); $i++) {
+            $spaceID = $spacesToCheck[$i];
+            $isSafe = (bool) $board[$spaceID]['is_safe'];
+
+            if ($isSafe) {
+                return true;
+            } else if (!in_array($spaceID, $spacesWithMilice) && !in_array($spaceID, $spacesWithSoldiers)) { 
+                $spacesToAdd = array();
+
+                foreach ($boardPaths as $boardPath) {
+                    if ($boardPath['space_id_start'] == $spaceID) {
+                        $spacesToAdd[] = $boardPath["space_id_end"];
+                    }
+                }
+
+                for($j = 0; $j < count($spacesToAdd); $j++) {
+                    if (!in_array($spacesToAdd[$j], $spacesToCheck)) {
+                        $spacesToCheck[] = $spacesToAdd[$j];
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 }

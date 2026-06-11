@@ -30,6 +30,7 @@ require_once("PatrolCardsTrait.php");
 require_once("PlayerTrait.php");
 require_once("PawnsTrait.php");
 require_once("MarkersTrait.php");
+require_once("BoardActionsTrait.php");
 
 const BOARD = 'BOARD_STATE';
 
@@ -44,6 +45,7 @@ class Game extends \Table {
     use PlayerTrait;
     use PawnsTrait;
     use MarkersTrait;
+    use BoardActionsTrait;
 
     private array $PATROL_CARD_ITEMS;
     private array $ACTIONS;
@@ -627,49 +629,6 @@ class Game extends \Table {
         return $this->getBridgesWithMarkers();
     }
 
-    protected function addSpaceAction(int|array $spaceID, string $actionName): void {
-        $spaceIDs = is_array($spaceID) ? $spaceID : [$spaceID];
-        $values = implode(', ', array_map(fn($id) => "($id, '$actionName')", $spaceIDs));
-        
-        self::DbQuery("
-            INSERT INTO board_action (space_id, action_name)
-            VALUES $values;
-        ");
-    }
-
-    protected function addSpareRoomActions(int $spaceID, string $roomID): void {
-        switch (str_replace("room_", "", $roomID)) {
-            case ROOM_INFORMANT:
-                $this->addSpaceAction($spaceID, ACTION_GET_INTEL);
-                break;
-            case ROOM_COUNTERFEITER:
-                $this->addSpaceAction($spaceID, ACTION_GET_MONEY);
-                break;
-            case ROOM_SAFE_HOUSE:
-                $this->updateFieldsSafety($spaceID, isSafe: true);
-                break;
-            case ROOM_CHEMISTS_LAB:
-                $this->addSpaceAction($spaceID, ACTION_BUY_EXPLOSIVES);
-                break;
-            case ROOM_SMUGGLER:
-                $this->addSpaceAction($spaceID, ACTION_GET_3_FOOD);
-                $this->addSpaceAction($spaceID, ACTION_GET_3_MEDICINE);
-                break;
-            case ROOM_PROPAGANDIST:
-                $this->addSpaceAction($spaceID, ACTION_INCREASE_MORALE);
-                break;
-            case ROOM_PHARMACIST:
-                $this->addSpaceAction($spaceID, ACTION_BUY_POISON);
-                break;
-            case ROOM_FORGER:
-                $this->addSpaceAction($spaceID, ACTION_FORGE_FAKE_ID);
-                break;
-            case ROOM_FIXER:
-                $this->addSpaceAction($spaceID, ACTION_USE_FIXER);
-                break;
-        }
-    } 
-
     protected function saveAction(string $actionName): void {
         switch($actionName) {
             // TODO: remove stats
@@ -1177,70 +1136,6 @@ class Game extends \Table {
         );
 
         return max($this->getActiveResistance(), $morale_to_patrols_map[$this->getMorale()]);
-    }
-
-    // BOARD PATHS
-
-    protected function getBoardPaths(): array {
-        $result = (array) $this->getCollectionFromDb("
-            SELECT path_id, space_id_start, space_id_end
-            FROM board_path;
-        ");
-
-        $paradeCanHappen = $this->getIsMissionSelected(MISSION_MILICE_PARADE_DAY) && !$this->getIsMissionCompleted(MISSION_MILICE_PARADE_DAY);
-        
-        return array_filter($result, function ($connection) use ($paradeCanHappen) {
-            return !(
-                    (($connection['space_id_start'] == '1' && $connection['space_id_end'] == '2') || ($connection['space_id_start'] == '2' && $connection['space_id_end'] == '1')) && 
-                    $this->isParadeDay() &&
-                    $paradeCanHappen
-                );
-        });
-        return $result;
-    }
-
-    // CHECK ESCAPE ROUTE 
-
-    protected function checkEscapeRoute(): bool {
-        $activeSpace = $this->getActiveSpace();
-        $board = $this->getBoard();
-        $boardPaths = $this->getBoardPaths();
-
-        $spacesToCheck = array();
-
-        foreach ($boardPaths as $boardPath) {
-            if ($boardPath['space_id_start'] == $activeSpace) {
-                $spacesToCheck[] = $boardPath["space_id_end"];
-            }
-        }
-
-        $spacesWithMilice = $this->getSpacesWithMilice();
-        $spacesWithSoldiers = $this->getSpacesWithSoldiers();
-
-        for ($i = 0; $i < count($spacesToCheck); $i++) {
-            $spaceID = $spacesToCheck[$i];
-            $isSafe = (bool) $board[$spaceID]['is_safe'];
-
-            if ($isSafe) {
-                return true;
-            } else if (!in_array($spaceID, $spacesWithMilice) && !in_array($spaceID, $spacesWithSoldiers)) { 
-                $spacesToAdd = array();
-
-                foreach ($boardPaths as $boardPath) {
-                    if ($boardPath['space_id_start'] == $spaceID) {
-                        $spacesToAdd[] = $boardPath["space_id_end"];
-                    }
-                }
-
-                for($j = 0; $j < count($spacesToAdd); $j++) {
-                    if (!in_array($spacesToAdd[$j], $spacesToCheck)) {
-                        $spacesToCheck[] = $spacesToAdd[$j];
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     protected function isParadeDay(): bool {
