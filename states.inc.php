@@ -35,6 +35,17 @@ $machinestates = [
         "type" => "activeplayer",
         "args" => "argPlaceWorker",
         "possibleactions" => ["actPlaceWorker"],
+        "transitions" => ["placePatrol" => ST_GAME_PLACE_PATROL, "placeFakeId" => ST_PLAYER_PLACE_FAKE_ID]
+    ],
+
+    ST_PLAYER_PLACE_FAKE_ID => [
+        "name" => "placeFakeId",
+        "descriptionmyturn" => clienttranslate('${you} may place Fake Id'),
+        "type" => "activeplayer",
+        "possibleactions" => [
+            "actPlaceFakeId",
+            "actDontPlaceFakeId"
+        ],
         "transitions" => ["placePatrol" => ST_GAME_PLACE_PATROL]
     ],
 

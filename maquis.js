@@ -608,6 +608,11 @@ function (dojo, declare) {
                         Object.values(args.actions).forEach(action => this.addActionButton(`actUseFixer_${action.action_name}`, action.action_description, () => this.bgaPerformAction("actUseFixer", { actionName: action.action_name }), null, null, 'blue'));
                         this.addActionButton('actBack', _('Back'), () => this.bgaPerformAction("actBack"), null, null, 'red');
                         break;
+
+                    case 'placeFakeId':
+                        this.addActionButton('actPlace', _('Place'), () => this.bgaPerformAction("actPlaceFakeId"), null, null, "blue");
+                        this.addActionButton('actDontPlace', _('Don\'t place'), () => this.bgaPerformAction("actDontPlaceFakeId"), null, null, "blue");
+                        break;
                 }
             }
         },        

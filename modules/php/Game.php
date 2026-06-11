@@ -180,20 +180,21 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
+        $this->gainResources(RESOURCE_FAKE_ID, 4);
+
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
 
     public function actPlaceWorker(int $spaceID): void {
-        $spaceName = $this->getSpaceNameById($spaceID);
-
+        $this->setActiveSpace($spaceID);
         $workerID = $this->getLastAvailableWorker();
         $this->updateComponent($workerID, (string) $spaceID, "placed");
 
         $this->notify->all("workerMoved", clienttranslate('Worker placed at ${spaceName}'), array(
             "workerID" => $workerID,
             "spaceID" => $spaceID,
-            "spaceName" => $spaceName
+            "spaceName" => $this->getSpaceNameById($spaceID)
         ));
 
         $doubleAgentSpaces = [RUE_BARADAT, PONT_DU_NORD, DOCTOR, POOR_DISTRICT, RADIO_A, PONT_LEVEQUE];
@@ -215,6 +216,23 @@ class Game extends \Table {
             }
         }
 
+        if ($this->getResource(RESOURCE_FAKE_ID)) {
+            $this->gamestate->nextState("placeFakeId");
+        } else {
+            $this->gamestate->nextState("placePatrol");
+        }
+    }
+
+    public function actPlaceFakeId(): void {
+        $activeSpace = $this->getActiveSpace();
+
+        $this->spendResources(RESOURCE_FAKE_ID);
+        $this->placeTokens($activeSpace, RESOURCE_FAKE_ID);
+
+        $this->gamestate->nextState("placePatrol");
+    }
+
+    public function actDontPlaceFakeId(): void {
         $this->gamestate->nextState("placePatrol");
     }
 

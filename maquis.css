@@ -206,6 +206,10 @@
     background-position-x: center;
 }
 
+.fake-id-token {
+    background-position: bottom right;
+}
+
 .aa-gun-token {
     background-position-y: bottom;
     background-position-x: left; 
