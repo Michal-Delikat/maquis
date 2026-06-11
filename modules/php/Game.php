@@ -169,11 +169,11 @@ class Game extends \Table {
             if ($missionA <= 1) {
                 $missionB = array_rand($zeroStarMissions);
             } else if ($missionA <= 6) {
-                $missionB = array_rand($oneStarMissions) + 2;
+                $missionB = array_rand($oneStarMissions) + count($zeroStarMissions);
             } else if ($missionA <= 13) {
-                $missionB = array_rand($twoStarMissions) + 2 + 5;
+                $missionB = array_rand($twoStarMissions) + count($zeroStarMissions) + count($oneStarMissions);
             } else {
-                $missionB = array_rand($threeStarMissions) + 2 + 5 + 7;
+                $missionB = array_rand($threeStarMissions) + count($zeroStarMissions) + count($oneStarMissions) + count($twoStarMissions);
             }
         }
 
