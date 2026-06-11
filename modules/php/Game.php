@@ -296,6 +296,12 @@ class Game extends \Table {
 
         if (count($possibleActions) === 0) {
             $this->actTakeAction(ACTION_RETURN);
+        } else if ($this->getIsFixerInLocation($spaceID)) {
+            if ($this->getResource(RESOURCE_MONEY) === 0) {
+                $this->actTakeAction(ACTION_RETURN);
+            } else {
+                $this->gamestate->nextState("useFixer");
+            }
         } else {
             $this->gamestate->nextState("takeAction");
         }

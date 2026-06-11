@@ -55,7 +55,7 @@ $machinestates = [
             "actActivateWorker",
             "actDeclareShootingMilice"
         ],
-        "transitions" => ["takeAction" => ST_PLAYER_TAKE_ACTION, "shootMilice" => ST_PLAYER_SHOOT_MILICE, "nextWorker" => ST_GAME_NEXT_WORKER]
+        "transitions" => ["takeAction" => ST_PLAYER_TAKE_ACTION, "shootMilice" => ST_PLAYER_SHOOT_MILICE, "nextWorker" => ST_GAME_NEXT_WORKER, "useFixer" => ST_PLAYER_USE_FIXER]
     ],
 
     ST_PLAYER_SHOOT_MILICE => [
@@ -127,7 +127,8 @@ $machinestates = [
         "type" => "activeplayer",
         "args" => "argUseFixer",
         "possibleactions" => [
-            "actUseFixer"
+            "actUseFixer",
+            "actBack"
         ],
         "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER],
     ],

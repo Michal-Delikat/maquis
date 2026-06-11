@@ -606,6 +606,7 @@ function (dojo, declare) {
 
                     case 'useFixer':
                         Object.values(args.actions).forEach(action => this.addActionButton(`actUseFixer_${action.action_name}`, action.action_description, () => this.bgaPerformAction("actUseFixer", { actionName: action.action_name }), null, null, 'blue'));
+                        this.addActionButton('actBack', _('Back'), () => this.bgaPerformAction("actBack"), null, null, 'red');
                         break;
                 }
             }

@@ -42,4 +42,12 @@ trait RoomsTrait {
             WHERE name LIKE 'room%' AND state = 'placed';
         ");
     }
+
+    protected function getIsFixerInLocation(int $spaceID): bool {
+        return (bool) $this->getUniqueValueFromDb("
+            SELECT *
+            FROM components
+            WHERE name = 'room_fixer' AND location = '$spaceID';
+        ");
+    }
 }
