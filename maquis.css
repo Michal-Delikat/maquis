@@ -693,7 +693,6 @@
 }
 
 .token-space {
-    position: absolute;
     z-index: 4;
     width: 50%;
     height: 20%;

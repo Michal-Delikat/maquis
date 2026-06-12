@@ -49,6 +49,23 @@ trait ComponentsTrait {
         }
     }
 
+    protected function getTokenTypeInSpace(int $spaceID): string {
+        return (string) $this->getUniqueValueFromDb("
+            SELECT SUBSTRING_INDEX(name, '_token', 1)
+            FROM components
+            WHERE location LIKE '$spaceID%' AND name LIKE '%token%'
+            LIMIT 1;
+        ");
+    } 
+
+    protected function getTokenQuantityInSpace(int $spaceID): int {
+        return (int) $this->getUniqueValueFromDb("
+            SELECT COUNT(*)
+            FROM components
+            WHERE location LIKE '$spaceID%' AND name LIKE '%token%';
+        ");
+    }
+
     function removeAAGun(int $spaceID): void {
         static::DbQuery("
             UPDATE components

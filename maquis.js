@@ -354,22 +354,17 @@ function (dojo, declare) {
                 dojo.place(`
                     <div id="space-${i + 1}" class="space board-space">
                         <div id="space-${i + 1}-room-tile-space" class="room-tile-space"></div>
-                        <div id="space-${i + 1}-token-spaces" class="token-spaces"></div>
+                        <div id="space-${i + 1}-token-spaces" class="token-spaces">
+                            <div 
+                                id="space-${i + 1}-token-space-1" 
+                                class="token-space"
+                            ></div>
+                        </div>
                         <div id="space-${i + 1}-marker-spaces"></div>
                         <div id="space-${i + 1}-worker-space" class="worker-space"></div>
                         <div id="space-${i + 1}-background-space" class="background-space"></div>
                     </div>
                 `, 'spaces');
-
-                for (let j = 0; j < 5; j++) {
-                    dojo.place(`
-                        <div 
-                            id="space-${i + 1}-token-space-${j + 1}" 
-                            class="token-space"
-                            style="top: ${20 * j}%"
-                        ></div>
-                    `, `space-${i + 1}-token-spaces`);
-                }
 
                 for (let j = 0; j < 2; j++) {
                     dojo.place(`
@@ -381,6 +376,17 @@ function (dojo, declare) {
                     `, `space-${i + 1}-marker-spaces`);
                 }
             }
+
+            [14, 17].forEach((id) => {
+                for (let i = 2; i < 5; i++) {
+                    dojo.place(`
+                        <div 
+                            id="space-${id}-token-space-${i}" 
+                            class="token-space"
+                        ></div>
+                    `, `space-${id}-token-spaces`)
+                }
+            });
 
             // ADDITIONAL SPACES FOR RESISTANCE
             // SAFE HOUSE
@@ -1057,7 +1063,7 @@ function (dojo, declare) {
         removeTokens: async function(tokenType, spaceID) {
             for (let i = 5; i > 0; i--) {
                 let space = dojo.byId(`space-${spaceID}-token-space-${i}`);
-                if (space.firstElementChild) {
+                if (space?.firstElementChild) {
                     let tokenID = space.firstElementChild.id;
                     const animation = this.slideToObject(`${tokenID}`, `${tokenType}-icon`);
                     await this.bgaPlayDojoAnimation(animation);

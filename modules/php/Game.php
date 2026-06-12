@@ -216,7 +216,7 @@ class Game extends \Table {
             }
         }
 
-        if ($this->getResource(RESOURCE_FAKE_ID)) {
+        if ($this->getResource(RESOURCE_FAKE_ID) && !in_array($spaceID, [LEFT_FIELD, RIGHT_FIELD, CAFE])) {
             $this->gamestate->nextState("placeFakeId");
         } else {
             $this->gamestate->nextState("placePatrol");

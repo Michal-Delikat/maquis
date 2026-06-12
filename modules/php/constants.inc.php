@@ -141,6 +141,7 @@ const ROOM_FIXER = 'fixer';
 const ROOM_PHARMACIST = 'pharmacist';
 const ROOM_FORGER = 'forger';
 
-const TOKEN_AA_GUN = 'aa';
+const TOKEN_AA_GUN = 'aa_gun';
+const TOKEN_FAKE_ID = 'fake_id';
 
 ?>

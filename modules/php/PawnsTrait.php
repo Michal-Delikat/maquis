@@ -152,6 +152,10 @@ trait PawnsTrait {
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
         $this->updateComponent($workerID, 'safe_house', 'active');
 
+        if ($this->getTokenTypeInSpace($spaceID) === TOKEN_FAKE_ID) {
+            $this->collectTokens(TOKEN_FAKE_ID, $spaceID);
+        }
+
         $this->notify->all("workerReturned", clienttranslate('Worker safely returned from ${spaceName}'), array(
             "activeSpace" => $spaceID,
             "workerID" => $workerID,
@@ -174,6 +178,14 @@ trait PawnsTrait {
             "spaceName" => $spaceName
         ));
     }
+    
+    function returnOrArrest(int $spaceID): void {
+        if ($this->checkEscapeRoute($spaceID)) {
+            $this->returnWorker($spaceID);
+        } else {
+            $this->arrestWorker($spaceID);
+        }
+    }
 
     function removeWorker(int $spaceID): void {
          if (!in_array($spaceID, $this->getSpacesWithResistanceWorkers())) {
@@ -188,13 +200,5 @@ trait PawnsTrait {
             "workerID" => $workerID,
             "spaceName" => $spaceName
         ));
-    }
-
-    function returnOrArrest(int $spaceID): void {
-        if ($this->checkEscapeRoute($spaceID)) {
-            $this->returnWorker($spaceID);
-        } else {
-            $this->arrestWorker($spaceID);
-        }
     }
 }

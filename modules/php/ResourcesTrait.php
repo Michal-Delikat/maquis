@@ -11,22 +11,6 @@ trait ResourcesTrait {
         ;");
     }
 
-    protected function getTokenTypeInSpace(int $spaceID): string {
-        return explode('_', (string) $this->getUniqueValueFromDb("
-            SELECT name
-            FROM components
-            WHERE location LIKE '$spaceID%' AND name LIKE '%token%'
-            LIMIT 1;
-        "))[0];
-    } 
-
-    protected function getTokenQuantityInSpace(int $spaceID): int {
-        return (int) $this->getUniqueValueFromDb("
-            SELECT COUNT(*)
-            FROM components
-            WHERE location LIKE '$spaceID%' AND name LIKE '%token%';
-        ");
-    }
 
     protected function getAvailableResource(string $resourceName): int {
         return (int) $this->getUniqueValueFromDb("
