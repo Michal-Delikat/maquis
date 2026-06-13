@@ -27,26 +27,39 @@ trait ComponentsTrait {
             ");
         }
 
-        $tokens = (array) $this->getCollectionFromDb("
-            SELECT name, location
-            FROM components
-            WHERE name LIKE '$tokenType%' AND state = 'placed' AND location LIKE '$spaceID%';
-        ");
-
         if ($notify) { 
-            $this->notify->all("tokensPlaced", clienttranslate('${quantity} ${tokenType} airdropped onto field'), array(
+            $tokens = (array) $this->getCollectionFromDb("
+                SELECT name, location
+                FROM components
+                WHERE name LIKE '$tokenType%' AND state = 'placed' AND location LIKE '$spaceID%';
+            ");
+
+            $this->notify->all("tokensPlaced", clienttranslate('${quantity} ${tokenType} placed at ${spaceName}'), array(
                 "tokens" => $tokens,
-                "tokenType" => $tokenType,
-                "quantity" => $quantity
+                "tokenType" => $tokenType === TOKEN_FAKE_ID ? "Fake Id" : $tokenType,
+                "quantity" => $quantity === 1 ? '' : $quantity,
+                "spaceName" => $this->getSpaceNameById($spaceID)
             ));
 
             $quantityPossesed = $this->getResource($tokenType);
-            $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
+            $this->notify->all("resourcesChanged", '', array(
                 "resource_name" => $tokenType,
                 "quantity" => $quantityPossesed,
                 "available" => $this->getAvailableResource($tokenType)
             ));
         }
+    }
+
+    protected function removeFakeId(int $spaceID) {
+        static::DbQuery("
+            UPDATE components
+            SET location = 'off_board', state = 'available'
+            WHERE name LIKE 'fake_id_token%' AND location LIKE '$spaceID%';
+        ");
+
+        $this->notify->all("fakeIdRemoved", clienttranslate('Fake Id removed from ${location}'), array(
+            "location" => $this->getSpaceNameById($spaceID)
+        ));
     }
 
     protected function getTokenTypeInSpace(int $spaceID): string {

@@ -327,8 +327,13 @@ class Game extends \Table {
 
     public function actTakeAction(string $actionName): void {
         // $this->notify->all("actionTaken", clienttranslate("Action selected: " . $actionName), array());
-
         $activeSpace = $this->getActiveSpace();
+
+        $escapeStatus = $this->checkEscapeRoute();
+
+        if ($escapeStatus["fakeIdUsed"]) {
+            $this->removeFakeId($activeSpace);
+        }
 
         if ($actionName === ACTION_GET_SPARE_ROOM) {
             $this->gamestate->nextstate("selectRoom");    
@@ -352,16 +357,9 @@ class Game extends \Table {
             } else {
                 $this->gamestate->nextState("removeWorker");
             }
-        } else if ($this->checkEscapeRoute()) {
+        } else if ($escapeStatus["escapeFound"]) {
             if ($actionName === ACTION_AIRDROP) {
-                if (!empty($this->getEmptyFields())) {
-                    $this->gamestate->nextstate("airdrop");
-                } else {
-                    $this->notify->all("noEmptyFieldsFound", clienttranslate("There are no empty fields"));
-                    $this->returnWorker($activeSpace);
-
-                    $this->gamestate->nextstate("nextWorker");
-                }
+                $this->gamestate->nextstate("airdrop");
             } else if ($actionName === ACTION_USE_FIXER) {
                 $this->gamestate->nextState("useFixer");
             } else {
@@ -517,11 +515,7 @@ class Game extends \Table {
             "spaceID" => $activeSpace
         ));
 
-        if ($this->checkEscapeRoute($activeSpace)) {
-            $this->returnWorker($activeSpace);
-        } else {
-            $this->arrestWorker($activeSpace);
-        }
+        $this->returnOrArrest($activeSpace);
 
         $this->gamestate->nextState("nextWorker");
     }
@@ -968,7 +962,7 @@ class Game extends \Table {
     }
 
     protected function getPossibleActions(int $spaceID): array {
-        $willNotGetArrested = $this->checkEscapeRoute();
+        $willNotGetArrested = $this->checkEscapeRoute()["escapeFound"];
 
         $result = (array) ($this->getCollectionFromDb("
             SELECT action_name

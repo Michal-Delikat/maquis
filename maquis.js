@@ -747,6 +747,10 @@ function (dojo, declare) {
             this.placeTokens(tokens);
         },
 
+        notif_fakeIdRemoved: function({location}) {
+            this.removeFakeId(location);
+        },
+
         notif_aaGunRemoved: function({location}) {
             this.removeAAGun(location);
         },
@@ -1156,6 +1160,16 @@ function (dojo, declare) {
             if (space.firstElementChild) {
                 let tokenID = space.firstElementChild.id;
                 const animation = this.slideToObject(`${tokenID}`, "player_boards");
+                await this.bgaPlayDojoAnimation(animation);
+                dojo.destroy(`${tokenID}`);
+            }            
+        },
+
+        removeFakeId: async function(location) {
+            let space = dojo.byId(`space-${location}-token-space-1`);
+            if (space.firstElementChild) {
+                let tokenID = space.firstElementChild.id;
+                const animation = this.slideToObject(`${tokenID}`, "$fake_id-icon");
                 await this.bgaPlayDojoAnimation(animation);
                 dojo.destroy(`${tokenID}`);
             }            

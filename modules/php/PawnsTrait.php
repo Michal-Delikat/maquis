@@ -152,7 +152,9 @@ trait PawnsTrait {
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
         $this->updateComponent($workerID, 'safe_house', 'active');
 
-        if ($this->getTokenTypeInSpace($spaceID) === TOKEN_FAKE_ID) {
+        if ($this->checkEscapeRoute($spaceID)['fakeIdUsed']) {
+            $this->removeFakeId($spaceID);
+        } else if ($this->getTokenTypeInSpace($spaceID) === TOKEN_FAKE_ID) {
             $this->collectTokens(TOKEN_FAKE_ID, $spaceID);
         }
 
@@ -172,6 +174,10 @@ trait PawnsTrait {
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
 
         $this->updateComponent($workerID, 'arrest', 'arrested');
+
+        if ($this->getTokenTypeInSpace($spaceID) === TOKEN_FAKE_ID) {
+            $this->removeFakeId($spaceID);
+        }
 
         $this->notify->all("workerArrested", clienttranslate('Worker arrested at ${spaceName}'), array(
             "workerID" => $workerID,

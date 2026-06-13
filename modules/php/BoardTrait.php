@@ -140,45 +140,58 @@ trait BoardTrait {
         });
     }
 
-    protected function checkEscapeRoute(): bool {
+    protected function checkEscapeRoute(): array {
         $activeSpace = $this->getActiveSpace();
         $board = $this->getBoard();
         $boardPaths = $this->getBoardPaths();
+        $spacesWithPatrols = array_merge($this->getSpacesWithMilice(), $this->getSpacesWithSoldiers());
+        $hasFakeId = (bool) ($this->getTokenTypeInSpace($activeSpace) === TOKEN_FAKE_ID);
 
         $spacesToCheck = array();
+        $visited = array();
 
         foreach ($boardPaths as $boardPath) {
             if ($boardPath['space_id_start'] == $activeSpace) {
-                $spacesToCheck[] = $boardPath["space_id_end"];
+                $spacesToCheck[] = [$boardPath["space_id_end"], !$hasFakeId];
             }
         }
 
-        $spacesWithMilice = $this->getSpacesWithMilice();
-        $spacesWithSoldiers = $this->getSpacesWithSoldiers();
-
         for ($i = 0; $i < count($spacesToCheck); $i++) {
-            $spaceID = $spacesToCheck[$i];
+            [$spaceID, $patrolSkipped] = $spacesToCheck[$i];
+
+            $visitedKey = "$spaceID-$patrolSkipped";
+            if (in_array($visitedKey, $visited)) {
+                continue;
+            }
+            $visited[] = $visitedKey;
+
             $isSafe = (bool) $board[$spaceID]['is_safe'];
 
             if ($isSafe) {
-                return true;
-            } else if (!in_array($spaceID, $spacesWithMilice) && !in_array($spaceID, $spacesWithSoldiers)) { 
-                $spacesToAdd = array();
+                if ($patrolSkipped) {
+                    return ["escapeFound" => true, "fakeIdUsed" => $hasFakeId];
+                } else {
+                    return ["escapeFound" => true, "fakeIdUsed" => false];
+                } 
+            }
 
+            $hasPatrol = in_array($spaceID, $spacesWithPatrols);
+
+            if (!$hasPatrol) {
                 foreach ($boardPaths as $boardPath) {
                     if ($boardPath['space_id_start'] == $spaceID) {
-                        $spacesToAdd[] = $boardPath["space_id_end"];
+                        $spacesToCheck[] = [$boardPath["space_id_end"], $patrolSkipped];
                     }
                 }
-
-                for($j = 0; $j < count($spacesToAdd); $j++) {
-                    if (!in_array($spacesToAdd[$j], $spacesToCheck)) {
-                        $spacesToCheck[] = $spacesToAdd[$j];
+            } else if (!$patrolSkipped) {
+                foreach ($boardPaths as $boardPath) {
+                    if ($boardPath['space_id_start'] == $spaceID) {
+                        $spacesToCheck[] = [$boardPath["space_id_end"], true];
                     }
                 }
             }
         }
 
-        return false;
+        return ["escapeFound" => false, "fakeIdUsed" => false];
     }
 }

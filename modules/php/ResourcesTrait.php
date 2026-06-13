@@ -41,10 +41,11 @@ trait ResourcesTrait {
         ));
 
         $quantityPossesed = $this->getResource($tokenType);
-        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
+        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${display_name}'), array(
             "resource_name" => $tokenType,
             "quantity" => $quantityPossesed,
-            "available" => $this->getAvailableResource($tokenType)
+            "available" => $this->getAvailableResource($tokenType),
+            "display_name" => $tokenType === RESOURCE_FAKE_ID ? 'Fake Id' : $tokenType
         ));
     }
 
@@ -70,10 +71,11 @@ trait ResourcesTrait {
         ");
 
         $quantityPossesed = $this->getResource($resourceName);
-        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
+        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${display_name}'), array(
             "resource_name" => $resourceName,
             "quantity" => $quantityPossesed,
-            "available" => $this->getAvailableResource($resourceName)
+            "available" => $this->getAvailableResource($resourceName),
+            "display_name" => $resourceName === RESOURCE_FAKE_ID ? 'Fake Id' : $resourceName
         ));
     }
 
@@ -86,10 +88,11 @@ trait ResourcesTrait {
         ");
         
         $quantityPossesed = $this->getResource($resourceName);
-        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${resource_name}'), array(
+        $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${display_name}'), array(
             "resource_name" => $resourceName,
             "quantity" => $quantityPossesed,
-            "available" => $this->getAvailableResource($resourceName)
+            "available" => $this->getAvailableResource($resourceName),
+            "display_name" => $resourceName === RESOURCE_FAKE_ID ? 'Fake Id' : $resourceName
         ));
     }
 }
