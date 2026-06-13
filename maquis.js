@@ -1166,10 +1166,12 @@ function (dojo, declare) {
         },
 
         removeFakeId: async function(location) {
+            console.log(location);
             let space = dojo.byId(`space-${location}-token-space-1`);
+            console.log(space);
             if (space.firstElementChild) {
                 let tokenID = space.firstElementChild.id;
-                const animation = this.slideToObject(`${tokenID}`, "$fake_id-icon");
+                const animation = this.slideToObject(`${tokenID}`, "fake_id-icon");
                 await this.bgaPlayDojoAnimation(animation);
                 dojo.destroy(`${tokenID}`);
             }            

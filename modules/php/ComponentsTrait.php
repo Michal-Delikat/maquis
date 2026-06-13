@@ -57,8 +57,9 @@ trait ComponentsTrait {
             WHERE name LIKE 'fake_id_token%' AND location LIKE '$spaceID%';
         ");
 
-        $this->notify->all("fakeIdRemoved", clienttranslate('Fake Id removed from ${location}'), array(
-            "location" => $this->getSpaceNameById($spaceID)
+        $this->notify->all("fakeIdRemoved", clienttranslate('Fake Id removed from ${display_name}'), array(
+            "location" => $spaceID,
+            "display_name" => $this->getSpaceNameById($spaceID)
         ));
     }
 
