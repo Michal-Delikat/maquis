@@ -83,6 +83,9 @@ const ACTION_GET_WORKER = 'get_worker';
 const ACTION_COLLECT_ITEMS = 'collect_items';
 const ACTION_GET_SPARE_ROOM = 'get_spare_room';
 const ACTION_RETURN = 'return';
+const ACTION_AIRDROP_FOOD = 'airdrop_food';
+const ACTION_AIRDROP_MONEY = 'airdrop_money';
+const ACTION_AIRDROP_WEAPON = 'airdrop_weapon';
 
 const ACTION_GET_MONEY = 'get_money';
 const ACTION_BUY_EXPLOSIVES = 'buy_explosives';

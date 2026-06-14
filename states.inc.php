@@ -99,27 +99,27 @@ $machinestates = [
             "gameEnd" => ST_PSEUDO_GAME_END]
     ],
 
-    ST_PLAYER_AIRDROP_SELECT_FIELD => [
-        "name" => "airdropSelectField",
-        "descriptionmyturn" => clienttranslate('${you} must select empty field'),
-        "type" => "activeplayer",
-        "args" => "argSelectField",
-        "possibleactions" => [
-            "actSelectField"
-        ],
-        "transitions" => ["airdropSelectSupplies" => ST_PLAYER_AIRDROP_SELECT_SUPPLIES],
-    ],
+    // ST_PLAYER_AIRDROP_SELECT_FIELD => [
+    //     "name" => "airdropSelectField",
+    //     "descriptionmyturn" => clienttranslate('${you} must select empty field'),
+    //     "type" => "activeplayer",
+    //     "args" => "argSelectField",
+    //     "possibleactions" => [
+    //         "actSelectField"
+    //     ],
+    //     "transitions" => ["airdropSelectSupplies" => ST_PLAYER_AIRDROP_SELECT_SUPPLIES],
+    // ],
 
-    ST_PLAYER_AIRDROP_SELECT_SUPPLIES => [
-        "name" => "airdropSelectSupplies",
-        "descriptionmyturn" => clienttranslate('${you} must select wanted resources'),
-        "type" => "activeplayer",
-        "args" => "argSelectSupplies",
-        "possibleactions" => [
-            "actSelectSupplies"
-        ],
-        "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER]
-    ],
+    // ST_PLAYER_AIRDROP_SELECT_SUPPLIES => [
+    //     "name" => "airdropSelectSupplies",
+    //     "descriptionmyturn" => clienttranslate('${you} must select wanted resources'),
+    //     "type" => "activeplayer",
+    //     "args" => "argSelectSupplies",
+    //     "possibleactions" => [
+    //         "actSelectSupplies"
+    //     ],
+    //     "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER]
+    // ],
 
     ST_PLAYER_SELECT_ROOM => [
         "name" => "selectSpareRoom",

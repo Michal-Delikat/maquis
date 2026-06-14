@@ -44,12 +44,12 @@ class DataService {
             INSERT INTO board_action (space_id, action_name)
             VALUES
             (2, \'' . ACTION_BUY_WEAPON . '\'),
-            (4, \'' . ACTION_GET_INTEL . '\'),(4, \'' . ACTION_AIRDROP . '\'),
+            (4, \'' . ACTION_GET_INTEL . '\'), (4, \'' . ACTION_AIRDROP_FOOD . '\'), (4, \'' . ACTION_AIRDROP_MONEY . '\'), (4, \'' . ACTION_AIRDROP_WEAPON . '\'),
             (5, \'' . ACTION_GET_MEDICINE . '\'),
             (6, \'' . ACTION_PAY_FOR_MORALE . '\'),
             (7, \'' . ACTION_GET_MONEY_FOR_FOOD . '\'),(7, \'' . ACTION_GET_MONEY_FOR_MEDICINE . '\'),
             (8, \'' . ACTION_GET_SPARE_ROOM . '\'),
-            (9, \'' . ACTION_GET_INTEL . '\'),(9, \'' . ACTION_AIRDROP . '\'),
+            (9, \'' . ACTION_GET_INTEL . '\'), (9, \'' . ACTION_AIRDROP_FOOD . '\'), (9, \'' . ACTION_AIRDROP_MONEY . '\'), (9, \'' . ACTION_AIRDROP_WEAPON . '\'),
             (10, \'' . ACTION_GET_SPARE_ROOM . '\'),
             (12, \'' . ACTION_GET_FOOD . '\'),
             (13, \'' . ACTION_GET_SPARE_ROOM . '\'),

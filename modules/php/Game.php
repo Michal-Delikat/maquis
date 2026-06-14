@@ -358,9 +358,7 @@ class Game extends \Table {
                 $this->gamestate->nextState("removeWorker");
             }
         } else if ($escapeStatus["escapeFound"]) {
-            if ($actionName === ACTION_AIRDROP) {
-                $this->gamestate->nextstate("airdrop");
-            } else if ($actionName === ACTION_USE_FIXER) {
+            if ($actionName === ACTION_USE_FIXER) {
                 $this->gamestate->nextState("useFixer");
             } else {
                 $this->saveAction($actionName);
@@ -398,11 +396,6 @@ class Game extends \Table {
         } else {
             $this->gamestate->nextState("roundEnd");
         }
-    }
-
-    public function actSelectField(int $spaceID): void {
-        $this->setSelectedField($spaceID);
-        $this->gamestate->nextstate("airdropSelectSupplies");
     }
 
     public function actSelectSupplies(string $supplyType): void {
@@ -586,37 +579,6 @@ class Game extends \Table {
         return [
             "actions" => $this->getPossibleActions($this->getActiveSpace()),
             "activeSpace" => $this->getActiveSpace()
-        ];
-    }
-
-    public function argSelectField(): array {
-        return [
-            "emptyFields" => $this->getEmptyFields()
-        ];
-    }
-
-    public function argSelectSupplies(): array {
-        $options = [
-            [
-                "resourceName" => RESOURCE_FOOD,
-                "airdropOptionDescription" => clienttranslate("Airdrop 3 food")
-            ], 
-            [
-                "resourceName" => RESOURCE_MONEY,
-                "airdropOptionDescription" => clienttranslate("Airdrop 1 money")
-            ], 
-            [
-                "resourceName" => RESOURCE_WEAPON,
-                "airdropOptionDescription" => clienttranslate("Airdrop 1 weapon")
-            ]
-        ];
-
-        $options = array_filter($options, function($option) {
-            return $this->getAvailableResource($option["resourceName"]) > 0;
-        });
-
-        return [
-            "options" => $options
         ];
     }
 
