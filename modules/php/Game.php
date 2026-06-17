@@ -180,8 +180,6 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
-        $this->gainResources(RESOURCE_FAKE_ID, 4);
-
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -410,6 +408,11 @@ class Game extends \Table {
         if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || $round >= 15 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
             $this->gamestate->nextstate("gameEnd");
         } else {
+            if ($this->getIsCryptographerPlaced() && $round === 11) {
+                $this->returnOrArrest((int) $this->getSpaceIdWithCryptographer());
+                $this->completeMission(MISSION_CODED_MESSAGES);
+            } 
+
             foreach (array_merge(array_reverse($this->getMilice()), array_reverse($this->getSoldiers())) as $patrol) {
                 if ($patrol['state'] === 'placed') {
                     $this->updateComponent($patrol['name'], 'barracks', 'active');
@@ -419,11 +422,6 @@ class Game extends \Table {
                     ));
                 }
             }
-
-            if ($this->getIsCryptographerPlaced() && $round === 11) {
-                $this->returnWorker((int) $this->getSpaceIdWithCryptographer());
-                $this->completeMission(MISSION_CODED_MESSAGES);
-            } 
 
             if ($this->getIsMoleInserted()) {
                 $cardId = $this->peekTopPatrolCardId();
@@ -473,10 +471,10 @@ class Game extends \Table {
         $this->setActiveSoldiers($this->getActiveSoldiers() + 1);
         $this->updateComponent($this->getNextInactiveSoldier(), 'barracks', 'active');
         $this->setMorale($morale - 1);
-        if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && (($this->getActiveMilice() + $this->getPlacedMilice()) <= 0) && ($this->getPlayerScore() === 1)) {
-            $this->completeMission(MISSION_ASSASSINATION);
+        if ($morale - 1 <= 0) {
             $this->gamestate->nextState("gameEnd");
-        } else if ($morale - 1 <= 0) {
+        } else if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && (($this->getPlacedMilice()) <= 0) && ($this->getPlayerScore() === 1)) {
+            $this->completeMission(MISSION_ASSASSINATION);
             $this->gamestate->nextState("gameEnd");
         } else {
             $this->gamestate->nextState("nextWorker");

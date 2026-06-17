@@ -175,7 +175,7 @@ trait PawnsTrait {
 
         $this->updateComponent($workerID, 'arrest', 'arrested');
 
-        if ($this->getTokenTypeInSpace($spaceID) === TOKEN_FAKE_ID) {
+        if ($this->checkIsTokenTypeInSpace($spaceID, TOKEN_FAKE_ID)) {
             $this->removeFakeId($spaceID);
         }
 
@@ -186,7 +186,7 @@ trait PawnsTrait {
     }
     
     function returnOrArrest(int $spaceID): void {
-        if ($this->checkEscapeRoute($spaceID)) {
+        if ($this->checkEscapeRoute($spaceID)['escapeFound']) {
             $this->returnWorker($spaceID);
         } else {
             $this->arrestWorker($spaceID);

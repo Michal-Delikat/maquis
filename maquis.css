@@ -468,6 +468,7 @@
 
 #mission_card_coded_messages > .mission-space-1 {
     left: 34%;
+    top: 50%;
 }
 
 :is(#mission_card_coded_messages, #mission_card_bomb_for_the_officer) > :is(.mission-space-2, .mission-space-3) {

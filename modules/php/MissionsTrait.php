@@ -148,6 +148,10 @@ trait MissionsTrait {
                 "playerId" => $this->getCurrentPlayerId()
             ));
         }
+
+        if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && !$this->getIsMissionCompleted(MISSION_ASSASSINATION) && $this->getPlacedMilice() <= 0) {
+            $this->completeMission(MISSION_ASSASSINATION);
+        }
     }
     
     protected function removeMissionSpace(int $spaceID) {
