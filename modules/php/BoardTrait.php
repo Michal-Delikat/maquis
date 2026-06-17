@@ -149,6 +149,7 @@ trait BoardTrait {
 
         $spacesToCheck = array();
         $visited = array();
+        $bestResult = null;
 
         foreach ($boardPaths as $boardPath) {
             if ($boardPath['space_id_start'] == $activeSpace) {
@@ -168,11 +169,16 @@ trait BoardTrait {
             $isSafe = (bool) $board[$spaceID]['is_safe'];
 
             if ($isSafe) {
-                if ($patrolSkipped) {
-                    return ["escapeFound" => true, "fakeIdUsed" => $hasFakeId];
-                } else {
+                $fakeIdUsed = $patrolSkipped && $hasFakeId;
+
+                // Jeśli znaleźliśmy drogę bez zużycia ID, to jest optymalna — można przerwać
+                if (!$fakeIdUsed) {
                     return ["escapeFound" => true, "fakeIdUsed" => false];
-                } 
+                }
+
+                // Inaczej zapamiętaj jako kandydata, ale szukaj dalej
+                $bestResult = ["escapeFound" => true, "fakeIdUsed" => true];
+                continue;
             }
 
             $hasPatrol = in_array($spaceID, $spacesWithPatrols);
@@ -192,6 +198,6 @@ trait BoardTrait {
             }
         }
 
-        return ["escapeFound" => false, "fakeIdUsed" => false];
+        return $bestResult ?? ["escapeFound" => false, "fakeIdUsed" => false];
     }
 }
