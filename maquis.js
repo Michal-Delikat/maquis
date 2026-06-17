@@ -1193,7 +1193,7 @@ function (dojo, declare) {
                 space = dojo.byId(`mission-b-token-space`);
             } else {
                 space = dojo.byId(`space-${location}-token-space-2`);
-                if (space && !space.firstElementChild) {
+                if (!space || !space.firstElementChild) {
                     space = dojo.byId(`space-${location}-token-space-1`);
                 }
             }
