@@ -64,7 +64,7 @@ trait BoardTrait {
             return !in_array((int) $field, $fieldsWithTokens) && !($field === RIGHT_FIELD && $this->getIsMissionSelected(MISSION_BOMB_FOR_THE_OFFICER) && !$this->getIsMissionCompleted(MISSION_BOMB_FOR_THE_OFFICER));
         });
 
-        return $fields;
+        return array_values($fields);
     }
 
     protected function getSpacesWithResistanceWorkers(): array {

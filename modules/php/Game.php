@@ -180,8 +180,6 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
-        $this->gainResources(RESOURCE_FAKE_ID, 4);
-
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -396,19 +394,6 @@ class Game extends \Table {
         } else {
             $this->gamestate->nextState("roundEnd");
         }
-    }
-
-    public function actSelectSupplies(string $supplyType): void {
-        $spaceID = $this->getSelectedField();
-        $quantity = $supplyType == RESOURCE_FOOD ? 3 : 1;
-
-        if ($this->getAvailableResource($supplyType) > 0) {
-            $this->placeTokens($spaceID, $supplyType, $quantity);
-        }
-
-        $this->returnWorker($this->getActiveSpace());
-
-        $this->gamestate->nextstate("nextWorker");
     }
 
     public function stRoundEnd(): void {
@@ -655,6 +640,18 @@ class Game extends \Table {
                 $this->spendResources(RESOURCE_FOOD);
                 $this->recruitWorker();
                 $this->incStat(1, "workers_recruited", $this->getActivePlayerId());
+                break;
+            case ACTION_AIRDROP_FOOD:
+                $emptyField = $this->getEmptyFields()[0];
+                $this->placeTokens($emptyField, RESOURCE_FOOD, 3);
+                break;
+            case ACTION_AIRDROP_MONEY:
+                $emptyField = $this->getEmptyFields()[0];
+                $this->placeTokens($emptyField, RESOURCE_MONEY, 1);
+                break;
+            case ACTION_AIRDROP_WEAPON:
+                $emptyField = $this->getEmptyFields()[0];
+                $this->placeTokens($emptyField, RESOURCE_WEAPON, 1);
                 break;
             case ACTION_COLLECT_ITEMS:
                 $activeSpace = $this->getActiveSpace();
@@ -942,8 +939,12 @@ class Game extends \Table {
             switch ($action['action_name']) {
                 case ACTION_BUY_WEAPON:
                     return $this->getResource(RESOURCE_MONEY) > 0;
-                case ACTION_AIRDROP:
-                    return count($this->getEmptyFields()) > 0;
+                case ACTION_AIRDROP_FOOD:
+                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_FOOD);
+                case ACTION_AIRDROP_MONEY:
+                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_MONEY);
+                case ACTION_AIRDROP_WEAPON:
+                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_WEAPON);
                 case ACTION_PAY_FOR_MORALE:
                     return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResource(RESOURCE_MEDICINE) > 0;
                 case ACTION_GET_MONEY_FOR_FOOD:
@@ -1034,7 +1035,6 @@ class Game extends \Table {
             ACTION_INFILTRATE_FACTORY => clienttranslate("Infiltrate factory"),
             ACTION_SABOTAGE_FACTORY => clienttranslate("Sabotage factory"),
             ACTION_DELIVER_INTEL => clienttranslate("Deliver intel"),
-            ACTION_AIRDROP => clienttranslate("Airdrop supplies onto an empty field"),
             ACTION_COMPLETE_OFFICERS_MANSION_MISSION => clienttranslate("Complete Officers Mansion mission"),
             ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION => clienttranslate("Complete Milice Parade Day mission"),
             ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate("Complete the mission"),
@@ -1056,6 +1056,9 @@ class Game extends \Table {
             ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES => clienttranslate("Destroy AA gun with explosives"),
             ACTION_DESTROY_AA_GUN_WITH_WEAPON => clienttranslate("Destroy AA gun with weapon"),
             ACTION_USE_FIXER => clienttranslate("Use fixer"),
+            ACTION_AIRDROP_FOOD => clienttranslate("Airdrop Food"),
+            ACTION_AIRDROP_MONEY => clienttranslate("Airdrop Money"),
+            ACTION_AIRDROP_WEAPON => clienttranslate("Airdrop Weapon")
         ];
 
         foreach($result as &$action) {

@@ -76,7 +76,6 @@ const ACTION_GET_MEDICINE = 'get_medicine';
 const ACTION_GET_MONEY_FOR_FOOD = 'get_money_for_food';
 const ACTION_GET_MONEY_FOR_MEDICINE = 'get_money_for_medicine';
 const ACTION_PAY_FOR_MORALE = 'pay_for_morale';
-const ACTION_AIRDROP = 'airdrop';
 const ACTION_GET_INTEL = 'get_intel';
 const ACTION_BUY_WEAPON = 'buy_weapon';
 const ACTION_GET_WORKER = 'get_worker';
