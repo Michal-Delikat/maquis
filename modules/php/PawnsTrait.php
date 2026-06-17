@@ -151,10 +151,10 @@ trait PawnsTrait {
 
         $workerID = $this->getWorkerIdByLocation((string) $spaceID);
         $this->updateComponent($workerID, 'safe_house', 'active');
-
+        
         if ($this->checkEscapeRoute($spaceID)['fakeIdUsed']) {
             $this->removeFakeId($spaceID);
-        } else if ($this->getTokenTypeInSpace($spaceID) === TOKEN_FAKE_ID) {
+        } else if ($this->checkIsTokenTypeInSpace($spaceID, TOKEN_FAKE_ID)) {
             $this->collectTokens(TOKEN_FAKE_ID, $spaceID);
         }
 

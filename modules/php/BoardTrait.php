@@ -145,7 +145,7 @@ trait BoardTrait {
         $board = $this->getBoard();
         $boardPaths = $this->getBoardPaths();
         $spacesWithPatrols = array_merge($this->getSpacesWithMilice(), $this->getSpacesWithSoldiers());
-        $hasFakeId = (bool) ($this->getTokenTypeInSpace($activeSpace) === TOKEN_FAKE_ID);
+        $hasFakeId = $this->checkIsTokenTypeInSpace($activeSpace, TOKEN_FAKE_ID);
 
         $spacesToCheck = array();
         $visited = array();

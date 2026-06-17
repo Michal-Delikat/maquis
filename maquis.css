@@ -701,6 +701,12 @@
     height: 25%;
 }
 
+.mission-token-space {
+    position: absolute;
+    right: 33%;
+    top: 20%;
+}
+
 .worker-space {
     position: absolute;
     width: 100%;

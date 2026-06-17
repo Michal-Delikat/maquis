@@ -14,18 +14,14 @@ trait ComponentsTrait {
     protected function placeTokens(int $spaceID, string $tokenType, int $quantity = 1, bool $notify = true): void {
         $quantity = min($quantity, $this->getAvailableResource($tokenType));
 
-        for ($i = 1; $i <= $quantity; $i++) {
-            $location = $spaceID . "_" . $i;
-
-            static::DbQuery("
-                UPDATE components
-                SET location = '$location', state = 'placed'
-                WHERE name LIKE '$tokenType%'
-                AND location = 'off_board'
-                AND state = 'available'
-                LIMIT 1
-            ");
-        }
+        static::DbQuery("
+            UPDATE components
+            SET location = '$spaceID', state = 'placed'
+            WHERE name LIKE '$tokenType%'
+            AND location = 'off_board'
+            AND state = 'available'
+            LIMIT $quantity
+        ");
 
         if ($notify) { 
             $tokens = (array) $this->getCollectionFromDb("
@@ -70,7 +66,15 @@ trait ComponentsTrait {
             WHERE location LIKE '$spaceID%' AND name LIKE '%token%'
             LIMIT 1;
         ");
-    } 
+    }
+
+    protected function checkIsTokenTypeInSpace(int $spaceID, string $tokenType): bool {
+        return (bool) $this->getUniqueValueFromDb("
+            SELECT name
+            FROM components
+            WHERE name LIKE '$tokenType%' AND location = '$spaceID';
+        ");
+    }
 
     protected function getTokenQuantityInSpace(int $spaceID): int {
         return (int) $this->getUniqueValueFromDb("

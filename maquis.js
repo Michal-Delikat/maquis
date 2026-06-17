@@ -118,6 +118,7 @@ function (dojo, declare) {
                                     </div>
                                     <div id="space-20-background-space" class="background-space"></div>
                                 </div>
+                                <div id="mission-a-token-space" class="mission-token-space"></div>
                             </div>
                         </div>
                         <div id="mission-slot-2" class="mission-slot">
@@ -145,6 +146,7 @@ function (dojo, declare) {
                                     </div>
                                     <div id="space-23-background-space" class="background-space"></div>
                                 </div>
+                                <div id="mission-b-token-space" class="mission-token-space"></div>
                             </div>
                         </div>
                         <div id="barracks" class="whiteblock">
@@ -376,6 +378,8 @@ function (dojo, declare) {
                     `, `space-${i + 1}-marker-spaces`);
                 }
             }
+
+            [1, 7].forEach((id) => dojo.place(`<div id="space-${id}-token-space-2" class="token-space"></div>`, `space-${id}-token-spaces`));
 
             [14, 17].forEach((id) => {
                 for (let i = 2; i < 5; i++) {
@@ -744,7 +748,7 @@ function (dojo, declare) {
         },
 
         notif_tokensPlaced: function({tokens}) {
-            this.placeTokens(tokens);
+            this.placeTokens(Object.values(tokens));
         },
 
         notif_fakeIdRemoved: function({location}) {
@@ -1045,16 +1049,28 @@ function (dojo, declare) {
         },
 
         placeTokens: async function(tokens, animate = true) {
-            const _tokens = Object.values(tokens);
-            for (var i = 0; i < _tokens.length; i++) {
-                let tokenID = _tokens[i].name.split('_').join('-');
+            for (const token of tokens) {
+                let tokenID = token.name.split('_').join('-');
                 let tokenClass = tokenID.split('-').slice(0, -1).join('-');
-                let targetID = `space-${_tokens[i].location.split('_')[0]}-token-space-${_tokens[i].location.split('_')[1]}`;
+                let targetID = '';
+                if (['18', '19', '20'].includes(token.location)) {
+                    targetID = 'mission-a-token-space';
+                } else if (['21', '22', '23'].includes(token.location)) {
+                    targetID = 'mission-b-token-space';
+                } else {
+                    for (let i = 1; i < 5; i++) {
+                        targetID = `space-${token.location}-token-space-${i}`;
+                        if (!dojo.byId(targetID).firstElementChild) {
+                            break;
+                        }
+                    }
+                }
 
                 dojo.place(`
                     <div id=${tokenID} class="token ${tokenClass}">
                         <div class="token-circle"></div>
-                    </div>`, targetID);
+                    </div>`, 
+                targetID);
 
                 if (animate) {
                     this.placeOnObject(tokenID, `custom-player-board`);
@@ -1065,13 +1081,16 @@ function (dojo, declare) {
         },
 
         removeTokens: async function(tokenType, spaceID) {
-            for (let i = 5; i > 0; i--) {
+            for (let i = 4; i > 0; i--) {
                 let space = dojo.byId(`space-${spaceID}-token-space-${i}`);
                 if (space?.firstElementChild) {
                     let tokenID = space.firstElementChild.id;
-                    const animation = this.slideToObject(`${tokenID}`, `${tokenType}-icon`);
-                    await this.bgaPlayDojoAnimation(animation);
-                    dojo.destroy(`${tokenID}`);
+                    let tokenTypeHTML = tokenID.split('-').slice(0, -2).join('_');
+                    if (tokenTypeHTML === tokenType) {
+                        const animation = this.slideToObject(`${tokenID}`, `${tokenType}-icon`);
+                        await this.bgaPlayDojoAnimation(animation);
+                        dojo.destroy(`${tokenID}`);
+                    }
                 }
             }
         },
@@ -1156,6 +1175,7 @@ function (dojo, declare) {
         },
 
         removeAAGun: async function(location) {
+            console.log("hello");
             let space = dojo.byId(`space-${location}-token-space-1`);
             if (space.firstElementChild) {
                 let tokenID = space.firstElementChild.id;
@@ -1166,9 +1186,17 @@ function (dojo, declare) {
         },
 
         removeFakeId: async function(location) {
-            console.log(location);
-            let space = dojo.byId(`space-${location}-token-space-1`);
-            console.log(space);
+            space = undefined;
+            if (['18', '19', '20'].includes(String(location))) {
+                space = dojo.byId(`mission-a-token-space`);
+            } else if (['21', '22', '23'].includes(String(location))) {
+                space = dojo.byId(`mission-b-token-space`);
+            } else {
+                space = dojo.byId(`space-${location}-token-space-2`);
+                if (space && !space.firstElementChild) {
+                    space = dojo.byId(`space-${location}-token-space-1`);
+                }
+            }
             if (space.firstElementChild) {
                 let tokenID = space.firstElementChild.id;
                 const animation = this.slideToObject(`${tokenID}`, "fake_id-icon");
