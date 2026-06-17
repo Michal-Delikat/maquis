@@ -168,7 +168,7 @@
     width: 60px;
     height: 60px;
     background-image: url('img/Tokens.png');
-    background-size: 304%;
+    background-size: 300%;
     position: absolute;
 }
 
@@ -688,14 +688,17 @@
 }
 
 .token-spaces {
-    width: 50%;
+    position: absolute;
+    right: 0;
+    top: 5%;
+    width: 35%;
     height: 100%;
 }
 
 .token-space {
     z-index: 4;
-    width: 50%;
-    height: 20%;
+    width: 100%;
+    height: 25%;
 }
 
 .worker-space {
