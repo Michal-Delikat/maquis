@@ -203,7 +203,7 @@ class DataService {
             ("aa_gun_token_2", "off_board", "available"),
             ("aa_gun_token_3", "off_board", "available"),
             ("aa_gun_token_4", "off_board", "available"),
-            ("round_marker", "0", "NaN"),
+            ("round_marker", "-1", "NaN"),
             ("morale_marker", "6", "NaN"),
             ("soldier_marker", "0", "NaN"),
             ("resistance_1", "safe_house", "active"),

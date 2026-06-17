@@ -143,11 +143,11 @@ class Game extends \Table {
 
         $zeroStarMissions = array(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
         $oneStarMissions = array(
-                MISSION_SABOTAGE, 
-                MISSION_UNDERGROUND_NEWSPAPER,
-                MISSION_INFILTRATION, 
-                MISSION_GERMAN_SHEPARDS,
-                MISSION_DOUBLE_AGENT
+            MISSION_SABOTAGE, 
+            MISSION_UNDERGROUND_NEWSPAPER,
+            MISSION_INFILTRATION, 
+            MISSION_GERMAN_SHEPARDS,
+            MISSION_DOUBLE_AGENT
         );
         $twoStarMissions = array(
             MISSION_AID_THE_SPY,
@@ -183,6 +183,31 @@ class Game extends \Table {
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
+
+    public function stRoundStart(): void {
+        $round = $this->getRoundNumber() + 1;
+        $this->setRoundNumber($round);
+        
+        if ($this->isParadeDay()) {
+            $this->setMorale($this->getMorale() - 1);
+        }
+
+        if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || $round >= 15 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
+            $this->gamestate->nextstate("gameEnd");
+        } else {
+            if ($this->getIsMoleInserted()) {
+                $cardId = $this->peekTopPatrolCardId();
+
+                $this->notify->all("cardPeeked", '', array(
+                    "cardId" => $cardId
+                ));
+            }
+
+            $this->setShotToday(false);
+            $this->gamestate->nextState("placeWorker");
+        }
+        
+}
 
     public function actPlaceWorker(int $spaceID): void {
         $this->setActiveSpace($spaceID);
@@ -397,42 +422,22 @@ class Game extends \Table {
     }
 
     public function stRoundEnd(): void {
-        $this->incStat(1, "turns_number");
-        $round = $this->getRoundNumber() + 1;
-        $this->setRoundNumber($round);
-        
-        if ($this->isParadeDay()) {
-            $this->setMorale($this->getMorale() - 1);
-        }
+        if ($this->getIsCryptographerPlaced() && $this->getRoundNumber() === 10) {
+            $this->returnOrArrest((int) $this->getSpaceIdWithCryptographer());
+            $this->completeMission(MISSION_CODED_MESSAGES);
+        } 
 
-        if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || $round >= 15 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
-            $this->gamestate->nextstate("gameEnd");
-        } else {
-            if ($this->getIsCryptographerPlaced() && $round === 11) {
-                $this->returnOrArrest((int) $this->getSpaceIdWithCryptographer());
-                $this->completeMission(MISSION_CODED_MESSAGES);
-            } 
+        foreach (array_merge(array_reverse($this->getMilice()), array_reverse($this->getSoldiers())) as $patrol) {
+            if ($patrol['state'] === 'placed') {
+                $this->updateComponent($patrol['name'], 'barracks', 'active');
 
-            foreach (array_merge(array_reverse($this->getMilice()), array_reverse($this->getSoldiers())) as $patrol) {
-                if ($patrol['state'] === 'placed') {
-                    $this->updateComponent($patrol['name'], 'barracks', 'active');
-
-                    $this->notify->all("patrolReturned", '', array(
-                        "patrolID" => $patrol['name']
-                    ));
-                }
-            }
-
-            if ($this->getIsMoleInserted()) {
-                $cardId = $this->peekTopPatrolCardId();
-
-                $this->notify->all("cardPeeked", '', array(
-                    "cardId" => $cardId
+                $this->notify->all("patrolReturned", '', array(
+                    "patrolID" => $patrol['name']
                 ));
             }
-            $this->setShotToday(false);
-            $this->gamestate->nextState("placeWorker");
         }
+
+        $this->gamestate->nextState("roundStart");
     }
 
     public function stPseudoGameEnd(): void {

@@ -21,13 +21,21 @@ $machinestates = [
 
     // The initial state. Please do not modify.
 
-    ST_BGA_GAME_SETUP => array(
+    ST_BGA_GAME_SETUP => [
         "name" => "gameSetup",
         "description" => "",
         "type" => "manager",
         "action" => "stGameSetup",
-        "transitions" => ["" => ST_PLAYER_PLACE_WORKER]
-    ),
+        "transitions" => ["" => ST_GAME_ROUND_START]
+    ],
+
+    ST_GAME_ROUND_START => [
+        "name" => "roundStart",
+        "description" => "",
+        "type" => "manager",
+        "action" => "stRoundStart",
+        "transitions" => ["placeWorker" => ST_PLAYER_PLACE_WORKER]
+    ],  
 
     ST_PLAYER_PLACE_WORKER => [
         "name" => "placeWorker",
@@ -179,7 +187,7 @@ $machinestates = [
         "description" => "",
         "type" => "game",
         "action" => "stRoundEnd",
-        "transitions" => ["placeWorker" => ST_PLAYER_PLACE_WORKER, "gameEnd" => ST_PSEUDO_GAME_END],
+        "transitions" => ["gameEnd" => ST_PSEUDO_GAME_END, "roundStart" => ST_GAME_ROUND_START],
         "updateGameProgression" => true,
     ],
 
