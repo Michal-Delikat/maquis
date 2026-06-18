@@ -336,6 +336,26 @@
     display: none;
 }
 
+.mission-flavour-text, .mission-description-text {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.mission-text-location-name {
+    color: red;
+}
+
+.mission-text-item-name {
+    color: green;
+}
+
+.mission-text-morale {
+    color: green;
+}
+
+.mission-text-soldier {
+    color: red;
+}
+
 /* 0-star missions */
 
 :is(#mission_card_milice_parade_day, #mission_card_officers_mansion) > .mission-card-face {
@@ -391,12 +411,20 @@
     background-position-x: center;
 }
 
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space {
+    top: 50%;
+}
+
 :is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-1 {
     left: 7.5%;
 }
 
 :is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-2 {
     left: 36%;
+}
+
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-3 {
+    left: 66%;
 }
 
 #mission_card_infiltration > :is(.mission-space-1, .mission-space-2) {
@@ -417,10 +445,6 @@
 
 #mission_card_german_shepards > .mission-space {
     top: 13%;
-}
-
-#mission_card_aid_the_spy > .mission-space-1 {
-    left: 22%;
 }
 
 /* 2-star missions  */
@@ -450,6 +474,14 @@
     background-position: 100% bottom;
 }
 
+#mission_card_aid_the_spy > :is(.mission-space-1, .mission-space-2) {
+    top: 50%;
+}
+
+#mission_card_aid_the_spy > .mission-space-1 {
+    left: 22%;
+}
+
 #mission_card_aid_the_spy > .mission-space-2 {
     left: 51%;
 }
@@ -459,6 +491,7 @@
 }
 
 #mission_card_destroy_the_train > .mission-space-1 {
+    top: 50%;
     left: 7%;
 }
 
@@ -476,7 +509,8 @@
 }
 
 #mission_card_bomb_for_the_officer > .mission-space-1 {
-    left: 58%
+    left: 58%;
+    top: 50%;
 }
 
 /* 3-star missions */

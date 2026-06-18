@@ -194,130 +194,112 @@ function (dojo, declare) {
                 let description = null;
                 switch(mission.split('_').slice(2).join("_")) {
                     case 'milice_parade_day':
-                        description = `<p>
-                            ${_('The Milice are holding parades around town - a brave volunteer must show our defiance. They probably won\'t make it back...')}<br><br>
-                            ${_('Deliver 1 Weapon to Rue Baradat on a Parade Day (Day 3, 6, 9, 12, and 14). The Worker is Arrested. Increase Morale by 1. Before this mission is completed, the road between Rue Baradat and Fence is blocked on Parade Days.')}
-                        </p>`;
+                        description = `
+                        <p class="mission-flavour-text">${_('The Milice are holding parades around town - a brave volunteer must show our defiance. They probably won\'t make it back...')}</p><br>
+                        <p class="mission-description-text">${_('Deliver 1')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('to')} <span class="mission-text-location-name">Rue Baradat</span> ${_('on a Parade Day (Day 3, 6, 9, 12, and 14). The Worker is Arrested. Increase')} <span class="mission-text-morale">${_('Morale')}</span> ${_('by 1. Before this mission is completed, the road between')} <span class="mission-text-location-name">Rue Baradat</span> ${_('and')} <span class="mission-text-location-name">Fence</span> ${_('is blocked on Parade Days.')}</p>`;
                         break;
                     case 'officers_mansion':
-                        description = `<p>
-                            ${_('The local commander has commandeered a fancy house north of town. We need to make sure he knows that he will never have us cowed.')}<br><br>
-                            ${_('Place a Worker on Rue Baradat, Pont Leveque and Pont du Nord to write anti-fascist graffiti (place markers during Action Phase to track graffiti). Once all three locations are tagged, place a Worker here to complete.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('The local commander has commandeered a fancy house north of town. We need to make sure he knows that he will never have us cowed.')}</p><br>
+                            <p class="mission-description-text">${_('Place a Worker on')} <span class="mission-text-location-name">Rue Baradat</span>, <span class="mission-text-location-name">Pont Leveque</span> ${_('and')} <span class="mission-text-location-name">Pont du Nord</span> ${_('to write anti-fascist graffiti (place markers during Action Phase to track graffiti). Once all three locations are tagged, place a Worker here to complete.')}</p>`;
                         break;
                     case 'sabotage':
-                        description = `<p>
-                            ${_('The occupation runs a munitions factory on the outskirts of town. Infiltrate and sabotage the operation by any means possible.')}<br><br>
-                            ${_('A Worker must infiltrate the factory twice, then return a third day to deliver Explosives.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('The occupation runs a munitions factory on the outskirts of town. Infiltrate and sabotage the operation by any means possible.')}</p><br>
+                            <p class="mission-description-text">${_('A Worker must infiltrate the factory twice, then return a third day to deliver')} <span class="mission-text-item-name">${_('Explosives')}</span>.</p>`;
                         break;
                     case 'underground_newspaper':
-                        description = `<p>
-                            ${_('Get the word out and counter the propaganda of the occupation.')}<br><br>
-                            ${_('Deliver 2 Intel to this location on three separate days.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('Get the word out and counter the propaganda of the occupation.')}</p><br>
+                            <p class="mission-description-text">${_('Deliver 2')} <span class="mission-text-item-name">${_('Intel')}</span> ${_('to this location on three separate days.')}</p>`;
                         break;
                     case 'infiltration':
-                        description = `<p>
-                            ${_('The best place to collect reconnaissance is often from the inside. Insert a mole into the Milice.')}<br><br>
-                            ${_('Deliver 2 Intel to this location. The Worker must remain here until another Worker delivers 1 Weapon and 1 Explosive. While the first Worker is here, you may look at the top card of the Patrol deck before the placement phase.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('The best place to collect reconnaissance is often from the inside. Insert a mole into the Milice.')}</p><br>
+                            <p class="mission-description-text">${_('Deliver 2')} <span class="mission-text-item-name">${_('Intel')}</span> ${_('to this location. The Worker must remain here until another Worker delivers 1')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('and 1')} <span class="mission-text-item-name">${_('Explosive')}</span>. ${_('While the first Worker is here, you may look at the top card of the Patrol deck before the placement phase.')}</p>`;
                         break;
                     case 'german_shepards':
-                        description = `<p>
-                            ${_('The occupiers have dogs to help with patrols. Use poison to eliminate them')}<br><br>
-                            ${_('Deliver 1 Medicine and 1 Food to this location on three separate days. Before this mission is completed, Milice units may not be eliminated.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('The occupiers have dogs to help with patrols. Use poison to eliminate them')}</p><br>
+                            <p class="mission-description-text">${_('Deliver 1')} <span class="mission-text-item-name">${_('Medicine')}</span> ${_('and 1')} <span class="mission-text-item-name">${_('Food')}</span> ${_('to this location on three separate days. Before this mission is completed, Milice units may not be eliminated.')}</p>`;
                         break;
                     case 'double_agent':
-                        description = `<p>
-                            ${_('We must enearth the double agent known only as the "Dark Lady"...')}<br><br>
-                            ${_('Visit all locations on the west side of the river except the Fence and Spare Room. Once completed, turn over the top patrol card; Location #1 is the location of the "Dark Lady". Visit that location again to complete the mission. Remove one Worker permanently from the game.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('We must enearth the double agent known only as the "Dark Lady"...')}</p><br>
+                            <p class="mission-description-text">${_('Visit all locations on the west side of the river except the')} <span class="mission-text-location-name">Fence</span> ${_('and')} <span class="mission-text-location-name">Spare Room</span>. ${_('Once completed, turn over the top patrol card; Location #1 is the location of the "Dark Lady". Visit that location again to complete the mission. Remove one Worker permanently from the game.')}</p>`;
                         break;
                     case 'aid_the_spy':
-                        description = `<p>
-                            ${_('A British spy parachuted in a few days ago and needs our help. Provide him with equipment and supplies to help him carr out his mission.')}<br><br>
-                            ${_('Deliver 2 Weapons to the spy on one day, followed by 1 Money and 2 Food on a second day.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('A British spy parachuted in a few days ago and needs our help. Provide him with equipment and supplies to help him carry out his mission.')}</p><br>
+                            <p class="mission-description-text">${_('Deliver 2')} <span class="mission-text-item-name">${_('Weapons')}</span> ${_('to the spy on one day, followed by 1')} <span class="mission-text-item-name">${_('Money')}</span> ${_('and 2')} <span class="mission-text-item-name">${_('Food')}</span> ${_('on a second day.')}</p>`;
                         break;
                     case 'assassination':
-                        description = `<p>
-                            ${_('The Milice is a paramilitary force of local thugs colluding with the occupiers - we need to send a message to teach these collaborators a lesson!')}<br><br>
-                            ${_('Eliminate all Milice Units. This mission MUST be completed last.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('The Milice is a paramilitary force of local thugs colluding with the occupiers - we need to send a message to teach these collaborators a lesson!')}</p><br>
+                            <p class="mission-description-text">${_('Eliminate all Milice Units. This mission MUST be completed last.')}</p>`;
                         break;
                     case 'destroy_the_train':
-                        description = `<p>
-                            ${_('We\'ve recieved intelligence that the occupation are going to be transporting Panzers along the railway near your town. Plant bombs to destroy the train as it passes.')}<br><br>
-                            ${_('Deliver 5 Explosives to this location. This mission can olny be completed on Days 6, 7, 8 or 9.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('We\'ve recieved intelligence that the occupation are going to be transporting Panzers along the railway near your town. Plant bombs to destroy the train as it passes.')}</p><br>
+                            <p class="mission-description-text">${_('Deliver 3')} <span class="mission-text-item-name">${_('Explosives')}</span> ${_('to this location. This mission can only be completed on Days 6, 7, 8 or 9.')}</p>`;
                         break;
                     case 'liberate_the_town':
-                        description = `<p>
-                            ${_('The Allies are pushing forward. If we rise up the right time, our town could emerge unscathed. For that, we will need weapons and courage!')}<br><br>
-                            ${_('Posses at least 3 Weapons and 4 Morale at the point the Day Track marker moves to \'END\' space.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('The Allies are pushing forward. If we rise up the right time, our town could emerge unscathed. For that, we will need weapons and courage!')}</p><br>
+                            <p class="mission-description-text">${_('Posses at least 3')} <span class="mission-text-item-name">${_('Weapons')}</span> ${_('and 4')} <span class="mission-text-morale">${_('Morale')}</span> ${_('at the point the Day Track marker moves to \'END\' space.')}</p>`;
                         break;
                     case 'coded_messages':
-                        description = `<p>
-                            ${_('Knowledge is power. Work with other Resistance Fighters from other cities to monitor the Occupation. Train a cryptographer, then have them communicate with other Resistance operatives.')}<br><br>
-                            ${_('A Worker must be placed here by end of Day 6 and must remain until the end of Day 10.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('Knowledge is power. Work with other Resistance Fighters from other cities to monitor the Occupation. Train a cryptographer, then have them communicate with other Resistance operatives.')}</p><br>
+                            <p class="mission-description-text">${_('A Worker must be placed here by end of Day 6 and must remain until the end of Day 10.')}</p>`;
                         break;
                     case 'take_out_the_bridges':
-                        description = `<p>
-                            ${_('The Occupation has enjoyed unfettered access to the city for too long. Slow them down!')}<br><br>
-                            ${_('To destroy a bridge, deliver 2 Explosives to the Black Market. Ath the end of the day, place a marker on a bridge of you choice connected to The Black Market. Workers may not pass destroyed bridges for the rest of the game.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('The Occupation has enjoyed unfettered access to the city for too long. Slow them down!')}</p><br>
+                            <p class="mission-description-text">${_('To destroy a bridge, deliver 2')} <span class="mission-text-item-name">${_('Explosives')}</span> ${_('to the')} <span class="mission-text-location-name">Black Market</span>. ${_('At the end of the day, place a marker on a bridge of you choice connected to The')} <span class="mission-text-location-name">Black Market</span>. ${_('Workers may not pass destroyed bridges for the rest of the game.')}</p>`;
                         break;
                     case 'bomb_for_the_officer':
-                        description = `<p>
-                            ${_('A German plane landed in the field southeast of town. The pilot is in a hotel nearby. A perfect time to strike!')}<br><br>
-                            ${_('You must have at least 5 Morale to carry out this mission. Deliver 1 Weapon and 1 Explosive to this location. Before this mission is completed, the East field and the Southeast Spare Room are unusable.')}
-                        </p>`;
+                        description = `
+                            <p class="mission-flavour-text">${_('A German plane landed in the field southeast of town. The pilot is in a hotel nearby. A perfect time to strike!')}</p><br>
+                            <p class="mission-description-text">${_('You must have at least 5')} <span class="mission-text-morale">${_('Morale')}</span> ${_('to carry out this mission. Deliver 1')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('and 1')} <span class="mission-text-item-name">${_('Explosive')}</span> ${_('to this location. Before this mission is completed, the East')} <span class="mission-text-location-name">Field</span> ${_('and the Southeast')} <span class="mission-text-location-name">Spare Room</span> ${_('are unusable.')}</p>`;
                         break;
                     case 'milice_hq':
-                        description = `<p>
-                            ${_('The Milice have established their regional HQ on the edge of town, and nobody knows who to trust. We need to clear out the rats to let the town feel safe again.')}<br><br>
-                            ${_('Morale starts on 4')}<br><br>
+                        description = `
+                            <p class="mission-flavour-text">${_('The Milice have established their regional HQ on the edge of town, and nobody knows who to trust. We need to clear out the rats to let the town feel safe again.')}<p><br>
+                            <p class="mission-description-text"><span class="mission-text-morale">${_('Morale')}</span> ${_('starts on 4')}<br><br>
                             ${_('Objective 1:')}<br>
-                            ${_('Discover the plans of the building at the public records office on Rue Baradat.')}<br><br>
+                            ${_('Discover the plans of the building at the public records office on')} <span class="mission-text-location-name">Rue Baradat</span>.<br><br>
                             ${_('Objective 2:')}<br>
-                            ${_('[SAFE] Spend 2 Poison on this location to spike the Milice\'s water supply, gain 2 on the Morale track and 3 on the Soldier track')}<br><br>
-                            ${_('If the soldier track was on 3+ already, success; otherwise, major success.')}
-                        </p>`;
+                            ${_('[SAFE] Spend 2')} <span class="mission-text-item-name">${_('Poison')}</span> ${_('on this location to spike the Milice\'s water supply, gain 2 on the')} <span class="mission-text-morale">Morale track</span>  ${_('and 3 on the')} <span class="mission-text-soldier">Soldier track</span><br><br>
+                            ${_('If the')} <span class="mission-text-soldier">soldier track</span> ${_('was on 3+ already, success; otherwise, major success.')}</p>`;
                         break;
                     case 'bomb_the_barracks':
-                        description = `<p>
-                            ${_('German soldiers are stationed right outside town. Draw them out with distraction and bomb the barracks to slow the Nazi war machine.')}<br><br>
-                            ${_('Soldier track starts on 3')}<br><br>
+                        description = `
+                            <p class="mission-flavour-text">${_('German soldiers are stationed right outside town. Draw them out with distraction and bomb the barracks to slow the Nazi war machine.')}</p><br>
+                            <p class="mission-description-text"><span class="mission-text-soldier">Soldier track</span> ${_('starts on 3')}<br><br>
                             ${_('Objective 1:')}<br>
                             ${_('Visit this location to recon the barracks')}<br><br>
                             ${_('Objective 2:')}<br>
                             ${_('Visit this location to recon the barracks')}<br><br>
                             ${_('Objective 3:')}<br>
-                            ${_('[SAFE] Spend a Fake ID and Two Explosives on this location AND, on the same day, send a second worker to an empty field and spend a Weapon to distract the soldiers to achieve a major success.')}
-                        </p>`;
+                            ${_('[SAFE] Spend a ')}<span class="mission-text-item-name">${_('Fake ID')}</span> and Two <span class="mission-text-item-name">${_('Explosives')}</span> ${_('on this location AND, on the same day, send a second worker to an empty')} <span class="mission-text-location-name">field</span> ${_('and spend a')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('to distract the soldiers to achieve a major success.')}</p>`;
                         break;
                     case 'free_the_resistance_leader':
-                        description = `<p>
-                            ${_('A resistance leader has been captured and will be transported away from town soon. Free him from the occupiers... or make sure he at least can\'t tell them his secrets.')}<br><br>
-                            ${_('Objective 1:')}<br>
-                            ${_('Spend Info and Money on this location before end of day 5 to bribe a clerk to discover the location of the prisoner.')}<br><br>
+                        description = `
+                            <p class="mission-flavour-text">${_('A resistance leader has been captured and will be transported away from town soon. Free him from the occupiers... or make sure he at least can\'t tell them his secrets.')}</p><br>
+                            <p class="mission-description-text">${_('Objective 1:')}<br>
+                            ${_('Spend')} <span class="mission-text-item-name">${_('Info')}</span> ${_('and')} <span class="mission-text-item-name">${_('Money')}</span> ${_('on this location before end of day 5 to bribe a clerk to discover the location of the prisoner.')}<br><br>
                             ${_('Objective 2:')}<br>
-                            ${_('[SAFE] Spend a Poison on this location before end of day 9 to succeed the mission OR spend a Fake ID, two Weapons and a Medicine to increase the soldier track by 2 on day 10 to achieve a major success.')}
-                        </p>`;
+                            ${_('[SAFE] Spend a')} <span class="mission-text-item-name">${_('Poison')}</span> ${_('on this location before end of day 9 to succeed the mission OR spend a')} <span class="mission-text-item-name">${_('Fake ID')}</span>, ${_('two')} <span class="mission-text-item-name">${_('Weapons')}</span> ${_('and a')} <span class="mission-text-item-name">${_('Medicine')}</span> ${_('to increase the')} <span class="mission-text-soldier">soldier track</span> ${_('by 2 on day 10 to achieve a major success.')}</p>`;
                         break;
                     case 'destroy_aa_guns':
-                        description = `<p>
-                            ${_('The Liberation of France approaches adn the Allies must surely be near. Take out the AA guns that the occupiers have positioned in and around town to ensure air support.')}<br><br>
-                            ${_('Place AA gun tokens on both fields, Rue Baradat, and the Black Market. A fifth gun emplacement is on this location.')}<br><br>
+                        description = `
+                            <p class="mission-flavour-text">${_('The Liberation of France approaches adn the Allies must surely be near. Take out the AA guns that the occupiers have positioned in and around town to ensure air support.')}</p><br>
+                            <p class="mission-description-text">${_('Place AA gun tokens on both')} <span class="mission-text-location-name">fields</span>, <span class="mission-text-location-name">Rue Baradat</span>, ${_('and the')} <span class="mission-text-location-name">Black Market</span>. ${('A fifth gun emplacement is on this location.')}<br><br>
                             ${_('Objective:')}<br>
-                            ${_('[SAFE] Spend an explosive or a weapon in a AA gun emplacement\'s position to destroy it.')}<br><br>
-                            ${_('No airdrops can be made at a field with a AA gun in place.')}<br><br>
-                            ${_('If 3 AA guns are disabled the mission is a success; if all 5 are disabled the mission is a major success.')}
-                        </p>`;
+                            ${_('[SAFE] Spend an')} <span class="mission-text-item-name">${_('explosive')}</span> ${_('or a')} <span class="mission-text-item-name">${_('weapon')}</span> ${_('in a AA gun emplacement\'s position to destroy it.')}<br><br>
+                            ${_('No airdrops can be made at a')} <span class="mission-text-location-name">field</span> ${('with a AA gun in place.')}<br><br>
+                            ${_('If 3 AA guns are disabled the mission is a success; if all 5 are disabled the mission is a major success.')}</p>`;
                         break;
                 }
                     
@@ -487,9 +469,7 @@ function (dojo, declare) {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
                         if (space) dojo.addClass(space, 'available-space');
                     });
-
                     break;
-
                 case 'activateWorker':
                     const spacesWithWorkers = Object.values(args.args.spaces);
 
@@ -497,27 +477,13 @@ function (dojo, declare) {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
                         if (space) dojo.addClass(space, 'space-with-available-worker');
                     });                        
-
                     break;
-
                 case 'takeAction':
                     const activeSpaceID = args.args.activeSpace;
 
                     let activeSpace = dojo.byId(`space-${activeSpaceID}-background-space`);
                     if (activeSpace) dojo.addClass(activeSpace, 'active-space');
-
                     break;
-
-                case 'airdropSelectField':
-                    const emptyFields = Object.values(args.args.emptyFields);
-                    
-                    emptyFields.forEach(field => {
-                        let space = dojo.byId(`space-${field}-background-space`);
-                        if (space) dojo.addClass(space, 'empty-field');
-                    });
-
-                    break;
-
                 case 'shootMilice':
                     const spacesWithMilice = Object.values(args.args.spacesWithMilice);
 
@@ -526,7 +492,6 @@ function (dojo, declare) {
                         if (space) dojo.addClass(space, 'space-with-milice');
                     });
                     break;
-
                 case 'removeWorker':
                     const spacesWithResistanceWorkers = Object.values(args.args);
 
@@ -535,16 +500,14 @@ function (dojo, declare) {
                         if (space) dojo.addClass(space, 'space-with-worker-to-remove');
                     });
                     break;
-
                 case 'removeBridge':
                     const bridgesWithMarkers = Object.values(args.args);
-
-                    console.log(bridgesWithMarkers);
 
                     ['24', '25'].filter(x => !bridgesWithMarkers.includes(x)).forEach(spaceID => {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
                         if (space) dojo.addClass(space, 'space-with-bridge-to-remove');
                     })
+                    break;
             }   
         },
 
