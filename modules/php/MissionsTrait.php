@@ -127,7 +127,7 @@ trait MissionsTrait {
         }
     }
 
-    protected function completeMission(string $missionName, bool $notify = true): void {
+    protected function completeMission(string $missionName, bool $majorSuccess = false): void {
         static::DbQuery("
             UPDATE components
             SET state = 'completed'
@@ -138,16 +138,17 @@ trait MissionsTrait {
         foreach ($spaceIDs as $spaceID) {
             $this->removeMissionSpace((int) $spaceID);
         }
-
-        $this->incrementPlayerScore();
-        
-        if ($notify) {
-            $this->notify->all("missionCompleted", clienttranslate("Mission completed"), array(
-                "missionName" => $missionName, 
-                "playerScore" => $this->getPlayerScore(),
-                "playerId" => $this->getCurrentPlayerId()
-            ));
+        if ($majorSuccess) {
+            $this->setPlayerScore($this->getPlayerScore() + 2);
+        } else {
+            $this->incrementPlayerScore();
         }
+        
+        $this->notify->all("missionCompleted", clienttranslate("Mission completed"), array(
+            "missionName" => $missionName, 
+            "playerScore" => $this->getPlayerScore(),
+            "playerId" => $this->getCurrentPlayerId()
+        ));
 
         if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && !$this->getIsMissionCompleted(MISSION_ASSASSINATION) && $this->getPlacedMilice() <= 0) {
             $this->completeMission(MISSION_ASSASSINATION);
@@ -238,6 +239,15 @@ trait MissionsTrait {
             SELECT name, location
             FROM components
             WHERE name LIKE 'mission_card%' AND state = 'completed';
+        ");
+    }
+
+    protected function getIsThreeStarMissionSelected(): bool {
+        return (bool) self::getUniqueValueFromDb("
+            SELECT name
+            FROM components 
+            WHERE state = 'selected' or state = 'completed' AND name IN ('mission_card_milice_hq', 'mission_card_bomb_the_barracks', 'mission_card_free_the_resistance_leader', 'mission_card_destroy_aa_guns')
+            LIMIT 1;
         ");
     }
 }

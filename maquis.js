@@ -67,8 +67,10 @@ function (dojo, declare) {
                     <div id="resources"></div>
                 </div>
             `, player_board_div);
+            
+            let maxScoreValue = gamedatas.threeStarMissionSelected ? '3' : '2';  
 
-            dojo.byId(`player_score_${player_id}`).innerHTML = `${playerScore}/2`;
+            dojo.place(`<span id="player_score_max_${player_id}">/${maxScoreValue}</span>`, `player_score_${player_id}`, "after");
 
             // RESOURCES
             Object.values(resources).forEach(([resource_name, quantity, available]) => dojo.place(`
@@ -739,7 +741,7 @@ function (dojo, declare) {
         },
 
         notif_missionCompleted: function({missionName, playerScore, playerId}) {
-            dojo.byId("player_score_" + playerId).innerHTML = `${playerScore}/2`;
+            dojo.byId("player_score_" + playerId).innerHTML = `${playerScore}`;
 
             this.flipMission(`mission_card_${missionName}`);
         },

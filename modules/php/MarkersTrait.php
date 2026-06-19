@@ -35,6 +35,12 @@ trait MarkersTrait {
     }
 
     function setMorale(int $newMorale, bool $notify = true): void {
+        if ($newMorale > 7) {
+            $newMorale = 7;
+        } else if ($newMorale < 0) {
+            $newMorale = 0;
+        }
+
         self::DbQuery("
             UPDATE components
             SET location = $newMorale
