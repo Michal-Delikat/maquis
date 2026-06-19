@@ -44,4 +44,12 @@ trait GlobalsTrait {
     protected function setExplosivesAtBridgePlanted(bool $explosivesAtBridgePlanted): void {
         $this->setGameStateValue("explosives_at_bridge_planted", $explosivesAtBridgePlanted);
     }
+
+    protected function setSoldiersDistracted(bool $soldiersDistracted): void {
+        $this->setGameStateValue("soldiers_distracted", $soldiersDistracted);
+    }
+
+    protected function getSoldiersDistracted(): bool {
+        return $this->getGameStateValue("soldiers_distracted");
+    }
 }

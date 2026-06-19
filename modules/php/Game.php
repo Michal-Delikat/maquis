@@ -69,6 +69,7 @@ class Game extends \Table {
             "selected_field" => 11,
             "shot_today" => 12,
             "explosives_at_bridge_planted" => 13,
+            "soldiers_distracted" => 14,
             "my_first_game_variant" => 100,
             "my_second_game_variant" => 101,
         ]);
@@ -126,6 +127,7 @@ class Game extends \Table {
         $this->setGameStateInitialValue("selected_field", 0);
         $this->setGameStateInitialValue("shot_today", false);
         $this->setGameStateInitialValue("explosives_at_bridge_planted", false);
+        $this->setGameStateInitialValue("soldiers_distracted", false);
 
          // Initalize game statistics
         $this->initStat("table", "turns_number", 0);
@@ -180,6 +182,10 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
+        $this->gainResources(RESOURCE_EXPLOSIVES, 2);
+        $this->gainResources(RESOURCE_FAKE_ID, 4);
+        $this->gainResources(RESOURCE_WEAPON, 4);
+
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -204,6 +210,7 @@ class Game extends \Table {
             }
 
             $this->setShotToday(false);
+            $this->setSoldiersDistracted(false);
             $this->gamestate->nextState("placeWorker");
         }        
     }
@@ -600,6 +607,52 @@ class Game extends \Table {
         return $this->getBridgesWithMarkers();
     }
 
+    protected function getAllDatas() {
+        $result = [];
+
+        $result["currentPlayerID"] = (int) $this->getCurrentPlayerId();
+
+        $result["players"] = $this->getCollectionFromDb(
+            "SELECT `player_id` `id`, `player_score` `score` FROM `player`"
+        );
+
+        $result["round"] = $this->getRoundNumber();
+        $result["morale"] = $this->getMorale();
+        $result["activeSoldiers"] = $this->getActiveSoldiers();
+
+        $result["board"] = $this->getBoard();
+        $result["placedTokens"] = $this->getPlacedTokens();
+        $result["placedRooms"] = $this->getPlacedRooms();
+        $result["spacesWithMarkers"] = $this->getSpacesWithMarkers();
+
+        $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');
+
+        $result["resources"] = $this->getAllResources();
+        
+        $selectedMissions = $this->getSelectedMissions();    
+        $result["selectedMissions"] = [
+            $selectedMissions[0]['location'] => $selectedMissions[0]['name'],
+            $selectedMissions[1]['location'] => $selectedMissions[1]['name']
+        ];
+        $result["completedMissions"] = $this->getCompletedMissions();
+        
+        $result["threeStarMissionSelected"] = $this->getIsThreeStarMissionSelected();
+
+        $result["rooms"] = $this->getRooms();
+        
+        $result["placedResistance"] = $this->getPlacedResistance();
+        $result["activeResistance"] = $this->getActiveResistance();
+        $result["resistanceToRecruit"] = $this->getResistanceToRecruit();
+
+        $result["resistanceWorkers"] = $this->getResistanceWorkers();
+        $result["milice"] = $this->getMilice();
+        $result["soldiers"] = $this->getSoldiers();
+
+        $result["darkLadyLocation"] = $this->getDarkLadyLocation();
+
+        return $result;
+    }
+
     protected function saveAction(string $actionName): void {
         switch($actionName) {
             // TODO: remove stats
@@ -838,13 +891,20 @@ class Game extends \Table {
                     $this->addSpaceAction($activeSpace + 1, ACTION_RECON_THE_BARRACKS);
                 } else {
                     $this->addSpaceAction($activeSpace + 1, ACTION_BOMB_THE_BARRACKS);
+                    $this->addSpaceAction(LEFT_FIELD, ACTION_DISTRACT_THE_SOLDIERS);
+                    $this->addSpaceAction(RIGHT_FIELD, ACTION_DISTRACT_THE_SOLDIERS);
                 }
                 break;
             case ACTION_BOMB_THE_BARRACKS:
                 $this->spendResources(RESOURCE_EXPLOSIVES, 2);
                 $this->spendResources(RESOURCE_FAKE_ID);
                 $this->returnOrArrest($this->getActiveSpace());
-                $this->completeMission(MISSION_BOMB_THE_BARRACKS);
+                $this->completeMission(MISSION_BOMB_THE_BARRACKS, $this->getSoldiersDistracted());
+                break;
+            case ACTION_DISTRACT_THE_SOLDIERS:
+                $this->spendResources(RESOURCE_WEAPON);
+                $this->returnWorker($this->getActiveSpace());
+                $this->setSoldiersDistracted(true);
                 break;
             case ACTION_BRIBE_THE_CLERK:
                 $this->spendResources(RESOURCE_INTEL);
@@ -883,56 +943,9 @@ class Game extends \Table {
                 if ($this->countAAGunsPlaced() <= 0 && $this->checkMarkersInSpaces([MISSION_B_SPACE_A])) {
                     $this->completeMission(MISSION_DESTROY_AA_GUNS);
                 }
-
                 break;
         }
     } 
-
-    protected function getAllDatas() {
-        $result = [];
-
-        $result["currentPlayerID"] = (int) $this->getCurrentPlayerId();
-
-        $result["players"] = $this->getCollectionFromDb(
-            "SELECT `player_id` `id`, `player_score` `score` FROM `player`"
-        );
-
-        $result["round"] = $this->getRoundNumber();
-        $result["morale"] = $this->getMorale();
-        $result["activeSoldiers"] = $this->getActiveSoldiers();
-
-        $result["board"] = $this->getBoard();
-        $result["placedTokens"] = $this->getPlacedTokens();
-        $result["placedRooms"] = $this->getPlacedRooms();
-        $result["spacesWithMarkers"] = $this->getSpacesWithMarkers();
-
-        $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');
-
-        $result["resources"] = $this->getAllResources();
-        
-        $selectedMissions = $this->getSelectedMissions();    
-        $result["selectedMissions"] = [
-            $selectedMissions[0]['location'] => $selectedMissions[0]['name'],
-            $selectedMissions[1]['location'] => $selectedMissions[1]['name']
-        ];
-        $result["completedMissions"] = $this->getCompletedMissions();
-        
-        $result["threeStarMissionSelected"] = $this->getIsThreeStarMissionSelected();
-
-        $result["rooms"] = $this->getRooms();
-        
-        $result["placedResistance"] = $this->getPlacedResistance();
-        $result["activeResistance"] = $this->getActiveResistance();
-        $result["resistanceToRecruit"] = $this->getResistanceToRecruit();
-
-        $result["resistanceWorkers"] = $this->getResistanceWorkers();
-        $result["milice"] = $this->getMilice();
-        $result["soldiers"] = $this->getSoldiers();
-
-        $result["darkLadyLocation"] = $this->getDarkLadyLocation();
-
-        return $result;
-    }
 
     protected function getPossibleActions(int $spaceID): array {
         $willNotGetArrested = $this->checkEscapeRoute()["escapeFound"];
@@ -1009,6 +1022,8 @@ class Game extends \Table {
                     return $this->getResource(RESOURCE_MONEY) >= 2 && $this->getResource(RESOURCE_INTEL);
                 case ACTION_BOMB_THE_BARRACKS:
                     return $this->getResource(RESOURCE_EXPLOSIVES) >= 2 && $this->getResource(RESOURCE_FAKE_ID);
+                case ACTION_DISTRACT_THE_SOLDIERS:
+                    return $this->getResource(RESOURCE_WEAPON) && !$this->getSoldiersDistracted() && !$this->getIsMissionCompleted(MISSION_BOMB_THE_BARRACKS);
                 case ACTION_BRIBE_THE_CLERK:
                     return $this->getRoundNumber() <= 5 && $this->getResource(RESOURCE_MONEY) && $this->getResource(RESOURCE_INTEL);
                 case ACTION_KILL_THE_RESISTANCE_LEADER:
