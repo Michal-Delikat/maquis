@@ -68,6 +68,7 @@ function (dojo, declare) {
                 </div>
             `, player_board_div);
             
+            console.log(gamedatas.threeStarMissionSelected);
             let maxScoreValue = gamedatas.threeStarMissionSelected ? '3' : '2';  
 
             dojo.place(`<span id="player_score_max_${player_id}">/${maxScoreValue}</span>`, `player_score_${player_id}`, "after");
@@ -751,7 +752,7 @@ function (dojo, declare) {
         },
 
         notif_cardPeeked: function({cardId}) {
-            this.displayModalWithCard(cardId, _("Next Patrol card"));
+            this.displayModalWithCard(cardId, _("Next patrol card"));
         },
         
         notif_patrolCardsShuffled: function() {

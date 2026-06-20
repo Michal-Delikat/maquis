@@ -246,7 +246,7 @@ trait MissionsTrait {
         return (bool) self::getUniqueValueFromDb("
             SELECT name
             FROM components 
-            WHERE state = 'selected' or state = 'completed' AND name IN ('mission_card_milice_hq', 'mission_card_bomb_the_barracks', 'mission_card_free_the_resistance_leader', 'mission_card_destroy_aa_guns')
+            WHERE (state = 'selected' OR state = 'completed') AND name IN ('mission_card_milice_hq', 'mission_card_bomb_the_barracks', 'mission_card_free_the_resistance_leader', 'mission_card_destroy_aa_guns')
             LIMIT 1;
         ");
     }

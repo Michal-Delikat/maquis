@@ -33,8 +33,28 @@
 }
 
 .standard_popin {
-  height: 300px;
+  aspect-ratio: 0.65;
+  width: 20vw;
   padding: 10px;
+}
+
+@media (min-width: 1400px) {
+    .standard_popin {
+        width: 15vw;
+    }
+}
+
+.standard_popin_title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+}
+
+.standard_popin .patrol-card {
+    width: 90%;
+}
+
+.standard_popin .patrol-card-front {
+    width: 100%;
 }
 
 .player-board {
