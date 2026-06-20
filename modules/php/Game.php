@@ -922,7 +922,8 @@ class Game extends \Table {
                 $this->spendResources(RESOURCE_MEDICINE);
                 $this->returnOrArrest(MISSION_B_SPACE_B);
                 $this->setActiveSoldiers($this->getActiveSoldiers() + 2);
-                $this->completeMission(MISSION_FREE_THE_RESISTANCE_LEADER);
+                $this->setMorale($this->getMorale() -  2);
+                $this->completeMission(MISSION_FREE_THE_RESISTANCE_LEADER, true);
                 break;
             case ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES:
             case ACTION_DESTROY_AA_GUN_WITH_WEAPON:
@@ -938,7 +939,7 @@ class Game extends \Table {
                     $this->removeAAGun($activeSpace);
                 }
                 if ($this->countAAGunsPlaced() <= 0 && $this->checkMarkersInSpaces([MISSION_B_SPACE_A])) {
-                    $this->completeMission(MISSION_DESTROY_AA_GUNS);
+                    $this->completeMission(MISSION_DESTROY_AA_GUNS, true);
                 }
                 break;
         }
