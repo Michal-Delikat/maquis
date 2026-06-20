@@ -182,9 +182,6 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
-        $this->gainResources(RESOURCE_EXPLOSIVES, 2);
-        $this->gainResources(RESOURCE_FAKE_ID, 4);
-        $this->gainResources(RESOURCE_WEAPON, 4);
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
@@ -381,7 +378,7 @@ class Game extends \Table {
                 $this->removeMarker($space);
             }
 
-            if ($this->isGameWon()) {
+            if ($this->getIsGameWon()) {
                 $this->gamestate->nextState("gameEnd");
             } else {
                 $this->gamestate->nextState("removeWorker");
@@ -393,7 +390,7 @@ class Game extends \Table {
                 $this->saveAction($actionName);
                 $this->returnWorker($activeSpace);
 
-                if ($this->isGameWon()) {
+                if ($this->getIsGameWon()) {
                     $this->gamestate->nextState("gameEnd");
                 }
 
@@ -403,7 +400,7 @@ class Game extends \Table {
             if ($actionName !== ACTION_RETURN && $this->getIsSafe($actionName)) {
                 $this->saveAction($actionName);
                 
-                if ($this->isGameWon()) {
+                if ($this->getIsGameWon()) {
                     $this->gamestate->nextState("gameEnd");
                 }
             }
@@ -866,7 +863,7 @@ class Game extends \Table {
             case ACTION_DELIVER_2_POISON:
                 $this->spendResources(RESOURCE_POISON, 2);
                 $this->returnOrArrest($this->getActiveSpace());
-                $this->setMorale($this->getMorale() + 2);
+                $this->decrementMorale();
                 if ($this->getActiveSoldiers() <= 2) {
                     $this->completeMission(MISSION_MILICE_HQ, true);
                 } else {
@@ -987,7 +984,7 @@ class Game extends \Table {
                 case ACTION_GET_WORKER:
                     return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResistanceToRecruit() > 0;
                 case ACTION_COLLECT_ITEMS:
-                    return $this->getTokenTypeInSpace($this->getActiveSpace()) !== TOKEN_AA_GUN;
+                    return $this->getTokenQuantityInSpace($spaceID) && ($this->getTokenTypeInSpace($spaceID) !== TOKEN_AA_GUN);
                 case ACTION_GET_SPARE_ROOM:
                     return !$this->getIsRoomPlaced($spaceID) && $this->getResource(RESOURCE_MONEY) >= 2;
                 case ACTION_BUY_EXPLOSIVES:
@@ -1087,7 +1084,8 @@ class Game extends \Table {
             ACTION_USE_FIXER => clienttranslate("Use fixer"),
             ACTION_AIRDROP_FOOD => clienttranslate("Airdrop Food"),
             ACTION_AIRDROP_MONEY => clienttranslate("Airdrop Money"),
-            ACTION_AIRDROP_WEAPON => clienttranslate("Airdrop Weapon")
+            ACTION_AIRDROP_WEAPON => clienttranslate("Airdrop Weapon"),
+            ACTION_DISTRACT_THE_SOLDIERS => clienttranslate("Distract the soldiers")
         ];
 
         foreach($result as &$action) {
@@ -1155,7 +1153,7 @@ class Game extends \Table {
         return $day > 0 && ($day === 14 || $day % 3 === 0);
     }
 
-    protected function isGameWon(): bool {
+    protected function getIsGameWon(): bool {
         $isThreeStarMissionSelected = $this->getIsThreeStarMissionSelected();
         $playerScore = $this->getPlayerScore();
         return ($isThreeStarMissionSelected && ($playerScore >= 3)) || (!$isThreeStarMissionSelected && ($playerScore >= 2));

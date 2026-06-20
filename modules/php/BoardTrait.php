@@ -15,6 +15,10 @@ trait BoardTrait {
         ");
     }
 
+    protected function getIsWorkerAtBarracksInBombTheBarracksMission(): bool {
+        return $this->getIsMissionSelected(MISSION_BOMB_THE_BARRACKS) && !$this->getIsMissionCompleted(MISSION_BOMB_THE_BARRACKS) && $this->getWorkerIdByLocation(MISSION_B_SPACE_C);
+    }
+
     protected function getEmptySpaces(): array {
         $result = array_keys($this->getCollectionFromDB('
             SELECT space_id
@@ -39,7 +43,7 @@ trait BoardTrait {
         return array_filter($result, function($space) use ($spacesWithPawns, $spacesWithTokens, $fieldSpaces, $spacesWithMarkers, $spaceWithMole, $missionSpaces) {
             return !in_array($space, $spacesWithPawns) && 
                     (string) $space !== (string) $spaceWithMole && 
-                    (!in_array($space, $fieldSpaces) || (in_array($space, $fieldSpaces) && in_array($space, $spacesWithTokens))) && 
+                    (!in_array($space, $fieldSpaces) || (in_array($space, $fieldSpaces) && (in_array($space, $spacesWithTokens) || $this->getIsWorkerAtBarracksInBombTheBarracksMission()))) && 
                     ((!in_array($space, $spacesWithMarkers) && in_array((int) $space, $missionSpaces)) || !in_array((int) $space, $missionSpaces)) &&
                     !($space === RIGHT_BOTTOM_SPARE_ROOM && $this->getIsMissionSelected(MISSION_BOMB_FOR_THE_OFFICER) && !$this->getIsMissionCompleted(MISSION_BOMB_FOR_THE_OFFICER));
         });
