@@ -766,6 +766,10 @@ function (dojo, declare) {
             this.placeDarkLadyLocationReminder(location);
         },
 
+        notif_darkLadyLocationReminderRemoved: function() {
+            this.removeDarkLadyLocationReminder();
+        },
+
         // UTILITY
 
         smoothRemove: function(node) {
@@ -1138,6 +1142,10 @@ function (dojo, declare) {
             `, `space-${spaceID}`);
 
             this.addTooltipHtml(`space-${spaceID}`, `Dark Lady's Location`);
+        },
+
+        removeDarkLadyLocationReminder: function() {
+            dojo.destroy("dark-lady-location");
         },
 
         removeAAGun: async function(location) {

@@ -377,6 +377,8 @@ class Game extends \Table {
                 $this->removeMarker($space);
             }
 
+            $this->notify->all("darkLadyLocationReminderRemoved", '');
+
             if ($this->getIsGameWon()) {
                 $this->gamestate->nextState("gameEnd");
             } else {
@@ -450,11 +452,7 @@ class Game extends \Table {
             $this->completeMission(MISSION_DESTROY_AA_GUNS);
         } 
 
-        $playerScore = $this->getPlayerScore();
-
-        if ($this->getIsGameWon()) {
-            $this->setPlayerScore((int) ($playerScore >= 2));
-        }
+        $this->setPlayerScore((int) $this->getIsGameWon());
 
         $this->gamestate->nextState("gameEnd");
     }
