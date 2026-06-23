@@ -32,6 +32,9 @@ function (dojo, declare) {
         setup: function(gamedatas) {
             // console.log("Starting game setup");
 
+            // TODO: REMOVE AFTER IMPLEMENTING DIFFICULTY MODES 
+            console.log(gamedatas.difficultyMode, gamedatas.isNormal);
+
             let currentRound = parseInt(gamedatas.round);
             let currentMorale = parseInt(gamedatas.morale);
             let activeSoldiers = parseInt(gamedatas.activeSoldiers);
@@ -68,7 +71,6 @@ function (dojo, declare) {
                 </div>
             `, player_board_div);
             
-            console.log(gamedatas.threeStarMissionSelected);
             let maxScoreValue = gamedatas.threeStarMissionSelected ? '3' : '2';  
 
             dojo.place(`<span id="player_score_max_${player_id}">/${maxScoreValue}</span>`, `player_score_${player_id}`, "after");

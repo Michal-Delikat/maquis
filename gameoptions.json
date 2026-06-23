@@ -1,5 +1,29 @@
 {
-    "100": { 
+    "100": {
+        "name": "Difficulty Mode",
+        "values": {
+            "0": {
+                "name": "Very Easy"
+            },
+            "1": {
+                "name": "Easy"
+            },
+            "2": {
+                "name": "Normal"
+            },
+            "3": {
+                "name": "Tricky"
+            },
+            "4": {
+                "name": "Hard"
+            },
+            "5": {
+                "name": "Very Hard"
+            }
+        },
+        "default": 2
+    },
+    "101": { 
         "name": "Mission A",
         "values": {
             "0": { 
@@ -57,7 +81,7 @@
         },
         "default": 0
     },
-    "101": { 
+    "102": { 
         "name": "Mission B",
         "values": {
             "0": { 

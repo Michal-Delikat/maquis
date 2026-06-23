@@ -70,8 +70,9 @@ class Game extends \Table {
             "shot_today" => 12,
             "explosives_at_bridge_planted" => 13,
             "soldiers_distracted" => 14,
-            "my_first_game_variant" => 100,
-            "my_second_game_variant" => 101,
+            "difficulty_mode" => 100,
+            "mission_a" => 101,
+            "mission_b" => 102
         ]);
 
         require('material.inc.php');
@@ -123,6 +124,7 @@ class Game extends \Table {
         $this->patrol_cards->createCards($this->PATROL_CARD_ITEMS);
 
         // Initialize globals
+        $this->setGameStateInitialValue("difficulty_mode", $this->tableOptions->get(100));
         $this->setGameStateInitialValue("active_space", 0);
         $this->setGameStateInitialValue("selected_field", 0);
         $this->setGameStateInitialValue("shot_today", false);
@@ -140,8 +142,8 @@ class Game extends \Table {
         $this->initStat("player", "workers_recruited", 0);
 
         // Configure missions
-        $missionA = (int) $this->tableOptions->get(100);
-        $missionB = (int) $this->tableOptions->get(101);
+        $missionA = (int) $this->tableOptions->get(101);
+        $missionB = (int) $this->tableOptions->get(102);
 
         $zeroStarMissions = array(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
         $oneStarMissions = array(
@@ -182,32 +184,60 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
+        $this->setRoundNumber(14);
+
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
 
     public function stRoundStart(): void {
-        $round = $this->getRoundNumber() + 1;
-        $this->setRoundNumber($round);
+        $this->setShotToday(false);
+        $this->setSoldiersDistracted(false);
+
+        if ($this->getIsMoleInserted()) {
+            $cardId = $this->peekTopPatrolCardId();
+
+            $this->notify->all("cardPeeked", '', array(
+                "cardId" => $cardId
+            ));
+        }
+
+        $this->gamestate->nextState("placeWorker");
+    }
+
+    public function stRoundEnd(): void {
+        if ($this->getIsCryptographerPlaced() && $this->getRoundNumber() === 10) {
+            $this->returnOrArrest((int) $this->getSpaceIdWithCryptographer());
+            $this->completeMission(MISSION_CODED_MESSAGES);
+        } 
+
+        foreach (array_merge(array_reverse($this->getMilice()), array_reverse($this->getSoldiers())) as $patrol) {
+            if ($patrol['state'] === 'placed') {
+                $this->updateComponent($patrol['name'], 'barracks', 'active');
+
+                $this->notify->all("patrolReturned", '', array(
+                    "patrolID" => $patrol['name']
+                ));
+            }
+        }
+
+        $this->setRoundNumber($this->getRoundNumber() + 1);
         
         if ($this->isParadeDay()) {
             $this->setMorale($this->getMorale() - 1);
         }
 
-        if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || $round >= 15 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
+        if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
             $this->gamestate->nextstate("gameEnd");
-        } else {
-            if ($this->getIsMoleInserted()) {
-                $cardId = $this->peekTopPatrolCardId();
-
-                $this->notify->all("cardPeeked", '', array(
-                    "cardId" => $cardId
-                ));
+        } else if ($this->getRoundNumber() >= 15) {
+            if ($this->getDifficultyMode() === VERY_EASY) {
+                $this->setRoundNumber(1);
+                $this->gamestate->nextState("roundStart");
+            } else {
+                $this->gamestate->nextState("gameEnd");
             }
-
-            $this->setShotToday(false);
-            $this->setSoldiersDistracted(false);
-            $this->gamestate->nextState("placeWorker");
+        } else {
+            $this->gamestate->nextState("roundStart");
         }        
     }
 
@@ -425,25 +455,6 @@ class Game extends \Table {
         }
     }
 
-    public function stRoundEnd(): void {
-        if ($this->getIsCryptographerPlaced() && $this->getRoundNumber() === 10) {
-            $this->returnOrArrest((int) $this->getSpaceIdWithCryptographer());
-            $this->completeMission(MISSION_CODED_MESSAGES);
-        } 
-
-        foreach (array_merge(array_reverse($this->getMilice()), array_reverse($this->getSoldiers())) as $patrol) {
-            if ($patrol['state'] === 'placed') {
-                $this->updateComponent($patrol['name'], 'barracks', 'active');
-
-                $this->notify->all("patrolReturned", '', array(
-                    "patrolID" => $patrol['name']
-                ));
-            }
-        }
-
-        $this->gamestate->nextState("roundStart");
-    }
-
     public function stPseudoGameEnd(): void {
         if ($this->getIsMissionSelected(MISSION_LIBERATE_THE_TOWN) && ($this->getMorale() >= 4) && ($this->getResource(RESOURCE_WEAPON) >= 3)) {
             $this->completeMission(MISSION_LIBERATE_THE_TOWN);
@@ -603,6 +614,10 @@ class Game extends \Table {
 
     protected function getAllDatas() {
         $result = [];
+
+        // TODO: REMOVE AFTER IMPLEMENTING DIFFICULTY MODES
+        $result["difficultyMode"] = $this->getDifficultyMode();
+        $result["isNormal"] = $this->getDifficultyMode() === NORMAL;
 
         $result["currentPlayerID"] = (int) $this->getCurrentPlayerId();
 
@@ -1147,8 +1162,7 @@ class Game extends \Table {
     }
 
     protected function isParadeDay(): bool {
-        $day = $this->getRoundNumber();
-        return $day > 0 && ($day === 14 || $day % 3 === 0);
+        return in_array($this->getRoundNumber(), [3, 6, 9, 12, 14]);
     }
 
     protected function getIsGameWon(): bool {

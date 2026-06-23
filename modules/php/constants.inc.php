@@ -23,6 +23,13 @@ const ST_GAME_ROUND_END = 90;
 const ST_PSEUDO_GAME_END = 98;
 const ST_BGA_GAME_END = 99;
 
+const VERY_EASY = '0';
+const EASY = '1';
+const NORMAL = '2';
+const TRICKY = '3';
+const HARD = '4';
+const VERY_HARD = '5';
+
 const RUE_BARADAT = 1;
 const FENCE = 2;
 const PONT_DU_NORD = 3;

@@ -3,6 +3,10 @@
 namespace Bga\Games\Maquis;
 
 trait GlobalsTrait {
+    function getDifficultyMode(): string {
+        return $this->getGameStateValue("difficulty_mode");
+    }
+
     protected function getActiveSpace(): int {
         return $this->getGameStateValue("active_space");
     }
