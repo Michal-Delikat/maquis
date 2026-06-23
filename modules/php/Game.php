@@ -184,8 +184,6 @@ class Game extends \Table {
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 
-        $this->setRoundNumber(14);
-
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
     }
@@ -711,15 +709,19 @@ class Game extends \Table {
                 break;
             case ACTION_AIRDROP_FOOD:
                 $emptyField = $this->getEmptyFields()[0];
-                $this->placeTokens($emptyField, RESOURCE_FOOD, 3);
+                $veryEasyOrEasyDifficultyMode = $this->getDifficultyMode() === VERY_EASY || $this->getDifficultyMode() === EASY;
+                $this->placeTokens($emptyField, RESOURCE_FOOD, $veryEasyOrEasyDifficultyMode ? 4 : 3);
                 break;
             case ACTION_AIRDROP_MONEY:
                 $emptyField = $this->getEmptyFields()[0];
-                $this->placeTokens($emptyField, RESOURCE_MONEY, 1);
+                $veryEasyOrEasyDifficultyMode = $this->getDifficultyMode() === VERY_EASY || $this->getDifficultyMode() === EASY;
+                $this->placeTokens($emptyField, RESOURCE_MONEY, $veryEasyOrEasyDifficultyMode ? 2 : 1);
                 break;
             case ACTION_AIRDROP_WEAPON:
                 $emptyField = $this->getEmptyFields()[0];
-                $this->placeTokens($emptyField, RESOURCE_WEAPON, 1);
+                $quantity = 0;
+                $veryEasyDifficultyMode = $this->getDifficultyMode() === VERY_EASY;
+                $this->placeTokens($emptyField, RESOURCE_WEAPON, $veryEasyDifficultyMode ? 2 : 1);
                 break;
             case ACTION_COLLECT_ITEMS:
                 $activeSpace = $this->getActiveSpace();

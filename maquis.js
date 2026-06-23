@@ -64,7 +64,6 @@ function (dojo, declare) {
             let player_board_div = $('player_board_' + player_id);
 
             // PLAYER INFO
-
             dojo.place(`
                 <div id="custom-player-board">
                     <div id="resources"></div>
