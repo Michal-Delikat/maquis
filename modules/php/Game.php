@@ -227,6 +227,8 @@ class Game extends \Table {
 
         if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
             $this->gamestate->nextstate("gameEnd");
+        } else if ($this->getRoundNumber() >= 12 && $this->getDifficultyMode() === TRICKY) {
+            $this->gamestate->nextState("gameEnd");
         } else if ($this->getRoundNumber() >= 15) {
             if ($this->getDifficultyMode() === VERY_EASY) {
                 $this->setRoundNumber(1);
