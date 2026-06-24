@@ -18,8 +18,8 @@ namespace Bga\Games\Maquis;
 
 require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
-require_once("DataService.php");
 require_once("constants.inc.php");
+
 require_once("ComponentsTrait.php");
 require_once("BoardTrait.php");
 require_once("MissionsTrait.php");
@@ -46,6 +46,7 @@ class Game extends \Table {
     use PawnsTrait;
     use MarkersTrait;
     use BoardActionsTrait;
+    use BoardPaths;
 
     private array $PATROL_CARD_ITEMS;
     private array $ACTIONS;
@@ -77,49 +78,20 @@ class Game extends \Table {
 
         require('material.inc.php');
 
-        $this->PATROL_CARD_ITEMS = PATROL_CARD_ITEMS;
         $this->ACTIONS = ACTIONS;
+        $this->PATROL_CARD_ITEMS = PATROL_CARD_ITEMS;
         $this->patrol_cards = $this->getNew("module.common.deck");  
         $this->patrol_cards->init("patrol_card");
         $this->patrol_cards->autoreshuffle_trigger = array('obj' => $this, 'method' => 'deckAutoReshuffle');
     }
 
     protected function setupNewGame($players, $options = []) {
-        // Set the colors of the players with HTML color code. The default below is red/green/blue/orange/brown. The
-        // number of colors defined here must correspond to the maximum number of players allowed for the gams.
-        $gameinfos = $this->getGameinfos();
-        $default_colors = $gameinfos['player_colors'];
+        $this->setupPlayer($players);
 
-        foreach ($players as $player_id => $player) {
-            // Now you can access both $player_id and $player array
-            $query_values[] = vsprintf("('%s', '%s', '%s', '%s', '%s')", [
-                $player_id,
-                array_shift($default_colors),
-                $player["player_canal"],
-                addslashes($player["player_name"]),
-                addslashes($player["player_avatar"]),
-            ]);
-        }
-
-        // Create players based on generic information.
-        //
-        // NOTE: You can add extra field on player table in the database (see dbmodel.sql) and initialize
-        // additional fields directly here.
-        static::DbQuery(
-            sprintf(
-                "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar) VALUES %s",
-                implode(",", $query_values)
-            )
-        );
-
-        $this->reattributeColorsBasedOnPreferences($players, $gameinfos["player_colors"]);
-        $this->reloadPlayersBasicInfos();
-
-        // Add master data to DB
-        static::DbQuery(DataService::setupBoard());
-        static::DbQuery(DataService::setupBoardPaths());
-        static::DbQuery(DataService::setupBoardActions());
-        static::DbQuery(DataService::setupComponents());
+        $this->setupBoard();
+        $this->setupBoardPaths();
+        $this->setupBoardActions();
+        $this->setupComponents();
 
         $this->patrol_cards->createCards($this->PATROL_CARD_ITEMS);
 

@@ -2,6 +2,31 @@
 namespace Bga\Games\Maquis;
 
 trait BoardTrait {
+    protected function setupBoard(): void {
+        static::DbQuery('
+            INSERT INTO board (space_id, space_name, is_safe, is_field)
+            VALUES
+            (1, "Rue Baradat", FALSE, FALSE),
+            (2, "Fence", FALSE, FALSE),
+            (3, "Pont du Nord", FALSE, FALSE),
+            (4, "Radio B", FALSE, FALSE),
+            (5, "Doctor", FALSE, FALSE),
+            (6, "Poor District", FALSE, FALSE),
+            (7, "Black Market", FALSE, FALSE),
+            (8, "Spare Room", FALSE, FALSE),
+            (9, "Radio A", FALSE, FALSE),
+            (10, "Spare Room", FALSE, FALSE),
+            (11, "Pont Leveque", FALSE, FALSE),
+            (12, "Grocer", FALSE, FALSE),
+            (13, "Spare Room", FALSE, FALSE),
+            (14, "Field", FALSE, TRUE),
+            (15, "Cafe", FALSE, FALSE),
+            (16, "Safe House", TRUE, FALSE),
+            (17, "Field", FALSE, TRUE),
+            (26, "Fixer", FALSE, FALSE);
+        ');
+    }
+
     protected function getBoard() {
         return $this->getCollectionFromDb(
             "SELECT `space_id`, `is_safe` FROM `board`;"
@@ -118,91 +143,5 @@ trait BoardTrait {
             SET is_safe = ' . (int) $isSafe . '
             WHERE space_id = ' . $spaceID . ';'
         );
-    }
-
-    public static function removePath(int $startId, int $endId): void {
-        self::DbQuery("
-            DELETE FROM board_path
-            WHERE (space_id_start = $startId AND space_id_end = $endId)
-                OR (space_id_start = $endId AND space_id_end = $startId);
-        ");
-    }
-
-    protected function getBoardPaths(): array {
-        $result = (array) $this->getCollectionFromDb("
-            SELECT path_id, space_id_start, space_id_end
-            FROM board_path;
-        ");
-
-        $paradeCanHappen = $this->getIsMissionSelected(MISSION_MILICE_PARADE_DAY) && !$this->getIsMissionCompleted(MISSION_MILICE_PARADE_DAY);
-        
-        return array_filter($result, function ($connection) use ($paradeCanHappen) {
-            return !(
-                    (($connection['space_id_start'] == '1' && $connection['space_id_end'] == '2') || ($connection['space_id_start'] == '2' && $connection['space_id_end'] == '1')) && 
-                    $this->isParadeDay() &&
-                    $paradeCanHappen
-                );
-        });
-    }
-
-    protected function checkEscapeRoute(): array {
-        $activeSpace = $this->getActiveSpace();
-        $board = $this->getBoard();
-        $boardPaths = $this->getBoardPaths();
-        $spacesWithPatrols = array_merge($this->getSpacesWithMilice(), $this->getSpacesWithSoldiers());
-        $hasFakeId = $this->checkIsTokenTypeInSpace($activeSpace, TOKEN_FAKE_ID);
-
-        $spacesToCheck = array();
-        $visited = array();
-        $bestResult = null;
-
-        foreach ($boardPaths as $boardPath) {
-            if ($boardPath['space_id_start'] == $activeSpace) {
-                $spacesToCheck[] = [$boardPath["space_id_end"], !$hasFakeId];
-            }
-        }
-
-        for ($i = 0; $i < count($spacesToCheck); $i++) {
-            [$spaceID, $patrolSkipped] = $spacesToCheck[$i];
-
-            $visitedKey = "$spaceID-$patrolSkipped";
-            if (in_array($visitedKey, $visited)) {
-                continue;
-            }
-            $visited[] = $visitedKey;
-
-            $isSafe = (bool) $board[$spaceID]['is_safe'];
-
-            if ($isSafe) {
-                $fakeIdUsed = $patrolSkipped && $hasFakeId;
-
-                // Jeśli znaleźliśmy drogę bez zużycia ID, to jest optymalna — można przerwać
-                if (!$fakeIdUsed) {
-                    return ["escapeFound" => true, "fakeIdUsed" => false];
-                }
-
-                // Inaczej zapamiętaj jako kandydata, ale szukaj dalej
-                $bestResult = ["escapeFound" => true, "fakeIdUsed" => true];
-                continue;
-            }
-
-            $hasPatrol = in_array($spaceID, $spacesWithPatrols);
-
-            if (!$hasPatrol) {
-                foreach ($boardPaths as $boardPath) {
-                    if ($boardPath['space_id_start'] == $spaceID) {
-                        $spacesToCheck[] = [$boardPath["space_id_end"], $patrolSkipped];
-                    }
-                }
-            } else if (!$patrolSkipped) {
-                foreach ($boardPaths as $boardPath) {
-                    if ($boardPath['space_id_start'] == $spaceID) {
-                        $spacesToCheck[] = [$boardPath["space_id_end"], true];
-                    }
-                }
-            }
-        }
-
-        return $bestResult ?? ["escapeFound" => false, "fakeIdUsed" => false];
     }
 }
