@@ -1,5 +1,4 @@
 <?php
-
 namespace Bga\Games\Maquis;
 
 require_once("constants.inc.php");

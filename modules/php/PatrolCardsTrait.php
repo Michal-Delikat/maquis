@@ -1,5 +1,4 @@
 <?php
-
 namespace Bga\Games\Maquis;
 
 trait PatrolCardsTrait {

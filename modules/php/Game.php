@@ -1169,6 +1169,12 @@ class Game extends \Table {
         return in_array($this->getRoundNumber(), [3, 6, 9, 12, 14]);
     }
 
+    protected function getCanShoot(): bool {
+        $weapon = $this->getResource('weapon');
+        $placedMilice = $this->getPlacedMilice();
+        return ($weapon > 0 && !$this->getShotToday() && $placedMilice > 0) && !($this->getIsMissionSelected(MISSION_GERMAN_SHEPARDS) && !$this->getIsMissionCompleted(MISSION_GERMAN_SHEPARDS));
+    }
+
     protected function getIsGameWon(): bool {
         $isThreeStarMissionSelected = $this->getIsThreeStarMissionSelected();
         $playerScore = $this->getPlayerScore();

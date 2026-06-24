@@ -1,5 +1,6 @@
 <?php
 namespace Bga\Games\Maquis;
+
 trait BoardTrait {
     protected function getBoard() {
         return $this->getCollectionFromDb(

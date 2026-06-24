@@ -1,5 +1,4 @@
 <?php
-
 namespace Bga\Games\Maquis;
 
 trait GlobalsTrait {
@@ -25,12 +24,6 @@ trait GlobalsTrait {
 
     protected function setShotToday(bool $shotToday): void {
         $this->setGameStateValue("shot_today", $shotToday);
-    }
-
-    protected function getCanShoot(): bool {
-        $weapon = $this->getResource('weapon');
-        $placedMilice = $this->getPlacedMilice();
-        return ($weapon > 0 && !$this->getShotToday() && $placedMilice > 0) && !($this->getIsMissionSelected(MISSION_GERMAN_SHEPARDS) && !$this->getIsMissionCompleted(MISSION_GERMAN_SHEPARDS));
     }
 
     protected function getSelectedField(): int {

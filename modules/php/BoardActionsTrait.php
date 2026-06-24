@@ -1,5 +1,6 @@
 <?php
 namespace Bga\Games\Maquis;
+
 trait BoardActionsTrait {
     protected function addSpaceAction(int|array $spaceID, string $actionName): void {
         $spaceIDs = is_array($spaceID) ? $spaceID : [$spaceID];
