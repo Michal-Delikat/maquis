@@ -191,14 +191,16 @@ class Game extends \Table {
         }
 
         $this->setRoundNumber($this->getRoundNumber() + 1);
+
+        $difficultyMode = $this->getDifficultyMode();
         
-        if ($this->isParadeDay()) {
+        if ((in_array($difficultyMode, [VERY_EASY, EASY, NORMAL, TRICKY]) && $this->isParadeDay()) || (in_array($difficultyMode, [HARD, VERY_HARD]) && $this->isDayWithTriangle())) {
             $this->setMorale($this->getMorale() - 1);
         }
 
         if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
             $this->gamestate->nextstate("gameEnd");
-        } else if ($this->getRoundNumber() >= 12 && $this->getDifficultyMode() === TRICKY) {
+        } else if ($this->getRoundNumber() >= 12 && in_array($this->getDifficultyMode(), [TRICKY, HARD, VERY_HARD])) {
             $this->gamestate->nextState("gameEnd");
         } else if ($this->getRoundNumber() >= 15) {
             if ($this->getDifficultyMode() === VERY_EASY) {
@@ -1138,6 +1140,10 @@ class Game extends \Table {
 
     protected function isParadeDay(): bool {
         return in_array($this->getRoundNumber(), [3, 6, 9, 12, 14]);
+    }
+
+    protected function isDayWithTriangle(): bool {
+        return in_array($this->getRoundNumber(), [2, 5, 8, 10, 12]);
     }
 
     protected function getCanShoot(): bool {
