@@ -183,6 +183,10 @@ trait Pawns {
             "workerID" => $workerID,
             "spaceName" => $spaceName
         ));
+
+        if ($this->getDifficultyMode() === VERY_HARD) {
+            $this->setMorale($this->getMorale() - 1);
+        }
     }
     
     function returnOrArrest(int $spaceID): void {
