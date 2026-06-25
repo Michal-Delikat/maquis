@@ -1,7 +1,7 @@
 <?php
 namespace Bga\Games\Maquis;
 
-trait BoardActionsTrait {
+trait BoardActions {
     protected function setupBoardActions(): void {
         $fixerActions = [ACTION_BUY_EXPLOSIVES, ACTION_GET_MONEY, ACTION_FORGE_FAKE_ID, ACTION_GET_INTEL, ACTION_BUY_POISON, ACTION_INCREASE_MORALE, ACTION_GET_3_FOOD, ACTION_GET_3_MEDICINE];
 

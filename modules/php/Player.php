@@ -2,7 +2,7 @@
 
 namespace Bga\Games\Maquis;
 
-trait PlayerTrait {
+trait Player {
     protected function setupPlayer(array $players): void {
         // Set the colors of the players with HTML color code. The default below is red/green/blue/orange/brown. The
         // number of colors defined here must correspond to the maximum number of players allowed for the gams.

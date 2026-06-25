@@ -1,7 +1,7 @@
 <?php
 namespace Bga\Games\Maquis;
 
-trait GlobalsTrait {
+trait Globals {
     function getDifficultyMode(): string {
         return $this->getGameStateValue("difficulty_mode");
     }

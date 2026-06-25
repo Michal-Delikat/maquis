@@ -20,32 +20,31 @@ require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
 require_once("constants.inc.php");
 
-require_once("ComponentsTrait.php");
-require_once("BoardTrait.php");
-require_once("MissionsTrait.php");
-require_once("GlobalsTrait.php");
-require_once("RoomsTrait.php");
-require_once("ResourcesTrait.php");
-require_once("PatrolCardsTrait.php");
-require_once("PlayerTrait.php");
-require_once("PawnsTrait.php");
-require_once("MarkersTrait.php");
-require_once("BoardActionsTrait.php");
-
-const BOARD = 'BOARD_STATE';
+require_once("Components.php");
+require_once("Board.php");
+require_once("Missions.php");
+require_once("Globals.php");
+require_once("Rooms.php");
+require_once("Resources.php");
+require_once("PatrolCards.php");
+require_once("Player.php");
+require_once("Pawns.php");
+require_once("Markers.php");
+require_once("BoardActions.php");
+require_once("BoardPaths.php");
 
 class Game extends \Table {
-    use ComponentsTrait;
-    use BoardTrait;
-    use MissionsTrait;
-    use GlobalsTrait;
-    use ResourcesTrait;
-    use PatrolCardsTrait;
-    use RoomsTrait;
-    use PlayerTrait;
-    use PawnsTrait;
-    use MarkersTrait;
-    use BoardActionsTrait;
+    use Components;
+    use Board;
+    use Missions;
+    use Globals;
+    use Resources;
+    use PatrolCards;
+    use Rooms;
+    use Player;
+    use Pawns;
+    use Markers;
+    use BoardActions;
     use BoardPaths;
 
     private array $PATROL_CARD_ITEMS;
@@ -88,11 +87,6 @@ class Game extends \Table {
     protected function setupNewGame($players, $options = []) {
         $this->setupPlayer($players);
 
-        $this->setupBoard();
-        $this->setupBoardPaths();
-        $this->setupBoardActions();
-        $this->setupComponents();
-
         $this->patrol_cards->createCards($this->PATROL_CARD_ITEMS);
 
         // Initialize globals
@@ -112,6 +106,11 @@ class Game extends \Table {
         $this->initStat("player", "intel_aquired", 0);
         $this->initStat("player", "explosives_aquired", 0);
         $this->initStat("player", "workers_recruited", 0);
+
+        $this->setupBoard();
+        $this->setupBoardPaths();
+        $this->setupBoardActions();
+        $this->setupComponents($this->getDifficultyMode());
 
         // Configure missions
         $missionA = (int) $this->tableOptions->get(101);

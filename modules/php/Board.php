@@ -1,7 +1,7 @@
 <?php
 namespace Bga\Games\Maquis;
 
-trait BoardTrait {
+trait Board {
     protected function setupBoard(): void {
         static::DbQuery('
             INSERT INTO board (space_id, space_name, is_safe, is_field)

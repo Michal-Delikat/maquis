@@ -1,8 +1,10 @@
 <?php
 namespace Bga\Games\Maquis;
 
-trait ComponentsTrait {
-    protected function setupComponents(): void {
+trait Components {
+    protected function setupComponents(string $difficultyMode = NORMAL): void {
+        $fifthResistanceWorker = in_array($difficultyMode, [TRICKY, HARD, VERY_HARD]) ? '("resistance_5", "off_board", "not_available")' : '("resistance_5", "safe_house", "active")';
+
         static::DbQuery('
             INSERT INTO components (name, location, state)
             VALUES
@@ -85,9 +87,9 @@ trait ComponentsTrait {
             ("soldier_marker", "0", "NaN"),
             ("resistance_1", "safe_house", "active"),
             ("resistance_2", "safe_house", "active"),
-            ("resistance_3", "safe_house", "active"),
-            ("resistance_4", "cafe", "inactive"),
-            ("resistance_5", "cafe", "inactive"),
+            ("resistance_3", "cafe", "inactive"),
+            ("resistance_4", "cafe", "inactive"),'.
+            $fifthResistanceWorker .',
             ("milice_1", "barracks", "active"),
             ("milice_2", "barracks", "active"),
             ("milice_3", "barracks", "active"),

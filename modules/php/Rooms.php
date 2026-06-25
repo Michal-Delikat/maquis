@@ -2,7 +2,7 @@
 
 namespace Bga\Games\Maquis;
 
-trait RoomsTrait {
+trait Rooms {
     protected function getRooms(): array {
         return (array) $this->getCollectionFromDb("
             SELECT name, location, state

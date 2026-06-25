@@ -1,7 +1,7 @@
 <?php
 namespace Bga\Games\Maquis;
 
-trait MissionsTrait {
+trait Missions {
     protected function configureMissions(string $missionAName, string $missionBName): void {
         $this->setSelectedMissions($missionAName, $missionBName);
 

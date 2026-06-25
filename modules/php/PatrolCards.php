@@ -1,7 +1,7 @@
 <?php
 namespace Bga\Games\Maquis;
 
-trait PatrolCardsTrait {
+trait PatrolCards {
     protected function shuffleIfNeeded(): void {
         if ($this->patrol_cards->countCardInLocation('deck') <= 0) {
             $this->patrol_cards->moveAllCardsInLocation('discard', 'deck');            

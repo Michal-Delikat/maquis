@@ -1,7 +1,7 @@
 <?php
 namespace Bga\Games\Maquis;
 
-trait PawnsTrait {
+trait Pawns {
     
     function getResistanceWorkers(): array {
         return $this->getCollectionFromDb("SELECT * FROM components WHERE name LIKE 'resistance%';");

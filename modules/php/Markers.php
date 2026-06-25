@@ -1,7 +1,7 @@
 <?php
 namespace Bga\Games\Maquis;
 
-trait MarkersTrait {
+trait Markers {
     // ROUND
     function getRoundNumber(): int {
         return (int) $this->getUniqueValueFromDb("

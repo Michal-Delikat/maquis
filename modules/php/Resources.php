@@ -2,7 +2,7 @@
 
 namespace Bga\Games\Maquis;
 
-trait ResourcesTrait {
+trait Resources {
     protected function getResource(string $resourceName): int {
         return (int) $this->getUniqueValueFromDb("
             SELECT COUNT(*) 
