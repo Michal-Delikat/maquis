@@ -150,25 +150,25 @@ function (dojo, declare) {
                                 <div id="mission-b-token-space" class="mission-token-space"></div>
                             </div>
                         </div>
-                        <div class="barrack-boxes">
+                        <div class="barracks-boxes">
                             <div class="milice-barracks barracks whiteblock">
                                 <h3 class="whiteblock-label">${_('Milice')}</h3>
                                 <div id="milice-row" class="patrol-units-row">
-                                    <div id="barracks-milice-space-1"></div>
-                                    <div id="barracks-milice-space-2"></div>
-                                    <div id="barracks-milice-space-3"></div>
-                                    <div id="barracks-milice-space-4"></div>
-                                    <div id="barracks-milice-space-5"></div>
+                                    <div id="barracks-milice-space-1" class="patrol-unit-barracks-space"></div>
+                                    <div id="barracks-milice-space-2" class="patrol-unit-barracks-space"></div>
+                                    <div id="barracks-milice-space-3" class="patrol-unit-barracks-space"></div>
+                                    <div id="barracks-milice-space-4" class="patrol-unit-barracks-space"></div>
+                                    <div id="barracks-milice-space-5" class="patrol-unit-barracks-space"></div>
                                 </div>
                             </div>
                             <div class="soldiers-barracks barracks whiteblock">
                                 <h3 class="whiteblock-label">${_('Soldiers')}</h3>
                                 <div id="soldiers-row" class="patrol-units-row">
-                                    <div id="barracks-soldier-space-1"></div>
-                                    <div id="barracks-soldier-space-2"></div>
-                                    <div id="barracks-soldier-space-3"></div>
-                                    <div id="barracks-soldier-space-4"></div>
-                                    <div id="barracks-soldier-space-5"></div>
+                                    <div id="barracks-soldier-space-1" class="patrol-unit-barracks-space"></div>
+                                    <div id="barracks-soldier-space-2" class="patrol-unit-barracks-space"></div>
+                                    <div id="barracks-soldier-space-3" class="patrol-unit-barracks-space"></div>
+                                    <div id="barracks-soldier-space-4" class="patrol-unit-barracks-space"></div>
+                                    <div id="barracks-soldier-space-5" class="patrol-unit-barracks-space"></div>
                                 </div>
                             </div>
                         </div>  
@@ -915,7 +915,6 @@ function (dojo, declare) {
                     const barracksSpace = dojo.byId(`barracks-milice-space-${i}`);
                     if (!barracksSpace.firstElementChild) {
                         dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `barracks-milice-space-${i}`); 
-                        this.placeOnObject(miliceID, `barracks-milice-space-${i}`);
                         break; 
                     }
                 }
@@ -930,7 +929,6 @@ function (dojo, declare) {
                     const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);
                     if (!barracksSpace.firstElementChild) {
                         dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `barracks-soldier-space-${i}`); 
-                        this.placeOnObject(soldierID, `barracks-soldier-space-${i}`);
                         break; 
                     }
                 }

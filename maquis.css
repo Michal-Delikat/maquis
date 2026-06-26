@@ -274,6 +274,7 @@
     border: 1px solid rgba(255, 255, 255, 0.75);
     border-radius: 6px;
     padding: 6px 12px;
+    margin: 0;
 }
 
 .arrest {
@@ -300,7 +301,7 @@
     perspective: 1000px;
 }
 
-.barrack-boxes {
+.barracks-boxes {
     width: 25%;
     height: 100%;
 }
@@ -321,11 +322,13 @@
     width: 100%;
     height: 70%;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-#milice-row > *, #soldiers-row > * {
-    width: 20%;
-    height: 75%;
+ .patrol-unit-barracks-space {
+    width: 33%;
+    height: 50%;
 }
 
 .mission-description {
