@@ -82,10 +82,10 @@ function (dojo, declare) {
             `, 'resources'));
 
             dojo.place(`
-                <div id="board-and-missions">
-                    <div id="top-area">
-                        <div id="arrest" class="whiteblock">
-                            <b>${_('Arrested Resistance')}</b>
+                <div class="board-and-missions">
+                    <div class="top-area">
+                        <div class="arrest whiteblock">
+                            <h3 class="whiteblock-label">${_('Arrested Resistance')}</h3>
                             <div>
                                 <div id="arrest-space-1" class="arrest-space"></div>
                                 <div id="arrest-space-2" class="arrest-space"></div>
@@ -150,24 +150,28 @@ function (dojo, declare) {
                                 <div id="mission-b-token-space" class="mission-token-space"></div>
                             </div>
                         </div>
-                        <div id="barracks" class="whiteblock">
-                            <b>${_('Milice')}</b>
-                            <div id="milice-row">
-                                <div id="barracks-milice-space-1"></div>
-                                <div id="barracks-milice-space-2"></div>
-                                <div id="barracks-milice-space-3"></div>
-                                <div id="barracks-milice-space-4"></div>
-                                <div id="barracks-milice-space-5"></div>
+                        <div class="barrack-boxes">
+                            <div class="milice-barracks barracks whiteblock">
+                                <h3 class="whiteblock-label">${_('Milice')}</h3>
+                                <div id="milice-row" class="patrol-units-row">
+                                    <div id="barracks-milice-space-1"></div>
+                                    <div id="barracks-milice-space-2"></div>
+                                    <div id="barracks-milice-space-3"></div>
+                                    <div id="barracks-milice-space-4"></div>
+                                    <div id="barracks-milice-space-5"></div>
+                                </div>
                             </div>
-                            <b>${_('Soldiers')}</b>
-                            <div id="soldiers-row">
-                                <div id="barracks-soldier-space-1"></div>
-                                <div id="barracks-soldier-space-2"></div>
-                                <div id="barracks-soldier-space-3"></div>
-                                <div id="barracks-soldier-space-4"></div>
-                                <div id="barracks-soldier-space-5"></div>
+                            <div class="soldiers-barracks barracks whiteblock">
+                                <h3 class="whiteblock-label">${_('Soldiers')}</h3>
+                                <div id="soldiers-row" class="patrol-units-row">
+                                    <div id="barracks-soldier-space-1"></div>
+                                    <div id="barracks-soldier-space-2"></div>
+                                    <div id="barracks-soldier-space-3"></div>
+                                    <div id="barracks-soldier-space-4"></div>
+                                    <div id="barracks-soldier-space-5"></div>
+                                </div>
                             </div>
-                        </div>
+                        </div>  
                     </div>
                     <div id="board">
                         <div id="spaces"></div>
@@ -175,13 +179,13 @@ function (dojo, declare) {
                     </div>
                 </div>
                 <div id="right-panel">
-                    <div id="cards">
+                    <div id="right-panel-top">
                         <div id="morale-and-soldiers-track" class="card">
                             <div id="morale-track"></div>
                             <div id="soldiers-track"></div>
                         </div>
                         <div id="patrol-deck" class="card"></div>
-                        <div id="patrol-discard" class="card"></div>
+                        <div id="patrol-discard" class="card whiteblock"></div>
                     </div>
                     <div id="room-tiles"></div>
                 </div>
