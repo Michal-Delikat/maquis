@@ -82,6 +82,7 @@ class Game extends \Table {
         $this->patrol_cards = $this->getNew("module.common.deck");  
         $this->patrol_cards->init("patrol_card");
         $this->patrol_cards->autoreshuffle_trigger = array('obj' => $this, 'method' => 'deckAutoReshuffle');
+        $this->patrol_cards->shuffle('deck');
     }
 
     protected function setupNewGame($players, $options = []) {
