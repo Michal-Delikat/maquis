@@ -41,7 +41,7 @@ function (dojo, declare) {
             
             let discardedPatrolCards = gamedatas.discardedPatrolCards;
             
-            let resources = gamedatas.resources;
+            let resources = Object.values(gamedatas.resources);
             
             let selectedMissions = gamedatas.selectedMissions;
             let completedMissions = Object.values(gamedatas.completedMissions);
@@ -72,12 +72,12 @@ function (dojo, declare) {
             dojo.place(`<span id="player_score_max_${player_id}">/${maxScoreValue}</span>`, `player_score_${player_id}`, "after");
 
             // RESOURCES
-            Object.values(resources).forEach(([resource_name, quantity, available]) => dojo.place(`
+            resources.forEach(({resource_type, amount}) => dojo.place(`
                 <div class="resource-box">
-                    <div id="${resource_name}-icon" class="resource-icon">
+                    <span id="${resource_type}-quantity" class="resource-amount">${amount}</span>
+                    <div id="${resource_type}-icon" class="resource-icon">
                         <div class="resource-icon-circle"></div>
                     </div>
-                    <span id=${resource_name}-quantity>${quantity}</span>/<span id=${resource_name}-available>${available}</span>
                 <div>    
             `, 'resources'));
 
@@ -710,9 +710,8 @@ function (dojo, declare) {
             this.moveMoraleMarker(morale);
         },
 
-        notif_resourcesChanged: function({resource_name, quantity, available}) {
+        notif_resourcesChanged: function({resource_name, quantity}) {
             dojo.byId(`${resource_name}-quantity`).innerHTML = quantity;
-            dojo.byId(`${resource_name}-available`).innerHTML = available;
         },
 
         notif_tokensPlaced: function({tokens}) {

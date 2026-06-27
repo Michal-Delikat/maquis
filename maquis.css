@@ -91,22 +91,28 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    gap: 8px;
+}
+
+.resource-box {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.resource-amount {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 32px;
 }
 
 .resource-icon {
     position: relative;
-    width: 60px;
+    width: 50px;
     aspect-ratio: 1;
     background-size: 300%;
     background-image: url('img/Tokens.png');
     background-position-y: center;
     z-index: 1;
-}
-
-.resource-box {
-    text-align: center;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 18px;
 }
 
 .worker {

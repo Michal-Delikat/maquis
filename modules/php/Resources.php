@@ -50,16 +50,17 @@ trait Resources {
     }
 
     protected function getAllResources(): array {
-        return [
-            RESOURCE_FOOD => [RESOURCE_FOOD, $this->getResource(RESOURCE_FOOD), $this->getAvailableResource(RESOURCE_FOOD)],
-            RESOURCE_MEDICINE => [RESOURCE_MEDICINE, $this->getResource(RESOURCE_MEDICINE), $this->getAvailableResource(RESOURCE_MEDICINE)],
-            RESOURCE_MONEY => [RESOURCE_MONEY, $this->getResource(RESOURCE_MONEY), $this->getAvailableResource(RESOURCE_MONEY)],
-            RESOURCE_EXPLOSIVES => [RESOURCE_EXPLOSIVES, $this->getResource(RESOURCE_EXPLOSIVES), $this->getAvailableResource(RESOURCE_EXPLOSIVES)],
-            RESOURCE_WEAPON => [RESOURCE_WEAPON, $this->getResource(RESOURCE_WEAPON), $this->getAvailableResource(RESOURCE_WEAPON)],
-            RESOURCE_INTEL => [RESOURCE_INTEL, $this->getResource(RESOURCE_INTEL), $this->getAvailableResource(RESOURCE_INTEL)],
-            RESOURCE_POISON => [RESOURCE_POISON, $this->getResource(RESOURCE_POISON), $this->getAvailableResource(RESOURCE_POISON)],
-            RESOURCE_FAKE_ID => [RESOURCE_FAKE_ID, $this->getResource(RESOURCE_FAKE_ID), $this->getAvailableResource(RESOURCE_FAKE_ID)],
-        ];
+        $resources = $this->getCollectionFromDb("
+            SELECT SUBSTRING_INDEX(name, '_token_', 1) AS resource_type, COUNT(*) AS amount
+            FROM components
+            WHERE name LIKE '%_token_%' AND name NOT LIKE 'aa_gun_token%' AND state = 'possessed'
+            GROUP BY resource_type;
+        ");
+        $allResources = [RESOURCE_FOOD, RESOURCE_MEDICINE, RESOURCE_MONEY, RESOURCE_INTEL, RESOURCE_WEAPON, RESOURCE_EXPLOSIVES, RESOURCE_POISON, RESOURCE_FAKE_ID];
+        return array_combine(
+            $allResources,
+            array_map(fn($type) => $resources[$type] ?? ['resource_type' => $type, 'amount' => 0], $allResources)
+        );
     }
 
     protected function gainResources(string $resourceName, int $amount = 1): void {
