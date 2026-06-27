@@ -338,19 +338,7 @@ class Game extends \Table {
             "spaceName" => $spaceName
         ));
 
-        $possibleActions = $this->getPossibleActions($spaceID);
-
-        if (count($possibleActions) === 0) {
-            $this->actTakeAction(ACTION_RETURN);
-        } else if ($this->getIsFixerInLocation($spaceID)) {
-            if ($this->getResource(RESOURCE_MONEY) === 0) {
-                $this->actTakeAction(ACTION_RETURN);
-            } else {
-                $this->gamestate->nextState("useFixer");
-            }
-        } else {
-            $this->gamestate->nextState("takeAction");
-        }
+        $this->gamestate->nextState("takeAction");
     }
 
     public function actTakeAction(string $actionName): void {
@@ -758,7 +746,7 @@ class Game extends \Table {
                 $this->returnOrArrest($this->getActiveSpace());
                 $this->completeMission(MISSION_SABOTAGE);
                 break;
-            case ACTION_DELIVER_INTEL:
+            case ACTION_DELIVER_2_INTEL:
                 $activeSpace = $this->getActiveSpace();
                 $this->spendResources(RESOURCE_INTEL, 2);
                 if ($activeSpace === MISSION_A_SPACE_C || $activeSpace === MISSION_B_SPACE_C) {
@@ -767,7 +755,7 @@ class Game extends \Table {
                 } else {
                     $this->placeMarker($activeSpace);
                     $this->addMissionSpace($activeSpace + 1);
-                    $this->addSpaceAction($activeSpace + 1, ACTION_DELIVER_INTEL);
+                    $this->addSpaceAction($activeSpace + 1, ACTION_DELIVER_2_INTEL);
                 }
                 break;
             case ACTION_INSERT_MOLE:
@@ -828,7 +816,7 @@ class Game extends \Table {
                 $cryptographerID = $this->getWorkerIdByLocation($activeSpace);
                 $this->updateComponent($cryptographerID, $activeSpace, 'cryptographer');
                 break;
-            case ACTION_DELIVER_2_EXPLOSIVES:
+            case ACTION_PLANT_2_EXPLOSIVES:
                 $this->spendResources(RESOURCE_EXPLOSIVES, 2);
                 $this->setExplosivesAtBridgePlanted(true);
                 break;
@@ -981,7 +969,7 @@ class Game extends \Table {
                     return $this->getResource(RESOURCE_MEDICINE) >= 1;
                 case ACTION_SABOTAGE_FACTORY:
                     return $this->getResource(RESOURCE_EXPLOSIVES) >= 1;
-                case ACTION_DELIVER_INTEL:
+                case ACTION_DELIVER_2_INTEL:
                     return $this->getResource(RESOURCE_INTEL) >= 2;
                 case ACTION_INSERT_MOLE:
                     return $this->getResource(RESOURCE_INTEL) >= 2;
@@ -997,7 +985,7 @@ class Game extends \Table {
                     return ($this->getResource(RESOURCE_EXPLOSIVES) >= 3) && (in_array($this->getRoundNumber(), [6, 7, 8, 9]));
                 case ACTION_TRAIN_A_CRYPTOGRAPHER:
                     return ($this->getResource(RESOURCE_FOOD) >= 1) && ($this->getResource(RESOURCE_MONEY) >= 1) && ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getRoundNumber() <= 6);
-                case ACTION_DELIVER_2_EXPLOSIVES:
+                case ACTION_PLANT_2_EXPLOSIVES:
                     return ($this->getResource(RESOURCE_EXPLOSIVES) >= 2) && !$this->getIsMissionCompleted(MISSION_TAKE_OUT_THE_BRIDGES);
                 case ACTION_DELIVER_EXPLOSIVES_AND_WEAPON:
                     return $this->getMorale() >= 5 && $this->getResource(RESOURCE_EXPLOSIVES) >= 1 && $this->getResource(RESOURCE_WEAPON) >= 1;
@@ -1029,53 +1017,58 @@ class Game extends \Table {
         });
 
         $actionDescriptions = [
-            ACTION_INSERT_MOLE => clienttranslate("Insert mole"),
-            ACTION_RECOVER_MOLE => clienttranslate("Recover mole and complete the mission"),
-            ACTION_POISON_SHEPARDS => clienttranslate("Poison German Shepards"),
-            ACTION_GET_SPARE_ROOM => clienttranslate("Get spare room"),
-            ACTION_BUY_WEAPON => clienttranslate("Get weapon"),
             ACTION_GET_FOOD => clienttranslate("Get food"),
             ACTION_GET_MEDICINE => clienttranslate("Get medicine"),
-            ACTION_GET_INTEL => clienttranslate("Get intel"),
             ACTION_GET_MONEY_FOR_FOOD => clienttranslate("Get money for food"),
             ACTION_GET_MONEY_FOR_MEDICINE => clienttranslate("Get money for medicine"),
             ACTION_PAY_FOR_MORALE => clienttranslate("Increase morale"),
+            ACTION_GET_INTEL => clienttranslate("Get intel"),
+            ACTION_BUY_WEAPON => clienttranslate("Get weapon"),
             ACTION_GET_WORKER => clienttranslate("Recruit worker"),
             ACTION_COLLECT_ITEMS => clienttranslate("Collect items"),
-            ACTION_WRITE_GRAFFITI => clienttranslate("Write graffiti"),
+            ACTION_GET_SPARE_ROOM => clienttranslate("Get spare room"),
+            ACTION_AIRDROP_FOOD => clienttranslate("Airdrop Food"),
+            ACTION_AIRDROP_MONEY => clienttranslate("Airdrop Money"),
+            ACTION_AIRDROP_WEAPON => clienttranslate("Airdrop Weapon"),
+            
             ACTION_GET_MONEY => clienttranslate("Get money"),
             ACTION_BUY_EXPLOSIVES => clienttranslate("Get explosives"),
             ACTION_GET_3_FOOD => clienttranslate("Get 3 food"),
             ACTION_GET_3_MEDICINE => clienttranslate("Get 3 medicine"),
             ACTION_INCREASE_MORALE => clienttranslate("Increase morale"),
-            ACTION_INFILTRATE_FACTORY => clienttranslate("Infiltrate factory"),
-            ACTION_SABOTAGE_FACTORY => clienttranslate("Sabotage factory"),
-            ACTION_DELIVER_INTEL => clienttranslate("Deliver intel"),
-            ACTION_COMPLETE_OFFICERS_MANSION_MISSION => clienttranslate("Complete Officers Mansion mission"),
-            ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION => clienttranslate("Complete Milice Parade Day mission"),
-            ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate("Complete the mission"),
-            ACTION_DELIVER_2_WEAPONS => clienttranslate("Deliver 2 Weapons"),
-            ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate("Deliver Money and 2 Food"),
-            ACTION_DELIVER_3_EXPLOSIVES => clienttranslate("Deliver 3 Explosives"),
-            ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate("Train a Cryptographer"),
-            ACTION_DELIVER_2_EXPLOSIVES => clienttranslate("Deliver 2 Explosives"),
-            ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate("Deliver Explosives and Weapon"),
-            ACTION_DISCOVER_THE_PLANS => clienttranslate("Discover the Plans"),
-            ACTION_DELIVER_2_POISON => clienttranslate("Deliver 2 Poison"),
             ACTION_BUY_POISON => clienttranslate("Buy poison"),
             ACTION_FORGE_FAKE_ID => clienttranslate("Forge fake ID"),
+            ACTION_USE_FIXER => clienttranslate("Use fixer"),
+
+            ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION => clienttranslate("Complete Milice Parade Day mission"),
+            ACTION_WRITE_GRAFFITI => clienttranslate("Write graffiti"),
+            ACTION_COMPLETE_OFFICERS_MANSION_MISSION => clienttranslate("Complete Officer's Mansion mission"),
+
+            ACTION_INFILTRATE_FACTORY => clienttranslate("Infiltrate factory"),
+            ACTION_SABOTAGE_FACTORY => clienttranslate("Sabotage factory and complete the mission"),
+            ACTION_DELIVER_2_INTEL => clienttranslate("Deliver 2 intel"),
+            ACTION_INSERT_MOLE => clienttranslate("Insert mole"),
+            ACTION_RECOVER_MOLE => clienttranslate("Recover mole and complete the mission"),
+            ACTION_POISON_SHEPARDS => clienttranslate("Poison German Shepards"),
+            ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate("Meet Double Agent and complete the mission"),
+
+            ACTION_DELIVER_2_WEAPONS => clienttranslate("Deliver 2 Weapons"),
+            ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate("Deliver Money and 2 Food; Complete mission"),
+            ACTION_DELIVER_3_EXPLOSIVES => clienttranslate("Deliver 3 Explosives and complete mission"),
+            ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate("Train a Cryptographer"),
+            ACTION_PLANT_2_EXPLOSIVES => clienttranslate("Plant 2 Explosives at a bridge"),
+            ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate("Deliver Explosives and Weapon; Complete the mission"),
+
+            ACTION_DISCOVER_THE_PLANS => clienttranslate("Discover the Plans"),
+            ACTION_DELIVER_2_POISON => clienttranslate("Deliver 2 Poison and complete the mission"),
             ACTION_RECON_THE_BARRACKS => clienttranslate("Recon the Barracks"),
-            ACTION_BOMB_THE_BARRACKS => clienttranslate("Bomb the Barracks"),
+            ACTION_DISTRACT_THE_SOLDIERS => clienttranslate("Distract the soldiers"),
+            ACTION_BOMB_THE_BARRACKS => clienttranslate("Bomb the Barracks and complete the mission"),
             ACTION_BRIBE_THE_CLERK => clienttranslate("Bribe the clerk"),
-            ACTION_FREE_THE_RESISTANCE_LEADER => clienttranslate("Free the resistance leader"),
-            ACTION_KILL_THE_RESISTANCE_LEADER => clienttranslate("Kill the resistance leader"),
+            ACTION_KILL_THE_RESISTANCE_LEADER => clienttranslate("Kill the resistance leader and complete the mission"),
+            ACTION_FREE_THE_RESISTANCE_LEADER => clienttranslate("Free the resistance leader and complete the mission"),
             ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES => clienttranslate("Destroy AA gun with explosives"),
             ACTION_DESTROY_AA_GUN_WITH_WEAPON => clienttranslate("Destroy AA gun with weapon"),
-            ACTION_USE_FIXER => clienttranslate("Use fixer"),
-            ACTION_AIRDROP_FOOD => clienttranslate("Airdrop Food"),
-            ACTION_AIRDROP_MONEY => clienttranslate("Airdrop Money"),
-            ACTION_AIRDROP_WEAPON => clienttranslate("Airdrop Weapon"),
-            ACTION_DISTRACT_THE_SOLDIERS => clienttranslate("Distract the soldiers")
         ];
 
         foreach($result as &$action) {

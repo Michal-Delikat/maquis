@@ -57,7 +57,7 @@ const ACTIONS = [
     
     ACTION_INFILTRATE_FACTORY => ['name' => ACTION_INFILTRATE_FACTORY, 'is_safe' => true],
     ACTION_SABOTAGE_FACTORY => ['name' => ACTION_SABOTAGE_FACTORY, 'is_safe' => true],
-    ACTION_DELIVER_INTEL => ['name' => ACTION_DELIVER_INTEL, 'is_safe' => true],
+    ACTION_DELIVER_2_INTEL => ['name' => ACTION_DELIVER_2_INTEL, 'is_safe' => true],
     ACTION_INSERT_MOLE => ['name' => ACTION_INSERT_MOLE, 'is_safe' => true],
     ACTION_RECOVER_MOLE => ['name' => ACTION_RECOVER_MOLE, 'is_safe' => true],
     ACTION_POISON_SHEPARDS => ['name' => ACTION_POISON_SHEPARDS, 'is_safe' => true],
@@ -67,7 +67,7 @@ const ACTIONS = [
     ACTION_DELIVER_MONEY_AND_2_FOOD => ['name' => ACTION_DELIVER_MONEY_AND_2_FOOD, 'is_safe' => true],
     ACTION_DELIVER_3_EXPLOSIVES => ['name' => ACTION_DELIVER_3_EXPLOSIVES, 'is_safe' => true],
     ACTION_TRAIN_A_CRYPTOGRAPHER => ['name' => ACTION_TRAIN_A_CRYPTOGRAPHER, 'is_safe' => false],
-    ACTION_DELIVER_2_EXPLOSIVES => ['name' => ACTION_DELIVER_2_EXPLOSIVES, 'is_safe' => true],
+    ACTION_PLANT_2_EXPLOSIVES => ['name' => ACTION_PLANT_2_EXPLOSIVES, 'is_safe' => true],
     ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => ['name' => ACTION_DELIVER_EXPLOSIVES_AND_WEAPON, 'is_safe' => true],
 
     ACTION_DISCOVER_THE_PLANS => ['name' => ACTION_DISCOVER_THE_PLANS, 'is_safe' => false],

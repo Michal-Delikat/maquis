@@ -109,7 +109,7 @@ const ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION = 'complete_milice_parade_day_mi
 
 const ACTION_INFILTRATE_FACTORY = 'infiltrate_factory';
 const ACTION_SABOTAGE_FACTORY = 'sabotage_factory';
-const ACTION_DELIVER_INTEL = 'deliver_intel';
+const ACTION_DELIVER_2_INTEL = 'deliver_intel';
 const ACTION_INSERT_MOLE = 'insert_mole';
 const ACTION_RECOVER_MOLE = 'recover_mole';
 const ACTION_POISON_SHEPARDS = 'poison_shepards';
@@ -119,14 +119,14 @@ const ACTION_DELIVER_2_WEAPONS = 'deliver_2_weapons';
 const ACTION_DELIVER_MONEY_AND_2_FOOD = 'deliver_money_and_2_food';
 const ACTION_DELIVER_3_EXPLOSIVES = 'deliver_3_explosives';
 const ACTION_TRAIN_A_CRYPTOGRAPHER = 'train_a_cryptographer';
-const ACTION_DELIVER_2_EXPLOSIVES = 'deliver_2_explosives';
+const ACTION_PLANT_2_EXPLOSIVES = 'deliver_2_explosives';
 const ACTION_DELIVER_EXPLOSIVES_AND_WEAPON = 'deliver_explosives_and_weapon';
 
 const ACTION_DISCOVER_THE_PLANS = 'discover_the_plans';
 const ACTION_DELIVER_2_POISON = 'deliver_2_poison';
 const ACTION_RECON_THE_BARRACKS = 'recon_the_barracks';
-const ACTION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
 const ACTION_DISTRACT_THE_SOLDIERS = 'distract_the_soldiers';
+const ACTION_BOMB_THE_BARRACKS = 'bomb_the_barracks';
 const ACTION_BRIBE_THE_CLERK = 'bribe_the_clerk';
 const ACTION_KILL_THE_RESISTANCE_LEADER = 'kill_the_resistance_leader';
 const ACTION_FREE_THE_RESISTANCE_LEADER = 'free_the_resistance_leader';

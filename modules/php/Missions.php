@@ -49,7 +49,7 @@ trait Missions {
 
         if (in_array(MISSION_UNDERGROUND_NEWSPAPER, $missionNames)) {
             $missionSpace = $missionAName === MISSION_UNDERGROUND_NEWSPAPER ? MISSION_A_SPACE_A : MISSION_B_SPACE_A;
-            $this->addSpaceAction($missionSpace, ACTION_DELIVER_INTEL);
+            $this->addSpaceAction($missionSpace, ACTION_DELIVER_2_INTEL);
         }
 
         if (in_array(MISSION_INFILTRATION, $missionNames)) {
@@ -78,7 +78,7 @@ trait Missions {
         }
 
         if (in_array(MISSION_TAKE_OUT_THE_BRIDGES, $missionNames)) {
-            $this->addSpaceAction(BLACK_MARKET, ACTION_DELIVER_2_EXPLOSIVES);
+            $this->addSpaceAction(BLACK_MARKET, ACTION_PLANT_2_EXPLOSIVES);
         }
 
         if (in_array(MISSION_BOMB_FOR_THE_OFFICER, $missionNames)) {
