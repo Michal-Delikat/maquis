@@ -120,6 +120,12 @@
     position: absolute;
 }
 
+@media (min-width: 900px) {
+    .worker {
+        width: 5vw;
+    }
+}
+
 @media (min-width: 1400px) {
     .worker {
         width: 3vw;
@@ -659,7 +665,7 @@
 #right-panel-top {
     display: flex;
     justify-content: space-around;
-    align-items: flex-end;
+    align-items: center;
     padding: 8px;
 }
 
