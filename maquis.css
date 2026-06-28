@@ -126,7 +126,7 @@
     position: absolute;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 995px) {
     .worker {
         width: 5vw;
     }
@@ -258,6 +258,7 @@
 .top-area {
     height: 38vw;
     display: flex;
+    justify-content: space-between;
     align-items: flex-end;
     padding: 8px;
 }
@@ -271,6 +272,7 @@
 @media (min-width: 1400px) {
     .top-area {
         height: 17vw;
+        padding-right: 0;
     }
 }
 
@@ -290,13 +292,16 @@
 }
 
 .arrest {
-    width: 18.5%;
+    box-sizing: border-box;
     height: 100%;
-    margin: 0 1%;
+    width: 18.5%;
+    display: flex;
+    flex-direction: column;
 }
 
-.arrest > div {
-    height: 80%;
+.arrest-spaces-wrapper {
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -316,11 +321,14 @@
 .barracks-boxes {
     width: 25%;
     height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
 }
 
 .barracks {
     height: 40%;
-    margin: 10px 0;
+    width: 100%;
 }
 
 .whiteblock-label {
@@ -328,6 +336,7 @@
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
     font-weight: 500;
+    margin-top: 0;
 }
 
 .patrol-units-row {

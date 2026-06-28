@@ -86,7 +86,7 @@ function (dojo, declare) {
                     <div class="top-area">
                         <div class="arrest whiteblock">
                             <h3 class="whiteblock-label">${_('Arrested Workerks')}</h3>
-                            <div>
+                            <div class="arrest-spaces-wrapper">
                                 <div id="arrest-space-1" class="arrest-space"></div>
                                 <div id="arrest-space-2" class="arrest-space"></div>
                                 <div id="arrest-space-3" class="arrest-space"></div>
