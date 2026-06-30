@@ -19,6 +19,7 @@ namespace Bga\Games\Maquis;
 require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
 
 require_once("constants.inc.php");
+require_once("Material.php");
 
 require_once("Components.php");
 require_once("Board.php");
@@ -75,10 +76,8 @@ class Game extends \Table {
             "mission_b" => 102
         ]);
 
-        require('material.inc.php');
-
-        $this->ACTIONS = ACTIONS;
-        $this->PATROL_CARD_ITEMS = PATROL_CARD_ITEMS;
+        $this->ACTIONS = Material::ACTIONS;
+        $this->PATROL_CARD_ITEMS = Material::PATROL_CARD_ITEMS;
         $this->patrol_cards = $this->getNew("module.common.deck");  
         $this->patrol_cards->init("patrol_card");
         $this->patrol_cards->autoreshuffle_trigger = array('obj' => $this, 'method' => 'deckAutoReshuffle');
@@ -556,7 +555,7 @@ class Game extends \Table {
     public function argSelectRoom(): array {
         return [
             "availableRooms" => $this->getAvailableRooms(),
-            "roomsDescriptions" => ROOM_DESCRIPTIONS
+            "roomsDescriptions" => Material::ROOM_DESCRIPTIONS
         ];
     }
 
