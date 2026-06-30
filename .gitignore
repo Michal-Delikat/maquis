@@ -1,4 +1,5 @@
+.DS_Store
 .vscode/sftp.json
 img
 misc
-.DS_Store
+doc
