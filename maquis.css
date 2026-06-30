@@ -252,7 +252,6 @@
 .board-and-missions {
     width: 100%;
     margin-bottom: 32px;
-    position: relative;
 }
 
 .top-area {
@@ -278,8 +277,7 @@
 
 @media (min-width: 1400px) {
     .board-and-missions {
-        width: 53%;
-        margin-right: 2%;
+        width: 55%;
     }
 }
 
@@ -294,7 +292,7 @@
 .arrest {
     box-sizing: border-box;
     height: 100%;
-    width: 18.5%;
+    width: 21%;
     display: flex;
     flex-direction: column;
 }
@@ -304,7 +302,7 @@
     min-height: 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .arrest-space {
@@ -316,6 +314,8 @@
     width: 25%;
     bottom: 0;
     perspective: 1000px;
+    display: flex;
+    justify-content: center;
 }
 
 .barracks-boxes {
@@ -329,6 +329,8 @@
 .barracks {
     height: 40%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .whiteblock-label {
@@ -341,7 +343,8 @@
 
 .patrol-units-row {
     width: 100%;
-    height: 70%;
+    /* height: 70%; */
+    flex: 1;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -350,6 +353,8 @@
  .patrol-unit-barracks-space {
     width: 33%;
     height: 50%;
+    display: flex;
+    justify-content: center;
 }
 
 .mission-description {
@@ -752,6 +757,7 @@
 }
 
 #board {
+    box-sizing: border-box;
     width: 100%;
     aspect-ratio: 1.43;
     background-size: contain;
