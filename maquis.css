@@ -251,7 +251,6 @@
 
 .board-and-missions {
     width: 100%;
-    margin-bottom: 32px;
 }
 
 .top-area {
@@ -684,9 +683,9 @@
 
 #right-panel-top {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding: 8px;
+    padding: 32px 16px;
 }
 
 @media (min-width: 1400px) {
@@ -1170,12 +1169,15 @@
 }
 
 #room-tiles {
-    position: relative;
+    box-sizing: border-box;
     width: 100%;
+    position: relative;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
+    column-gap: 4vw;
     row-gap: 2vh;
+    padding: 32px;
 }
 
 .room-tile-container {
