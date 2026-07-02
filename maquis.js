@@ -187,7 +187,9 @@ function (dojo, declare) {
                         <div id="patrol-deck" class="card"></div>
                         <div id="patrol-discard" class="card whiteblock"></div>
                     </div>
-                    <div id="room-tiles"></div>
+                    <div id="room-tiles-container-wrapper">
+                        <div id="room-tiles"></div>
+                    </div>
                 </div>
             `, 'game_play_area');
 

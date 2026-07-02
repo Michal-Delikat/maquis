@@ -810,6 +810,12 @@
     aspect-ratio: 1;
 }
 
+#room-tiles-container-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0 0;
+}
+
 .room-tile-space {
     position: absolute;
     width: 100%;
@@ -1199,14 +1205,13 @@
 
 #room-tiles {
     box-sizing: border-box;
-    width: 100%;
+    width: 70%;
     position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     column-gap: 2vw;
     row-gap: 2vw;
-    padding: 32px;
 }
 
 .room-tile-container {
