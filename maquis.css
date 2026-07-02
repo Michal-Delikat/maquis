@@ -41,6 +41,7 @@
 @media (min-width: 1400px) {
     .standard_popin {
         width: 15vw;
+        height: 18vw;
     }
 }
 
@@ -49,12 +50,46 @@
     font-size: 18px;
 }
 
-.standard_popin .patrol-card {
-    width: 90%;
+#popin_one-card-dialog .patrol-card-front {
+    width: 100%;
 }
 
-.standard_popin .patrol-card-front {
-    width: 100%;
+.patrol-card-dialog-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#popin_discarded-patrol-cards-dialog {
+    box-sizing: border-box;
+    width: 50vw;
+    height: 168vw;
+    max-width: 9999px;
+}
+
+@media (min-width: 995px) {
+    #popin_discarded-patrol-cards-dialog {
+        width: 70vw;
+        height: 73vw;
+    }
+}
+
+@media (min-width: 1400px) {
+    #popin_discarded-patrol-cards-dialog {
+        width: 58vw;
+        height: 34vw;
+    }
+}
+
+#popin_discarded-patrol-cards-dialog .patrol-card {
+    position: static;
+}
+
+#discarded-patrol-cards-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    column-gap: 1vw;
+    row-gap: 1vw;
 }
 
 .player-board {
@@ -753,6 +788,7 @@
 
 #patrol-discard {
     padding: 0;
+    cursor: pointer;
 }
 
 #board {

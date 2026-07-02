@@ -453,6 +453,8 @@ function (dojo, declare) {
 
             // Event Listeners
             dojo.query('.background-space').connect('click', this, "onSpaceClicked");
+
+            dojo.query('#patrol-discard').connect('click', this, "onPatrolDiscardClicked");
  
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
@@ -635,6 +637,22 @@ function (dojo, declare) {
                     spaceID: spaceID
                 });
             }
+        },
+
+        onPatrolDiscardClicked: function(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            const patrolDiscard = document.getElementById('patrol-discard');
+            const htmlContent = patrolDiscard.innerHTML;
+
+            console.log(htmlContent);
+
+            let dialog = new ebg.popindialog();
+            dialog.create('discarded-patrol-cards-dialog');
+            dialog.setTitle(`${'Discarded patrol cards'}`);
+            dialog.setContent(`<div id="discarded-patrol-cards-wrapper">${htmlContent}</div>`);
+            dialog.show();
         },
         
         ///////////////////////////////////////////////////
@@ -1125,13 +1143,14 @@ function (dojo, declare) {
 
         displayModalWithCard: function(cardId, title) {
             let dialog = new ebg.popindialog();
-            dialog.create('cardDialog');
+            dialog.create('one-card-dialog');
             dialog.setTitle(title);
             dialog.setContent(`
-                <div id="patrol-${cardId}" class="card patrol-card">
-                    <div class="card patrol-card-front" style="transform:none"></div>
+                <div class="patrol-card-dialog-wrapper">
+                    <div id="patrol-${cardId}" class="card patrol-card">
+                        <div class="card patrol-card-front" style="transform:none"></div>
+                    </div>
                 </div>`);
-            // dialog.resize(200, 300);
             dialog.show();
         },
 
