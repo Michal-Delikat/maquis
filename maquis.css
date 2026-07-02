@@ -1222,7 +1222,7 @@
     position: absolute;
     aspect-ratio: 1;
     z-index: 0;
-    background-image: url('img/Spare_rooms2.png');
+    background-image: url('img/Spare_rooms.png');
     background-size: 300%;
     display: flex;
     justify-content: center;
@@ -1242,7 +1242,7 @@
 
 .room-tile > .rectangle-shape {
     position: absolute;
-    background-image: url('img/Spare_rooms2.png');
+    background-image: url('img/Spare_rooms.png');
     background-size: 450%;
     background-position-x: 7.1%;
     background-position-y: 27.65%;
