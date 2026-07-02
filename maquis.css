@@ -718,15 +718,8 @@
 
 #right-panel-top {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-evenly;
     padding: 32px 16px;
-}
-
-@media (min-width: 1400px) {
-    #right-panel-top {
-        height: 17vw;
-    }
 }
 
 #help-card {
@@ -1210,9 +1203,9 @@
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    column-gap: 4vw;
-    row-gap: 2vh;
+    justify-content: flex-start;
+    column-gap: 2vw;
+    row-gap: 2vw;
     padding: 32px;
 }
 
