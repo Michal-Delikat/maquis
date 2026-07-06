@@ -60,6 +60,7 @@ trait Missions {
             MISSION_BOMB_THE_BARRACKS          => $this->setupBombTheBarracks(),
             MISSION_FREE_THE_RESISTANCE_LEADER => $this->addSpaceAction(MISSION_B_SPACE_A, ACTION_BRIBE_THE_CLERK),
             MISSION_DESTROY_AA_GUNS            => $this->setupDestroyAAGuns(),
+            default                            => null
         };
     }
 
