@@ -180,6 +180,10 @@ class Game extends \Table {
             $this->completeMission(MISSION_CODED_MESSAGES);
         }
 
+        if ($this->getIsGameWon()) {
+            $this->gamestate->nextState("gameEnd");
+        }
+
         foreach (array_merge(array_reverse($this->getMilice()), array_reverse($this->getSoldiers())) as $patrol) {
             if ($patrol['state'] === 'placed') {
                 $this->updateComponent($patrol['name'], 'barracks', 'active');
