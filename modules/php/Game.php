@@ -215,7 +215,9 @@ class Game extends \Table {
             }
         } else {
             $this->gamestate->nextState("roundStart");
-        }        
+        }
+
+        $this->giveExtraTime($this->getActivePlayerId());
     }
 
     public function actPlaceWorker(int $spaceID): void {
