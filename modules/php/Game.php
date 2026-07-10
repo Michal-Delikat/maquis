@@ -71,6 +71,7 @@ class Game extends \Table {
             "shot_today" => 12,
             "explosives_at_bridge_planted" => 13,
             "soldiers_distracted" => 14,
+            "second_pass" => 15,
             "difficulty_mode" => 100,
             "mission_a" => 101,
             "mission_b" => 102
@@ -96,6 +97,7 @@ class Game extends \Table {
         $this->setGameStateInitialValue("shot_today", false);
         $this->setGameStateInitialValue("explosives_at_bridge_planted", false);
         $this->setGameStateInitialValue("soldiers_distracted", false);
+        $this->setGameStateInitialValue("second_pass", false);
 
          // Initalize game statistics
         $this->initStat("table", "turns_number", 0);
@@ -207,7 +209,8 @@ class Game extends \Table {
         } else if ($this->getRoundNumber() >= 12 && in_array($this->getDifficultyMode(), [TRICKY, HARD, VERY_HARD])) {
             $this->gamestate->nextState("gameEnd");
         } else if ($this->getRoundNumber() >= 15) {
-            if ($this->getDifficultyMode() === VERY_EASY) {
+            if ($this->getDifficultyMode() === VERY_EASY && !$this->getSecondPass()) {
+                $this->setSecondPass(true);
                 $this->setRoundNumber(1);
                 $this->gamestate->nextState("roundStart");
             } else {

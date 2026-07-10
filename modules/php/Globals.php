@@ -49,4 +49,12 @@ trait Globals {
     protected function getSoldiersDistracted(): bool {
         return $this->getGameStateValue("soldiers_distracted");
     }
+
+    protected function setSecondPass(bool $secondPass): void {
+        $this->setGameStateValue("second_pass", $secondPass);
+    }
+
+    protected function getSecondPass(): bool {
+        return $this->getGameStateValue("second_pass");
+    }
 }
