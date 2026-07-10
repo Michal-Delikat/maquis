@@ -998,6 +998,8 @@ class Game extends \Table {
                     return $this->getResource(RESOURCE_MEDICINE) >= 2;
                 case ACTION_FORGE_FAKE_ID:
                     return $this->getResource(RESOURCE_MONEY) >= 2 && $this->getResource(RESOURCE_INTEL);
+                case ACTION_DISCOVER_THE_PLANS:
+                    return !$this->getIsMissionCompleted(MISSION_MILICE_HQ) && !$this->checkMarkersInSpaces([MISSION_B_SPACE_A]);
                 case ACTION_BOMB_THE_BARRACKS:
                     return $this->getResource(RESOURCE_EXPLOSIVES) >= 2 && $this->getResource(RESOURCE_FAKE_ID);
                 case ACTION_DISTRACT_THE_SOLDIERS:
