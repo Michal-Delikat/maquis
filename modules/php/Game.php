@@ -178,7 +178,7 @@ class Game extends \Table {
         if ($this->getIsCryptographerPlaced() && $this->getRoundNumber() === 10) {
             $this->returnOrArrest((int) $this->getSpaceIdWithCryptographer());
             $this->completeMission(MISSION_CODED_MESSAGES);
-        } 
+        }
 
         foreach (array_merge(array_reverse($this->getMilice()), array_reverse($this->getSoldiers())) as $patrol) {
             if ($patrol['state'] === 'placed') {
@@ -198,7 +198,7 @@ class Game extends \Table {
             $this->setMorale($this->getMorale() - 1);
         }
 
-        if ($this->getMorale() <= 0 || $this->getActiveResistance() <= 0 || ($this->getActiveResistance() == 1 && $this->getIsMoleInserted())) {
+        if (($this->getMorale() <= 0) || ($this->getActiveResistance() <= 0)) {
             $this->gamestate->nextstate("gameEnd");
         } else if ($this->getRoundNumber() >= 12 && in_array($this->getDifficultyMode(), [TRICKY, HARD, VERY_HARD])) {
             $this->gamestate->nextState("gameEnd");
@@ -405,9 +405,7 @@ class Game extends \Table {
     public function stNextWorker() {
         $this->resetActiveSpace();
 
-        if ($this->getIsMoleInserted() && ($this->getPlacedResistance() === 1)) {
-            $this->gamestate->nextState("roundEnd");
-        } else if ($this->getPlacedResistance() > 0) {
+        if ($this->getPlacedResistance() > 0) {
             $this->gamestate->nextState("activateWorker");
         } else if ($this->getExplosivesAtBridgePlanted()) {
             $this->gamestate->nextState("removeBridge");
@@ -759,11 +757,12 @@ class Game extends \Table {
                 }
                 break;
             case ACTION_INSERT_MOLE:
-                $activeSpace = $this->getActiveSpace();
                 $this->spendResources(RESOURCE_INTEL, 2);
+                
+                $activeSpace = (string) $this->getActiveSpace();
+                $moleId = $this->getWorkerIdByLocation($activeSpace);
 
-                $moleID = $this->getWorkerIdByLocation((string) $activeSpace);
-                $this->updateComponent($moleID, (string) $activeSpace, 'mole');
+                $this->insertMole($moleId, $activeSpace);
 
                 $this->addMissionSpace($activeSpace + 1);
                 $this->addSpaceAction($activeSpace + 1, ACTION_RECOVER_MOLE);

@@ -66,7 +66,7 @@ trait Pawns {
         return (int) $this->getUniqueValueFromDb("
             SELECT COUNT(*)
             FROM components
-            WHERE name LIKE 'resistance%' AND (state = 'placed' OR state = 'mole');
+            WHERE name LIKE 'resistance%' AND state = 'placed';
         ");
     }
 
@@ -74,7 +74,7 @@ trait Pawns {
         return (int) $this->getUniqueValueFromDb("
             SELECT COUNT(*)
             FROM components
-            WHERE name LIKE 'resistance%' AND (state = 'active' OR state = 'placed' OR state = 'mole');
+            WHERE name LIKE 'resistance%' AND state IN ('active', 'placed');
         ");
     }
 
@@ -210,5 +210,11 @@ trait Pawns {
             "workerID" => $workerID,
             "spaceName" => $spaceName
         ));
+    }
+
+    function insertMole(string $workerID, string $location): void {
+        $this->updateComponent($workerID, $location, 'mole');
+
+        $this->notify->all("moleInserted", clienttranslate('Mole inserted'));
     }
 }
