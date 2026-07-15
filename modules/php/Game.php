@@ -632,7 +632,6 @@ class Game extends \Table {
 
     protected function saveAction(string $actionName): void {
         switch($actionName) {
-            // TODO: remove stats
             case ACTION_BUY_WEAPON:
                 $this->spendResources(RESOURCE_MONEY);
                 $this->gainResources(RESOURCE_WEAPON);
@@ -650,7 +649,6 @@ class Game extends \Table {
                 $this->gainResources(RESOURCE_INTEL);
                 $this->incStat(1, "intel_aquired", $this->getActivePlayerId());
                 break;
-            // TODO: remove conditions
             case ACTION_GET_MONEY_FOR_FOOD:
                 if ($this->getAvailableResource(RESOURCE_MONEY) > 0) {
                     $this->spendResources(RESOURCE_FOOD);

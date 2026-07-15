@@ -27,56 +27,46 @@
         "name": "Mission A",
         "values": {
             "0": { 
-                "name": "Milice Parade Day", 
-                "tmdisplay": "0-star mission" 
+                "name": "Milice Parade Day | 0 Star"
             },
             "1": { 
-                "name": "Officer's Mansion", 
-                "tmdisplay": "0-star mission" 
+                "name": "Officer's Mansion | 0 Star"
             },
             "2": { 
-                "name": "Sabotage", 
-                "tmdisplay": "1-star mission" 
+                "name": "Sabotage | 1 Star"
             },
             "3": {
-                "name": "Underground Newspaper",
-                "tmdisplay": "1-star mission"
+                "name": "Underground Newspaper | 1 Star"
             },
             "4": {
-                "name": "Infiltration",
-                "tmdisplay": "1-star mission"
+                "name": "Infiltration | 1 Star"
             },
             "5": {
-                "name": "German Shepards",
-                "tmdisplay": "1-star mission"
+                "name": "German Shepards | 1 Star"
             },
             "6": {
-                "name": "Double Agent",
-                "tmdisplay": "1-star mission"
+                "name": "Double Agent | 1 Star"
             },
             "7": {
-                "name": "Aid the Spy",
-                "tmdisplay": "2-star mission"
+                "name": "Aid the Spy | 2 Star"
             },
             "8": {
-                "name": "Assassination",
-                "tmdisplay": "2-star mission"
+                "name": "Assassination | 2 Star"
             },
             "9": {
-                "name": "Destroy the Train",
-                "tmdisplay": "2-star mission"
+                "name": "Destroy the Train | 2 Star"
             },
             "10": {
-                "name": "Liberate the Town"
+                "name": "Liberate the Town | 2 Star"
             },
             "11": {
-                "name": "Coded Messages"
+                "name": "Coded Messages | 2 Star"
             },
             "12": {
-                "name": "Take out the Bridges"
+                "name": "Take out the Bridges | 2 Star"
             },
             "13": {
-                "name": "Bomb for the Officer"
+                "name": "Bomb for the Officer | 2 Star"
             }
         },
         "default": 0
@@ -84,69 +74,59 @@
     "102": { 
         "name": "Mission B",
         "values": {
-            "0": { 
-                "name": "Milice Parade Day", 
-                "tmdisplay": "0-star mission" 
+           "0": { 
+                "name": "Milice Parade Day | 0 Star"
             },
             "1": { 
-                "name": "Officer's Mansion", 
-                "tmdisplay": "0-star mission" 
+                "name": "Officer's Mansion | 0 Star"
             },
             "2": { 
-                "name": "Sabotage", 
-                "tmdisplay": "1-star mission" 
+                "name": "Sabotage | 1 Star"
             },
             "3": {
-                "name": "Underground Newspaper",
-                "tmdisplay": "1-star mission"
+                "name": "Underground Newspaper | 1 Star"
             },
             "4": {
-                "name": "Infiltration",
-                "tmdisplay": "1-star mission"
+                "name": "Infiltration | 1 Star"
             },
             "5": {
-                "name": "German Shepards",
-                "tmdisplay": "1-star mission"
+                "name": "German Shepards | 1 Star"
             },
             "6": {
-                "name": "Double Agent",
-                "tmdisplay": "1-star mission"
+                "name": "Double Agent | 1 Star"
             },
             "7": {
-                "name": "Aid the Spy",
-                "tmdisplay": "2-star mission"
+                "name": "Aid the Spy | 2 Star"
             },
             "8": {
-                "name": "Assassination",
-                "tmdisplay": "2-star mission"
+                "name": "Assassination | 2 Star"
             },
             "9": {
-                "name": "Destroy the Train",
-                "tmdisplay": "2-star mission"
+                "name": "Destroy the Train | 2 Star"
             },
             "10": {
-                "name": "Liberate the Town"
+                "name": "Liberate the Town | 2 Star"
             },
             "11": {
-                "name": "Coded Messages"
+                "name": "Coded Messages | 2 Star"
             },
             "12": {
-                "name": "Take out the Bridges"
+                "name": "Take out the Bridges | 2 Star"
             },
             "13": {
-                "name": "Bomb for the Officer"
+                "name": "Bomb for the Officer | 2 Star"
             },
             "14": {
-                "name": "Milice HQ"
+                "name": "Milice HQ | 3 Star"
             },
             "15": {
-                "name": "Bomb the Barracks"
+                "name": "Bomb the Barracks | 3 Star"
             },
             "16": {
-                "name": "Free the Resistance Leader"
+                "name": "Free the Resistance Leader | 3 Star"
             },
             "17": {
-                "name": "Destroy AA Guns"
+                "name": "Destroy AA Guns | 3 Star"
             }
         },
         "default": 1
