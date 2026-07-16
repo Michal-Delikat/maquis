@@ -278,18 +278,18 @@ function (dojo, declare) {
                             ${_('Discover the plans of the building at the public records office on')} <span class="mission-text-location-name">Rue Baradat</span>.<br><br>
                             ${_('Objective 2:')}<br>
                             ${_('[SAFE] Spend 2')} <span class="mission-text-item-name">${_('Poison')}</span> ${_('on this location to spike the Milice\'s water supply, gain 2 on the')} <span class="mission-text-morale">Morale track</span>  ${_('and 3 on the')} <span class="mission-text-soldier">Soldier track</span><br><br>
-                            ${_('If the')} <span class="mission-text-soldier">soldier track</span> ${_('was on 3+ already, success; otherwise, major success.')}</p>`;
+                            ${_('If the')} <span class="mission-text-soldier">${_('soldier track')}</span> ${_('was on 3+ already, success; otherwise, major success.')}</p>`;
                         break;
                     case 'bomb_the_barracks':
                         description = `
                             <p class="mission-flavour-text">${_('German soldiers are stationed right outside town. Draw them out with distraction and bomb the barracks to slow the Nazi war machine.')}</p><br>
-                            <p class="mission-description-text"><span class="mission-text-soldier">Soldier track</span> ${_('starts on 3')}<br><br>
+                            <p class="mission-description-text"><span class="mission-text-soldier">${_('Soldier track')}</span> ${_('starts on 3')}<br><br>
                             ${_('Objective 1:')}<br>
                             ${_('Visit this location to recon the barracks')}<br><br>
                             ${_('Objective 2:')}<br>
                             ${_('Visit this location to recon the barracks')}<br><br>
                             ${_('Objective 3:')}<br>
-                            ${_('[SAFE] Spend a ')}<span class="mission-text-item-name">${_('Fake ID')}</span> and Two <span class="mission-text-item-name">${_('Explosives')}</span> ${_('on this location AND, on the same day, send a second worker to an empty')} <span class="mission-text-location-name">field</span> ${_('and spend a')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('to distract the soldiers to achieve a major success.')}</p>`;
+                            ${_('[SAFE] Spend a ')}<span class="mission-text-item-name">${_('Fake ID')}</span> ${_('and Two')} <span class="mission-text-item-name">${_('Explosives')}</span> ${_('on this location AND, on the same day, send a second worker to an empty')} <span class="mission-text-location-name">field</span> ${_('and spend a')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('to distract the soldiers to achieve a major success.')}</p>`;
                         break;
                     case 'free_the_resistance_leader':
                         description = `
@@ -647,8 +647,6 @@ function (dojo, declare) {
 
             const patrolDiscard = document.getElementById('patrol-discard');
             const htmlContent = patrolDiscard.innerHTML;
-
-            console.log(htmlContent);
 
             let dialog = new ebg.popindialog();
             dialog.create('discarded-patrol-cards-dialog');
@@ -1169,7 +1167,6 @@ function (dojo, declare) {
         },
 
         removeAAGun: async function(location) {
-            console.log("hello");
             let space = dojo.byId(`space-${location}-token-space-1`);
             if (space.firstElementChild) {
                 let tokenID = space.firstElementChild.id;
