@@ -13,8 +13,6 @@
  *
  */
 
-/* Note: you must not use any @import directive */
-
 .current_player_is_active #page-title, .gamestate_gameEnd #page-title, #page-title {
     min-height: 46px;
     display: flex;

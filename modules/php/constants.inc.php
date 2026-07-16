@@ -1,4 +1,13 @@
 <?php
+/**
+ *------
+ * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
+ * Maquis implementation : © Michał Delikat michal.delikat0@gmail.com
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ */
 
 const ST_PLAYER_PLACE_WORKER = 2;
 const ST_PLAYER_ACTIVATE_WORKER = 3;

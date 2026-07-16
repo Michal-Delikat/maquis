@@ -14,12 +14,9 @@
  *
  */
 
-//    !! It is not a good idea to modify this file when a game is running !!
 require_once("modules/php/constants.inc.php");
 
 $machinestates = [
-
-    // The initial state. Please do not modify.
 
     ST_GAME_ROUND_START => [
         "name" => "roundStart",
