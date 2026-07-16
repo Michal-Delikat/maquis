@@ -1,7 +1,5 @@
 <?php
 
-const ST_BGA_GAME_SETUP = 1;
-
 const ST_PLAYER_PLACE_WORKER = 2;
 const ST_PLAYER_ACTIVATE_WORKER = 3;
 const ST_PLAYER_TAKE_ACTION = 4;

@@ -16,8 +16,6 @@ declare(strict_types=1);
 
 namespace Bga\Games\Maquis;
 
-require_once(APP_GAMEMODULE_PATH . "module/table/table.game.php");
-
 require_once("constants.inc.php");
 require_once("Material.php");
 
@@ -34,7 +32,8 @@ require_once("Markers.php");
 require_once("BoardActions.php");
 require_once("BoardPaths.php");
 
-class Game extends \Table {
+
+class Game extends \Bga\GameFramework\Table {
     use Components;
     use Board;
     use Missions;
@@ -79,7 +78,7 @@ class Game extends \Table {
 
         $this->ACTIONS = Material::ACTIONS;
         $this->PATROL_CARD_ITEMS = Material::PATROL_CARD_ITEMS;
-        $this->patrol_cards = $this->getNew("module.common.deck");  
+        $this->patrol_cards = $this->bga->deckFactory->createDeck("patrol_card");  
         $this->patrol_cards->init("patrol_card");
         $this->patrol_cards->autoreshuffle_trigger = array('obj' => $this, 'method' => 'deckAutoReshuffle');
         $this->patrol_cards->shuffle('deck');
@@ -431,7 +430,9 @@ class Game extends \Table {
             $this->completeMission(MISSION_DESTROY_AA_GUNS);
         } 
 
-        $this->setPlayerScore((int) $this->getIsGameWon());
+        if (!$this->getIsGameWon()) {
+            $this->setPlayerScore(0);
+        }
 
         $this->gamestate->nextState("gameEnd");
     }
@@ -1192,14 +1193,5 @@ class Game extends \Table {
         //            $sql = "CREATE TABLE DBPREFIX_xxxxxxx ....";
         //            $this->applyDbUpgradeToAllDB( $sql );
         //       }
-    }
-
-    /**
-     * Returns the game name.
-     *
-     * IMPORTANT: Please do not modify.
-     */
-    protected function getGameName() {
-        return "maquis";
     }
 }

@@ -21,14 +21,6 @@ $machinestates = [
 
     // The initial state. Please do not modify.
 
-    ST_BGA_GAME_SETUP => [
-        "name" => "gameSetup",
-        "description" => "",
-        "type" => "manager",
-        "action" => "stGameSetup",
-        "transitions" => ["" => ST_GAME_ROUND_START]
-    ],
-
     ST_GAME_ROUND_START => [
         "name" => "roundStart",
         "description" => "",
@@ -175,16 +167,5 @@ $machinestates = [
         "type" => "game",
         "action" => "stPseudoGameEnd",
         "transitions" => ["gameEnd" => ST_BGA_GAME_END],
-    ],
-
-    // Final state.
-    // Please do not modify (and do not overload action/args methods).
-    ST_BGA_GAME_END => [
-        "name" => "gameEnd",
-        "description" => clienttranslate("End of game"),
-        "type" => "manager",
-        "action" => "stGameEnd",
-        "args" => "argGameEnd"
-    ],
-
+    ]
 ];

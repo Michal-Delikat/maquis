@@ -44,10 +44,10 @@ trait Player {
     }
 
     protected function setPlayerScore(int $playerScore): void {
-        static::DbQuery("UPDATE player SET player_score = $playerScore;");
+        $this->bga->playerScore->set($this->getCurrentPlayerId(), $playerScore);
     }
 
     protected function incrementPlayerScore(): void {
-        static::DbQuery("UPDATE player SET player_score = player_score + 1;");
+        $this->bga->playerScore->inc($this->getCurrentPlayerId(), 1);
     }
 }

@@ -58,7 +58,7 @@ function (dojo, declare) {
 
             let darkLadyLocation = gamedatas.darkLadyLocation;
 
-            let player_board_div = $('player_board_' + player_id);
+            let player_board_div = this.bga.playerPanels.getElement(player_id);
 
             // PLAYER INFO
             dojo.place(`
