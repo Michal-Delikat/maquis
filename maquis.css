@@ -1170,23 +1170,24 @@
     width: 15vw;
 }
 
-.maq_room-tile > .maq_circle-shape {
+.maq_room-tile > :is(.maq_circle-shape, .maq_rectangle-shape) {
     position: absolute;
-    border-radius: 50%;
     border: 3px solid black;
+}
+
+.maq_room-tile > .maq_circle-shape {
+    border-radius: 50%;
     width: 90%;
     height: 90%;
 }
 
 .maq_room-tile > .maq_rectangle-shape {
-    position: absolute;
     background-image: url('img/Spare_rooms.png');
     background-size: 450%;
     background-position-x: 7.1%;
     background-position-y: 27.65%;
     width: 66%;
     height: 20%;
-    border: 3px solid black;
     border-top: none;
     bottom: 0;
 }
