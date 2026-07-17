@@ -13,6 +13,26 @@
  *
  */
 
+html[data-theme="light"] {
+    --mq-bg-color: #f9f4d3;
+    --mq-bd-color: black;
+
+    --mq-mission-location-color: #3B6D11;
+    --mq-mission-item-color: #185FA5;
+    --mq-mission-morale-color: #534AB7;
+    --mq-mission-soldier-color: #993C1D;
+}
+
+html[data-theme="dark"] {
+    --mq-bg-color: #2b2719;
+    --mq-bd-color: white;
+
+    --mq-mission-location-color: #97C459;
+    --mq-mission-item-color: #85B7EB;
+    --mq-mission-morale-color: #AFA9EC;
+    --mq-mission-soldier-color: #F0997B;
+}
+
 /* Player Area */
 
 .current_player_is_active #page-title, .gamestate_gameEnd #page-title, #page-title {
@@ -21,7 +41,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 5px;
-    background-color: #f9f4d3;
+    background-color: var(--mq-bg-color);
 }
 
 #game_play_area {
@@ -33,7 +53,7 @@
 }
 
 .player-board {
-    background-color: #f9f4d3;
+    background-color: var(--mq-bg-color);
 }
 
 #custom-player-board {
@@ -583,7 +603,7 @@
     height: 30.7vw;
     border-radius: 10px;
     background-repeat: no-repeat;
-    border: 2px solid black;
+    border: 2px solid var(--mq-bd-color);
     transition: transform 0.6s;
     transform-style: preserve-3d;
 }
@@ -666,20 +686,20 @@
     font-weight: 600;
 }
 
-.mission-text-location-name {
-    color: #3B6D11;
+.maq_mission-text-location-name {
+    color: var(--mq-mission-location-color);
 }
 
 .maq_mission-text-item-name {
-    color: #185FA5;
+    color: var(--mq-mission-item-color);
 }
 
 .maq_mission-text-morale {
-    color: #534AB7;
+    color: var(--mq-mission-morale-color);
 }
 
 .maq_mission-text-soldier {
-    color: #993C1D;
+    color: var(--mq-mission-soldier-color);
 }
 
 /* 0-star missions */
