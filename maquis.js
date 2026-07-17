@@ -21,13 +21,7 @@ define([
 ],
 function (dojo, declare) {
     return declare("bgagame.maquis", ebg.core.gamegui, {
-        constructor: function() {
-            // console.log('maquis constructor');
-              
-            // Here, you can init the global variables of your user interface
-            // Example:
-            // this.myGlobalValue = 0;
-        },
+        constructor: function() {},
         
         setup: function(gamedatas) {
             // console.log("Starting game setup");
@@ -73,102 +67,102 @@ function (dojo, declare) {
 
             // RESOURCES
             resources.forEach(({resource_type, amount}) => dojo.place(`
-                <div class="resource-box">
-                    <span id="${resource_type}-quantity" class="resource-amount">${amount}</span>
-                    <div id="${resource_type}-icon" class="resource-icon">
-                        <div class="resource-icon-circle"></div>
+                <div class="maq_resource-box">
+                    <span id="${resource_type}-quantity" class="maq_resource-amount">${amount}</span>
+                    <div id="${resource_type}-icon" class="maq_resource-icon">
+                        <div class="maq_resource-icon-circle"></div>
                     </div>
                 <div>    
             `, 'resources'));
 
             dojo.place(`
-                <div class="board-and-missions">
-                    <div class="top-area">
-                        <div class="arrest whiteblock">
-                            <h3 class="whiteblock-label">${_('Arrested Workerks')}</h3>
-                            <div class="arrest-spaces-wrapper">
-                                <div id="arrest-space-1" class="arrest-space"></div>
-                                <div id="arrest-space-2" class="arrest-space"></div>
-                                <div id="arrest-space-3" class="arrest-space"></div>
-                                <div id="arrest-space-4" class="arrest-space"></div>
-                                <div id="arrest-space-5" class="arrest-space"></div>
+                <div id="board-and-missions">
+                    <div id="top-area">
+                        <div id="arrest" class="maq_whiteblock">
+                            <h3 class="maq_whiteblock-label">${_('Arrested Workers')}</h3>
+                            <div id="arrest-spaces-wrapper">
+                                <div id="arrest-space-1" class="maq_arrest-space"></div>
+                                <div id="arrest-space-2" class="maq_arrest-space"></div>
+                                <div id="arrest-space-3" class="maq_arrest-space"></div>
+                                <div id="arrest-space-4" class="maq_arrest-space"></div>
+                                <div id="arrest-space-5" class="maq_arrest-space"></div>
                             </div>
                         </div>
-                        <div id="mission-slot-1" class="mission-slot">
-                            <div id="${selectedMissions.mission_card_a}" class="card mission-card">
-                                <div class="mission-card-back mission-card-face"></div>
-                                <div class="mission-card-front mission-card-face"></div>
-                                <div id="space-18" class="space mission-space mission-space-1">
-                                    <div id="space-18-worker-space" class="worker-space"></div>
-                                    <div id="space-18-marker-space" class="marker-space">
-                                        <div id="space-18-marker-space-1" class="marker-space"></div>
+                        <div id="mission-slot-1" class="maq_mission-slot">
+                            <div id="${selectedMissions.mission_card_a}" class="maq_card">
+                                <div class="maq_mission-card-back maq_mission-card-face"></div>
+                                <div class="maq_mission-card-front maq_mission-card-face"></div>
+                                <div id="space-18" class="maq_space maq_mission-space maq_mission-space-1">
+                                    <div id="space-18-worker-space" class="maq_worker-space"></div>
+                                    <div id="space-18-marker-space" class="maq_marker-space">
+                                        <div id="space-18-marker-space-1" class="maq_marker-space"></div>
                                     </div>
-                                    <div id="space-18-background-space" class="background-space"></div>
+                                    <div id="space-18-background-space" class="maq_background-space"></div>
                                 </div>
-                                <div id="space-19" class="space mission-space mission-space-2">
-                                    <div id="space-19-worker-space" class="worker-space"></div>
-                                    <div id="space-19-marker-space" class="marker-space">
-                                        <div id="space-19-marker-space-1" class="marker-space"></div>
+                                <div id="space-19" class="maq_space maq_mission-space maq_mission-space-2">
+                                    <div id="space-19-worker-space" class="maq_worker-space"></div>
+                                    <div id="space-19-marker-space" class="maq_marker-space">
+                                        <div id="space-19-marker-space-1" class="maq_marker-space"></div>
                                     </div>
-                                    <div id="space-19-background-space" class="background-space"></div>
+                                    <div id="space-19-background-space" class="maq_background-space"></div>
                                 </div>
-                                <div id="space-20" class="space mission-space mission-space-3">
-                                    <div id="space-20-worker-space" class="worker-space"></div>
-                                    <div id="space-20-marker-space" class="marker-space">
-                                        <div id="space-20-marker-space-1" class="marker-space"></div>    
+                                <div id="space-20" class="maq_space maq_mission-space maq_mission-space-3">
+                                    <div id="space-20-worker-space" class="maq_worker-space"></div>
+                                    <div id="space-20-marker-space" class="maq_marker-space">
+                                        <div id="space-20-marker-space-1" class="maq_marker-space"></div>    
                                     </div>
-                                    <div id="space-20-background-space" class="background-space"></div>
+                                    <div id="space-20-background-space" class="maq_background-space"></div>
                                 </div>
-                                <div id="mission-a-token-space" class="mission-token-space"></div>
+                                <div id="mission-a-token-space" class="maq_mission-token-space"></div>
                             </div>
                         </div>
-                        <div id="mission-slot-2" class="mission-slot">
-                            <div id="${selectedMissions.mission_card_b}" class="card mission-card">
-                                <div class="mission-card-back mission-card-face"></div>
-                                <div class="mission-card-front mission-card-face"></div>
-                                <div id="space-21" class="space mission-space mission-space-1">
-                                    <div id="space-21-worker-space" class="worker-space"></div>
-                                    <div id="space-21-marker-space" class="marker-space">
-                                        <div id="space-21-marker-space-1" class="marker-space"></div>
+                        <div id="mission-slot-2" class="maq_mission-slot">
+                            <div id="${selectedMissions.mission_card_b}" class="maq_card">
+                                <div class="maq_mission-card-back maq_mission-card-face"></div>
+                                <div class="maq_mission-card-front maq_mission-card-face"></div>
+                                <div id="space-21" class="maq_space maq_mission-space maq_mission-space-1">
+                                    <div id="space-21-worker-space" class="maq_worker-space"></div>
+                                    <div id="space-21-marker-space" class="maq_marker-space">
+                                        <div id="space-21-marker-space-1" class="maq_marker-space"></div>
                                     </div>
-                                    <div id="space-21-background-space" class="background-space"></div>
+                                    <div id="space-21-background-space" class="maq_background-space"></div>
                                 </div>
-                                <div id="space-22" class="space mission-space mission-space-2">
-                                    <div id="space-22-worker-space" class="worker-space"></div>
-                                    <div id="space-22-marker-space" class="marker-space">
-                                        <div id="space-22-marker-space-1" class="marker-space"></div>
+                                <div id="space-22" class="maq_space maq_mission-space maq_mission-space-2">
+                                    <div id="space-22-worker-space" class="maq_worker-space"></div>
+                                    <div id="space-22-marker-space" class="maq_marker-space">
+                                        <div id="space-22-marker-space-1" class="maq_marker-space"></div>
                                     </div>
-                                    <div id="space-22-background-space" class="background-space"></div>
+                                    <div id="space-22-background-space" class="maq_background-space"></div>
                                 </div>
-                                <div id="space-23" class="space mission-space mission-space-3">
-                                    <div id="space-23-worker-space" class="worker-space"></div>
-                                    <div id="space-23-marker-space" class="marker-space">
-                                        <div id="space-23-marker-space-1" class="marker-space"></div>
+                                <div id="space-23" class="maq_space maq_mission-space maq_mission-space-3">
+                                    <div id="space-23-worker-space" class="maq_worker-space"></div>
+                                    <div id="space-23-marker-space" class="maq_marker-space">
+                                        <div id="space-23-marker-space-1" class="maq_marker-space"></div>
                                     </div>
-                                    <div id="space-23-background-space" class="background-space"></div>
+                                    <div id="space-23-background-space" class="maq_background-space"></div>
                                 </div>
-                                <div id="mission-b-token-space" class="mission-token-space"></div>
+                                <div id="mission-b-token-space" class="maq_mission-token-space"></div>
                             </div>
                         </div>
-                        <div class="barracks-boxes">
-                            <div class="milice-barracks barracks whiteblock">
-                                <h3 class="whiteblock-label">${_('Milice')}</h3>
-                                <div id="milice-row" class="patrol-units-row">
-                                    <div id="barracks-milice-space-1" class="patrol-unit-barracks-space"></div>
-                                    <div id="barracks-milice-space-2" class="patrol-unit-barracks-space"></div>
-                                    <div id="barracks-milice-space-3" class="patrol-unit-barracks-space"></div>
-                                    <div id="barracks-milice-space-4" class="patrol-unit-barracks-space"></div>
-                                    <div id="barracks-milice-space-5" class="patrol-unit-barracks-space"></div>
+                        <div id="barracks-boxes-wrapper">
+                            <div class="maq_barracks maq_whiteblock">
+                                <h3 class="maq_whiteblock-label">${_('Milice')}</h3>
+                                <div class="maq_patrol-units-row">
+                                    <div id="barracks-milice-space-1" class="maq_patrol-unit-barracks-space"></div>
+                                    <div id="barracks-milice-space-2" class="maq_patrol-unit-barracks-space"></div>
+                                    <div id="barracks-milice-space-3" class="maq_patrol-unit-barracks-space"></div>
+                                    <div id="barracks-milice-space-4" class="maq_patrol-unit-barracks-space"></div>
+                                    <div id="barracks-milice-space-5" class="maq_patrol-unit-barracks-space"></div>
                                 </div>
                             </div>
-                            <div class="soldiers-barracks barracks whiteblock">
-                                <h3 class="whiteblock-label">${_('Soldiers')}</h3>
-                                <div id="soldiers-row" class="patrol-units-row">
-                                    <div id="barracks-soldier-space-1" class="patrol-unit-barracks-space"></div>
-                                    <div id="barracks-soldier-space-2" class="patrol-unit-barracks-space"></div>
-                                    <div id="barracks-soldier-space-3" class="patrol-unit-barracks-space"></div>
-                                    <div id="barracks-soldier-space-4" class="patrol-unit-barracks-space"></div>
-                                    <div id="barracks-soldier-space-5" class="patrol-unit-barracks-space"></div>
+                            <div class="maq_barracks maq_whiteblock">
+                                <h3 class="maq_whiteblock-label">${_('Soldiers')}</h3>
+                                <div class="maq_patrol-units-row">
+                                    <div id="barracks-soldier-space-1" class="maq_patrol-unit-barracks-space"></div>
+                                    <div id="barracks-soldier-space-2" class="maq_patrol-unit-barracks-space"></div>
+                                    <div id="barracks-soldier-space-3" class="maq_patrol-unit-barracks-space"></div>
+                                    <div id="barracks-soldier-space-4" class="maq_patrol-unit-barracks-space"></div>
+                                    <div id="barracks-soldier-space-5" class="maq_patrol-unit-barracks-space"></div>
                                 </div>
                             </div>
                         </div>  
@@ -180,12 +174,12 @@ function (dojo, declare) {
                 </div>
                 <div id="right-panel">
                     <div id="right-panel-top">
-                        <div id="morale-and-soldiers-track" class="card">
+                        <div id="morale-and-soldiers-track" class="maq_card">
                             <div id="morale-track"></div>
                             <div id="soldiers-track"></div>
                         </div>
-                        <div id="patrol-deck" class="card"></div>
-                        <div id="patrol-discard" class="card whiteblock"></div>
+                        <div id="patrol-deck" class="maq_card"></div>
+                        <div id="patrol-discard" class="maq_card maq_whiteblock"></div>
                     </div>
                     <div id="room-tiles-container-wrapper">
                         <div id="room-tiles"></div>
@@ -202,117 +196,117 @@ function (dojo, declare) {
                 switch(mission.split('_').slice(2).join("_")) {
                     case 'milice_parade_day':
                         description = `
-                        <p class="mission-flavour-text">${_('The Milice are holding parades around town - a brave volunteer must show our defiance. They probably won\'t make it back...')}</p><br>
-                        <p class="mission-description-text">${_('Deliver 1')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('to')} <span class="mission-text-location-name">Rue Baradat</span> ${_('on a Parade Day (Day 3, 6, 9, 12, and 14). The Worker is Arrested. Increase')} <span class="mission-text-morale">${_('Morale')}</span> ${_('by 1. Before this mission is completed, the road between')} <span class="mission-text-location-name">Rue Baradat</span> ${_('and')} <span class="mission-text-location-name">Fence</span> ${_('is blocked on Parade Days.')}</p>`;
+                        <p class="maq_maq_mission-flavour-text">${_('The Milice are holding parades around town - a brave volunteer must show our defiance. They probably won\'t make it back...')}</p><br>
+                        <p class="maq_mission-description-text">${_('Deliver 1')} <span class="maq_mission-text-item-name">${_('Weapon')}</span> ${_('to')} <span class="maq_mission-text-location-name">Rue Baradat</span> ${_('on a Parade Day (Day 3, 6, 9, 12, and 14). The Worker is Arrested. Increase')} <span class="maq_mission-text-morale">${_('Morale')}</span> ${_('by 1. Before this mission is completed, the road between')} <span class="maq_mission-text-location-name">Rue Baradat</span> ${_('and')} <span class="maq_mission-text-location-name">Fence</span> ${_('is blocked on Parade Days.')}</p>`;
                         break;
                     case 'officers_mansion':
                         description = `
-                            <p class="mission-flavour-text">${_('The local commander has commandeered a fancy house north of town. We need to make sure he knows that he will never have us cowed.')}</p><br>
-                            <p class="mission-description-text">${_('Place a Worker on')} <span class="mission-text-location-name">Rue Baradat</span>, <span class="mission-text-location-name">Pont Leveque</span> ${_('and')} <span class="mission-text-location-name">Pont du Nord</span> ${_('to write anti-fascist graffiti (place markers during Action Phase to track graffiti). Once all three locations are tagged, place a Worker here to complete.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('The local commander has commandeered a fancy house north of town. We need to make sure he knows that he will never have us cowed.')}</p><br>
+                            <p class="maq_mission-description-text">${_('Place a Worker on')} <span class="maq_mission-text-location-name">Rue Baradat</span>, <span class="maq_mission-text-location-name">Pont Leveque</span> ${_('and')} <span class="maq_mission-text-location-name">Pont du Nord</span> ${_('to write anti-fascist graffiti (place markers during Action Phase to track graffiti). Once all three locations are tagged, place a Worker here to complete.')}</p>`;
                         break;
                     case 'sabotage':
                         description = `
-                            <p class="mission-flavour-text">${_('The occupation runs a munitions factory on the outskirts of town. Infiltrate and sabotage the operation by any means possible.')}</p><br>
-                            <p class="mission-description-text">${_('A Worker must infiltrate the factory twice, then return a third day to deliver')} <span class="mission-text-item-name">${_('Explosives')}</span>.</p>`;
+                            <p class="maq_mission-flavour-text">${_('The occupation runs a munitions factory on the outskirts of town. Infiltrate and sabotage the operation by any means possible.')}</p><br>
+                            <p class="maq_mission-description-text">${_('A Worker must infiltrate the factory twice, then return a third day to deliver')} <span class="maq_mission-text-item-name">${_('Explosives')}</span>.</p>`;
                         break;
                     case 'underground_newspaper':
                         description = `
-                            <p class="mission-flavour-text">${_('Get the word out and counter the propaganda of the occupation.')}</p><br>
-                            <p class="mission-description-text">${_('Deliver 2')} <span class="mission-text-item-name">${_('Intel')}</span> ${_('to this location on three separate days.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('Get the word out and counter the propaganda of the occupation.')}</p><br>
+                            <p class="maq_mission-description-text">${_('Deliver 2')} <span class="maq_mission-text-item-name">${_('Intel')}</span> ${_('to this location on three separate days.')}</p>`;
                         break;
                     case 'infiltration':
                         description = `
-                            <p class="mission-flavour-text">${_('The best place to collect reconnaissance is often from the inside. Insert a mole into the Milice.')}</p><br>
-                            <p class="mission-description-text">${_('Deliver 2')} <span class="mission-text-item-name">${_('Intel')}</span> ${_('to this location. The Worker must remain here until another Worker delivers 1')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('and 1')} <span class="mission-text-item-name">${_('Explosive')}</span>. ${_('While the first Worker is here, you may look at the top card of the Patrol deck before the placement phase.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('The best place to collect reconnaissance is often from the inside. Insert a mole into the Milice.')}</p><br>
+                            <p class="maq_mission-description-text">${_('Deliver 2')} <span class="maq_mission-text-item-name">${_('Intel')}</span> ${_('to this location. The Worker must remain here until another Worker delivers 1')} <span class="maq_mission-text-item-name">${_('Weapon')}</span> ${_('and 1')} <span class="maq_mission-text-item-name">${_('Explosive')}</span>. ${_('While the first Worker is here, you may look at the top card of the Patrol deck before the placement phase.')}</p>`;
                         break;
                     case 'german_shepards':
                         description = `
-                            <p class="mission-flavour-text">${_('The occupiers have dogs to help with patrols. Use poison to eliminate them')}</p><br>
-                            <p class="mission-description-text">${_('Deliver 1')} <span class="mission-text-item-name">${_('Medicine')}</span> ${_('and 1')} <span class="mission-text-item-name">${_('Food')}</span> ${_('to this location on three separate days. Before this mission is completed, Milice units may not be eliminated.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('The occupiers have dogs to help with patrols. Use poison to eliminate them')}</p><br>
+                            <p class="maq_mission-description-text">${_('Deliver 1')} <span class="maq_mission-text-item-name">${_('Medicine')}</span> ${_('and 1')} <span class="maq_mission-text-item-name">${_('Food')}</span> ${_('to this location on three separate days. Before this mission is completed, Milice units may not be eliminated.')}</p>`;
                         break;
                     case 'double_agent':
                         description = `
-                            <p class="mission-flavour-text">${_('We must enearth the double agent known only as the "Dark Lady"...')}</p><br>
-                            <p class="mission-description-text">${_('Visit all locations on the west side of the river except the')} <span class="mission-text-location-name">Fence</span> ${_('and')} <span class="mission-text-location-name">Spare Room</span>. ${_('Once completed, turn over the top patrol card; Location #1 is the location of the "Dark Lady". Visit that location again to complete the mission. Remove one Worker permanently from the game.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('We must enearth the double agent known only as the "Dark Lady"...')}</p><br>
+                            <p class="maq_mission-description-text">${_('Visit all locations on the west side of the river except the')} <span class="maq_mission-text-location-name">Fence</span> ${_('and')} <span class="maq_mission-text-location-name">Spare Room</span>. ${_('Once completed, turn over the top patrol card; Location #1 is the location of the "Dark Lady". Visit that location again to complete the mission. Remove one Worker permanently from the game.')}</p>`;
                         break;
                     case 'aid_the_spy':
                         description = `
-                            <p class="mission-flavour-text">${_('A British spy parachuted in a few days ago and needs our help. Provide him with equipment and supplies to help him carry out his mission.')}</p><br>
-                            <p class="mission-description-text">${_('Deliver 2')} <span class="mission-text-item-name">${_('Weapons')}</span> ${_('to the spy on one day, followed by 1')} <span class="mission-text-item-name">${_('Money')}</span> ${_('and 2')} <span class="mission-text-item-name">${_('Food')}</span> ${_('on a second day.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('A British spy parachuted in a few days ago and needs our help. Provide him with equipment and supplies to help him carry out his mission.')}</p><br>
+                            <p class="maq_mission-description-text">${_('Deliver 2')} <span class="maq_mission-text-item-name">${_('Weapons')}</span> ${_('to the spy on one day, followed by 1')} <span class="maq_mission-text-item-name">${_('Money')}</span> ${_('and 2')} <span class="maq_mission-text-item-name">${_('Food')}</span> ${_('on a second day.')}</p>`;
                         break;
                     case 'assassination':
                         description = `
-                            <p class="mission-flavour-text">${_('The Milice is a paramilitary force of local thugs colluding with the occupiers - we need to send a message to teach these collaborators a lesson!')}</p><br>
-                            <p class="mission-description-text">${_('Eliminate all Milice Units. This mission MUST be completed last.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('The Milice is a paramilitary force of local thugs colluding with the occupiers - we need to send a message to teach these collaborators a lesson!')}</p><br>
+                            <p class="maq_mission-description-text">${_('Eliminate all Milice Units. This mission MUST be completed last.')}</p>`;
                         break;
                     case 'destroy_the_train':
                         description = `
-                            <p class="mission-flavour-text">${_('We\'ve recieved intelligence that the occupation are going to be transporting Panzers along the railway near your town. Plant bombs to destroy the train as it passes.')}</p><br>
-                            <p class="mission-description-text">${_('Deliver 3')} <span class="mission-text-item-name">${_('Explosives')}</span> ${_('to this location. This mission can only be completed on Days 6, 7, 8 or 9.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('We\'ve recieved intelligence that the occupation are going to be transporting Panzers along the railway near your town. Plant bombs to destroy the train as it passes.')}</p><br>
+                            <p class="maq_mission-description-text">${_('Deliver 3')} <span class="maq_mission-text-item-name">${_('Explosives')}</span> ${_('to this location. This mission can only be completed on Days 6, 7, 8 or 9.')}</p>`;
                         break;
                     case 'liberate_the_town':
                         description = `
-                            <p class="mission-flavour-text">${_('The Allies are pushing forward. If we rise up the right time, our town could emerge unscathed. For that, we will need weapons and courage!')}</p><br>
-                            <p class="mission-description-text">${_('Posses at least 3')} <span class="mission-text-item-name">${_('Weapons')}</span> ${_('and 4')} <span class="mission-text-morale">${_('Morale')}</span> ${_('at the point the Day Track marker moves to \'END\' space.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('The Allies are pushing forward. If we rise up the right time, our town could emerge unscathed. For that, we will need weapons and courage!')}</p><br>
+                            <p class="maq_mission-description-text">${_('Posses at least 3')} <span class="maq_mission-text-item-name">${_('Weapons')}</span> ${_('and 4')} <span class="maq_mission-text-morale">${_('Morale')}</span> ${_('at the point the Day Track marker moves to \'END\' space.')}</p>`;
                         break;
                     case 'coded_messages':
                         description = `
-                            <p class="mission-flavour-text">${_('Knowledge is power. Work with other Resistance Fighters from other cities to monitor the Occupation. Train a cryptographer, then have them communicate with other Resistance operatives.')}</p><br>
-                            <p class="mission-description-text">${_('A Worker must be placed here by end of Day 6 and must remain until the end of Day 10.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('Knowledge is power. Work with other Resistance Fighters from other cities to monitor the Occupation. Train a cryptographer, then have them communicate with other Resistance operatives.')}</p><br>
+                            <p class="maq_mission-description-text">${_('A Worker must be placed here by end of Day 6 and must remain until the end of Day 10.')}</p>`;
                         break;
                     case 'take_out_the_bridges':
                         description = `
-                            <p class="mission-flavour-text">${_('The Occupation has enjoyed unfettered access to the city for too long. Slow them down!')}</p><br>
-                            <p class="mission-description-text">${_('To destroy a bridge, deliver 2')} <span class="mission-text-item-name">${_('Explosives')}</span> ${_('to the')} <span class="mission-text-location-name">Black Market</span>. ${_('At the end of the day, place a marker on a bridge of you choice connected to The')} <span class="mission-text-location-name">Black Market</span>. ${_('Workers may not pass destroyed bridges for the rest of the game.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('The Occupation has enjoyed unfettered access to the city for too long. Slow them down!')}</p><br>
+                            <p class="maq_mission-description-text">${_('To destroy a bridge, deliver 2')} <span class="maq_mission-text-item-name">${_('Explosives')}</span> ${_('to the')} <span class="maq_mission-text-location-name">Black Market</span>. ${_('At the end of the day, place a marker on a bridge of you choice connected to The')} <span class="maq_mission-text-location-name">Black Market</span>. ${_('Workers may not pass destroyed bridges for the rest of the game.')}</p>`;
                         break;
                     case 'bomb_for_the_officer':
                         description = `
-                            <p class="mission-flavour-text">${_('A German plane landed in the field southeast of town. The pilot is in a hotel nearby. A perfect time to strike!')}</p><br>
-                            <p class="mission-description-text">${_('You must have at least 5')} <span class="mission-text-morale">${_('Morale')}</span> ${_('to carry out this mission. Deliver 1')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('and 1')} <span class="mission-text-item-name">${_('Explosive')}</span> ${_('to this location. Before this mission is completed, the East')} <span class="mission-text-location-name">Field</span> ${_('and the Southeast')} <span class="mission-text-location-name">Spare Room</span> ${_('are unusable.')}</p>`;
+                            <p class="maq_mission-flavour-text">${_('A German plane landed in the field southeast of town. The pilot is in a hotel nearby. A perfect time to strike!')}</p><br>
+                            <p class="maq_mission-description-text">${_('You must have at least 5')} <span class="maq_mission-text-morale">${_('Morale')}</span> ${_('to carry out this mission. Deliver 1')} <span class="maq_mission-text-item-name">${_('Weapon')}</span> ${_('and 1')} <span class="maq_mission-text-item-name">${_('Explosive')}</span> ${_('to this location. Before this mission is completed, the East')} <span class="maq_mission-text-location-name">Field</span> ${_('and the Southeast')} <span class="maq_mission-text-location-name">Spare Room</span> ${_('are unusable.')}</p>`;
                         break;
                     case 'milice_hq':
                         description = `
-                            <p class="mission-flavour-text">${_('The Milice have established their regional HQ on the edge of town, and nobody knows who to trust. We need to clear out the rats to let the town feel safe again.')}<p><br>
-                            <p class="mission-description-text"><span class="mission-text-morale">${_('Morale')}</span> ${_('starts on 4')}<br><br>
+                            <p class="maq_mission-flavour-text">${_('The Milice have established their regional HQ on the edge of town, and nobody knows who to trust. We need to clear out the rats to let the town feel safe again.')}<p><br>
+                            <p class="maq_mission-description-text"><span class="maq_mission-text-morale">${_('Morale')}</span> ${_('starts on 4')}<br><br>
                             ${_('Objective 1:')}<br>
-                            ${_('Discover the plans of the building at the public records office on')} <span class="mission-text-location-name">Rue Baradat</span>.<br><br>
+                            ${_('Discover the plans of the building at the public records office on')} <span class="maq_mission-text-location-name">Rue Baradat</span>.<br><br>
                             ${_('Objective 2:')}<br>
-                            ${_('[SAFE] Spend 2')} <span class="mission-text-item-name">${_('Poison')}</span> ${_('on this location to spike the Milice\'s water supply, gain 2 on the')} <span class="mission-text-morale">Morale track</span>  ${_('and 3 on the')} <span class="mission-text-soldier">Soldier track</span><br><br>
-                            ${_('If the')} <span class="mission-text-soldier">${_('soldier track')}</span> ${_('was on 3+ already, success; otherwise, major success.')}</p>`;
+                            ${_('[SAFE] Spend 2')} <span class="maq_mission-text-item-name">${_('Poison')}</span> ${_('on this location to spike the Milice\'s water supply, gain 2 on the')} <span class="maq_mission-text-morale">Morale track</span>  ${_('and 3 on the')} <span class="maq_mission-text-soldier">Soldier track</span><br><br>
+                            ${_('If the')} <span class="maq_mission-text-soldier">${_('soldier track')}</span> ${_('was on 3+ already, success; otherwise, major success.')}</p>`;
                         break;
                     case 'bomb_the_barracks':
                         description = `
-                            <p class="mission-flavour-text">${_('German soldiers are stationed right outside town. Draw them out with distraction and bomb the barracks to slow the Nazi war machine.')}</p><br>
-                            <p class="mission-description-text"><span class="mission-text-soldier">${_('Soldier track')}</span> ${_('starts on 3')}<br><br>
+                            <p class="maq_mission-flavour-text">${_('German soldiers are stationed right outside town. Draw them out with distraction and bomb the barracks to slow the Nazi war machine.')}</p><br>
+                            <p class="maq_mission-description-text"><span class="maq_mission-text-soldier">${_('Soldier track')}</span> ${_('starts on 3')}<br><br>
                             ${_('Objective 1:')}<br>
                             ${_('Visit this location to recon the barracks')}<br><br>
                             ${_('Objective 2:')}<br>
                             ${_('Visit this location to recon the barracks')}<br><br>
                             ${_('Objective 3:')}<br>
-                            ${_('[SAFE] Spend a ')}<span class="mission-text-item-name">${_('Fake ID')}</span> ${_('and Two')} <span class="mission-text-item-name">${_('Explosives')}</span> ${_('on this location AND, on the same day, send a second worker to an empty')} <span class="mission-text-location-name">field</span> ${_('and spend a')} <span class="mission-text-item-name">${_('Weapon')}</span> ${_('to distract the soldiers to achieve a major success.')}</p>`;
+                            ${_('[SAFE] Spend a ')}<span class="maq_mission-text-item-name">${_('Fake ID')}</span> ${_('and Two')} <span class="maq_mission-text-item-name">${_('Explosives')}</span> ${_('on this location AND, on the same day, send a second worker to an empty')} <span class="maq_mission-text-location-name">field</span> ${_('and spend a')} <span class="maq_mission-text-item-name">${_('Weapon')}</span> ${_('to distract the soldiers to achieve a major success.')}</p>`;
                         break;
                     case 'free_the_resistance_leader':
                         description = `
-                            <p class="mission-flavour-text">${_('A resistance leader has been captured and will be transported away from town soon. Free him from the occupiers... or make sure he at least can\'t tell them his secrets.')}</p><br>
-                            <p class="mission-description-text">${_('Objective 1:')}<br>
-                            ${_('Spend')} <span class="mission-text-item-name">${_('Info')}</span> ${_('and')} <span class="mission-text-item-name">${_('Money')}</span> ${_('on this location before end of day 5 to bribe a clerk to discover the location of the prisoner.')}<br><br>
+                            <p class="maq_mission-flavour-text">${_('A resistance leader has been captured and will be transported away from town soon. Free him from the occupiers... or make sure he at least can\'t tell them his secrets.')}</p><br>
+                            <p class="maq_mission-description-text">${_('Objective 1:')}<br>
+                            ${_('Spend')} <span class="maq_mission-text-item-name">${_('Info')}</span> ${_('and')} <span class="maq_mission-text-item-name">${_('Money')}</span> ${_('on this location before end of day 5 to bribe a clerk to discover the location of the prisoner.')}<br><br>
                             ${_('Objective 2:')}<br>
-                            ${_('[SAFE] Spend a')} <span class="mission-text-item-name">${_('Poison')}</span> ${_('on this location before end of day 9 to succeed the mission OR spend a')} <span class="mission-text-item-name">${_('Fake ID')}</span>, ${_('two')} <span class="mission-text-item-name">${_('Weapons')}</span> ${_('and a')} <span class="mission-text-item-name">${_('Medicine')}</span> ${_('to increase the')} <span class="mission-text-soldier">soldier track</span> ${_('by 2 on day 10 to achieve a major success.')}</p>`;
+                            ${_('[SAFE] Spend a')} <span class="maq_mission-text-item-name">${_('Poison')}</span> ${_('on this location before end of day 9 to succeed the mission OR spend a')} <span class="maq_mission-text-item-name">${_('Fake ID')}</span>, ${_('two')} <span class="maq_mission-text-item-name">${_('Weapons')}</span> ${_('and a')} <span class="maq_mission-text-item-name">${_('Medicine')}</span> ${_('to increase the')} <span class="maq_mission-text-soldier">soldier track</span> ${_('by 2 on day 10 to achieve a major success.')}</p>`;
                         break;
                     case 'destroy_aa_guns':
                         description = `
-                            <p class="mission-flavour-text">${_('The Liberation of France approaches adn the Allies must surely be near. Take out the AA guns that the occupiers have positioned in and around town to ensure air support.')}</p><br>
-                            <p class="mission-description-text">${_('Place AA gun tokens on both')} <span class="mission-text-location-name">fields</span>, <span class="mission-text-location-name">Rue Baradat</span>, ${_('and the')} <span class="mission-text-location-name">Black Market</span>. ${('A fifth gun emplacement is on this location.')}<br><br>
+                            <p class="maq_mission-flavour-text">${_('The Liberation of France approaches adn the Allies must surely be near. Take out the AA guns that the occupiers have positioned in and around town to ensure air support.')}</p><br>
+                            <p class="maq_mission-description-text">${_('Place AA gun tokens on both')} <span class="maq_mission-text-location-name">fields</span>, <span class="maq_mission-text-location-name">Rue Baradat</span>, ${_('and the')} <span class="maq_mission-text-location-name">Black Market</span>. ${('A fifth gun emplacement is on this location.')}<br><br>
                             ${_('Objective:')}<br>
-                            ${_('[SAFE] Spend an')} <span class="mission-text-item-name">${_('explosive')}</span> ${_('or a')} <span class="mission-text-item-name">${_('weapon')}</span> ${_('in a AA gun emplacement\'s position to destroy it.')}<br><br>
-                            ${_('No airdrops can be made at a')} <span class="mission-text-location-name">field</span> ${('with a AA gun in place.')}<br><br>
+                            ${_('[SAFE] Spend an')} <span class="maq_mission-text-item-name">${_('explosive')}</span> ${_('or a')} <span class="maq_mission-text-item-name">${_('weapon')}</span> ${_('in a AA gun emplacement\'s position to destroy it.')}<br><br>
+                            ${_('No airdrops can be made at a')} <span class="maq_mission-text-location-name">field</span> ${('with a AA gun in place.')}<br><br>
                             ${_('If 3 AA guns are disabled the mission is a success; if all 5 are disabled the mission is a major success.')}</p>`;
                         break;
                 }
                     
                 this.addTooltipHtml(mission, 
                     `<div class="mission-tooltip-wrapper">
-                        <div class="mission-description">
+                        <div class="maq_mission-description">
                             ${description}
                         </div>
                     </div>`
@@ -321,39 +315,39 @@ function (dojo, declare) {
 
             // MORALE TRACK
             for (let i = 0; i <= 7; i++) {
-                dojo.place(`<div id="morale-track-space-${i}" class="morale-track-space"></div>`, "morale-track");
+                dojo.place(`<div id="morale-track-space-${i}" class="maq_morale-track-space"></div>`, "morale-track");
             }
 
-            dojo.place(`<div id="marker-morale" class="marker"></div>`, `morale-track-space-${currentMorale}`);
+            dojo.place(`<div id="marker-morale" class="maq_marker"></div>`, `morale-track-space-${currentMorale}`);
 
             // SOLDIER TRACK
             for (let i = 0; i <= 5; i++) {
-                dojo.place(`<div id="soldiers-track-space-${i}" class="soldiers-track-space"></div>`, "soldiers-track");
+                dojo.place(`<div id="soldiers-track-space-${i}" class="maq_soldiers-track-space"></div>`, "soldiers-track");
             }
 
-            dojo.place('<div id="marker-soldiers" class="marker"></div>', `soldiers-track-space-${activeSoldiers}`);
+            dojo.place('<div id="marker-soldiers" class="maq_marker"></div>', `soldiers-track-space-${activeSoldiers}`);
 
             // ROUND NUMBER
             for (let i = 0; i < 16; i++) {
-                dojo.place(`<div id="round-number-space-${i}" class="round-number-space"></div>`, 'round-number-spaces')
+                dojo.place(`<div id="round-number-space-${i}" class="maq_round-number-space"></div>`, 'round-number-spaces')
             }
 
-            dojo.place(`<div id="marker-round" class="marker"></div>`, `round-number-space-${currentRound}`);
+            dojo.place(`<div id="marker-round" class="maq_marker"></div>`, `round-number-space-${currentRound}`);
             
             // BOARD SPACES
             for (let i = 0; i < 17; i++) {
                 dojo.place(`
-                    <div id="space-${i + 1}" class="space board-space">
-                        <div id="space-${i + 1}-room-tile-space" class="room-tile-space"></div>
-                        <div id="space-${i + 1}-token-spaces" class="token-spaces">
+                    <div id="space-${i + 1}" class="maq_space maq_board-space">
+                        <div id="space-${i + 1}-room-tile-space" class="maq_room-tile-space"></div>
+                        <div id="space-${i + 1}-token-spaces" class="maq_token-spaces">
                             <div 
                                 id="space-${i + 1}-token-space-1" 
-                                class="token-space"
+                                class="maq_token-space"
                             ></div>
                         </div>
                         <div id="space-${i + 1}-marker-spaces"></div>
-                        <div id="space-${i + 1}-worker-space" class="worker-space"></div>
-                        <div id="space-${i + 1}-background-space" class="background-space"></div>
+                        <div id="space-${i + 1}-worker-space" class="maq_worker-space"></div>
+                        <div id="space-${i + 1}-background-space" class="maq_background-space"></div>
                     </div>
                 `, 'spaces');
 
@@ -361,21 +355,21 @@ function (dojo, declare) {
                     dojo.place(`
                         <div 
                             id="space-${i + 1}-marker-space-${j + 1}" 
-                            class="marker-space"
+                            class="maq_marker-space"
                             style="left: ${50 * j}%"
                         ></div>
                     `, `space-${i + 1}-marker-spaces`);
                 }
             }
 
-            [1, 7].forEach((id) => dojo.place(`<div id="space-${id}-token-space-2" class="token-space"></div>`, `space-${id}-token-spaces`));
+            [1, 7].forEach((id) => dojo.place(`<div id="space-${id}-token-space-2" class="maq_token-space"></div>`, `space-${id}-token-spaces`));
 
             [14, 17].forEach((id) => {
                 for (let i = 2; i < 5; i++) {
                     dojo.place(`
                         <div 
                             id="space-${id}-token-space-${i}" 
-                            class="token-space"
+                            class="maq_token-space"
                         ></div>
                     `, `space-${id}-token-spaces`)
                 }
@@ -384,33 +378,33 @@ function (dojo, declare) {
             // ADDITIONAL SPACES FOR RESISTANCE
             // SAFE HOUSE
             dojo.place(`
-                <div id="safe-house-space-1" class="safe-house-space"></div>
-                <div id="safe-house-space-2" class="safe-house-space"></div>
-                <div id="safe-house-space-3" class="safe-house-space"></div>
-                <div id="safe-house-space-4" class="safe-house-space"></div>
-                <div id="safe-house-space-5" class="safe-house-space"></div>
+                <div id="safe-house-space-1" class="maq_safe-house-space"></div>
+                <div id="safe-house-space-2" class="maq_safe-house-space"></div>
+                <div id="safe-house-space-3" class="maq_safe-house-space"></div>
+                <div id="safe-house-space-4" class="maq_safe-house-space"></div>
+                <div id="safe-house-space-5" class="maq_safe-house-space"></div>
                 `, 'space-16-worker-space');
             // CAFE
             dojo.place(`
-                <div class="cafe-spaces">
-                    <div id="cafe-space-1" class="cafe-space"></div>
-                    <div id="cafe-space-2" class="cafe-space"></div>
+                <div class="maq_cafe-spaces">
+                    <div id="cafe-space-1" class="maq_cafe-space"></div>
+                    <div id="cafe-space-2" class="maq_cafe-space"></div>
                 </div>
                 `, 'spaces');
 
             // ADDITIONAL SPACES AT BRIDGES
             dojo.place(`
-                <div id="space-24" class="space board-space bridge-space">
+                <div id="space-24" class="maq_space maq_board-space maq_bridge-space">
                     <div id="space-24-marker-space">
-                        <div id="space-24-marker-space-1" class="marker-space"></div>
+                        <div id="space-24-marker-space-1" class="maq_marker-space"></div>
                     </div>
-                    <div id="space-24-background-space" class="background-space"></div>
+                    <div id="space-24-background-space" class="maq_background-space"></div>
                 </div>
-                <div id="space-25" class="space board-space bridge-space">
+                <div id="space-25" class="maq_space maq_board-space maq_bridge-space">
                     <div id="space-25-marker-space">
-                        <div id="space-25-marker-space-1" class="marker-space"></div>
+                        <div id="space-25-marker-space-1" class="maq_marker-space"></div>
                     </div>
-                    <div id="space-25-background-space" class="background-space"></div>
+                    <div id="space-25-background-space" class="maq_background-space"></div>
                 </div>
                 `, 'spaces');
                 
@@ -433,10 +427,10 @@ function (dojo, declare) {
             
             // ROOM TILES
             rooms.forEach((room) => dojo.place(`
-                    <div id="${room.name}-tile-container" class="room-tile-container">
-                        <div id="room-tile-${room.name}" class="room-tile">
-                            <div class="circle-shape"></div>
-                            <div class="rectangle-shape"></div>
+                    <div id="${room.name}-tile-container" class="maq_room-tile-container">
+                        <div id="room-tile-${room.name}" class="maq_room-tile">
+                            <div class="maq_circle-shape"></div>
+                            <div class="maq_rectangle-shape"></div>
                         </div>
                     <div>
                 `, `room-tiles`));
@@ -454,7 +448,7 @@ function (dojo, declare) {
             }
 
             // Event Listeners
-            dojo.query('.background-space').connect('click', this, "onSpaceClicked");
+            dojo.query('.maq_background-space').connect('click', this, "onSpaceClicked");
 
             dojo.query('#patrol-discard').connect('click', this, "onPatrolDiscardClicked");
  
@@ -476,7 +470,7 @@ function (dojo, declare) {
                                         
                     emptySpaces.forEach(spaceID => {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
-                        if (space) dojo.addClass(space, 'available-space');
+                        if (space) dojo.addClass(space, 'maq_available-space');
                     });
                     break;
                 case 'activateWorker':
@@ -484,7 +478,7 @@ function (dojo, declare) {
 
                     spacesWithWorkers.forEach(spaceID => {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
-                        if (space) dojo.addClass(space, 'space-with-available-worker');
+                        if (space) dojo.addClass(space, 'maq_space-with-available-worker');
                     });                        
                     break;
                 case 'takeAction':
@@ -498,7 +492,7 @@ function (dojo, declare) {
 
                     spacesWithMilice.forEach(spaceID => {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
-                        if (space) dojo.addClass(space, 'space-with-milice');
+                        if (space) dojo.addClass(space, 'maq_space-with-milice');
                     });
                     break;
                 case 'removeWorker':
@@ -506,7 +500,7 @@ function (dojo, declare) {
 
                     spacesWithResistanceWorkers.forEach(spaceID => {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
-                        if (space) dojo.addClass(space, 'space-with-worker-to-remove');
+                        if (space) dojo.addClass(space, 'maq_space-with-worker-to-remove');
                     });
                     break;
                 case 'removeBridge':
@@ -514,7 +508,7 @@ function (dojo, declare) {
 
                     ['24', '25'].filter(x => !bridgesWithMarkers.includes(x)).forEach(spaceID => {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
-                        if (space) dojo.addClass(space, 'space-with-bridge-to-remove');
+                        if (space) dojo.addClass(space, 'maq_space-with-bridge-to-remove');
                     })
                     break;
             }   
@@ -527,11 +521,11 @@ function (dojo, declare) {
             switch(stateName)
             {
                 case 'placeWorker':
-                    dojo.query('.available-space').removeClass('available-space');
+                    dojo.query('.maq_available-space').removeClass('maq_available-space');
                     break;
 
                 case 'activateWorker':
-                    dojo.query('.space-with-available-worker').removeClass('space-with-available-worker');
+                    dojo.query('.maq_space-with-available-worker').removeClass('maq_space-with-available-worker');
                     break;
 
                 case 'takeAction':
@@ -543,15 +537,15 @@ function (dojo, declare) {
                     break;
 
                 case 'shootMilice':
-                    dojo.query('.space-with-milice').removeClass('space-with-milice');
+                    dojo.query('.maq_space-with-milice').removeClass('maq_space-with-milice');
                     break;
 
                 case 'removeWorker':
-                    dojo.query('.space-with-worker-to-remove').removeClass('space-with-worker-to-remove');
+                    dojo.query('.maq_space-with-worker-to-remove').removeClass('maq_space-with-worker-to-remove');
                     break;
 
                 case 'removeBridge':
-                    dojo.query('.space-with-bridge-to-remove').removeClass('space-with-bridge-to-remove');
+                    dojo.query('.maq_space-with-bridge-to-remove').removeClass('maq_space-with-bridge-to-remove');
                     break;
             }          
         }, 
@@ -609,12 +603,12 @@ function (dojo, declare) {
             var space = evt.currentTarget.id.split('-');
             var spaceID = space[1];
             
-            if (evt.currentTarget.classList.contains('available-space')) {
+            if (evt.currentTarget.classList.contains('maq_available-space')) {
                 this.bgaPerformAction("actPlaceWorker", {
                     spaceID: spaceID
                 });
             }
-            else if (evt.currentTarget.classList.contains('space-with-available-worker')) {
+            else if (evt.currentTarget.classList.contains('maq_space-with-available-worker')) {
                 this.bgaPerformAction("actActivateWorker", {
                     spaceID: spaceID
                 });
@@ -624,17 +618,17 @@ function (dojo, declare) {
                     spaceID: spaceID
                 });
             }
-            else if (evt.currentTarget.classList.contains('space-with-milice')) {
+            else if (evt.currentTarget.classList.contains('maq_space-with-milice')) {
                 this.bgaPerformAction("actShootMilice", {
                     spaceID: spaceID
                 });
             }
-            else if (evt.currentTarget.classList.contains('space-with-worker-to-remove')) {
+            else if (evt.currentTarget.classList.contains('maq_space-with-worker-to-remove')) {
                 this.bgaPerformAction("actRemoveWorker", {
                     spaceID: spaceID
                 });
             }
-            else if (evt.currentTarget.classList.contains('space-with-bridge-to-remove')) {
+            else if (evt.currentTarget.classList.contains('maq_space-with-bridge-to-remove')) {
                 this.bgaPerformAction("actRemoveBridge", {
                     spaceID: spaceID
                 });
@@ -775,7 +769,7 @@ function (dojo, declare) {
         },
         
         notif_patrolCardsShuffled: function() {
-            dojo.query('.patrol-card').forEach(node => {
+            dojo.query('.maq_patrol-card').forEach(node => {
                 dojo.destroy(node.id);
             });
         },
@@ -834,7 +828,7 @@ function (dojo, declare) {
                 for (let i = 1; i <= 5; i++) {
                     const safeHouseSpace = dojo.byId(`safe-house-space-${i}`);
                     if (!safeHouseSpace.firstElementChild) {
-                        dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `safe-house-space-${i}`); 
+                        dojo.place(`<div id="${resistanceID}" class="maq_worker maq_resistance"></div>`, `safe-house-space-${i}`); 
                         break; 
                     }
                 }
@@ -842,7 +836,7 @@ function (dojo, declare) {
                 for (let i = 1; i <= 2; i++) {
                     const cafeSpace = dojo.byId(`cafe-space-${i}`);
                     if (!cafeSpace.firstElementChild) {
-                        dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `cafe-space-${i}`);
+                        dojo.place(`<div id="${resistanceID}" class="maq_worker maq_resistance"></div>`, `cafe-space-${i}`);
                         break; 
                     }
                 }
@@ -850,12 +844,12 @@ function (dojo, declare) {
                 for (let i = 1; i <= 5; i++) {
                     const arrestSpace = dojo.byId(`arrest-space-${i}`);
                     if (!arrestSpace.firstElementChild) {
-                        dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `arrest-space-${i}`);
+                        dojo.place(`<div id="${resistanceID}" class="maq_worker maq_resistance"></div>`, `arrest-space-${i}`);
                         break; 
                     }
                 }
             } else {
-                dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `space-${spaceID}-worker-space`);            
+                dojo.place(`<div id="${resistanceID}" class="maq_worker maq_resistance"></div>`, `space-${spaceID}-worker-space`);            
             }
         },
 
@@ -864,7 +858,7 @@ function (dojo, declare) {
             const parentNode = resistanceNode.parentNode;
 
             dojo.destroy(resistanceID);
-            dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `space-${spaceID}-worker-space`);
+            dojo.place(`<div id="${resistanceID}" class="maq_worker maq_resistance"></div>`, `space-${spaceID}-worker-space`);
             this.placeOnObject(resistanceID, parentNode.id);
 
             const animation = this.slideToObject(resistanceID, `space-${spaceID}-worker-space`);
@@ -879,7 +873,7 @@ function (dojo, declare) {
                 const safeHouseSpace = dojo.byId(`safe-house-space-${i}`);
                 if (!safeHouseSpace.firstElementChild) {
                     dojo.destroy(resistanceID);
-                    dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `safe-house-space-${i}`);
+                    dojo.place(`<div id="${resistanceID}" class="maq_worker maq_resistance"></div>`, `safe-house-space-${i}`);
                     this.placeOnObject(resistanceID, parentNode.id);
 
                     const animation = this.slideToObject(resistanceID, `safe-house-space-${i}`);
@@ -894,7 +888,7 @@ function (dojo, declare) {
             for (let i = 1; i <= 5; i++) {
                 const safeHouseSpace = dojo.byId(`safe-house-space-${i}`);
                 if (!safeHouseSpace.firstElementChild) {
-                    dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `safe-house-space-${i}`); 
+                    dojo.place(`<div id="${resistanceID}" class="maq_worker maq_resistance"></div>`, `safe-house-space-${i}`); 
                     this.placeOnObject(resistanceID, `space-${spaceID}-worker-space`);
                     const animation = this.slideToObject(resistanceID, `safe-house-space-${i}`);
                     await this.bgaPlayDojoAnimation(animation);
@@ -911,7 +905,7 @@ function (dojo, declare) {
                 const arrestSpace = dojo.byId(`arrest-space-${i}`);
                 if (!arrestSpace.firstElementChild) {
                     dojo.destroy(resistanceID);
-                    dojo.place(`<div id="${resistanceID}" class="worker resistance"></div>`, `arrest-space-${i}`);
+                    dojo.place(`<div id="${resistanceID}" class="maq_worker maq_resistance"></div>`, `arrest-space-${i}`);
                     this.placeOnObject(resistanceID,  parentNode.id);
                     const animation = this.slideToObject(resistanceID, `arrest-space-${i}`);
                     await this.bgaPlayDojoAnimation(animation);
@@ -931,12 +925,12 @@ function (dojo, declare) {
                 for (let i = 5; i >= 1; i--) {
                     const barracksSpace = dojo.byId(`barracks-milice-space-${i}`);
                     if (!barracksSpace.firstElementChild) {
-                        dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `barracks-milice-space-${i}`); 
+                        dojo.place(`<div id="${miliceID}" class="maq_worker maq_milice"></div>`, `barracks-milice-space-${i}`); 
                         break; 
                     }
                 }
             } else {
-                dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `space-${spaceID}-worker-space`);
+                dojo.place(`<div id="${miliceID}" class="maq_worker maq_milice"></div>`, `space-${spaceID}-worker-space`);
             }
         },
 
@@ -945,12 +939,12 @@ function (dojo, declare) {
                 for (let i = 5; i >= 1; i--) {
                     const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);
                     if (!barracksSpace.firstElementChild) {
-                        dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `barracks-soldier-space-${i}`); 
+                        dojo.place(`<div id="${soldierID}" class="maq_worker maq_soldier"></div>`, `barracks-soldier-space-${i}`); 
                         break; 
                     }
                 }
             } else {
-                dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `space-${spaceID}-worker-space`);
+                dojo.place(`<div id="${soldierID}" class="maq_worker maq_soldier"></div>`, `space-${spaceID}-worker-space`);
             }
         },
 
@@ -959,7 +953,7 @@ function (dojo, declare) {
             const parentNode = miliceNode.parentNode;
 
             dojo.destroy(miliceID);
-            dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `space-${spaceID}-worker-space`);
+            dojo.place(`<div id="${miliceID}" class="maq_worker maq_milice"></div>`, `space-${spaceID}-worker-space`);
             this.placeOnObject(miliceID, parentNode.id);
 
             const animation = this.slideToObject(miliceID, `space-${spaceID}-worker-space`);
@@ -971,7 +965,7 @@ function (dojo, declare) {
             const parentNode = soldierNode.parentNode;
 
             dojo.destroy(soldierID);
-            dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `space-${spaceID}-worker-space`);
+            dojo.place(`<div id="${soldierID}" class="maq_worker maq_soldier"></div>`, `space-${spaceID}-worker-space`);
             this.placeOnObject(soldierID, parentNode.id);
 
             const animation = this.slideToObject(soldierID, `space-${spaceID}-worker-space`);
@@ -986,7 +980,7 @@ function (dojo, declare) {
                 const barracksSpace = dojo.byId(`barracks-milice-space-${i}`);
                 if (!barracksSpace.firstElementChild) {
                     dojo.destroy(miliceID);
-                    dojo.place(`<div id="${miliceID}" class="worker milice"></div>`, `barracks-milice-space-${i}`); 
+                    dojo.place(`<div id="${miliceID}" class="maq_worker maq_milice"></div>`, `barracks-milice-space-${i}`); 
                     this.placeOnObject(miliceID, parentNode.id);
                     const animation = this.slideToObject(miliceID, `barracks-milice-space-${i}`);
                     await this.bgaPlayDojoAnimation(animation);
@@ -1003,7 +997,7 @@ function (dojo, declare) {
                 const barracksSpace = dojo.byId(`barracks-soldier-space-${i}`);
                 if (!barracksSpace.firstElementChild) {
                     dojo.destroy(soldierID);
-                    dojo.place(`<div id="${soldierID}" class="worker soldier"></div>`, `barracks-soldier-space-${i}`);
+                    dojo.place(`<div id="${soldierID}" class="maq_worker maq_soldier"></div>`, `barracks-soldier-space-${i}`);
                     this.placeOnObject(soldierID, parentNode.id);
                     const animation = this.slideToObject(soldierID, `barracks-soldier-space-${i}`);
                     await this.bgaPlayDojoAnimation(animation);
@@ -1014,18 +1008,18 @@ function (dojo, declare) {
 
         discardPatrolCard: async function(patrolCardID, animate = true) {
             dojo.place(`
-                <div id="patrol-${patrolCardID}" class="card patrol-card">
-                    <div class="card patrol-card-back"></div>
-                    <div class="card patrol-card-front"></div>
+                <div id="patrol-${patrolCardID}" class="maq_card maq_patrol-card">
+                    <div class="maq_card maq_patrol-card-back"></div>
+                    <div class="maq_card maq_patrol-card-front"></div>
                 </div>`, 'patrol-discard');
             
             if (animate) {
                 this.placeOnObject(`patrol-${patrolCardID}`, 'patrol-deck');
-                dojo.toggleClass(dojo.byId(`patrol-${patrolCardID}`), 'flipped');
+                dojo.toggleClass(dojo.byId(`patrol-${patrolCardID}`), 'maq_flipped');
                 const slideAnimation = this.slideToObjectPos(`patrol-${patrolCardID}`, `patrol-discard`, 0, 0, 2000);
                 await this.bgaPlayDojoAnimation(slideAnimation);
             } else {
-                dojo.toggleClass(dojo.byId(`patrol-${patrolCardID}`), 'flipped');
+                dojo.toggleClass(dojo.byId(`patrol-${patrolCardID}`), 'maq_flipped');
             }
         },
 
@@ -1054,8 +1048,8 @@ function (dojo, declare) {
                 }
 
                 dojo.place(`
-                    <div id=${tokenID} class="token ${tokenClass}">
-                        <div class="token-circle"></div>
+                    <div id=${tokenID} class="maq_token maq_${tokenClass}">
+                        <div class="maq_token-circle"></div>
                     </div>`, 
                 targetID);
 
@@ -1098,10 +1092,10 @@ function (dojo, declare) {
         },
 
         placeMissionMarker: async function(spaceID, markerNumber, animate = true) {
-            const markerIDs = dojo.query(".marker-mission").map(node => node.id);
+            const markerIDs = dojo.query(".maq_marker-mission").map(node => node.id);
             const markerID = markerIDs.length
 
-            dojo.place(`<div id="mission-marker-${markerID}" class="marker marker-mission"></div>`, `space-${spaceID}-marker-space-${markerNumber}`);
+            dojo.place(`<div id="mission-marker-${markerID}" class="maq_marker maq_marker-mission"></div>`, `space-${spaceID}-marker-space-${markerNumber}`);
             if (animate) {
                 this.placeOnObject(`mission-marker-${markerID}`, 'player_boards');
                 const animation = this.slideToObject(`mission-marker-${markerID}`, `space-${spaceID}-marker-space-${markerNumber}`);
@@ -1119,15 +1113,15 @@ function (dojo, declare) {
         },
 
         flipMission: function(missionName) {
-            dojo.toggleClass(dojo.byId(`${missionName}`), 'flipped');
+            dojo.toggleClass(dojo.byId(`${missionName}`), 'maq_flipped');
         },
 
         placeRoomTile: async function(spaceID, roomID, animate = true) {
             dojo.destroy(`room-tile-${roomID}`);
             dojo.place(`
-                <div id="room-tile-${roomID}" class="room-tile">
-                    <div class="circle-shape"></div>
-                    <div class="rectangle-shape"></div>
+                <div id="room-tile-${roomID}" class="maq_room-tile">
+                    <div class="maq_circle-shape"></div>
+                    <div class="maq_rectangle-shape"></div>
                 </div>`, `space-${spaceID}-room-tile-space`);
             if (animate) {
                 this.placeOnObject(`room-tile-${roomID}`, `${roomID}-tile-container`);
@@ -1146,9 +1140,9 @@ function (dojo, declare) {
             dialog.create('one-card-dialog');
             dialog.setTitle(title);
             dialog.setContent(`
-                <div class="patrol-card-dialog-wrapper">
-                    <div id="patrol-${cardId}" class="card patrol-card">
-                        <div class="card patrol-card-front" style="transform:none"></div>
+                <div class="maq_patrol-card-dialog-wrapper">
+                    <div id="patrol-${cardId}" class="maq_card maq_patrol-card">
+                        <div class="maq_card maq_patrol-card-front" style="transform:none"></div>
                     </div>
                 </div>`);
             dialog.show();

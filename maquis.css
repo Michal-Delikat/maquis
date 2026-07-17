@@ -13,6 +13,8 @@
  *
  */
 
+/* Player Area */
+
 .current_player_is_active #page-title, .gamestate_gameEnd #page-title, #page-title {
     min-height: 46px;
     display: flex;
@@ -30,94 +32,12 @@
     align-content: flex-start;
 }
 
-.standard_popin {
-  aspect-ratio: 0.65;
-  width: 20vw;
-  padding: 10px;
-}
-
-@media (min-width: 1400px) {
-    .standard_popin {
-        width: 15vw;
-        height: 18vw;
-    }
-}
-
-.standard_popin_title {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 18px;
-}
-
-#popin_one-card-dialog .patrol-card-front {
-    width: 100%;
-}
-
-.patrol-card-dialog-wrapper {
-    display: flex;
-    justify-content: center;
-}
-
-#popin_discarded-patrol-cards-dialog {
-    box-sizing: border-box;
-    width: 50vw;
-    height: 168vw;
-    max-width: 9999px;
-}
-
-@media (min-width: 995px) {
-    #popin_discarded-patrol-cards-dialog {
-        width: 70vw;
-        height: 73vw;
-    }
-}
-
-@media (min-width: 1400px) {
-    #popin_discarded-patrol-cards-dialog {
-        width: 58vw;
-        height: 34vw;
-    }
-}
-
-#popin_discarded-patrol-cards-dialog .patrol-card {
-    position: static;
-}
-
-#discarded-patrol-cards-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    column-gap: 1vw;
-    row-gap: 1vw;
-}
-
 .player-board {
     background-color: #f9f4d3;
 }
 
 #custom-player-board {
     padding: 16px;
-}
-
-#workers {
-    display: flex;
-    justify-content: space-between;
-}
-
-#resistance-worker-icon, #milice-worker-icon, #soldier-worker-icon {
-    width: 50px;
-    aspect-ratio: 1;
-    background-size: 400%;
-    background-image: url('img/Meeples.png');
-    background-position-y: center;
-    z-index: 1;
-}
-
-#milice-worker-icon {
-    background-position-x: 67%;
-}
-
-#soldier-worker-icon {
-    background-position-x: 100%;
 }
 
 #resources {
@@ -127,18 +47,18 @@
     gap: 8px;
 }
 
-.resource-box {
+.maq_resource-box {
     display: flex;
     align-items: center;
     gap: 4px;
 }
 
-.resource-amount {
+.maq_resource-amount {
     font-family: 'Courier New', Courier, monospace;
     font-size: 32px;
 }
 
-.resource-icon {
+.maq_resource-icon {
     position: relative;
     width: 50px;
     aspect-ratio: 1;
@@ -148,145 +68,43 @@
     z-index: 1;
 }
 
-.worker {
-    width: 6vw;
-    aspect-ratio: 1;
-    background-size: 400%;
-    background-image: url('img/Meeples.png');
-    background-position-y: center;
-    background-repeat: no-repeat;
-    z-index: 1;
+.maq_resource-icon-circle {
     position: absolute;
+    border-radius: 50%;
+    border: 3px solid black;
+    width: 90%;
+    height: 90%;
 }
 
-@media (min-width: 995px) {
-    .worker {
-        width: 5vw;
-    }
+/* Layout */
+
+.maq_whiteblock {
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 6px;
+    padding: 6px 12px;
+    margin: 0;
 }
 
-@media (min-width: 1400px) {
-    .worker {
-        width: 3vw;
-    }
+.maq_whiteblock-label {
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 0;
 }
 
-.resistance {
-    background-position-x: 33%;
-}
-
-.milice {
-    background-position-x: 67%;
-}
-
-.soldier {
-    background-position-x: 100%;
-}
-
-.card {
-    width: 22vw;
-    height: 30.7vw;
-    border-radius: 10px;
-    background-repeat: no-repeat;
-    border: 2px solid black;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-}
-
-@media (min-width: 995px) {
-    .card {
-        width: 15vw;
-        height: 21vw;
-    }
-}
-
-@media (min-width: 1400px) {
-    .card {
-        width: 10vw;
-        height: 14vw;
-    }
-}
-
-.marker {
-    width: 18px;
-    aspect-ratio: 1;
-    background-size: 700%;
-    background-position-y: center;
-    background-image: url('img/Markers.png');
-    position: absolute;
-    transition: transform 0.5s ease;
-}
-
-:is(.round-number-space, .morale-track-space, .soldiers-track-space):hover > .marker {
-    transform: translateY(-30px);
-}
-
-@media (min-width: 1400px) {
-    .marker {
-        width: 16%;
-    }
-
-    .mission-space .marker-mission {
-        width: 100%;
-    }
-}
-
-.token {
-    width: 60px;
-    height: 60px;
-    background-image: url('img/Tokens.png');
-    background-size: 300%;
-    position: absolute;
-}
-
-.food-token, #food-icon {
-    background-position-y: center;
-    background-position-x: -50%;
-}
-
-#medicine-icon {
-    background-position-y: center;
-    background-position-x: center;
-}
-
-.money-token, #money-icon {
-    background-position-y: top;
-    background-position-x: -50%; 
-}
-
-.weapon-token, #weapon-icon {
-    background-position-y: top;
-}
-
-#explosives-icon {
-    background-position-x: center;
-    background-position-y: top;
-}
-
-#fake_id-icon {
-    background-position-y: bottom;
-    background-position-x: -50%;
-}
-
-#poison-icon {
-    background-position-y: bottom;
-    background-position-x: center;
-}
-
-.fake-id-token {
-    background-position: bottom right;
-}
-
-.aa-gun-token {
-    background-position-y: bottom;
-    background-position-x: left; 
-}
-
-.board-and-missions {
+#board-and-missions {
     width: 100%;
 }
 
-.top-area {
+@media (min-width: 1400px) {
+    #board-and-missions {
+        width: 55%;
+    }
+}
+
+#top-area {
     height: 38vw;
     display: flex;
     justify-content: space-between;
@@ -295,33 +113,19 @@
 }
 
 @media (min-width: 995px) {
-    .top-area {
+    #top-area {
         height: 26vw;
     }
 }
 
 @media (min-width: 1400px) {
-    .top-area {
+    #top-area {
         height: 17vw;
         padding-right: 0;
     }
 }
 
-@media (min-width: 1400px) {
-    .board-and-missions {
-        width: 55%;
-    }
-}
-
-.whiteblock {
-    background: rgba(255, 255, 255, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.75);
-    border-radius: 6px;
-    padding: 6px 12px;
-    margin: 0;
-}
-
-.arrest {
+#arrest {
     box-sizing: border-box;
     height: 100%;
     width: 21%;
@@ -329,7 +133,7 @@
     flex-direction: column;
 }
 
-.arrest-spaces-wrapper {
+#arrest-spaces-wrapper {
     flex: 1;
     min-height: 0;
     display: flex;
@@ -337,12 +141,12 @@
     justify-content: center;
 }
 
-.arrest-space {
+.maq_arrest-space {
     width: 45%;
     height: 33%;
 }
 
-.mission-slot {
+.maq_mission-slot {
     width: 25%;
     bottom: 0;
     perspective: 1000px;
@@ -350,7 +154,7 @@
     justify-content: center;
 }
 
-.barracks-boxes {
+#barracks-boxes-wrapper {
     width: 25%;
     height: 100%;
     display: flex;
@@ -358,348 +162,26 @@
     align-content: space-between;
 }
 
-.barracks {
+.maq_barracks {
     height: 40%;
     width: 100%;
     display: flex;
     flex-direction: column;
 }
 
-.whiteblock-label {
-    font-size: 18px;
-    font-family: 'Courier New', Courier, monospace;
-    text-align: center;
-    font-weight: 500;
-    margin-top: 0;
-}
-
-.patrol-units-row {
+.maq_patrol-units-row {
     width: 100%;
-    /* height: 70%; */
     flex: 1;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
- .patrol-unit-barracks-space {
+.maq_patrol-unit-barracks-space {
     width: 33%;
     height: 50%;
     display: flex;
     justify-content: center;
-}
-
-.mission-description {
-    padding: 16px;
-}
-
-.mission-card-front, .mission-card-back {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    border-radius: 10px;
-    backface-visibility: hidden;
-}
-
-.mission-card-back {
-    transform: rotateY(180deg);
-}
-
-.mission-space {
-    width: 26.7%;
-    height: 14%;
-}
-
-.mission-space > .worker-space {
-    top: -30%;
-}
-
-.flipped > .mission-space {
-    display: none;
-}
-
-.mission-flavour-text, .mission-description-text {
-    font-family: 'Courier New', Courier, monospace;
-}
-
-:is(.mission-text-location-name, .mission-text-item-name, .mission-text-morale, .mission-text-soldier) {
-    font-weight: 600;
-}
-
-.mission-text-location-name {
-    color: #3B6D11;
-}
-
-.mission-text-item-name {
-    color: #185FA5;
-}
-
-.mission-text-morale {
-    color: #534AB7;
-}
-
-.mission-text-soldier {
-    color: #993C1D;
-}
-
-/* 0-star missions */
-
-:is(#mission_card_milice_parade_day, #mission_card_officers_mansion) > .mission-card-face {
-    background-image: url('img/Mission_Cards_0star.jpg');
-    background-size: 400%;
-}
-
-:is(#mission_card_milice_parade_day, #mission_card_officers_mansion) > .mission-card-back {
-    background-position-x: 66.7%;
-}
-
-#mission_card_milice_parade_day > .mission-card-front {
-    background-position-x: 0;
-}
-
-#mission_card_officers_mansion > .mission-card-front {
-    background-position-x: 33.3%;
-}
-
-#mission_card_officers_mansion > .mission-space-1 {
-    left: 65%;
-    top: 50%;
-}
-
-#mission_card_officers_mansion > :is(.mission-space-2, .mission-space-3) {
-    display: none;
-}
-
-/* 1-star missions */
-
-:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_infiltration, #mission_card_german_shepards, #mission_card_double_agent) > .mission-card-face {
-    background-image: url('img/Mission_Cards_1star.jpg');
-    background-size: 300%;
-}
-
-:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_infiltration, #mission_card_german_shepards, #mission_card_double_agent) > .mission-card-back {
-    background-position: 100% bottom;
-}
-
-#mission_card_underground_newspaper > .mission-card-front {
-    background-position-x: 50%;
-}
-
-#mission_card_infiltration > .mission-card-front {
-    background-position-x: 100%;
-}
-
-:is(#mission_card_german_shepards, #mission_card_double_agent) > .mission-card-face {
-    background-position-y: bottom;
-}
-
-#mission_card_double_agent > .mission-card-front {
-    background-position-x: center;
-}
-
-:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space {
-    top: 50%;
-}
-
-:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-1 {
-    left: 7.5%;
-}
-
-:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-2 {
-    left: 36%;
-}
-
-:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .mission-space-3 {
-    left: 66%;
-}
-
-#mission_card_infiltration > :is(.mission-space-1, .mission-space-2) {
-    top: 50%;
-}
-
-#mission_card_infiltration > .mission-space-1 {
-    left: 22%;
-}
-
-#mission_card_infiltration > .mission-space-2 {
-    left: 51%;
-}
-
-#mission_card_infiltration > .mission-space-3 {
-    display: none;
-}
-
-#mission_card_german_shepards > .mission-space {
-    top: 13%;
-}
-
-/* 2-star missions  */
-
-:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-face {
-    background-image: url('img/Mission_Cards_2star.jpg');
-    background-size: 400%;
-}
-
-:is(#mission_card_assassination, #mission_card_take_out_the_bridges) > .mission-card-front {
-    background-position-x: 33%;
-}
-
-:is(#mission_card_destroy_the_train, #mission_card_bomb_for_the_officer) > .mission-card-front {
-    background-position-x: 66.7%;
-}
-
-#mission_card_liberate_the_town > .mission-card-front {
-    background-position-x: 100%;
-}
-
-:is(#mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-front {
-    background-position-y: 100%;
-}
-
-:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .mission-card-back {
-    background-position: 100% bottom;
-}
-
-#mission_card_aid_the_spy > :is(.mission-space-1, .mission-space-2) {
-    top: 50%;
-}
-
-#mission_card_aid_the_spy > .mission-space-1 {
-    left: 22%;
-}
-
-#mission_card_aid_the_spy > .mission-space-2 {
-    left: 51%;
-}
-
-#mission_card_aid_the_spy > .mission-space-3 {
-    display: none;
-}
-
-#mission_card_destroy_the_train > .mission-space-1 {
-    top: 50%;
-    left: 7%;
-}
-
-#mission_card_destroy_the_train > :is(.mission-space-2, .mission-space-3) {
-    display: none;
-}
-
-#mission_card_coded_messages > .mission-space-1 {
-    left: 34%;
-    top: 50%;
-}
-
-:is(#mission_card_coded_messages, #mission_card_bomb_for_the_officer) > :is(.mission-space-2, .mission-space-3) {
-    display: none;
-}
-
-#mission_card_bomb_for_the_officer > .mission-space-1 {
-    left: 58%;
-    top: 50%;
-}
-
-/* 3-star missions */
-
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) {
-    height: 37.6vw;
-}
-
-@media (min-width: 995px) {
-    :is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) {
-        height: 25.6vw;
-    }
-}
-
-@media (min-width: 1400px) {
-    :is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) {
-        height: 17.1vw;
-    }
-}
-
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) > .mission-card-face {
-    background-image: url('img/Mission_Cards_3star.jpg');
-    background-size: 500%;
-}
-
-:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) > .mission-card-back {
-    background-position-x: right;
-}
-
-#mission_card_milice_hq > .mission-space {
-    width: 25%;
-    height: 10%;
-}
-
-#mission_card_milice_hq > :is(.mission-space-1, .mission-space-2) {
-    top: 37%;
-}
-
-#mission_card_milice_hq > .mission-space-1 {
-    left: 45%;
-}
-
-#mission_card_milice_hq > .mission-space-2 {
-    left: 72%;
-}
-
-#mission_card_bomb_the_barracks > .mission-card-front {
-    background-position-x: 25%;
-}
-
-:is(#mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) > .mission-space {
-    top: 37%;
-    height: 10%;
-}
-
-#mission_card_bomb_the_barracks > :is(.mission-space-1, .mission-space-2) {
-    width: 20%;
-}
-
-#mission_card_bomb_the_barracks > .mission-space-1 {
-    left: 7.6%;
-}
-
-#mission_card_bomb_the_barracks > .mission-space-2 {
-    left: 29.6%;
-}
-
-#mission_card_bomb_the_barracks > .mission-space-3 {
-    width: 25%;
-    left: 51.6%;
-}
-
-#mission_card_free_the_resistance_leader > .mission-card-front {
-    background-position-x: 50%;
-}
-
-#mission_card_free_the_resistance_leader > .mission-space-1 {
-    left: 4%;
-    width: 24%;
-}
-
-#mission_card_free_the_resistance_leader > .mission-space-2 {
-    left: 31%;
-    width: 41%;
-}
-
-#mission_card_free_the_resistance_leader > .mission-space-3 {
-    display: none;
-}
-
-#mission_card_destroy_aa_guns > .mission-card-front {
-    background-position-x: 75%;
-}
-
-#mission_card_destroy_aa_guns > .mission-space-1 {
-    width: 25.6%;
-    height: 10%;
-    left: 4%;
-    top: 36.6%;
-}
-
-#mission_card_destroy_aa_guns > :is(.mission-space-2, .mission-space-3) {
-    display: none;
 }
 
 /* Right panel */
@@ -718,12 +200,6 @@
     display: flex;
     justify-content: space-evenly;
     padding: 32px 16px;
-}
-
-#help-card {
-    background-image: url('img/Mission_Cards_0star.jpg');
-    background-position-x: 100%;
-    background-size: 400%;
 }
 
 #morale-and-soldiers-track {
@@ -751,7 +227,7 @@
     top: 62.5%;
 }
 
-.morale-track-space, .soldiers-track-space {
+.maq_morale-track-space, .maq_soldiers-track-space {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -782,6 +258,19 @@
     cursor: pointer;
 }
 
+#room-tiles {
+    box-sizing: border-box;
+    width: 70%;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    column-gap: 2vw;
+    row-gap: 2vw;
+}
+
+/* Board */
+
 #board {
     box-sizing: border-box;
     width: 100%;
@@ -792,18 +281,12 @@
     border: 2px solid black;
 }
 
-@media (min-width: 1400px) {
-    #board {
-        width: 100%;
-    }
-}
-
-.space {
+.maq_space {
     z-index: 2;
     position: absolute;
 }
 
-.board-space {
+.maq_board-space {
     width: 14%;
     aspect-ratio: 1;
 }
@@ -814,7 +297,7 @@
     padding: 16px 0 0;
 }
 
-.room-tile-space {
+.maq_room-tile-space {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -822,14 +305,7 @@
     top: -2%;
 }
 
-@media (min-width: 1400px) {
-    .room-tile-space > .room-tile {
-        width: 7.05vw;
-        height: 7.05vw;
-    }
-}
-
-.token-spaces {
+.maq_token-spaces {
     position: absolute;
     right: 0;
     top: 5%;
@@ -837,19 +313,13 @@
     height: 100%;
 }
 
-.token-space {
+.maq_token-space {
     z-index: 4;
     width: 100%;
     height: 25%;
 }
 
-.mission-token-space {
-    position: absolute;
-    right: 33%;
-    top: 20%;
-}
-
-.worker-space {
+.maq_worker-space {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -861,7 +331,7 @@
     align-items: center;
 }
 
-.background-space {
+.maq_background-space {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -870,11 +340,11 @@
     z-index: 5;
 }
 
-.board-space > .background-space {
+.maq_board-space > .maq_background-space {
     border-radius: 50%;
 }
 
-.board-space .marker-space {
+.maq_board-space .maq_marker-space {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -885,75 +355,41 @@
     align-items: center;
 }
 
-.mission-space > .marker-space {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.mission-space > .marker-space > * {
-    position: relative;
-    top: 15%;
-    left: 25%;
-    width: 50%;
-    height: 50%;
-}
-
-.bridge-space {
+.maq_bridge-space {
     position: absolute;
     width: 6%;
     aspect-ratio: 1;
     border-radius: 50%;
 }
 
-.bridge-space .marker-space {
+.maq_bridge-space .marker-space {
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
 }
 
-#space-24 {
-    left: 62%;
-    top: 19%;
-}
 
-#space-25 {
-    left: 57.7%;
-    top: 30%;
-}
-
-.marker-mission {
-    background-position: 64%;
-}
-
-@media (min-width: 1400px) {
-    .marker-mission {
-        width: 40%;
-    }
-}
-
-:is(.available-space, .space-with-available-worker, .space-with-worker-to-remove, .space-with-milice, .space-with-bridge-to-remove) {
+:is(.maq_available-space, .maq_space-with-available-worker, .maq_space-with-worker-to-remove, .maq_space-with-milice, .maq_space-with-bridge-to-remove) {
     cursor: pointer;
     opacity: 0.5;
 }
 
-.available-space {
+.maq_available-space {
     background-color: #EAF3DE;
     border-color: #639922;
 }
 
-.available-space:hover {
+.maq_available-space:hover {
     background-color: #C0DD97;
     border-color: #3B6D11;
 } 
 
-.space-with-available-worker {
+.maq_space-with-available-worker {
     background-color: #E6F1FB;
 }
 
-.space-with-available-worker:hover {
+.maq_space-with-available-worker:hover {
     background-color: #B5D4F4;
 }
 
@@ -962,29 +398,29 @@
     opacity: 0.5;
 }
 
-.space-with-milice {
+.maq_space-with-milice {
     background-color: #FAECE7;
 }
 
-.space-with-milice:hover {
+.maq_space-with-milice:hover {
     background-color: #F5C4B3;
 }
 
-.space-with-worker-to-remove {
+.maq_space-with-worker-to-remove {
     background-color: #EEEDFE;
 }
 
-.space-with-worker-to-remove:hover {
+.maq_space-with-worker-to-remove:hover {
     background-color: #CECBF6;
 }
 
-.space-with-bridge-to-remove {
+.maq_space-with-bridge-to-remove {
     background-color: #FAEEDA;
     border: 3px solid #BA7517;
     opacity: 0.75;
 }
 
-.space-with-bridge-to-remove:hover {
+.maq_space-with-bridge-to-remove:hover {
     background-color: #FAC775;
     border: 3px solid #854F0B;
 }
@@ -1010,7 +446,7 @@
     height: 93.5%;
 }
 
-.round-number-space {
+.maq_round-number-space {
     width: 100%;
     aspect-ratio: 1;
     display: flex;
@@ -1021,77 +457,6 @@
 #marker-round {
     background-position-x: 35.5%;
     width: 100%;
-}
-
-.patrol-card {
-    position: absolute;
-}
-
-.patrol-card-front {
-    background-image: url('img/Patrol_cards.jpg');
-    background-size: 500%;
-    background-repeat: no-repeat;
-}
-
-.patrol-card-front, .patrol-card-back {
-    position: absolute;
-    backface-visibility: hidden;
-    border: none;
-}
-
-.patrol-card-front {
-    transform: rotateY(180deg);
-}
-
-.patrol-card-back {
-    background-image: url('img/Tracking_card_Patrol_back.jpg');
-    background-size: 200%;
-    background-position-x: right;
-}
-
-#patrol-1 > .patrol-card-front {
-    background-position-x: 49%;
-}
-
-#patrol-2 > .patrol-card-front {
-    background-position-x: 24%;
-}
-
-#patrol-3 > .patrol-card-front {
-    background-position-x: 0%;
-}
-
-#patrol-4 > .patrol-card-front {
-    background-position-x: 24%;
-    background-position-y: 100%;
-}
-
-#patrol-5 > .patrol-card-front {
-    background-position-x: 0;
-    background-position-y: 100%;
-}
-
-#patrol-6 > .patrol-card-front {
-    background-position-x: 99%;
-}
-
-#patrol-7 > .patrol-card-front {
-    background-position-x: 74%;
-}
-
-#patrol-8 > .patrol-card-front {
-    background-position-x: 99%;
-    background-position-y: 100%;
-}
-
-#patrol-9 > .patrol-card-front {
-    background-position-x: 74%;
-    background-position-y: 100%;
-}
-
-#patrol-10 > .patrol-card-front {
-    background-position-x: 49%;
-    background-position-y: 100%;
 }
 
 #space-1 {
@@ -1179,7 +544,17 @@
     top: 76%;
 }
 
-.safe-house-space {
+#space-24 {
+    left: 62%;
+    top: 19%;
+}
+
+#space-25 {
+    left: 57.7%;
+    top: 30%;
+}
+
+.maq_safe-house-space {
     width: 100%;
     aspect-ratio: 1;
     display: flex;
@@ -1187,7 +562,7 @@
     align-items: center;
 }
 
-.cafe-spaces {
+.maq_cafe-spaces {
     width: 12%;
     display: flex;
     justify-content: space-between;
@@ -1196,27 +571,592 @@
     left: 33%;
 }
 
-.cafe-space {
+.maq_cafe-space {
     width: 3vw;
     aspect-ratio: 1;
 }
 
-#room-tiles {
-    box-sizing: border-box;
-    width: 70%;
+/* Cards */
+
+.maq_card {
+    width: 22vw;
+    height: 30.7vw;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    border: 2px solid black;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+@media (min-width: 995px) {
+    .maq_card {
+        width: 15vw;
+        height: 21vw;
+    }
+}
+
+@media (min-width: 1400px) {
+    .maq_card {
+        width: 10vw;
+        height: 14vw;
+    }
+}
+
+.maq_flipped {
+    transform: rotateY(180deg);
+}
+
+/* Mission Card */
+
+.maq_mission-description {
+    padding: 16px;
+}
+
+.maq_mission-token-space {
+    position: absolute;
+    right: 33%;
+    top: 20%;
+}
+
+.maq_mission-card-front, .maq_mission-card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 10px;
+    backface-visibility: hidden;
+}
+
+.maq_mission-card-back {
+    transform: rotateY(180deg);
+}
+
+.maq_mission-space > .maq_marker-space {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.maq_mission-space > .maq_marker-space > * {
     position: relative;
+    top: 15%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+}
+
+.maq_mission-space {
+    width: 26.7%;
+    height: 14%;
+}
+
+.maq_mission-space > .maq_worker-space {
+    top: -30%;
+}
+
+.maq_flipped > .maq_mission-space {
+    display: none;
+}
+
+.maq_mission-flavour-text, .maq_mission-description-text {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+:is(.maq_mission-text-location-name, .maq_mission-text-item-name, .maq_mission-text-morale, .maq_mission-text-soldier) {
+    font-weight: 600;
+}
+
+.mission-text-location-name {
+    color: #3B6D11;
+}
+
+.maq_mission-text-item-name {
+    color: #185FA5;
+}
+
+.maq_mission-text-morale {
+    color: #534AB7;
+}
+
+.maq_mission-text-soldier {
+    color: #993C1D;
+}
+
+/* 0-star missions */
+
+:is(#mission_card_milice_parade_day, #mission_card_officers_mansion) > .maq_mission-card-face {
+    background-image: url('img/Mission_Cards_0star.jpg');
+    background-size: 400%;
+}
+
+:is(#mission_card_milice_parade_day, #mission_card_officers_mansion) > .maq_mission-card-back {
+    background-position-x: 66.7%;
+}
+
+#mission_card_milice_parade_day > .maq_mission-card-front {
+    background-position-x: 0;
+}
+
+#mission_card_officers_mansion > .maq_mission-card-front {
+    background-position-x: 33.3%;
+}
+
+#mission_card_officers_mansion > .maq_mission-space-1 {
+    left: 65%;
+    top: 50%;
+}
+
+#mission_card_officers_mansion > :is(.maq_mission-space-2, .maq_mission-space-3) {
+    display: none;
+}
+
+/* 1-star missions */
+
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_infiltration, #mission_card_german_shepards, #mission_card_double_agent) > .maq_mission-card-face {
+    background-image: url('img/Mission_Cards_1star.jpg');
+    background-size: 300%;
+}
+
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_infiltration, #mission_card_german_shepards, #mission_card_double_agent) > .maq_mission-card-back {
+    background-position: 100% bottom;
+}
+
+#mission_card_underground_newspaper > .maq_mission-card-front {
+    background-position-x: 50%;
+}
+
+#mission_card_infiltration > .maq_mission-card-front {
+    background-position-x: 100%;
+}
+
+:is(#mission_card_german_shepards, #mission_card_double_agent) > .maq_mission-card-face {
+    background-position-y: bottom;
+}
+
+#mission_card_double_agent > .maq_mission-card-front {
+    background-position-x: center;
+}
+
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .maq_mission-space {
+    top: 50%;
+}
+
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .maq_mission-space-1 {
+    left: 7.5%;
+}
+
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .maq_mission-space-2 {
+    left: 36%;
+}
+
+:is(#mission_card_sabotage, #mission_card_underground_newspaper, #mission_card_german_shepards) > .maq_mission-space-3 {
+    left: 66%;
+}
+
+#mission_card_infiltration > :is(.maq_mission-space-1, .maq_mission-space-2) {
+    top: 50%;
+}
+
+#mission_card_infiltration > .maq_mission-space-1 {
+    left: 22%;
+}
+
+#mission_card_infiltration > .maq_mission-space-2 {
+    left: 51%;
+}
+
+#mission_card_infiltration > .maq_mission-space-3 {
+    display: none;
+}
+
+#mission_card_german_shepards > .maq_mission-space {
+    top: 13%;
+}
+
+/* 2-star missions  */
+
+:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .maq_mission-card-face {
+    background-image: url('img/Mission_Cards_2star.jpg');
+    background-size: 400%;
+}
+
+:is(#mission_card_assassination, #mission_card_take_out_the_bridges) > .maq_mission-card-front {
+    background-position-x: 33%;
+}
+
+:is(#mission_card_destroy_the_train, #mission_card_bomb_for_the_officer) > .maq_mission-card-front {
+    background-position-x: 66.7%;
+}
+
+#mission_card_liberate_the_town > .maq_mission-card-front {
+    background-position-x: 100%;
+}
+
+:is(#mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .maq_mission-card-front {
+    background-position-y: 100%;
+}
+
+:is(#mission_card_aid_the_spy, #mission_card_assassination, #mission_card_destroy_the_train, #mission_card_liberate_the_town, #mission_card_coded_messages, #mission_card_take_out_the_bridges, #mission_card_bomb_for_the_officer) > .maq_mission-card-back {
+    background-position: 100% bottom;
+}
+
+#mission_card_aid_the_spy > :is(.maq_mission-space-1, .maq_mission-space-2) {
+    top: 50%;
+}
+
+#mission_card_aid_the_spy > .maq_mission-space-1 {
+    left: 22%;
+}
+
+#mission_card_aid_the_spy > .maq_mission-space-2 {
+    left: 51%;
+}
+
+#mission_card_aid_the_spy > .maq_mission-space-3 {
+    display: none;
+}
+
+#mission_card_destroy_the_train > .maq_mission-space-1 {
+    top: 50%;
+    left: 7%;
+}
+
+#mission_card_destroy_the_train > :is(.maq_mission-space-2, .maq_mission-space-3) {
+    display: none;
+}
+
+#mission_card_coded_messages > .maq_mission-space-1 {
+    left: 34%;
+    top: 50%;
+}
+
+:is(#mission_card_coded_messages, #mission_card_bomb_for_the_officer) > :is(.maq_mission-space-2, .maq_mission-space-3) {
+    display: none;
+}
+
+#mission_card_bomb_for_the_officer > .maq_mission-space-1 {
+    left: 58%;
+    top: 50%;
+}
+
+/* 3-star missions */
+
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) {
+    height: 37.6vw;
+}
+
+@media (min-width: 995px) {
+    :is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) {
+        height: 25.6vw;
+    }
+}
+
+@media (min-width: 1400px) {
+    :is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) {
+        height: 17.1vw;
+    }
+}
+
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) > .maq_mission-card-face {
+    background-image: url('img/Mission_Cards_3star.jpg');
+    background-size: 500%;
+}
+
+:is(#mission_card_milice_hq, #mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader, #mission_card_destroy_aa_guns) > .maq_mission-card-back {
+    background-position-x: right;
+}
+
+#mission_card_milice_hq > .maq_mission-space {
+    width: 25%;
+    height: 10%;
+}
+
+#mission_card_milice_hq > :is(.maq_mission-space-1, .maq_mission-space-2) {
+    top: 37%;
+}
+
+#mission_card_milice_hq > .maq_mission-space-1 {
+    left: 45%;
+}
+
+#mission_card_milice_hq > .maq_mission-space-2 {
+    left: 72%;
+}
+
+#mission_card_bomb_the_barracks > .maq_mission-card-front {
+    background-position-x: 25%;
+}
+
+:is(#mission_card_bomb_the_barracks, #mission_card_free_the_resistance_leader) > .maq_mission-space {
+    top: 37%;
+    height: 10%;
+}
+
+#mission_card_bomb_the_barracks > :is(.maq_mission-space-1, .maq_mission-space-2) {
+    width: 20%;
+}
+
+#mission_card_bomb_the_barracks > .maq_mission-space-1 {
+    left: 7.6%;
+}
+
+#mission_card_bomb_the_barracks > .maq_mission-space-2 {
+    left: 29.6%;
+}
+
+#mission_card_bomb_the_barracks > .maq_mission-space-3 {
+    width: 25%;
+    left: 51.6%;
+}
+
+#mission_card_free_the_resistance_leader > .maq_mission-card-front {
+    background-position-x: 50%;
+}
+
+#mission_card_free_the_resistance_leader > .maq_mission-space-1 {
+    left: 4%;
+    width: 24%;
+}
+
+#mission_card_free_the_resistance_leader > .maq_mission-space-2 {
+    left: 31%;
+    width: 41%;
+}
+
+#mission_card_free_the_resistance_leader > .maq_mission-space-3 {
+    display: none;
+}
+
+#mission_card_destroy_aa_guns > .maq_mission-card-front {
+    background-position-x: 75%;
+}
+
+#mission_card_destroy_aa_guns > .maq_mission-space-1 {
+    width: 25.6%;
+    height: 10%;
+    left: 4%;
+    top: 36.6%;
+}
+
+#mission_card_destroy_aa_guns > :is(.maq_mission-space-2, .maq_mission-space-3) {
+    display: none;
+}
+
+/* Patrol cards */
+
+.maq_patrol-card {
+    position: absolute;
+}
+
+.maq_patrol-card-front {
+    background-image: url('img/Patrol_cards.jpg');
+    background-size: 500%;
+    background-repeat: no-repeat;
+}
+
+.maq_patrol-card-front, .maq_patrol-card-back {
+    position: absolute;
+    backface-visibility: hidden;
+    border: none;
+}
+
+.maq_patrol-card-front {
+    transform: rotateY(180deg);
+}
+
+.maq_patrol-card-back {
+    background-image: url('img/Tracking_card_Patrol_back.jpg');
+    background-size: 200%;
+    background-position-x: right;
+}
+
+#patrol-1 > .maq_patrol-card-front {
+    background-position-x: 49%;
+}
+
+#patrol-2 > .maq_patrol-card-front {
+    background-position-x: 24%;
+}
+
+#patrol-3 > .maq_patrol-card-front {
+    background-position-x: 0%;
+}
+
+#patrol-4 > .maq_patrol-card-front {
+    background-position-x: 24%;
+    background-position-y: 100%;
+}
+
+#patrol-5 > .maq_patrol-card-front {
+    background-position-x: 0;
+    background-position-y: 100%;
+}
+
+#patrol-6 > .maq_patrol-card-front {
+    background-position-x: 99%;
+}
+
+#patrol-7 > .maq_patrol-card-front {
+    background-position-x: 74%;
+}
+
+#patrol-8 > .maq_patrol-card-front {
+    background-position-x: 99%;
+    background-position-y: 100%;
+}
+
+#patrol-9 > .maq_patrol-card-front {
+    background-position-x: 74%;
+    background-position-y: 100%;
+}
+
+#patrol-10 > .maq_patrol-card-front {
+    background-position-x: 49%;
+    background-position-y: 100%;
+}
+
+/* Markers */
+
+.maq_marker {
+    width: 18px;
+    aspect-ratio: 1;
+    background-size: 700%;
+    background-position-y: center;
+    background-image: url('img/Markers.png');
+    position: absolute;
+    transition: transform 0.5s ease;
+}
+
+:is(.maq_round-number-space, .maq_morale-track-space, .maq_soldiers-track-space):hover > .maq_marker {
+    transform: translateY(-30px);
+}
+
+@media (min-width: 1400px) {
+    .maq_marker {
+        width: 16%;
+    }
+
+    .maq_mission-space .maq_marker-mission {
+        width: 100%;
+    }
+}
+
+.maq_marker-mission {
+    background-position: 64%;
+}
+
+@media (min-width: 1400px) {
+    .maq_marker-mission {
+        width: 40%;
+    }
+}
+
+/* Pawns */
+
+.maq_worker {
+    width: 6vw;
+    aspect-ratio: 1;
+    background-size: 400%;
+    background-image: url('img/Meeples.png');
+    background-position-y: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    position: absolute;
+}
+
+@media (min-width: 995px) {
+    .maq_worker {
+        width: 5vw;
+    }
+}
+
+@media (min-width: 1400px) {
+    .maq_worker {
+        width: 3vw;
+    }
+}
+
+.maq_resistance {
+    background-position-x: 33%;
+}
+
+.maq_milice {
+    background-position-x: 67%;
+}
+
+.maq_soldier {
+    background-position-x: 100%;
+}
+
+/* Pop-ups */
+
+.standard_popin {
+  aspect-ratio: 0.65;
+  width: 20vw;
+  padding: 10px;
+}
+
+@media (min-width: 1400px) {
+    .standard_popin {
+        width: 15vw;
+        height: 18vw;
+    }
+}
+
+.standard_popin_title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+}
+
+#popin_one-card-dialog .patrol-card-front {
+    width: 100%;
+}
+
+.maq_patrol-card-dialog-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#popin_discarded-patrol-cards-dialog {
+    box-sizing: border-box;
+    width: 50vw;
+    height: 168vw;
+    max-width: 9999px;
+}
+
+@media (min-width: 995px) {
+    #popin_discarded-patrol-cards-dialog {
+        width: 70vw;
+        height: 73vw;
+    }
+}
+
+@media (min-width: 1400px) {
+    #popin_discarded-patrol-cards-dialog {
+        width: 58vw;
+        height: 34vw;
+    }
+}
+
+#popin_discarded-patrol-cards-dialog .maq_patrol-card {
+    position: static;
+}
+
+#discarded-patrol-cards-wrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    column-gap: 2vw;
-    row-gap: 2vw;
+    column-gap: 1vw;
+    row-gap: 1vw;
 }
 
-.room-tile-container {
+/* Rooms */
+
+.maq_room-tile-container {
     aspect-ratio: 1;
 }
 
-.room-tile {
+.maq_room-tile {
     position: absolute;
     aspect-ratio: 1;
     z-index: 0;
@@ -1226,11 +1166,11 @@
     justify-content: center;
 }
 
-.room-tile, .room-tile-container {
+.maq_room-tile, .maq_room-tile-container {
     width: 15vw;
 }
 
-.room-tile > .circle-shape, .resource-icon-circle, .token-circle {
+.maq_room-tile > .maq_circle-shape {
     position: absolute;
     border-radius: 50%;
     border: 3px solid black;
@@ -1238,7 +1178,7 @@
     height: 90%;
 }
 
-.room-tile > .rectangle-shape {
+.maq_room-tile > .maq_rectangle-shape {
     position: absolute;
     background-image: url('img/Spare_rooms.png');
     background-size: 450%;
@@ -1251,18 +1191,14 @@
     bottom: 0;
 }
 
-.flipped {
-    transform: rotateY(180deg);
-}
-
 @media (min-width: 995px) {
-    .room-tile, .room-tile-container {
+    .maq_room-tile, .maq_room-tile-container {
         width: 11.5vw;
     }
 }
 
 @media (min-width: 1400px) {
-    .room-tile, .room-tile-container {
+    .maq_room-tile, .maq_room-tile-container {
         width: 7.05vw;
         height: 7.05vw;
     }
@@ -1272,7 +1208,7 @@
     background-position-x: center;
 }
 
-:is(#room-tile-room_counterfeiter, #room-tile-room_smuggler, #room-tile-room_pharmacist) > .rectangle-shape {
+:is(#room-tile-room_counterfeiter, #room-tile-room_smuggler, #room-tile-room_pharmacist) > .maq_rectangle-shape {
     background-position-x: 49.9%;
 }
 
@@ -1280,7 +1216,7 @@
     background-position-x: right;
 }
 
-:is(#room-tile-room_safe_house, #room-tile-room_propagandist, #room-tile-room_forger) > .rectangle-shape {
+:is(#room-tile-room_safe_house, #room-tile-room_propagandist, #room-tile-room_forger) > .maq_rectangle-shape {
     background-position-x: 93%;
 }
 
@@ -1298,7 +1234,7 @@
     background-position-x: right;
 }
 
-:is(#room-tile-room_chemists_lab, #room-tile-room_smuggler, #room-tile-room_propagandist) > .rectangle-shape {
+:is(#room-tile-room_chemists_lab, #room-tile-room_smuggler, #room-tile-room_propagandist) > .maq_rectangle-shape {
     background-position-y: 63.5%;
 }
 
@@ -1316,6 +1252,67 @@
     background-position-x: right;
 }
 
-:is(#room-tile-room_fixer, #room-tile-room_pharmacist, #room-tile-room_forger ) > .rectangle-shape {
+:is(#room-tile-room_fixer, #room-tile-room_pharmacist, #room-tile-room_forger ) > .maq_rectangle-shape {
     background-position-y: 99.25%;
+}
+
+/* Tokens */
+
+.maq_token {
+    width: 60px;
+    height: 60px;
+    background-image: url('img/Tokens.png');
+    background-size: 300%;
+    position: absolute;
+}
+
+.maq_token-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid black;
+    width: 90%;
+    height: 90%;
+}
+
+.maq_food-token, #food-icon {
+    background-position-y: center;
+    background-position-x: -50%;
+}
+
+#medicine-icon {
+    background-position-y: center;
+    background-position-x: center;
+}
+
+.maq_money-token, #money-icon {
+    background-position-y: top;
+    background-position-x: -50%; 
+}
+
+.maq_weapon-token, #weapon-icon {
+    background-position-y: top;
+}
+
+#explosives-icon {
+    background-position-x: center;
+    background-position-y: top;
+}
+
+#fake_id-icon {
+    background-position-y: bottom;
+    background-position-x: -50%;
+}
+
+#poison-icon {
+    background-position-y: bottom;
+    background-position-x: center;
+}
+
+.maq_fake-id-token {
+    background-position: bottom right;
+}
+
+.maq_aa-gun-token {
+    background-position-y: bottom;
+    background-position-x: left; 
 }
