@@ -1096,7 +1096,11 @@ html[data-theme="dark"] {
     }
 }
 
-.maq_resistance {
+:is(#resistance_1, #resistance_3, #resistance_5) {
+    background-position-x: 0;
+}
+
+:is(#resistance_2, #resistance_4) {
     background-position-x: 33%;
 }
 
