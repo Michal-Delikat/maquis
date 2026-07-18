@@ -16,7 +16,7 @@ trait PatrolCards {
         if ($this->patrol_cards->countCardInLocation('deck') <= 0) {
             $this->patrol_cards->moveAllCardsInLocation('discard', 'deck');            
             $this->patrol_cards->shuffle('deck');
-            $this->notify->all("patrolCardsShuffled", clienttranslate("Patrol Cards Shuffled"));
+            $this->notify->all("patrolCardsShuffled", clienttranslate('Patrol cards shuffled'));
         }
     }
 

@@ -283,7 +283,7 @@ function (dojo, declare) {
                             ${_('Objective 2:')}<br>
                             ${_('Visit this location to recon the barracks')}<br><br>
                             ${_('Objective 3:')}<br>
-                            ${_('[SAFE] Spend a ')}<span class="maq_mission-text-item-name">${_('Fake ID')}</span> ${_('and Two')} <span class="maq_mission-text-item-name">${_('Explosives')}</span> ${_('on this location AND, on the same day, send a second worker to an empty')} <span class="maq_mission-text-location-name">field</span> ${_('and spend a')} <span class="maq_mission-text-item-name">${_('Weapon')}</span> ${_('to distract the soldiers to achieve a major success.')}</p>`;
+                            ${_('[SAFE] Spend a')}<span class="maq_mission-text-item-name"> ${_('Fake ID')}</span> ${_('and Two')} <span class="maq_mission-text-item-name">${_('Explosives')}</span> ${_('on this location AND, on the same day, send a second worker to an empty')} <span class="maq_mission-text-location-name">field</span> ${_('and spend a')} <span class="maq_mission-text-item-name">${_('Weapon')}</span> ${_('to distract the soldiers to achieve a major success.')}</p>`;
                         break;
                     case 'free_the_resistance_leader':
                         description = `
@@ -485,7 +485,7 @@ function (dojo, declare) {
                     const activeSpaceID = args.args.activeSpace;
 
                     let activeSpace = dojo.byId(`space-${activeSpaceID}-background-space`);
-                    if (activeSpace) dojo.addClass(activeSpace, 'active-space');
+                    if (activeSpace) dojo.addClass(activeSpace, 'maq_active-space');
                     break;
                 case 'shootMilice':
                     const spacesWithMilice = Object.values(args.args.spacesWithMilice);
@@ -529,11 +529,7 @@ function (dojo, declare) {
                     break;
 
                 case 'takeAction':
-                    dojo.query('.active-space').removeClass('active-space');
-                    break;
-
-                case 'airdropSelectSupplies':
-                    dojo.query('.empty-field').removeClass('empty-field');
+                    dojo.query('.maq_active-space').removeClass('maq_active-space');
                     break;
 
                 case 'shootMilice':
@@ -563,7 +559,13 @@ function (dojo, declare) {
                         break;
 
                     case 'takeAction':
-                        Object.values(args.actions).forEach(action => this.addActionButton(`actTakeAction_${action.action_name}`, action.action_description, () => this.bgaPerformAction("actTakeAction", { actionName: action.action_name }), null, null, 'blue'));
+                        Object.values(args.actions).forEach(action => {
+                            let label = _(action.action_description);
+                            if (action.action_note) {
+                                label += ' (' + _(action.action_note) + ')';
+                            }
+                            this.addActionButton(`actTakeAction_${action.action_name}`, label, () => this.bgaPerformAction("actTakeAction", { actionName: action.action_name }), null, null, 'blue')
+                        });
                         this.addActionButton(`actReturn`, _('Return to Safe House'), () => this.bgaPerformAction("actTakeAction", { actionName: 'return'}), null, null, 'gray');
                         this.addActionButton('actBack', _('Back'), () => this.bgaPerformAction("actBack"), null, null, 'red');
                         break;

@@ -51,10 +51,11 @@ trait Resources {
 
         $quantityPossesed = $this->getResource($tokenType);
         $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${display_name}'), array(
+            "i18n" => ['display_name'],
             "resource_name" => $tokenType,
             "quantity" => $quantityPossesed,
             "available" => $this->getAvailableResource($tokenType),
-            "display_name" => $tokenType === RESOURCE_FAKE_ID ? 'Fake Id' : $tokenType
+            "display_name" => $this->material->resources[$tokenType]
         ));
     }
 
@@ -82,10 +83,11 @@ trait Resources {
 
         $quantityPossesed = $this->getResource($resourceName);
         $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${display_name}'), array(
+            "i18n" => ['display_name'],
             "resource_name" => $resourceName,
             "quantity" => $quantityPossesed,
             "available" => $this->getAvailableResource($resourceName),
-            "display_name" => $resourceName === RESOURCE_FAKE_ID ? 'Fake Id' : $resourceName
+            "display_name" => $this->material->resources[$resourceName]
         ));
     }
 
@@ -99,10 +101,11 @@ trait Resources {
         
         $quantityPossesed = $this->getResource($resourceName);
         $this->notify->all("resourcesChanged", clienttranslate('You have ${quantity} ${display_name}'), array(
+            "i18n" => ['display_name'],
             "resource_name" => $resourceName,
             "quantity" => $quantityPossesed,
             "available" => $this->getAvailableResource($resourceName),
-            "display_name" => $resourceName === RESOURCE_FAKE_ID ? 'Fake Id' : $resourceName
+            "display_name" => $this->material->resources[$resourceName]
         ));
     }
 }

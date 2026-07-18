@@ -133,12 +133,10 @@ trait BoardPaths {
             if ($isSafe) {
                 $fakeIdUsed = $patrolSkipped && $hasFakeId;
 
-                // Jeśli znaleźliśmy drogę bez zużycia ID, to jest optymalna — można przerwać
                 if (!$fakeIdUsed) {
                     return ["escapeFound" => true, "fakeIdUsed" => false];
                 }
 
-                // Inaczej zapamiętaj jako kandydata, ale szukaj dalej
                 $bestResult = ["escapeFound" => true, "fakeIdUsed" => true];
                 continue;
             }

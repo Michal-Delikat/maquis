@@ -67,7 +67,7 @@ trait Pawns {
 
         $this->updateComponent($workerID, 'safe_house', 'active');
 
-        $this->notify->all("workerRecruited", "", array(
+        $this->notify->all("workerRecruited", clienttranslate('Worker recruited'), array(
             "workerID" => $workerID 
         ));
     }

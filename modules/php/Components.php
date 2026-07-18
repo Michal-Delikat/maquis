@@ -141,8 +141,9 @@ trait Components {
             ");
 
             $this->notify->all("tokensPlaced", clienttranslate('${quantity} ${tokenType} placed at ${spaceName}'), array(
+                "i18n" => ['tokenType'],
                 "tokens" => $tokens,
-                "tokenType" => $tokenType === TOKEN_FAKE_ID ? "Fake Id" : $tokenType,
+                "tokenType" => $this->material->resources[$tokenType],
                 "quantity" => $quantity === 1 ? '' : $quantity,
                 "spaceName" => $this->getSpaceNameById($spaceID)
             ));

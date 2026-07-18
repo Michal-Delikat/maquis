@@ -12,6 +12,21 @@
 namespace Bga\Games\Maquis;
 
 class Material {
+    public $resources;
+
+    function __construct() {
+        $this->resources = [
+            RESOURCE_FOOD => clienttranslate('food'),
+            RESOURCE_MEDICINE => clienttranslate('medicine'),
+            RESOURCE_WEAPON => clienttranslate('weapon'),
+            RESOURCE_INTEL => clienttranslate('intel'),
+            RESOURCE_MONEY => clienttranslate('money'),
+            RESOURCE_EXPLOSIVES => clienttranslate('explosives'),
+            RESOURCE_POISON => clienttranslate('poison'),
+            RESOURCE_FAKE_ID => clienttranslate('fake id')
+        ];
+    }
+
     public const PATROL_CARD_ITEMS = [
         ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 1, 'space_a' => GROCER, 'space_b' => POOR_DISTRICT, 'space_c' => DOCTOR],
         ['type' => 'PATROL', 'nbr' => 1, 'type_arg' => 2, 'space_a' => RADIO_B, 'space_b' => GROCER, 'space_c' => BLACK_MARKET],
