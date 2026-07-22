@@ -80,13 +80,13 @@ class Game extends \Bga\GameFramework\Table {
         $this->patrol_cards = $this->bga->deckFactory->createDeck("patrol_card");  
         $this->patrol_cards->init("patrol_card");
         $this->patrol_cards->autoreshuffle_trigger = array('obj' => $this, 'method' => 'deckAutoReshuffle');
-        $this->patrol_cards->shuffle('deck');
     }
 
     protected function setupNewGame($players, $options = []) {
         $this->setupPlayer($players);
 
         $this->patrol_cards->createCards($this->PATROL_CARD_ITEMS);
+        $this->patrol_cards->shuffle('deck');
 
         // Initialize globals
         $this->setGameStateInitialValue("difficulty_mode", $this->tableOptions->get(100));
