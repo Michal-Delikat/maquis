@@ -57,7 +57,10 @@ html[data-theme="dark"] {
 }
 
 #custom-player-board {
-    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 16px 0;
 }
 
 #resources {
@@ -65,6 +68,13 @@ html[data-theme="dark"] {
     flex-wrap: wrap;
     justify-content: space-around;
     gap: 8px;
+    width: 340px;
+}
+
+@media (min-width: 770px) {
+    #resources {
+        width: 690px;
+    }
 }
 
 .maq_resource-box {
@@ -125,29 +135,22 @@ html[data-theme="dark"] {
 }
 
 #top-area {
-    height: 38vw;
+    height: auto;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 8px;
-}
-
-@media (min-width: 995px) {
-    #top-area {
-        height: 26vw;
-    }
+    margin: 8px;
 }
 
 @media (min-width: 1400px) {
     #top-area {
-        height: 17vw;
-        padding-right: 0;
+        margin-right: 0;
     }
 }
 
 #arrest {
     box-sizing: border-box;
-    height: 100%;
+    align-self: stretch !important;
     width: 21%;
     display: flex;
     flex-direction: column;
@@ -164,6 +167,8 @@ html[data-theme="dark"] {
 .maq_arrest-space {
     width: 45%;
     height: 33%;
+    display: flex;
+    justify-content: center;
 }
 
 .maq_mission-slot {
@@ -176,14 +181,15 @@ html[data-theme="dark"] {
 
 #barracks-boxes-wrapper {
     width: 25%;
-    height: 100%;
+    align-self: stretch !important;
     display: flex;
     flex-wrap: wrap;
     align-content: space-between;
 }
 
 .maq_barracks {
-    height: 40%;
+    box-sizing: border-box;
+    height: 48%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -219,7 +225,11 @@ html[data-theme="dark"] {
 #right-panel-top {
     display: flex;
     justify-content: space-evenly;
-    padding: 32px 16px;
+    margin: 32px 16px;
+}
+
+#right-panel-top > * {
+    width: 25%;
 }
 
 #morale-and-soldiers-track {
@@ -280,13 +290,13 @@ html[data-theme="dark"] {
 
 #room-tiles {
     box-sizing: border-box;
-    width: 70%;
+    width: 55%;
     position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    column-gap: 2vw;
-    row-gap: 2vw;
+    column-gap: 1vw;
+    row-gap: 1vw;
 }
 
 /* Board */
@@ -314,15 +324,12 @@ html[data-theme="dark"] {
 #room-tiles-container-wrapper {
     display: flex;
     justify-content: center;
-    padding: 16px 0 0;
 }
 
 .maq_room-tile-space {
     position: absolute;
     width: 100%;
     height: 100%;
-    left: -5%;
-    top: -2%;
 }
 
 .maq_token-spaces {
@@ -583,11 +590,11 @@ html[data-theme="dark"] {
 }
 
 .maq_cafe-spaces {
-    width: 12%;
+    width: 9%;
     display: flex;
     justify-content: space-between;
     position: absolute;
-    bottom: 1%;
+    bottom: 6%;
     left: 33%;
 }
 
@@ -599,27 +606,13 @@ html[data-theme="dark"] {
 /* Cards */
 
 .maq_card {
-    width: 22vw;
-    height: 30.7vw;
+    width: 100%;
+    aspect-ratio: 0.715;
     border-radius: 10px;
     background-repeat: no-repeat;
     border: 2px solid var(--mq-bd-color);
     transition: transform 0.6s;
     transform-style: preserve-3d;
-}
-
-@media (min-width: 995px) {
-    .maq_card {
-        width: 15vw;
-        height: 21vw;
-    }
-}
-
-@media (min-width: 1400px) {
-    .maq_card {
-        width: 10vw;
-        height: 14vw;
-    }
 }
 
 .maq_flipped {
@@ -1038,7 +1031,7 @@ html[data-theme="dark"] {
 /* Markers */
 
 .maq_marker {
-    width: 18px;
+    width: 75%;
     aspect-ratio: 1;
     background-size: 700%;
     background-position-y: center;
@@ -1047,15 +1040,15 @@ html[data-theme="dark"] {
     transition: transform 0.5s ease;
 }
 
+:is(.maq_morale-track-space, .maq_soldiers-track-space) {
+    position: relative;
+}
+
 :is(.maq_round-number-space, .maq_morale-track-space, .maq_soldiers-track-space):hover > .maq_marker {
     transform: translateY(-30px);
 }
 
 @media (min-width: 1400px) {
-    .maq_marker {
-        width: 16%;
-    }
-
     .maq_mission-space .maq_marker-mission {
         width: 100%;
     }
@@ -1065,16 +1058,14 @@ html[data-theme="dark"] {
     background-position: 64%;
 }
 
-@media (min-width: 1400px) {
-    .maq_marker-mission {
-        width: 40%;
-    }
+ .maq_marker-mission {
+    width: 40%;
 }
 
 /* Pawns */
 
 .maq_worker {
-    width: 6vw;
+    width: 50px;
     aspect-ratio: 1;
     background-size: 400%;
     background-image: url('img/Meeples.png');
@@ -1084,15 +1075,9 @@ html[data-theme="dark"] {
     position: absolute;
 }
 
-@media (min-width: 995px) {
+@media (min-width: 1900px) {
     .maq_worker {
-        width: 5vw;
-    }
-}
-
-@media (min-width: 1400px) {
-    .maq_worker {
-        width: 3vw;
+        width: 70px;
     }
 }
 
@@ -1178,6 +1163,8 @@ html[data-theme="dark"] {
 
 .maq_room-tile-container {
     aspect-ratio: 1;
+    width: 30%;
+    position: relative
 }
 
 .maq_room-tile {
@@ -1190,8 +1177,8 @@ html[data-theme="dark"] {
     justify-content: center;
 }
 
-.maq_room-tile, .maq_room-tile-container {
-    width: 15vw;
+.maq_room-tile {
+    width: 100%;
 }
 
 .maq_room-tile > :is(.maq_circle-shape, .maq_rectangle-shape) {
@@ -1214,19 +1201,6 @@ html[data-theme="dark"] {
     height: 20%;
     border-top: none;
     bottom: 0;
-}
-
-@media (min-width: 995px) {
-    .maq_room-tile, .maq_room-tile-container {
-        width: 11.5vw;
-    }
-}
-
-@media (min-width: 1400px) {
-    .maq_room-tile, .maq_room-tile-container {
-        width: 7.05vw;
-        height: 7.05vw;
-    }
 }
 
 #room-tile-room_counterfeiter {
