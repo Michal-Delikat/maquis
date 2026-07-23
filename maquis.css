@@ -658,12 +658,16 @@ html[data-theme="dark"] {
 }
 
 .maq_mission-space > .maq_marker-space > * {
-    position: relative;
-    top: 15%;
-    left: 25%;
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.maq_mission-space .maq_marker-mission {
+    width: 60%;
+} 
 
 .maq_mission-space {
     width: 26.7%;
@@ -1047,12 +1051,6 @@ html[data-theme="dark"] {
 
 :is(.maq_round-number-space, .maq_morale-track-space, .maq_soldiers-track-space):hover > .maq_marker {
     transform: translateY(-30px);
-}
-
-@media (min-width: 1400px) {
-    .maq_mission-space .maq_marker-mission {
-        width: 100%;
-    }
 }
 
 .maq_marker-mission {
