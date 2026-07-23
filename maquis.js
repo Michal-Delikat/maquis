@@ -114,6 +114,7 @@ function (dojo, declare) {
                                     <div id="space-20-background-space" class="maq_background-space"></div>
                                 </div>
                                 <div id="mission-a-token-space" class="maq_mission-token-space"></div>
+                                <div id="${selectedMissions.mission_card_a}-description-section" class="maq_mission-description-section"></div>
                             </div>
                         </div>
                         <div id="mission-slot-2" class="maq_mission-slot">
@@ -142,6 +143,7 @@ function (dojo, declare) {
                                     <div id="space-23-background-space" class="maq_background-space"></div>
                                 </div>
                                 <div id="mission-b-token-space" class="maq_mission-token-space"></div>
+                                <div id="${selectedMissions.mission_card_b}-description-section" class="maq_mission-description-section"></div>
                             </div>
                         </div>
                         <div id="barracks-boxes-wrapper">
@@ -304,13 +306,7 @@ function (dojo, declare) {
                         break;
                 }
 
-                this.addTooltipHtml(mission, 
-                    `<div class="mission-tooltip-wrapper">
-                        <div class="maq_mission-description">
-                            ${description}
-                        </div>
-                    </div>`
-                );
+                this.addTooltipHtml(`${mission}-description-section`, `${description}`);
             });
 
             // MORALE TRACK
