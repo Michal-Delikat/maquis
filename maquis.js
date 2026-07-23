@@ -303,7 +303,7 @@ function (dojo, declare) {
                             ${_('If 3 AA guns are disabled the mission is a success; if all 5 are disabled the mission is a major success.')}</p>`;
                         break;
                 }
-                    
+
                 this.addTooltipHtml(mission, 
                     `<div class="mission-tooltip-wrapper">
                         <div class="maq_mission-description">
