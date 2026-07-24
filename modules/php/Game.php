@@ -140,18 +140,6 @@ class Game extends \Bga\GameFramework\Table {
             MISSION_DESTROY_AA_GUNS
         );
 
-        while ($missionA === $missionB) {
-            if ($missionA <= 1) {
-                $missionB = array_rand($zeroStarMissions);
-            } else if ($missionA <= 6) {
-                $missionB = array_rand($oneStarMissions) + count($zeroStarMissions);
-            } else if ($missionA <= 13) {
-                $missionB = array_rand($twoStarMissions) + count($zeroStarMissions) + count($oneStarMissions);
-            } else {
-                $missionB = array_rand($threeStarMissions) + count($zeroStarMissions) + count($oneStarMissions) + count($twoStarMissions);
-            }
-        }
-
         $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
         $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
 

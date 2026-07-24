@@ -455,7 +455,7 @@ html[data-theme="dark"] {
 #dark-lady-location {
     width: 100%;
     aspect-ratio: 1;
-    border: rgba(2, 212, 51, 0.5) 5px solid;
+    border: rgba(212, 2, 198, 0.5) 5px solid;
     position: absolute;
     top: -3%;
     left: -3%;

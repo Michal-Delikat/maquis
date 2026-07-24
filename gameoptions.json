@@ -2,133 +2,93 @@
     "100": {
         "name": "Difficulty Mode",
         "values": {
-            "0": {
-                "name": "Very Easy"
-            },
-            "1": {
-                "name": "Easy"
-            },
-            "2": {
-                "name": "Normal"
-            },
-            "3": {
-                "name": "Tricky"
-            },
-            "4": {
-                "name": "Hard"
-            },
-            "5": {
-                "name": "Very Hard"
-            }
+            "0": { "name": "Very Easy" },
+            "1": { "name": "Easy" },
+            "2": { "name": "Normal" },
+            "3": { "name": "Tricky" },
+            "4": { "name": "Hard" },
+            "5": { "name": "Very Hard" }
         },
         "default": 2
     },
-    "101": { 
+    "101": {
         "name": "Mission A",
         "values": {
-            "0": { 
-                "name": "Milice Parade Day | 0 Star"
-            },
-            "1": { 
-                "name": "Officer's Mansion | 0 Star"
-            },
-            "2": { 
-                "name": "Sabotage | 1 Star"
-            },
-            "3": {
-                "name": "Underground Newspaper | 1 Star"
-            },
-            "4": {
-                "name": "Infiltration | 1 Star"
-            },
-            "5": {
-                "name": "German Shepards | 1 Star"
-            },
-            "6": {
-                "name": "Double Agent | 1 Star"
-            },
-            "7": {
-                "name": "Aid the Spy | 2 Star"
-            },
-            "8": {
-                "name": "Assassination | 2 Star"
-            },
-            "9": {
-                "name": "Destroy the Train | 2 Star"
-            },
-            "10": {
-                "name": "Liberate the Town | 2 Star"
-            },
-            "11": {
-                "name": "Coded Messages | 2 Star"
-            },
-            "12": {
-                "name": "Take out the Bridges | 2 Star"
-            },
-            "13": {
-                "name": "Bomb for the Officer | 2 Star"
-            }
+            "0": { "name": "Milice Parade Day | 0 Star" },
+            "1": { "name": "Officer's Mansion | 0 Star" },
+            "2": { "name": "Sabotage | 1 Star" },
+            "3": { "name": "Underground Newspaper | 1 Star" },
+            "4": { "name": "Infiltration | 1 Star" },
+            "5": { "name": "German Shepards | 1 Star" },
+            "6": { "name": "Double Agent | 1 Star" },
+            "7": { "name": "Aid the Spy | 2 Star" },
+            "8": { "name": "Assassination | 2 Star" },
+            "9": { "name": "Destroy the Train | 2 Star" },
+            "10": { "name": "Liberate the Town | 2 Star" },
+            "11": { "name": "Coded Messages | 2 Star" },
+            "12": { "name": "Take out the Bridges | 2 Star" },
+            "13": { "name": "Bomb for the Officer | 2 Star" }
         },
-        "default": 0
+        "default": 0,
+        "startcondition": {
+            "0":  [{ "type": "otheroptionisnot", "id": 102, "value": 0,  "message": "Mission A and Mission B must be different!" }],
+            "1":  [{ "type": "otheroptionisnot", "id": 102, "value": 1,  "message": "Mission A and Mission B must be different!" }],
+            "2":  [{ "type": "otheroptionisnot", "id": 102, "value": 2,  "message": "Mission A and Mission B must be different!" }],
+            "3":  [{ "type": "otheroptionisnot", "id": 102, "value": 3,  "message": "Mission A and Mission B must be different!" }],
+            "4":  [{ "type": "otheroptionisnot", "id": 102, "value": 4,  "message": "Mission A and Mission B must be different!" }],
+            "5":  [{ "type": "otheroptionisnot", "id": 102, "value": 5,  "message": "Mission A and Mission B must be different!" }],
+            "6":  [{ "type": "otheroptionisnot", "id": 102, "value": 6,  "message": "Mission A and Mission B must be different!" }],
+            "7":  [{ "type": "otheroptionisnot", "id": 102, "value": 7,  "message": "Mission A and Mission B must be different!" }],
+            "8":  [{ "type": "otheroptionisnot", "id": 102, "value": 8,  "message": "Mission A and Mission B must be different!" }],
+            "9":  [{ "type": "otheroptionisnot", "id": 102, "value": 9,  "message": "Mission A and Mission B must be different!" }],
+            "10": [{ "type": "otheroptionisnot", "id": 102, "value": 10, "message": "Mission A and Mission B must be different!" }],
+            "11": [{ "type": "otheroptionisnot", "id": 102, "value": 11, "message": "Mission A and Mission B must be different!" }],
+            "12": [{ "type": "otheroptionisnot", "id": 102, "value": 12, "message": "Mission A and Mission B must be different!" }],
+            "13": [{ "type": "otheroptionisnot", "id": 102, "value": 13, "message": "Mission A and Mission B must be different!" }]
+        }
     },
-    "102": { 
+    "102": {
         "name": "Mission B",
         "values": {
-           "0": { 
-                "name": "Milice Parade Day | 0 Star"
-            },
-            "1": { 
-                "name": "Officer's Mansion | 0 Star"
-            },
-            "2": { 
-                "name": "Sabotage | 1 Star"
-            },
-            "3": {
-                "name": "Underground Newspaper | 1 Star"
-            },
-            "4": {
-                "name": "Infiltration | 1 Star"
-            },
-            "5": {
-                "name": "German Shepards | 1 Star"
-            },
-            "6": {
-                "name": "Double Agent | 1 Star"
-            },
-            "7": {
-                "name": "Aid the Spy | 2 Star"
-            },
-            "8": {
-                "name": "Assassination | 2 Star"
-            },
-            "9": {
-                "name": "Destroy the Train | 2 Star"
-            },
-            "10": {
-                "name": "Liberate the Town | 2 Star"
-            },
-            "11": {
-                "name": "Coded Messages | 2 Star"
-            },
-            "12": {
-                "name": "Take out the Bridges | 2 Star"
-            },
-            "13": {
-                "name": "Bomb for the Officer | 2 Star"
-            },
-            "14": {
-                "name": "Milice HQ | 3 Star"
-            },
-            "15": {
-                "name": "Bomb the Barracks | 3 Star"
-            },
-            "16": {
-                "name": "Free the Resistance Leader | 3 Star"
-            },
-            "17": {
-                "name": "Destroy AA Guns | 3 Star"
-            }
+            "0":  { "name": "Milice Parade Day | 0 Star" },
+            "1":  { "name": "Officer's Mansion | 0 Star" },
+            "2":  { "name": "Sabotage | 1 Star" },
+            "3":  { "name": "Underground Newspaper | 1 Star" },
+            "4":  { "name": "Infiltration | 1 Star" },
+            "5":  { "name": "German Shepards | 1 Star" },
+            "6":  { "name": "Double Agent | 1 Star" },
+            "7":  { "name": "Aid the Spy | 2 Star" },
+            "8":  { "name": "Assassination | 2 Star" },
+            "9":  { "name": "Destroy the Train | 2 Star" },
+            "10": { "name": "Liberate the Town | 2 Star" },
+            "11": { "name": "Coded Messages | 2 Star" },
+            "12": { "name": "Take out the Bridges | 2 Star" },
+            "13": { "name": "Bomb for the Officer | 2 Star" },
+            "14": { "name": "Milice HQ | 3 Star" },
+            "15": { "name": "Bomb the Barracks | 3 Star" },
+            "16": { "name": "Free the Resistance Leader | 3 Star" },
+            "17": { "name": "Destroy AA Guns | 3 Star" }
         },
-        "default": 1
+        "default": 1,
+        "startcondition": {
+            "0":  [{ "type": "otheroptionisnot", "id": 101, "value": 0,  "message": "Mission A and Mission B must be different!" }],
+            "1":  [{ "type": "otheroptionisnot", "id": 101, "value": 1,  "message": "Mission A and Mission B must be different!" }],
+            "2":  [{ "type": "otheroptionisnot", "id": 101, "value": 2,  "message": "Mission A and Mission B must be different!" }],
+            "3":  [{ "type": "otheroptionisnot", "id": 101, "value": 3,  "message": "Mission A and Mission B must be different!" }],
+            "4":  [{ "type": "otheroptionisnot", "id": 101, "value": 4,  "message": "Mission A and Mission B must be different!" }],
+            "5":  [{ "type": "otheroptionisnot", "id": 101, "value": 5,  "message": "Mission A and Mission B must be different!" }],
+            "6":  [{ "type": "otheroptionisnot", "id": 101, "value": 6,  "message": "Mission A and Mission B must be different!" }],
+            "7":  [{ "type": "otheroptionisnot", "id": 101, "value": 7,  "message": "Mission A and Mission B must be different!" }],
+            "8":  [{ "type": "otheroptionisnot", "id": 101, "value": 8,  "message": "Mission A and Mission B must be different!" }],
+            "9":  [{ "type": "otheroptionisnot", "id": 101, "value": 9,  "message": "Mission A and Mission B must be different!" }],
+            "10": [{ "type": "otheroptionisnot", "id": 101, "value": 10, "message": "Mission A and Mission B must be different!" }],
+            "11": [{ "type": "otheroptionisnot", "id": 101, "value": 11, "message": "Mission A and Mission B must be different!" }],
+            "12": [{ "type": "otheroptionisnot", "id": 101, "value": 12, "message": "Mission A and Mission B must be different!" }],
+            "13": [{ "type": "otheroptionisnot", "id": 101, "value": 13, "message": "Mission A and Mission B must be different!" }],
+            "14": [],
+            "15": [],
+            "16": [],
+            "17": []
+        }
     }
 }
