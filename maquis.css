@@ -359,6 +359,8 @@ html[data-theme="dark"] {
 }
 
 .maq_background-space {
+    border: 3px solid transparent;
+    box-sizing: border-box;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -403,13 +405,11 @@ html[data-theme="dark"] {
 }
 
 .maq_available-space {
-    background-color: #EAF3DE;
-    border-color: #639922;
+    border-color: #04ff00;;
 }
 
 .maq_available-space:hover {
-    background-color: #C0DD97;
-    border-color: #3B6D11;
+    background-color: #f0f5ea;
 } 
 
 .maq_space-with-available-worker {
@@ -571,6 +571,8 @@ html[data-theme="dark"] {
     top: 76%;
 }
 
+/* Bridge spaces */
+
 #space-24 {
     left: 62%;
     top: 19%;
@@ -650,6 +652,11 @@ html[data-theme="dark"] {
     transform: rotateY(180deg);
 }
 
+.maq_mission-space {
+    width: 26.7%;
+    height: 14%;
+}
+
 .maq_mission-space > .maq_marker-space {
     top: 0;
     left: 0;
@@ -668,11 +675,6 @@ html[data-theme="dark"] {
 .maq_mission-space .maq_marker-mission {
     width: 60%;
 } 
-
-.maq_mission-space {
-    width: 26.7%;
-    height: 14%;
-}
 
 .maq_mission-space > .maq_worker-space {
     top: -30%;
