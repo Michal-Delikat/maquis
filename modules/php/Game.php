@@ -942,6 +942,8 @@ class Game extends \Bga\GameFramework\Table {
                     return $this->getResource(RESOURCE_INTEL) >= 2;
                 case ACTION_INSERT_MOLE:
                     return $this->getResource(RESOURCE_INTEL) >= 2;
+                case ACTION_POISON_SHEPARDS:
+                    return $this->getResource(RESOURCE_FOOD) >= 1 && $this->getResource(RESOURCE_MEDICINE) >= 1;
                 case ACTION_COMPLETE_DOUBLE_AGENT_MISSION:
                     return !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT);
                 case ACTION_RECOVER_MOLE:
