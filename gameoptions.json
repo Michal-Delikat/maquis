@@ -2,12 +2,12 @@
     "100": {
         "name": "Difficulty Mode",
         "values": {
-            "0": { "name": "Very Easy" },
-            "1": { "name": "Easy" },
+            "0": { "name": "Very Easy", "description": "When the Day track marker reaches the 'End' space, do not end the game; instead, move the Day track marker immediately next to the Day 1 space and continue as normal. (Any objective that has specific day requirements may be completed on those days on either pass through the time track). When you Airdrop in Resources, you may choose from 2 Money, 2 Weapons, or 4 Food." },
+            "1": { "name": "Easy", "description": "When you Airdrop in Resources, you may choose from 2 Money,  1 Weapon or, 4 Food." },
             "2": { "name": "Normal" },
-            "3": { "name": "Tricky" },
-            "4": { "name": "Hard" },
-            "5": { "name": "Very Hard" }
+            "3": { "name": "Tricky", "description": "Start the game with only two Workers, with two recruitable Workers by the Café; the fifth Resistance Worker does not exist. The game ends when the Day track marker lands on Day 12." },
+            "4": { "name": "Hard", "description": "Utilize the same rules as Tricky mode. Additionally, instead of decreasing Morale when the Day track marker lands on an orange space, decrease Morale when the Day track marker lands on a space with a triangle." },
+            "5": { "name": "Very Hard", "description": "Utilize the same rules as Tricky and Hard mode. Additionally, when a Resistance Worker is arrested (either by being cut off from a Safe House or by a Patrol landing on it because all available Patrol Locations were taken), reduce Morale by one." }
         },
         "default": 2
     },
