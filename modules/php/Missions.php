@@ -12,7 +12,56 @@
 namespace Bga\Games\Maquis;
 
 trait Missions {
-    protected function configureMissions(string $missionAName, string $missionBName): void {
+    protected function configureMissions(int $missionAInt, int $missionBInt): void {
+        $zeroStarMissions = array(
+            MISSION_MILICE_PARADE_DAY, 
+            MISSION_OFFICERS_MANSION
+        );
+        $oneStarMissions = array(
+            MISSION_SABOTAGE, 
+            MISSION_UNDERGROUND_NEWSPAPER,
+            MISSION_INFILTRATION, 
+            MISSION_GERMAN_SHEPARDS,
+            MISSION_DOUBLE_AGENT
+        );
+        $twoStarMissions = array(
+            MISSION_AID_THE_SPY,
+            MISSION_ASSASSINATION,
+            MISSION_DESTROY_THE_TRAIN,
+            MISSION_LIBERATE_THE_TOWN,
+            MISSION_CODED_MESSAGES,
+            MISSION_TAKE_OUT_THE_BRIDGES,
+            MISSION_BOMB_FOR_THE_OFFICER
+        );
+        $threeStarMissions = array(
+            MISSION_MILICE_HQ,
+            MISSION_BOMB_THE_BARRACKS,
+            MISSION_FREE_THE_RESISTANCE_LEADER,
+            MISSION_DESTROY_AA_GUNS
+        );
+        $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
+        
+        $missionADifficulty = null;
+        if (in_array($missionAInt, [0, 1, 2])) {
+            $missionADifficulty = $missionAInt;
+            $missionArray = [$zeroStarMissions, $oneStarMissions, $twoStarMissions][$missionADifficulty];
+            $missionAName = $missionArray[array_rand($missionArray)];
+        } else {
+            $missionAName = $allMissions[$missionAInt - 4];
+        }
+
+        if (in_array($missionBInt, [0, 1, 2, 3])) {
+            $missionArray = [$zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions][$missionBInt];
+            $missionBName = $missionArray[array_rand($missionArray)];
+        } else {
+            $missionBName = $allMissions[$missionBInt - 4];
+        }
+
+        while ($missionAName === $missionBName) {
+            $missionArray = [$zeroStarMissions, $oneStarMissions, $twoStarMissions][$missionADifficulty];
+            $missionAName = $missionArray[array_rand($missionArray)];
+        }
+
         $this->setSelectedMissions($missionAName, $missionBName);
 
         $missionNames = [$missionAName, $missionBName];

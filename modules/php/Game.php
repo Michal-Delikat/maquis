@@ -113,35 +113,10 @@ class Game extends \Bga\GameFramework\Table {
         $this->setupComponents($this->getDifficultyMode());
 
         // Configure missions
-        $missionA = (int) $this->tableOptions->get(101);
-        $missionB = (int) $this->tableOptions->get(102);
+        $missionAInt = (int) $this->tableOptions->get(101);
+        $missionBInt = (int) $this->tableOptions->get(102);
 
-        $zeroStarMissions = array(MISSION_MILICE_PARADE_DAY, MISSION_OFFICERS_MANSION);
-        $oneStarMissions = array(
-            MISSION_SABOTAGE, 
-            MISSION_UNDERGROUND_NEWSPAPER,
-            MISSION_INFILTRATION, 
-            MISSION_GERMAN_SHEPARDS,
-            MISSION_DOUBLE_AGENT
-        );
-        $twoStarMissions = array(
-            MISSION_AID_THE_SPY,
-            MISSION_ASSASSINATION,
-            MISSION_DESTROY_THE_TRAIN,
-            MISSION_LIBERATE_THE_TOWN,
-            MISSION_CODED_MESSAGES,
-            MISSION_TAKE_OUT_THE_BRIDGES,
-            MISSION_BOMB_FOR_THE_OFFICER
-        );
-        $threeStarMissions = array(
-            MISSION_MILICE_HQ,
-            MISSION_BOMB_THE_BARRACKS,
-            MISSION_FREE_THE_RESISTANCE_LEADER,
-            MISSION_DESTROY_AA_GUNS
-        );
-
-        $allMissions = array_merge($zeroStarMissions, $oneStarMissions, $twoStarMissions, $threeStarMissions);
-        $this->configureMissions($allMissions[$missionA], $allMissions[$missionB]);
+        $this->configureMissions($missionAInt, $missionBInt);
 
         // Activate first player once everything has been initialized and ready.
         $this->activeNextPlayer();
@@ -593,7 +568,8 @@ class Game extends \Bga\GameFramework\Table {
 
         $result["resources"] = $this->getAllResources();
         
-        $selectedMissions = $this->getSelectedMissions();    
+        $selectedMissions = $this->getSelectedMissions();
+
         $result["selectedMissions"] = [
             $selectedMissions[0]['location'] => $selectedMissions[0]['name'],
             $selectedMissions[1]['location'] => $selectedMissions[1]['name']
