@@ -398,7 +398,6 @@ html[data-theme="dark"] {
     left: 0;
 }
 
-
 :is(.maq_available-space, .maq_space-with-available-worker, .maq_space-with-worker-to-remove, .maq_space-with-milice, .maq_space-with-bridge-to-remove) {
     cursor: pointer;
     opacity: 0.5;
