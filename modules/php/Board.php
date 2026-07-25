@@ -112,6 +112,16 @@ trait Board {
             return $resistanceWorker['location'];
         }, $this->getResistanceWorkers());
     }
+
+    protected function getSpacesWithPlacedResistanceWorkers(): array {
+        $result = $this->getCollectionFromDb("
+            SELECT location 
+            FROM components
+            WHERE name LIKE 'resistance_%' AND state = 'placed';
+        ");
+
+        return array_keys($result);
+    }
     
     protected function getSpacesWithMilice(): array {
         return array_map(function ($milice) {

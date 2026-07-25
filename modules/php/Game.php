@@ -535,7 +535,7 @@ class Game extends \Bga\GameFramework\Table {
     }
 
     public function argRemoveWorker(): array {
-        return $this->getSpacesWithResistanceWorkers();
+        return $this->getSpacesWithPlacedResistanceWorkers();
     }
 
     public function argRemoveBridge(): array {
