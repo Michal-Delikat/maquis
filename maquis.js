@@ -47,7 +47,7 @@ function (dojo, declare) {
             let milice = Object.values(gamedatas.milice);
             let soldiers = Object.values(gamedatas.soldiers);
 
-            let player_id = gamedatas.currentPlayerID;
+            let player_id = gamedatas.gamestate.active_player;
             let playerScore = Object.values(gamedatas.players)[0].score;
 
             let darkLadyLocation = gamedatas.darkLadyLocation;
@@ -442,6 +442,8 @@ function (dojo, declare) {
             if (darkLadyLocation !== 'off_board') {
                 this.placeDarkLadyLocationReminder(darkLadyLocation);
             }
+
+            
 
             // Event Listeners
             dojo.query('.maq_background-space').connect('click', this, "onSpaceClicked");
