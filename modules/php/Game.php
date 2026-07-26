@@ -139,8 +139,10 @@ class Game extends \Bga\GameFramework\Table {
 
     public function stRoundEnd(): void {
         if ($this->getIsCryptographerPlaced() && $this->getRoundNumber() === 10) {
+            $this->setActiveSpace((int) $this->getSpaceIdWithCryptographer());
             $this->returnOrArrest((int) $this->getSpaceIdWithCryptographer());
             $this->completeMission(MISSION_CODED_MESSAGES);
+            $this->resetActiveSpace();
         }
 
         if ($this->getIsGameWon()) {
