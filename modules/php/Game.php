@@ -389,7 +389,8 @@ class Game extends \Bga\GameFramework\Table {
         if ($this->getIsMissionSelected(MISSION_LIBERATE_THE_TOWN) && ($this->getMorale() >= 4) && ($this->getResource(RESOURCE_WEAPON) >= 3)) {
             $this->completeMission(MISSION_LIBERATE_THE_TOWN);
         }
-        if ($this->getIsMissionSelected(MISSION_DESTROY_AA_GUNS) && (($this->countAAGunsPlaced() - (int) $this->checkMarkersInSpaces([MISSION_B_SPACE_A])) <= 2)) {
+        
+        if (($this->getIsMissionSelected(MISSION_DESTROY_AA_GUNS) && !$this->getIsMissionCompleted(MISSION_DESTROY_AA_GUNS)) && (($this->countAAGunsPlaced() - (int) $this->checkMarkersInSpaces([MISSION_B_SPACE_A])) <= 2)) {
             $this->completeMission(MISSION_DESTROY_AA_GUNS);
         } 
 
