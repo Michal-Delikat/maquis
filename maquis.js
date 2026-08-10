@@ -306,7 +306,7 @@ function (dojo, declare) {
                         break;
                 }
 
-                this.addTooltipHtml(`${mission}-description-section`, `${description}`);
+                this.addTooltipHtml(`${mission}-description-section`, description);
             });
 
             // MORALE TRACK
@@ -1153,10 +1153,12 @@ function (dojo, declare) {
                 <div id="dark-lady-location"></div>
             `, `space-${spaceID}`);
 
-            this.addTooltipHtml(`space-${spaceID}`, `Dark Lady's Location`);
+            this.bga.gameui.addTooltip(`space-${spaceID}`, _("Dark Lady's Location"), _("Place a worker here to meet Dark Lady"));
         },
 
         removeDarkLadyLocationReminder: function() {
+            this.bga.gameui.removeTooltip(document.getElementById('dark-lady-location').parentElement.id);
+
             dojo.destroy("dark-lady-location");
         },
 
