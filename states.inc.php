@@ -51,7 +51,7 @@ $machinestates = [
         "description" => '',
         "type" => "game",
         "action" => "stPlacePatrol",
-        "transitions" => ["placePatrol" => ST_GAME_PLACE_PATROL, "placeWorker" => ST_PLAYER_PLACE_WORKER, "activateWorker" => ST_PLAYER_ACTIVATE_WORKER]
+        "transitions" => ["gameEnd" => ST_PSEUDO_GAME_END, "placePatrol" => ST_GAME_PLACE_PATROL, "placeWorker" => ST_PLAYER_PLACE_WORKER, "activateWorker" => ST_PLAYER_ACTIVATE_WORKER]
     ],
     
     ST_PLAYER_ACTIVATE_WORKER => [

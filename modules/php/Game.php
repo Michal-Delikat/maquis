@@ -291,7 +291,9 @@ class Game extends \Bga\GameFramework\Table {
             }
         }
 
-        if ($this->getPlacedResistance() < $this->getActiveResistance()) {
+        if ($this->getActiveResistance() <= 0) {
+            $this->gamestate->nextState("gameEnd");
+        } else if ($this->getPlacedResistance() < $this->getActiveResistance()) {
             $this->gamestate->nextState("placeWorker");
         } else if ($this->getPlacedMilice() + $this->getPlacedSoldiers() < $this->getPatrolsToPlace()) {
             $this->gamestate->nextState("placePatrol");
