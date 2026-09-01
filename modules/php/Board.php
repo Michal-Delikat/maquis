@@ -55,6 +55,12 @@ trait Board {
         return $this->getIsMissionSelected(MISSION_BOMB_THE_BARRACKS) && !$this->getIsMissionCompleted(MISSION_BOMB_THE_BARRACKS) && $this->getWorkerIdByLocation(MISSION_B_SPACE_C);
     }
 
+    protected function isSpaceEmpty(int $spaceID): bool {
+        return !in_array($spaceID, $this->getSpacesWithResistanceWorkers()) && 
+               !in_array($spaceID, $this->getSpacesWithMilice()) && 
+               !in_array($spaceID, $this->getSpacesWithSoldiers());
+    }
+
     protected function getEmptySpaces(): array {
         $result = array_keys($this->getCollectionFromDB('
             SELECT space_id
@@ -84,7 +90,7 @@ trait Board {
                     !($space === RIGHT_BOTTOM_SPARE_ROOM && $this->getIsMissionSelected(MISSION_BOMB_FOR_THE_OFFICER) && !$this->getIsMissionCompleted(MISSION_BOMB_FOR_THE_OFFICER));
         });
     }
-
+    
     protected function getFields(): array {
         $result = (array) $this->getCollectionFromDb('
             SELECT space_id

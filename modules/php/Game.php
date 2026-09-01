@@ -187,6 +187,10 @@ class Game extends \Bga\GameFramework\Table {
     }
 
     public function actPlaceWorker(int $spaceID): void {
+        if (!$this->isSpaceEmpty($spaceID)) {
+            return;
+        }
+        
         $this->setActiveSpace($spaceID);
         $workerID = $this->getLastAvailableWorker();
         $this->updateComponent($workerID, (string) $spaceID, "placed");
