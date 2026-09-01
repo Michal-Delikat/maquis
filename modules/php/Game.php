@@ -1080,7 +1080,7 @@ class Game extends \Bga\GameFramework\Table {
                 case ACTION_GET_MONEY_FOR_FOOD:
                 case ACTION_GET_MONEY_FOR_MEDICINE:
                     if ($this->getMorale() === 1) {
-                        $action['action_note'] = clienttranslate('This will result in loosing the game');
+                        $action['action_note'] = clienttranslate('This will result in losing the game');
                     } 
                     break;
                 case ACTION_PAY_FOR_MORALE:
