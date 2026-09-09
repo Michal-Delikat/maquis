@@ -20,6 +20,7 @@ const ST_PLAYER_REMOVE_WORKER = 9;
 const ST_PLAYER_REMOVE_BRIDGE = 10;
 const ST_PLAYER_USE_FIXER = 11;
 const ST_PLAYER_PLACE_FAKE_ID = 12;
+const ST_PLAYER_SHOOT_MILICE_EXTRA = 13;
 
 const ST_GAME_PLACE_PATROL = 60;
 const ST_GAME_NEXT_WORKER = 63;
@@ -139,6 +140,8 @@ const ACTION_KILL_THE_RESISTANCE_LEADER = 'kill_the_resistance_leader';
 const ACTION_FREE_THE_RESISTANCE_LEADER = 'free_the_resistance_leader';
 const ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES = 'destroy_aa_gun_with_explosives';
 const ACTION_DESTROY_AA_GUN_WITH_WEAPON = 'destroy_aa_gun_with_weapon';
+
+const ACTION_BUY_AND_SHOOT = 'buy_and_shoot';
 
 const RESOURCE_FOOD = 'food';
 const RESOURCE_MEDICINE = 'medicine';

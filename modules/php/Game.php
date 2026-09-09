@@ -122,6 +122,53 @@ class Game extends \Bga\GameFramework\Table {
         $this->activeNextPlayer();
     }
 
+    protected function getAllDatas() {
+        $result = [];
+
+        $result["currentPlayerID"] = (int) $this->getCurrentPlayerId();
+
+        $result["players"] = $this->getCollectionFromDb(
+            "SELECT `player_id` `id`, `player_score` `score` FROM `player`"
+        );
+
+        $result["round"] = $this->getRoundNumber();
+        $result["morale"] = $this->getMorale();
+        $result["activeSoldiers"] = $this->getActiveSoldiers();
+
+        $result["board"] = $this->getBoard();
+        $result["placedTokens"] = $this->getPlacedTokens();
+        $result["placedRooms"] = $this->getPlacedRooms();
+        $result["spacesWithMarkers"] = $this->getSpacesWithMarkers();
+
+        $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');
+
+        $result["resources"] = $this->getAllResources();
+        
+        $selectedMissions = $this->getSelectedMissions();
+
+        $result["selectedMissions"] = [
+            $selectedMissions[0]['location'] => $selectedMissions[0]['name'],
+            $selectedMissions[1]['location'] => $selectedMissions[1]['name']
+        ];
+        $result["completedMissions"] = $this->getCompletedMissions();
+        
+        $result["threeStarMissionSelected"] = $this->getIsThreeStarMissionSelected();
+
+        $result["rooms"] = $this->getRooms();
+        
+        $result["placedResistance"] = $this->getPlacedResistance();
+        $result["activeResistance"] = $this->getActiveResistance();
+        $result["resistanceToRecruit"] = $this->getResistanceToRecruit();
+
+        $result["resistanceWorkers"] = $this->getResistanceWorkers();
+        $result["milice"] = $this->getMilice();
+        $result["soldiers"] = $this->getSoldiers();
+
+        $result["darkLadyLocation"] = $this->getDarkLadyLocation();
+
+        return $result;
+    }
+
     public function stRoundStart(): void {
         $this->setShotToday(false);
         $this->setSoldiersDistracted(false);
@@ -327,16 +374,18 @@ class Game extends \Bga\GameFramework\Table {
         if ($escapeStatus["fakeIdUsed"]) {
             $this->removeFakeId($activeSpace);
         }
+        if ($actionName === ACTION_BUY_AND_SHOOT) {
+            $this->spendResources(RESOURCE_MONEY);
+            $this->gainResources(RESOURCE_WEAPON);
 
-        if ($actionName === ACTION_GET_SPARE_ROOM) {
+            $this->gamestate->nextState("shootMilice");
+        } else if ($actionName === ACTION_GET_SPARE_ROOM) {
             $this->gamestate->nextstate("selectRoom");    
         } else if ($actionName === ACTION_INSERT_MOLE) {
             $this->saveAction(ACTION_INSERT_MOLE);
-
             $this->gamestate->nextState("nextWorker");
         } else if ($actionName === ACTION_TRAIN_A_CRYPTOGRAPHER) {
             $this->saveAction(ACTION_TRAIN_A_CRYPTOGRAPHER);
-
             $this->gamestate->nextState("nextWorker");
         } else if ($actionName === ACTION_COMPLETE_DOUBLE_AGENT_MISSION) {
             $this->setDarkLadyLocation('off_board', 'NaN');
@@ -434,6 +483,40 @@ class Game extends \Bga\GameFramework\Table {
             $this->completeMission(MISSION_ASSASSINATION);
             $this->gamestate->nextState("gameEnd");
         } else {
+            $this->gamestate->nextState("nextWorker");
+        }
+    }
+
+    public function actShootMiliceExtra(int $spaceID): void {
+        $morale = $this->getMorale();
+        $miliceID = $this->getMiliceIdByLocation((string) $spaceID);
+
+        $this->updateComponent($miliceID, 'off_board', 'NaN');
+
+        $this->notify->all("patrolRemoved", clienttranslate('Milice patrol at ${spaceName} shot. Active milice: ${activeMilice}'), array(
+            "patrolID" => $miliceID,
+            "spaceName" => $this->getSpaceNameById($spaceID),
+            "activeMilice" => $this->getActiveMilice()
+        ));
+
+        $this->spendResources(RESOURCE_WEAPON, 1);
+        $this->setShotToday(true);
+        $this->setActiveSoldiers($this->getActiveSoldiers() + 1);
+        $this->updateComponent($this->getNextInactiveSoldier(), 'barracks', 'active');
+        $this->setMorale($morale - 1);
+        if ($morale - 1 <= 0) {
+            $this->gamestate->nextState("gameEnd");
+        } else if ($this->getIsMissionSelected(MISSION_ASSASSINATION) && (($this->getPlacedMilice()) <= 0) && ($this->getPlayerScore() === 1)) {
+            $this->completeMission(MISSION_ASSASSINATION);
+            $this->gamestate->nextState("gameEnd");
+        } else {
+            $escapeFound = $this->checkEscapeRoute()['escapeFound'];
+
+            if ($escapeFound) {
+                $this->returnWorker($this->getActiveSpace());
+            } else {
+                $this->arrestWorker($this->getActiveSpace());
+            }
             $this->gamestate->nextState("nextWorker");
         }
     }
@@ -549,57 +632,6 @@ class Game extends \Bga\GameFramework\Table {
 
     public function argRemoveBridge(): array {
         return $this->getBridgesWithMarkers();
-    }
-
-    protected function getAllDatas() {
-        $result = [];
-
-        // TODO: REMOVE AFTER IMPLEMENTING DIFFICULTY MODES
-        $result["difficultyMode"] = $this->getDifficultyMode();
-        $result["isNormal"] = $this->getDifficultyMode() === NORMAL;
-
-        $result["currentPlayerID"] = (int) $this->getCurrentPlayerId();
-
-        $result["players"] = $this->getCollectionFromDb(
-            "SELECT `player_id` `id`, `player_score` `score` FROM `player`"
-        );
-
-        $result["round"] = $this->getRoundNumber();
-        $result["morale"] = $this->getMorale();
-        $result["activeSoldiers"] = $this->getActiveSoldiers();
-
-        $result["board"] = $this->getBoard();
-        $result["placedTokens"] = $this->getPlacedTokens();
-        $result["placedRooms"] = $this->getPlacedRooms();
-        $result["spacesWithMarkers"] = $this->getSpacesWithMarkers();
-
-        $result["discardedPatrolCards"] = $this->patrol_cards->getCardsInLocation('discard');
-
-        $result["resources"] = $this->getAllResources();
-        
-        $selectedMissions = $this->getSelectedMissions();
-
-        $result["selectedMissions"] = [
-            $selectedMissions[0]['location'] => $selectedMissions[0]['name'],
-            $selectedMissions[1]['location'] => $selectedMissions[1]['name']
-        ];
-        $result["completedMissions"] = $this->getCompletedMissions();
-        
-        $result["threeStarMissionSelected"] = $this->getIsThreeStarMissionSelected();
-
-        $result["rooms"] = $this->getRooms();
-        
-        $result["placedResistance"] = $this->getPlacedResistance();
-        $result["activeResistance"] = $this->getActiveResistance();
-        $result["resistanceToRecruit"] = $this->getResistanceToRecruit();
-
-        $result["resistanceWorkers"] = $this->getResistanceWorkers();
-        $result["milice"] = $this->getMilice();
-        $result["soldiers"] = $this->getSoldiers();
-
-        $result["darkLadyLocation"] = $this->getDarkLadyLocation();
-
-        return $result;
     }
 
     protected function saveAction(string $actionName): void {
@@ -901,18 +933,22 @@ class Game extends \Bga\GameFramework\Table {
     } 
 
     protected function getPossibleActions(int $spaceID): array {
-        $willNotGetArrested = $this->checkEscapeRoute()["escapeFound"];
-
         $result = (array) ($this->getCollectionFromDb("
             SELECT action_name
             FROM board_action 
             WHERE space_id = $spaceID;
         "));
 
-        if (!$willNotGetArrested) {
-            $result = array_filter($result, function($action) {
-                return $this->getIsSafe($action["action_name"]);
-            });
+        $escapeFound = $this->checkEscapeRoute()["escapeFound"];
+
+        if (!$escapeFound) {
+            if ($spaceID === FENCE && $this->getResource(RESOURCE_MONEY) > 0 && $this->getShotToday() === false) {
+                $result = [['action_name' => ACTION_BUY_AND_SHOOT]];
+            } else {
+                $result = array_filter($result, function($action) {
+                    return $this->getIsSafe($action["action_name"]);
+                });
+            }
         } 
 
         $result = array_filter($result, function($action) use ($spaceID) {
@@ -1051,6 +1087,8 @@ class Game extends \Bga\GameFramework\Table {
             ACTION_FREE_THE_RESISTANCE_LEADER => clienttranslate('Free the resistance leader and complete the mission'),
             ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES => clienttranslate('Destroy AA gun with explosives'),
             ACTION_DESTROY_AA_GUN_WITH_WEAPON => clienttranslate('Destroy AA gun with weapon'),
+
+            ACTION_BUY_AND_SHOOT => clienttranslate('Escape blocked: buy weapon and shoot milice')
         ];
 
         foreach($result as &$action) {

@@ -78,6 +78,17 @@ $machinestates = [
         "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER, "gameEnd" => ST_PSEUDO_GAME_END]
     ],
 
+    ST_PLAYER_SHOOT_MILICE_EXTRA => [
+        "name" => "shootMiliceExtra",
+        "descriptionmyturn" => clienttranslate('${you} must shoot a milice'),
+        "type" => "activeplayer",
+        "args" => "argShootMilice",
+        "possibleactions" => [
+            "actShootMiliceExtra"
+        ],
+        "transitions" => ["nextWorker" => ST_GAME_NEXT_WORKER, "gameEnd" => ST_PSEUDO_GAME_END]
+    ],
+
     ST_PLAYER_TAKE_ACTION => [
         "name" => "takeAction",
         "descriptionmyturn" => clienttranslate('${you} must take an action'),
@@ -89,6 +100,7 @@ $machinestates = [
         ],
         "transitions" => [
             "nextWorker" => ST_GAME_NEXT_WORKER, 
+            "shootMilice" => ST_PLAYER_SHOOT_MILICE_EXTRA,
             "airdrop" => ST_PLAYER_AIRDROP_SELECT_FIELD, 
             "selectRoom" => ST_PLAYER_SELECT_ROOM,
             "removeWorker" => ST_PLAYER_REMOVE_WORKER,

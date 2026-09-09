@@ -443,11 +443,8 @@ function (dojo, declare) {
                 this.placeDarkLadyLocationReminder(darkLadyLocation);
             }
 
-            
-
             // Event Listeners
             dojo.query('.maq_background-space').connect('click', this, "onSpaceClicked");
-
             dojo.query('#patrol-discard').connect('click', this, "onPatrolDiscardClicked");
  
             // Setup game notifications to handle (see "setupNotifications" method below)
@@ -486,11 +483,12 @@ function (dojo, declare) {
                     if (activeSpace) dojo.addClass(activeSpace, 'maq_active-space');
                     break;
                 case 'shootMilice':
+                case 'shootMiliceExtra':
                     const spacesWithMilice = Object.values(args.args.spacesWithMilice);
 
                     spacesWithMilice.forEach(spaceID => {
                         let space = dojo.byId(`space-${spaceID}-background-space`);
-                        if (space) dojo.addClass(space, 'maq_space-with-milice');
+                        if (space) dojo.addClass(space, stateName === 'shootMilice' ? 'maq_space-with-milice' : 'maq_space-with-milice-extra' );
                     });
                     break;
                 case 'removeWorker':
@@ -532,6 +530,10 @@ function (dojo, declare) {
 
                 case 'shootMilice':
                     dojo.query('.maq_space-with-milice').removeClass('maq_space-with-milice');
+                    break;
+                
+                case 'shootMiliceExtra':
+                    dojo.query('.maq_space-with-milice-extra').removeClass('maq_space-with-milice-extra');
                     break;
 
                 case 'removeWorker':
@@ -620,6 +622,11 @@ function (dojo, declare) {
             }
             else if (evt.currentTarget.classList.contains('maq_space-with-milice')) {
                 this.bgaPerformAction("actShootMilice", {
+                    spaceID: spaceID
+                });
+            }
+            else if (evt.currentTarget.classList.contains('maq_space-with-milice-extra')) {
+                this.bgaPerformAction("actShootMiliceExtra", {
                     spaceID: spaceID
                 });
             }

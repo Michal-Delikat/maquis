@@ -398,7 +398,7 @@ html[data-theme="dark"] {
     left: 0;
 }
 
-:is(.maq_available-space, .maq_space-with-available-worker, .maq_space-with-worker-to-remove, .maq_space-with-milice, .maq_space-with-bridge-to-remove) {
+:is(.maq_available-space, .maq_space-with-available-worker, .maq_space-with-worker-to-remove, .maq_space-with-milice, .maq_space-with-milice-extra, .maq_space-with-bridge-to-remove) {
     cursor: pointer;
     opacity: 0.5;
 }
@@ -424,11 +424,11 @@ html[data-theme="dark"] {
     opacity: 0.5;
 }
 
-.maq_space-with-milice {
+.maq_space-with-milice, .maq_space-with-milice-extra {
     background-color: #FAECE7;
 }
 
-.maq_space-with-milice:hover {
+.maq_space-with-milice:hover, .maq_space-with-milice-extra:hover {
     background-color: #F5C4B3;
 }
 
