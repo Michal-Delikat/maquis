@@ -187,13 +187,6 @@ class Game extends \Bga\GameFramework\Table {
     }
 
     public function stRoundEnd(): void {
-        if ($this->getIsCryptographerPlaced() && $this->getRoundNumber() === 10) {
-            $this->setActiveSpace((int) $this->getSpaceIdWithCryptographer());
-            $this->returnOrArrest((int) $this->getSpaceIdWithCryptographer());
-            $this->completeMission(MISSION_CODED_MESSAGES);
-            $this->resetActiveSpace();
-        }
-
         if ($this->getIsGameWon()) {
             $this->gamestate->nextState("gameEnd");
         }
@@ -593,7 +586,7 @@ class Game extends \Bga\GameFramework\Table {
 
     public function argActivateWorker(): array {
         $resistanceWorkersLocations = $this->getSpacesWithResistanceWorkers();
-        if ($this->getIsMoleInserted() || $this->getIsCryptographerPlaced()) {
+        if ($this->getIsMoleInserted() || ($this->getIsCryptographerPlaced() && $this->getRoundNumber() !== 11)) {
             $spaceIdWithMole = $this->getSpaceIdWithMole();
             $spaceIdWithCryptographer = $this->getSpaceIdWithCryptographer();
 
@@ -786,6 +779,7 @@ class Game extends \Bga\GameFramework\Table {
             ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate('Deliver Money and 2 Food; Complete mission'),
             ACTION_DELIVER_3_EXPLOSIVES => clienttranslate('Deliver 3 Explosives and complete mission'),
             ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate('Train a Cryptographer'),
+            ACTION_COMPLETE_CODED_MESSAGES_MISSION => clienttranslate('Complete Coded Messages mission'),
             ACTION_PLANT_2_EXPLOSIVES => clienttranslate('Plant 2 Explosives at a bridge'),
             ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate('Deliver Explosives and Weapon; Complete the mission'),
 
@@ -1035,6 +1029,12 @@ class Game extends \Bga\GameFramework\Table {
                 $activeSpace = (string) $this->getActiveSpace();
                 $cryptographerID = $this->getWorkerIdByLocation($activeSpace);
                 $this->updateComponent($cryptographerID, $activeSpace, 'cryptographer');
+
+                $this->addSpaceAction((int) $activeSpace, ACTION_COMPLETE_CODED_MESSAGES_MISSION);
+                break;
+            case ACTION_COMPLETE_CODED_MESSAGES_MISSION:
+                $this->returnWorker($this->getActiveSpace());
+                $this->completeMission(MISSION_CODED_MESSAGES);
                 break;
             case ACTION_PLANT_2_EXPLOSIVES:
                 $this->spendResources(RESOURCE_EXPLOSIVES, 2);
