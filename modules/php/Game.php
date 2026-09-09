@@ -169,6 +169,8 @@ class Game extends \Bga\GameFramework\Table {
         return $result;
     }
 
+    // GAME ACTIONS
+
     public function stRoundStart(): void {
         $this->setShotToday(false);
         $this->setSoldiersDistracted(false);
@@ -231,60 +233,6 @@ class Game extends \Bga\GameFramework\Table {
         }
 
         $this->giveExtraTime($this->getActivePlayerId());
-    }
-
-    public function actPlaceWorker(int $spaceID): void {
-        if (!$this->isSpaceEmpty($spaceID)) {
-            return;
-        }
-        
-        $this->setActiveSpace($spaceID);
-        $workerID = $this->getLastAvailableWorker();
-        $this->updateComponent($workerID, (string) $spaceID, "placed");
-
-        $this->notify->all("workerMoved", clienttranslate('Worker placed at ${spaceName}'), array(
-            "workerID" => $workerID,
-            "spaceID" => $spaceID,
-            "spaceName" => $this->getSpaceNameById($spaceID)
-        ));
-
-        $doubleAgentSpaces = [RUE_BARADAT, PONT_DU_NORD, DOCTOR, POOR_DISTRICT, RADIO_A, PONT_LEVEQUE];
-        if ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && in_array($spaceID, $doubleAgentSpaces) && $this->countMarkers($spaceID) <= 0) {
-            $this->placeMarker($spaceID);
-
-            if ($this->checkMarkersInSpaces($doubleAgentSpaces)) {
-                $cardID = $this->drawPatrolCard();
-                $card = $this->PATROL_CARD_ITEMS[$cardID - 1];
-                $doubleAgentLocation = $card['space_a'];
-                $this->addSpaceAction($doubleAgentLocation, ACTION_COMPLETE_DOUBLE_AGENT_MISSION);
-                $this->setDarkLadyLocation((string) $doubleAgentLocation, 'placed');
-
-                $this->notify->all("darkLadyFound", clienttranslate('Dark Lady found at ${locationName}'), array(
-                    "cardId" => $cardID,
-                    "location" => $doubleAgentLocation,
-                    "locationName" => $this->getSpaceNameById($doubleAgentLocation)
-                ));
-            }
-        }
-
-        if ($this->getResource(RESOURCE_FAKE_ID) && !in_array($spaceID, [LEFT_FIELD, RIGHT_FIELD, CAFE])) {
-            $this->gamestate->nextState("placeFakeId");
-        } else {
-            $this->gamestate->nextState("placePatrol");
-        }
-    }
-
-    public function actPlaceFakeId(): void {
-        $activeSpace = $this->getActiveSpace();
-
-        $this->spendResources(RESOURCE_FAKE_ID);
-        $this->placeTokens($activeSpace, RESOURCE_FAKE_ID);
-
-        $this->gamestate->nextState("placePatrol");
-    }
-
-    public function actDontPlaceFakeId(): void {
-        $this->gamestate->nextState("placePatrol");
     }
 
     public function stPlacePatrol(): void {
@@ -351,6 +299,90 @@ class Game extends \Bga\GameFramework\Table {
         } else {
             $this->gamestate->nextState("activateWorker");
         }
+    }
+
+    public function stNextWorker() {
+        $this->resetActiveSpace();
+
+        if ($this->getPlacedResistance() > 0) {
+            $this->gamestate->nextState("activateWorker");
+        } else if ($this->getExplosivesAtBridgePlanted()) {
+            $this->gamestate->nextState("removeBridge");
+        } else {
+            $this->gamestate->nextState("roundEnd");
+        }
+    }
+
+    public function stPseudoGameEnd(): void {
+        if ($this->getIsMissionSelected(MISSION_LIBERATE_THE_TOWN) && ($this->getMorale() >= 4) && ($this->getResource(RESOURCE_WEAPON) >= 3)) {
+            $this->completeMission(MISSION_LIBERATE_THE_TOWN);
+        }
+        
+        if (($this->getIsMissionSelected(MISSION_DESTROY_AA_GUNS) && !$this->getIsMissionCompleted(MISSION_DESTROY_AA_GUNS)) && (($this->countAAGunsPlaced() - (int) $this->checkMarkersInSpaces([MISSION_B_SPACE_A])) <= 2)) {
+            $this->completeMission(MISSION_DESTROY_AA_GUNS);
+        } 
+
+        if (!$this->getIsGameWon()) {
+            $this->setPlayerScore(0);
+        }
+
+        $this->gamestate->nextState("gameEnd");
+    }
+
+    // PLAYER ACTIONS
+
+    public function actPlaceWorker(int $spaceID): void {
+        if (!$this->isSpaceEmpty($spaceID)) {
+            return;
+        }
+        
+        $this->setActiveSpace($spaceID);
+        $workerID = $this->getLastAvailableWorker();
+        $this->updateComponent($workerID, (string) $spaceID, "placed");
+
+        $this->notify->all("workerMoved", clienttranslate('Worker placed at ${spaceName}'), array(
+            "workerID" => $workerID,
+            "spaceID" => $spaceID,
+            "spaceName" => $this->getSpaceNameById($spaceID)
+        ));
+
+        $doubleAgentSpaces = [RUE_BARADAT, PONT_DU_NORD, DOCTOR, POOR_DISTRICT, RADIO_A, PONT_LEVEQUE];
+        if ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && in_array($spaceID, $doubleAgentSpaces) && $this->countMarkers($spaceID) <= 0) {
+            $this->placeMarker($spaceID);
+
+            if ($this->checkMarkersInSpaces($doubleAgentSpaces)) {
+                $cardID = $this->drawPatrolCard();
+                $card = $this->PATROL_CARD_ITEMS[$cardID - 1];
+                $doubleAgentLocation = $card['space_a'];
+                $this->addSpaceAction($doubleAgentLocation, ACTION_COMPLETE_DOUBLE_AGENT_MISSION);
+                $this->setDarkLadyLocation((string) $doubleAgentLocation, 'placed');
+
+                $this->notify->all("darkLadyFound", clienttranslate('Dark Lady found at ${locationName}'), array(
+                    "cardId" => $cardID,
+                    "location" => $doubleAgentLocation,
+                    "locationName" => $this->getSpaceNameById($doubleAgentLocation)
+                ));
+            }
+        }
+
+        if ($this->getResource(RESOURCE_FAKE_ID) && !in_array($spaceID, [LEFT_FIELD, RIGHT_FIELD, CAFE])) {
+            $this->gamestate->nextState("placeFakeId");
+        } else {
+            $this->gamestate->nextState("placePatrol");
+        }
+    }
+
+    public function actPlaceFakeId(): void {
+        $activeSpace = $this->getActiveSpace();
+
+        $this->spendResources(RESOURCE_FAKE_ID);
+        $this->placeTokens($activeSpace, RESOURCE_FAKE_ID);
+
+        $this->gamestate->nextState("placePatrol");
+    }
+
+    public function actDontPlaceFakeId(): void {
+        $this->gamestate->nextState("placePatrol");
     }
 
     public function actActivateWorker(int $spaceID): void {
@@ -426,34 +458,6 @@ class Game extends \Bga\GameFramework\Table {
 
             $this->gamestate->nextState("nextWorker");
         }      
-    }
-
-    public function stNextWorker() {
-        $this->resetActiveSpace();
-
-        if ($this->getPlacedResistance() > 0) {
-            $this->gamestate->nextState("activateWorker");
-        } else if ($this->getExplosivesAtBridgePlanted()) {
-            $this->gamestate->nextState("removeBridge");
-        } else {
-            $this->gamestate->nextState("roundEnd");
-        }
-    }
-
-    public function stPseudoGameEnd(): void {
-        if ($this->getIsMissionSelected(MISSION_LIBERATE_THE_TOWN) && ($this->getMorale() >= 4) && ($this->getResource(RESOURCE_WEAPON) >= 3)) {
-            $this->completeMission(MISSION_LIBERATE_THE_TOWN);
-        }
-        
-        if (($this->getIsMissionSelected(MISSION_DESTROY_AA_GUNS) && !$this->getIsMissionCompleted(MISSION_DESTROY_AA_GUNS)) && (($this->countAAGunsPlaced() - (int) $this->checkMarkersInSpaces([MISSION_B_SPACE_A])) <= 2)) {
-            $this->completeMission(MISSION_DESTROY_AA_GUNS);
-        } 
-
-        if (!$this->getIsGameWon()) {
-            $this->setPlayerScore(0);
-        }
-
-        $this->gamestate->nextState("gameEnd");
     }
 
     public function actDeclareShootingMilice(): void {
@@ -632,6 +636,208 @@ class Game extends \Bga\GameFramework\Table {
 
     public function argRemoveBridge(): array {
         return $this->getBridgesWithMarkers();
+    }
+
+    // ACTIONS
+
+    protected function getPossibleActions(int $spaceID): array {
+        $possibleActions = (array) ($this->getCollectionFromDb("
+            SELECT action_name
+            FROM board_action 
+            WHERE space_id = $spaceID;
+        "));
+
+        $escapeFound = $this->checkEscapeRoute()["escapeFound"];
+
+        if (!$escapeFound) {
+            $possibleActions = array_filter($possibleActions, function($action) {
+                return $this->getIsSafe($action["action_name"]);
+            });
+
+            if ($spaceID === FENCE && $this->getResource(RESOURCE_MONEY) > 0 && $this->getShotToday() === false) {
+                $possibleActions[] = ['action_name' => ACTION_BUY_AND_SHOOT];
+            }
+        } 
+
+        $possibleActions = array_filter($possibleActions, function($action) use ($spaceID) {
+            switch ($action['action_name']) {
+                case ACTION_BUY_WEAPON:
+                    return $this->getResource(RESOURCE_MONEY) > 0;
+                case ACTION_AIRDROP_FOOD:
+                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_FOOD);
+                case ACTION_AIRDROP_MONEY:
+                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_MONEY);
+                case ACTION_AIRDROP_WEAPON:
+                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_WEAPON);
+                case ACTION_PAY_FOR_MORALE:
+                    return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResource(RESOURCE_MEDICINE) > 0;
+                case ACTION_GET_MONEY_FOR_FOOD:
+                    return $this->getResource(RESOURCE_FOOD) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
+                case ACTION_GET_MONEY_FOR_MEDICINE:
+                    return $this->getResource(RESOURCE_MEDICINE) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
+                case ACTION_WRITE_GRAFFITI:
+                    return (($this->countMarkers($spaceID) === 0) || (($this->countMarkers($spaceID) === 1) && $this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT))) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
+                case ACTION_COMPLETE_OFFICERS_MANSION_MISSION:
+                    return ((!$this->getIsMissionSelected(MISSION_DOUBLE_AGENT) || $this->getIsMissionCompleted(MISSION_DOUBLE_AGENT)) && $this->countMarkersInSpaces([RUE_BARADAT, PONT_DU_NORD, PONT_LEVEQUE]) == 3) || ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && $this->countMarkersInSpaces([RUE_BARADAT, PONT_DU_NORD, PONT_LEVEQUE]) == 6) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
+                case ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION:
+                    return $this->getResource(RESOURCE_WEAPON) > 0 && $this->isParadeDay();
+                case ACTION_GET_WORKER:
+                    return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResistanceToRecruit() > 0;
+                case ACTION_COLLECT_ITEMS:
+                    return $this->getTokenQuantityInSpace($spaceID) && ($this->getTokenTypeInSpace($spaceID) !== TOKEN_AA_GUN);
+                case ACTION_GET_SPARE_ROOM:
+                    return !$this->getIsRoomPlaced($spaceID) && $this->getResource(RESOURCE_MONEY) >= 2;
+                case ACTION_BUY_EXPLOSIVES:
+                    return $this->getResource(RESOURCE_MEDICINE) >= 1;
+                case ACTION_SABOTAGE_FACTORY:
+                    return $this->getResource(RESOURCE_EXPLOSIVES) >= 1;
+                case ACTION_DELIVER_2_INTEL:
+                    return $this->getResource(RESOURCE_INTEL) >= 2;
+                case ACTION_INSERT_MOLE:
+                    return $this->getResource(RESOURCE_INTEL) >= 2;
+                case ACTION_POISON_SHEPARDS:
+                    return $this->getResource(RESOURCE_FOOD) >= 1 && $this->getResource(RESOURCE_MEDICINE) >= 1;
+                case ACTION_COMPLETE_DOUBLE_AGENT_MISSION:
+                    return !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT);
+                case ACTION_RECOVER_MOLE:
+                    return ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getResource(RESOURCE_EXPLOSIVES) >= 1);
+                case ACTION_DELIVER_2_WEAPONS:
+                    return ($this->getResource(RESOURCE_WEAPON) >= 2);
+                case ACTION_DELIVER_MONEY_AND_2_FOOD:
+                    return ($this->getResource(RESOURCE_FOOD) >= 2) && ($this->getResource(RESOURCE_MONEY) >= 1);
+                case ACTION_DELIVER_3_EXPLOSIVES:
+                    return ($this->getResource(RESOURCE_EXPLOSIVES) >= 3) && (in_array($this->getRoundNumber(), [6, 7, 8, 9]));
+                case ACTION_TRAIN_A_CRYPTOGRAPHER:
+                    return ($this->getResource(RESOURCE_FOOD) >= 1) && ($this->getResource(RESOURCE_MONEY) >= 1) && ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getRoundNumber() <= 6);
+                case ACTION_PLANT_2_EXPLOSIVES:
+                    return ($this->getResource(RESOURCE_EXPLOSIVES) >= 2) && !$this->getIsMissionCompleted(MISSION_TAKE_OUT_THE_BRIDGES);
+                case ACTION_DELIVER_EXPLOSIVES_AND_WEAPON:
+                    return $this->getMorale() >= 5 && $this->getResource(RESOURCE_EXPLOSIVES) >= 1 && $this->getResource(RESOURCE_WEAPON) >= 1;
+                case ACTION_DELIVER_2_POISON:
+                    return $this->getResource(RESOURCE_POISON) >= 2;
+                case ACTION_BUY_POISON:
+                    return $this->getResource(RESOURCE_MEDICINE) >= 2;
+                case ACTION_FORGE_FAKE_ID:
+                    return $this->getResource(RESOURCE_MONEY) >= 2 && $this->getResource(RESOURCE_INTEL);
+                case ACTION_DISCOVER_THE_PLANS:
+                    return !$this->getIsMissionCompleted(MISSION_MILICE_HQ) && !$this->checkMarkersInSpaces([MISSION_B_SPACE_A]);
+                case ACTION_BOMB_THE_BARRACKS:
+                    return $this->getResource(RESOURCE_EXPLOSIVES) >= 2 && $this->getResource(RESOURCE_FAKE_ID);
+                case ACTION_DISTRACT_THE_SOLDIERS:
+                    return $this->getResource(RESOURCE_WEAPON) && !$this->getSoldiersDistracted() && !$this->getIsMissionCompleted(MISSION_BOMB_THE_BARRACKS);
+                case ACTION_BRIBE_THE_CLERK:
+                    return $this->getRoundNumber() <= 5 && $this->getResource(RESOURCE_MONEY) && $this->getResource(RESOURCE_INTEL);
+                case ACTION_KILL_THE_RESISTANCE_LEADER:
+                    return $this->getRoundNumber() <= 9 && $this->getResource(RESOURCE_POISON);
+                case ACTION_FREE_THE_RESISTANCE_LEADER:
+                    return $this->getRoundNumber() === 10 && $this->getResource(RESOURCE_FAKE_ID) && $this->getResource(RESOURCE_WEAPON) >= 2 && $this->getResource(RESOURCE_MEDICINE);
+                case ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES:
+                    return $this->getResource(RESOURCE_EXPLOSIVES) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === MISSION_B_SPACE_A);
+                case ACTION_DESTROY_AA_GUN_WITH_WEAPON:
+                    return $this->getResource(RESOURCE_WEAPON) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === MISSION_B_SPACE_A);
+                case ACTION_USE_FIXER:
+                    return $this->getResource(RESOURCE_MONEY);
+                default:
+                    return true;
+            }
+        });
+
+        $actionDescriptions = [
+            ACTION_GET_FOOD => clienttranslate('Get food'),
+            ACTION_GET_MEDICINE => clienttranslate('Get medicine'),
+            ACTION_GET_MONEY_FOR_FOOD => clienttranslate('Get money for food'),
+            ACTION_GET_MONEY_FOR_MEDICINE => clienttranslate('Get money for medicine'),
+            ACTION_PAY_FOR_MORALE => clienttranslate('Increase morale'),
+            ACTION_GET_INTEL => clienttranslate('Get intel'),
+            ACTION_BUY_WEAPON => clienttranslate('Get weapon'),
+            ACTION_GET_WORKER => clienttranslate('Recruit worker'),
+            ACTION_COLLECT_ITEMS => clienttranslate('Collect items'),
+            ACTION_GET_SPARE_ROOM => clienttranslate('Get spare room'),
+            ACTION_AIRDROP_FOOD => clienttranslate('Airdrop Food'),
+            ACTION_AIRDROP_MONEY => clienttranslate('Airdrop Money'),
+            ACTION_AIRDROP_WEAPON => clienttranslate('Airdrop Weapon'),
+            
+            ACTION_GET_MONEY => clienttranslate('Get money'),
+            ACTION_BUY_EXPLOSIVES => clienttranslate('Get explosives'),
+            ACTION_GET_3_FOOD => clienttranslate('Get 3 food'),
+            ACTION_GET_3_MEDICINE => clienttranslate('Get 3 medicine'),
+            ACTION_INCREASE_MORALE => clienttranslate('Increase morale'),
+            ACTION_BUY_POISON => clienttranslate('Buy poison'),
+            ACTION_FORGE_FAKE_ID => clienttranslate('Forge fake ID'),
+            ACTION_USE_FIXER => clienttranslate('Use fixer'),
+
+            ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION => clienttranslate('Complete Milice Parade Day mission'),
+            ACTION_WRITE_GRAFFITI => clienttranslate('Write graffiti'),
+            ACTION_COMPLETE_OFFICERS_MANSION_MISSION => clienttranslate('Complete Officer\'s Mansion mission'),
+
+            ACTION_INFILTRATE_FACTORY => clienttranslate('Infiltrate factory'),
+            ACTION_SABOTAGE_FACTORY => clienttranslate('Sabotage factory and complete the mission'),
+            ACTION_DELIVER_2_INTEL => clienttranslate('Deliver 2 intel'),
+            ACTION_INSERT_MOLE => clienttranslate('Insert mole'),
+            ACTION_RECOVER_MOLE => clienttranslate('Recover mole and complete the mission'),
+            ACTION_POISON_SHEPARDS => clienttranslate('Poison German Shepards'),
+            ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate('Meet Double Agent and complete the mission'),
+
+            ACTION_DELIVER_2_WEAPONS => clienttranslate('Deliver 2 Weapons'),
+            ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate('Deliver Money and 2 Food; Complete mission'),
+            ACTION_DELIVER_3_EXPLOSIVES => clienttranslate('Deliver 3 Explosives and complete mission'),
+            ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate('Train a Cryptographer'),
+            ACTION_PLANT_2_EXPLOSIVES => clienttranslate('Plant 2 Explosives at a bridge'),
+            ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate('Deliver Explosives and Weapon; Complete the mission'),
+
+            ACTION_DISCOVER_THE_PLANS => clienttranslate('Discover the Plans'),
+            ACTION_DELIVER_2_POISON => clienttranslate('Deliver 2 Poison and complete the mission'),
+            ACTION_RECON_THE_BARRACKS => clienttranslate('Recon the Barracks'),
+            ACTION_DISTRACT_THE_SOLDIERS => clienttranslate('Distract the soldiers'),
+            ACTION_BOMB_THE_BARRACKS => clienttranslate('Bomb the Barracks and complete the mission'),
+            ACTION_BRIBE_THE_CLERK => clienttranslate('Bribe the clerk'),
+            ACTION_KILL_THE_RESISTANCE_LEADER => clienttranslate('Kill the resistance leader and complete the mission'),
+            ACTION_FREE_THE_RESISTANCE_LEADER => clienttranslate('Free the resistance leader and complete the mission'),
+            ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES => clienttranslate('Destroy AA gun with explosives'),
+            ACTION_DESTROY_AA_GUN_WITH_WEAPON => clienttranslate('Destroy AA gun with weapon'),
+
+            ACTION_BUY_AND_SHOOT => clienttranslate('Escape blocked: buy weapon and shoot milice')
+        ];
+
+        foreach($possibleActions as &$action) {
+            $action['action_description'] = $actionDescriptions[$action['action_name']] ?? "";
+
+            switch($action['action_name']) {
+                case ACTION_GET_FOOD:
+                    if ($this->getAvailableResource(RESOURCE_FOOD) <= 0) {
+                        $action['action_note'] = clienttranslate('No effect');
+                    }
+                    break;
+                case ACTION_GET_MEDICINE:
+                    if ($this->getAvailableResource(RESOURCE_MEDICINE) <= 0) {
+                        $action['action_note'] = clienttranslate('No effect');
+                    }
+                    break;
+                case ACTION_GET_INTEL:
+                    if ($this->getAvailableResource(RESOURCE_INTEL) <= 0) {
+                        $action['action_note'] = clienttranslate('No effect');
+                    }
+                    break;
+                case ACTION_GET_MONEY:
+                    if ($this->getAvailableResource(RESOURCE_MONEY) <= 0) {
+                        $action['action_note'] = clienttranslate('No effect');
+                    }
+                    break;
+                case ACTION_GET_MONEY_FOR_FOOD:
+                case ACTION_GET_MONEY_FOR_MEDICINE:
+                    if ($this->getMorale() === 1) {
+                        $action['action_note'] = clienttranslate('This will result in losing the game');
+                    } 
+                    break;
+                case ACTION_PAY_FOR_MORALE:
+                    if ($this->getMorale() === 7) {
+                        $action['action_note'] = clienttranslate('Resources will be lost. Morale won\'t be gained');
+                    }
+                    break;
+            }
+        }
+
+        return $possibleActions;
     }
 
     protected function saveAction(string $actionName): void {
@@ -931,206 +1137,6 @@ class Game extends \Bga\GameFramework\Table {
                 break;
         }
     } 
-
-    protected function getPossibleActions(int $spaceID): array {
-        $result = (array) ($this->getCollectionFromDb("
-            SELECT action_name
-            FROM board_action 
-            WHERE space_id = $spaceID;
-        "));
-
-        $escapeFound = $this->checkEscapeRoute()["escapeFound"];
-
-        if (!$escapeFound) {
-            if ($spaceID === FENCE && $this->getResource(RESOURCE_MONEY) > 0 && $this->getShotToday() === false) {
-                $result = [['action_name' => ACTION_BUY_AND_SHOOT]];
-            } else {
-                $result = array_filter($result, function($action) {
-                    return $this->getIsSafe($action["action_name"]);
-                });
-            }
-        } 
-
-        $result = array_filter($result, function($action) use ($spaceID) {
-            switch ($action['action_name']) {
-                case ACTION_BUY_WEAPON:
-                    return $this->getResource(RESOURCE_MONEY) > 0;
-                case ACTION_AIRDROP_FOOD:
-                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_FOOD);
-                case ACTION_AIRDROP_MONEY:
-                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_MONEY);
-                case ACTION_AIRDROP_WEAPON:
-                    return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_WEAPON);
-                case ACTION_PAY_FOR_MORALE:
-                    return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResource(RESOURCE_MEDICINE) > 0;
-                case ACTION_GET_MONEY_FOR_FOOD:
-                    return $this->getResource(RESOURCE_FOOD) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
-                case ACTION_GET_MONEY_FOR_MEDICINE:
-                    return $this->getResource(RESOURCE_MEDICINE) > 0 && $this->getAvailableResource(RESOURCE_MONEY) > 0;
-                case ACTION_WRITE_GRAFFITI:
-                    return (($this->countMarkers($spaceID) === 0) || (($this->countMarkers($spaceID) === 1) && $this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT))) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
-                case ACTION_COMPLETE_OFFICERS_MANSION_MISSION:
-                    return ((!$this->getIsMissionSelected(MISSION_DOUBLE_AGENT) || $this->getIsMissionCompleted(MISSION_DOUBLE_AGENT)) && $this->countMarkersInSpaces([RUE_BARADAT, PONT_DU_NORD, PONT_LEVEQUE]) == 3) || ($this->getIsMissionSelected(MISSION_DOUBLE_AGENT) && !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT) && $this->countMarkersInSpaces([RUE_BARADAT, PONT_DU_NORD, PONT_LEVEQUE]) == 6) && !$this->getIsMissionCompleted(MISSION_OFFICERS_MANSION);
-                case ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION:
-                    return $this->getResource(RESOURCE_WEAPON) > 0 && $this->isParadeDay();
-                case ACTION_GET_WORKER:
-                    return $this->getResource(RESOURCE_FOOD) > 0 && $this->getResistanceToRecruit() > 0;
-                case ACTION_COLLECT_ITEMS:
-                    return $this->getTokenQuantityInSpace($spaceID) && ($this->getTokenTypeInSpace($spaceID) !== TOKEN_AA_GUN);
-                case ACTION_GET_SPARE_ROOM:
-                    return !$this->getIsRoomPlaced($spaceID) && $this->getResource(RESOURCE_MONEY) >= 2;
-                case ACTION_BUY_EXPLOSIVES:
-                    return $this->getResource(RESOURCE_MEDICINE) >= 1;
-                case ACTION_SABOTAGE_FACTORY:
-                    return $this->getResource(RESOURCE_EXPLOSIVES) >= 1;
-                case ACTION_DELIVER_2_INTEL:
-                    return $this->getResource(RESOURCE_INTEL) >= 2;
-                case ACTION_INSERT_MOLE:
-                    return $this->getResource(RESOURCE_INTEL) >= 2;
-                case ACTION_POISON_SHEPARDS:
-                    return $this->getResource(RESOURCE_FOOD) >= 1 && $this->getResource(RESOURCE_MEDICINE) >= 1;
-                case ACTION_COMPLETE_DOUBLE_AGENT_MISSION:
-                    return !$this->getIsMissionCompleted(MISSION_DOUBLE_AGENT);
-                case ACTION_RECOVER_MOLE:
-                    return ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getResource(RESOURCE_EXPLOSIVES) >= 1);
-                case ACTION_DELIVER_2_WEAPONS:
-                    return ($this->getResource(RESOURCE_WEAPON) >= 2);
-                case ACTION_DELIVER_MONEY_AND_2_FOOD:
-                    return ($this->getResource(RESOURCE_FOOD) >= 2) && ($this->getResource(RESOURCE_MONEY) >= 1);
-                case ACTION_DELIVER_3_EXPLOSIVES:
-                    return ($this->getResource(RESOURCE_EXPLOSIVES) >= 3) && (in_array($this->getRoundNumber(), [6, 7, 8, 9]));
-                case ACTION_TRAIN_A_CRYPTOGRAPHER:
-                    return ($this->getResource(RESOURCE_FOOD) >= 1) && ($this->getResource(RESOURCE_MONEY) >= 1) && ($this->getResource(RESOURCE_WEAPON) >= 1) && ($this->getRoundNumber() <= 6);
-                case ACTION_PLANT_2_EXPLOSIVES:
-                    return ($this->getResource(RESOURCE_EXPLOSIVES) >= 2) && !$this->getIsMissionCompleted(MISSION_TAKE_OUT_THE_BRIDGES);
-                case ACTION_DELIVER_EXPLOSIVES_AND_WEAPON:
-                    return $this->getMorale() >= 5 && $this->getResource(RESOURCE_EXPLOSIVES) >= 1 && $this->getResource(RESOURCE_WEAPON) >= 1;
-                case ACTION_DELIVER_2_POISON:
-                    return $this->getResource(RESOURCE_POISON) >= 2;
-                case ACTION_BUY_POISON:
-                    return $this->getResource(RESOURCE_MEDICINE) >= 2;
-                case ACTION_FORGE_FAKE_ID:
-                    return $this->getResource(RESOURCE_MONEY) >= 2 && $this->getResource(RESOURCE_INTEL);
-                case ACTION_DISCOVER_THE_PLANS:
-                    return !$this->getIsMissionCompleted(MISSION_MILICE_HQ) && !$this->checkMarkersInSpaces([MISSION_B_SPACE_A]);
-                case ACTION_BOMB_THE_BARRACKS:
-                    return $this->getResource(RESOURCE_EXPLOSIVES) >= 2 && $this->getResource(RESOURCE_FAKE_ID);
-                case ACTION_DISTRACT_THE_SOLDIERS:
-                    return $this->getResource(RESOURCE_WEAPON) && !$this->getSoldiersDistracted() && !$this->getIsMissionCompleted(MISSION_BOMB_THE_BARRACKS);
-                case ACTION_BRIBE_THE_CLERK:
-                    return $this->getRoundNumber() <= 5 && $this->getResource(RESOURCE_MONEY) && $this->getResource(RESOURCE_INTEL);
-                case ACTION_KILL_THE_RESISTANCE_LEADER:
-                    return $this->getRoundNumber() <= 9 && $this->getResource(RESOURCE_POISON);
-                case ACTION_FREE_THE_RESISTANCE_LEADER:
-                    return $this->getRoundNumber() === 10 && $this->getResource(RESOURCE_FAKE_ID) && $this->getResource(RESOURCE_WEAPON) >= 2 && $this->getResource(RESOURCE_MEDICINE);
-                case ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES:
-                    return $this->getResource(RESOURCE_EXPLOSIVES) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === MISSION_B_SPACE_A);
-                case ACTION_DESTROY_AA_GUN_WITH_WEAPON:
-                    return $this->getResource(RESOURCE_WEAPON) && ($this->getTokenTypeInSpace($this->getActiveSpace()) === TOKEN_AA_GUN || $this->getActiveSpace() === MISSION_B_SPACE_A);
-                case ACTION_USE_FIXER:
-                    return $this->getResource(RESOURCE_MONEY);
-                default:
-                    return true;
-            }
-        });
-
-        $actionDescriptions = [
-            ACTION_GET_FOOD => clienttranslate('Get food'),
-            ACTION_GET_MEDICINE => clienttranslate('Get medicine'),
-            ACTION_GET_MONEY_FOR_FOOD => clienttranslate('Get money for food'),
-            ACTION_GET_MONEY_FOR_MEDICINE => clienttranslate('Get money for medicine'),
-            ACTION_PAY_FOR_MORALE => clienttranslate('Increase morale'),
-            ACTION_GET_INTEL => clienttranslate('Get intel'),
-            ACTION_BUY_WEAPON => clienttranslate('Get weapon'),
-            ACTION_GET_WORKER => clienttranslate('Recruit worker'),
-            ACTION_COLLECT_ITEMS => clienttranslate('Collect items'),
-            ACTION_GET_SPARE_ROOM => clienttranslate('Get spare room'),
-            ACTION_AIRDROP_FOOD => clienttranslate('Airdrop Food'),
-            ACTION_AIRDROP_MONEY => clienttranslate('Airdrop Money'),
-            ACTION_AIRDROP_WEAPON => clienttranslate('Airdrop Weapon'),
-            
-            ACTION_GET_MONEY => clienttranslate('Get money'),
-            ACTION_BUY_EXPLOSIVES => clienttranslate('Get explosives'),
-            ACTION_GET_3_FOOD => clienttranslate('Get 3 food'),
-            ACTION_GET_3_MEDICINE => clienttranslate('Get 3 medicine'),
-            ACTION_INCREASE_MORALE => clienttranslate('Increase morale'),
-            ACTION_BUY_POISON => clienttranslate('Buy poison'),
-            ACTION_FORGE_FAKE_ID => clienttranslate('Forge fake ID'),
-            ACTION_USE_FIXER => clienttranslate('Use fixer'),
-
-            ACTION_COMPLETE_MILICE_PARADE_DAY_MISSION => clienttranslate('Complete Milice Parade Day mission'),
-            ACTION_WRITE_GRAFFITI => clienttranslate('Write graffiti'),
-            ACTION_COMPLETE_OFFICERS_MANSION_MISSION => clienttranslate('Complete Officer\'s Mansion mission'),
-
-            ACTION_INFILTRATE_FACTORY => clienttranslate('Infiltrate factory'),
-            ACTION_SABOTAGE_FACTORY => clienttranslate('Sabotage factory and complete the mission'),
-            ACTION_DELIVER_2_INTEL => clienttranslate('Deliver 2 intel'),
-            ACTION_INSERT_MOLE => clienttranslate('Insert mole'),
-            ACTION_RECOVER_MOLE => clienttranslate('Recover mole and complete the mission'),
-            ACTION_POISON_SHEPARDS => clienttranslate('Poison German Shepards'),
-            ACTION_COMPLETE_DOUBLE_AGENT_MISSION => clienttranslate('Meet Double Agent and complete the mission'),
-
-            ACTION_DELIVER_2_WEAPONS => clienttranslate('Deliver 2 Weapons'),
-            ACTION_DELIVER_MONEY_AND_2_FOOD => clienttranslate('Deliver Money and 2 Food; Complete mission'),
-            ACTION_DELIVER_3_EXPLOSIVES => clienttranslate('Deliver 3 Explosives and complete mission'),
-            ACTION_TRAIN_A_CRYPTOGRAPHER => clienttranslate('Train a Cryptographer'),
-            ACTION_PLANT_2_EXPLOSIVES => clienttranslate('Plant 2 Explosives at a bridge'),
-            ACTION_DELIVER_EXPLOSIVES_AND_WEAPON => clienttranslate('Deliver Explosives and Weapon; Complete the mission'),
-
-            ACTION_DISCOVER_THE_PLANS => clienttranslate('Discover the Plans'),
-            ACTION_DELIVER_2_POISON => clienttranslate('Deliver 2 Poison and complete the mission'),
-            ACTION_RECON_THE_BARRACKS => clienttranslate('Recon the Barracks'),
-            ACTION_DISTRACT_THE_SOLDIERS => clienttranslate('Distract the soldiers'),
-            ACTION_BOMB_THE_BARRACKS => clienttranslate('Bomb the Barracks and complete the mission'),
-            ACTION_BRIBE_THE_CLERK => clienttranslate('Bribe the clerk'),
-            ACTION_KILL_THE_RESISTANCE_LEADER => clienttranslate('Kill the resistance leader and complete the mission'),
-            ACTION_FREE_THE_RESISTANCE_LEADER => clienttranslate('Free the resistance leader and complete the mission'),
-            ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES => clienttranslate('Destroy AA gun with explosives'),
-            ACTION_DESTROY_AA_GUN_WITH_WEAPON => clienttranslate('Destroy AA gun with weapon'),
-
-            ACTION_BUY_AND_SHOOT => clienttranslate('Escape blocked: buy weapon and shoot milice')
-        ];
-
-        foreach($result as &$action) {
-            $action['action_description'] = $actionDescriptions[$action['action_name']] ?? "";
-
-            switch($action['action_name']) {
-                case ACTION_GET_FOOD:
-                    if ($this->getAvailableResource(RESOURCE_FOOD) <= 0) {
-                        $action['action_note'] = clienttranslate('No effect');
-                    }
-                    break;
-                case ACTION_GET_MEDICINE:
-                    if ($this->getAvailableResource(RESOURCE_MEDICINE) <= 0) {
-                        $action['action_note'] = clienttranslate('No effect');
-                    }
-                    break;
-                case ACTION_GET_INTEL:
-                    if ($this->getAvailableResource(RESOURCE_INTEL) <= 0) {
-                        $action['action_note'] = clienttranslate('No effect');
-                    }
-                    break;
-                case ACTION_GET_MONEY:
-                    if ($this->getAvailableResource(RESOURCE_MONEY) <= 0) {
-                        $action['action_note'] = clienttranslate('No effect');
-                    }
-                    break;
-                case ACTION_GET_MONEY_FOR_FOOD:
-                case ACTION_GET_MONEY_FOR_MEDICINE:
-                    if ($this->getMorale() === 1) {
-                        $action['action_note'] = clienttranslate('This will result in losing the game');
-                    } 
-                    break;
-                case ACTION_PAY_FOR_MORALE:
-                    if ($this->getMorale() === 7) {
-                        $action['action_note'] = clienttranslate('Resources will be lost. Morale won\'t be gained');
-                    }
-                    break;
-            }
-        }
-
-        return $result;
-    }
 
     protected function getIsSafe(string $actionName): bool {
         return (bool) $this->ACTIONS[$actionName]['is_safe'];
