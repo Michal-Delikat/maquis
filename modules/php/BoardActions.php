@@ -25,7 +25,7 @@ trait BoardActions {
         static::DbQuery('
             INSERT INTO board_action (space_id, action_name)
             VALUES
-            (2, \'' . ACTION_BUY_WEAPON . '\'),
+            (2, \'' . ACTION_BUY_WEAPON . '\'), (2, \'' . ACTION_BUY_AND_SHOOT . '\'),
             (4, \'' . ACTION_GET_INTEL . '\'), (4, \'' . ACTION_AIRDROP_FOOD . '\'), (4, \'' . ACTION_AIRDROP_MONEY . '\'), (4, \'' . ACTION_AIRDROP_WEAPON . '\'),
             (5, \'' . ACTION_GET_MEDICINE . '\'),
             (6, \'' . ACTION_PAY_FOR_MORALE . '\'),

@@ -403,9 +403,7 @@ class Game extends \Bga\GameFramework\Table {
 
         $escapeStatus = $this->checkEscapeRoute();
 
-        if ($escapeStatus["fakeIdUsed"]) {
-            $this->removeFakeId($activeSpace);
-        }
+        
         if ($actionName === ACTION_BUY_AND_SHOOT) {
             $this->spendResources(RESOURCE_MONEY);
             $this->gainResources(RESOURCE_WEAPON);
@@ -439,6 +437,9 @@ class Game extends \Bga\GameFramework\Table {
             } else {
                 $this->saveAction($actionName);
                 $this->returnWorker($activeSpace);
+                if ($escapeStatus["fakeIdUsed"]) {
+                    $this->removeFakeId($activeSpace);
+                }
 
                 if ($this->getIsGameWon()) {
                     $this->gamestate->nextState("gameEnd");
@@ -455,6 +456,9 @@ class Game extends \Bga\GameFramework\Table {
                 }
             }
             $this->arrestWorker($activeSpace);
+            if ($escapeStatus["fakeIdUsed"]) {
+                $this->removeFakeId($activeSpace);
+            }
 
             $this->gamestate->nextState("nextWorker");
         }      
@@ -653,16 +657,16 @@ class Game extends \Bga\GameFramework\Table {
             $possibleActions = array_filter($possibleActions, function($action) {
                 return $this->getIsSafe($action["action_name"]);
             });
+        }
 
-            if ($spaceID === FENCE && $this->getResource(RESOURCE_MONEY) > 0 && $this->getShotToday() === false) {
-                $possibleActions[] = ['action_name' => ACTION_BUY_AND_SHOOT];
-            }
-        } 
+      
 
         $possibleActions = array_filter($possibleActions, function($action) use ($spaceID) {
             switch ($action['action_name']) {
                 case ACTION_BUY_WEAPON:
                     return $this->getResource(RESOURCE_MONEY) > 0;
+                case ACTION_BUY_AND_SHOOT:
+                    return $this->getResource(RESOURCE_MONEY) > 0 && !$this->getShotToday();
                 case ACTION_AIRDROP_FOOD:
                     return !empty($this->getEmptyFields()) && $this->getAvailableResource(RESOURCE_FOOD);
                 case ACTION_AIRDROP_MONEY:
@@ -796,7 +800,7 @@ class Game extends \Bga\GameFramework\Table {
             ACTION_DESTROY_AA_GUN_WITH_EXPLOSIVES => clienttranslate('Destroy AA gun with explosives'),
             ACTION_DESTROY_AA_GUN_WITH_WEAPON => clienttranslate('Destroy AA gun with weapon'),
 
-            ACTION_BUY_AND_SHOOT => clienttranslate('Escape blocked: buy weapon and shoot milice')
+            ACTION_BUY_AND_SHOOT => clienttranslate('Get weapon and shoot milice')
         ];
 
         foreach($possibleActions as &$action) {

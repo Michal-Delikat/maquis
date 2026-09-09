@@ -64,6 +64,7 @@ class Material {
         ACTION_AIRDROP_WEAPON => ['name' => ACTION_AIRDROP_WEAPON, 'is_safe' => false],
         ACTION_GET_INTEL => ['name' => ACTION_GET_INTEL, 'is_safe' => false],
         ACTION_BUY_WEAPON => ['name' => ACTION_BUY_WEAPON, 'is_safe' => false],
+        ACTION_BUY_AND_SHOOT => ['name' => ACTION_BUY_AND_SHOOT, 'is_safe' => true],
         ACTION_GET_WORKER => ['name' => ACTION_GET_WORKER, 'is_safe' => false],
         ACTION_COLLECT_ITEMS => ['name' => ACTION_COLLECT_ITEMS, 'is_safe' => false],
         ACTION_GET_SPARE_ROOM => ['name' => ACTION_GET_SPARE_ROOM, 'is_safe' => true],
