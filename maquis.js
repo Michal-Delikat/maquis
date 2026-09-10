@@ -198,7 +198,7 @@ function (dojo, declare) {
                 switch(mission.split('_').slice(2).join("_")) {
                     case 'milice_parade_day':
                         description = `
-                        <p class="maq_maq_mission-flavour-text">${_('The Milice are holding parades around town - a brave volunteer must show our defiance. They probably won\'t make it back...')}</p><br>
+                        <p class="maq_mission-flavour-text">${_('The Milice are holding parades around town - a brave volunteer must show our defiance. They probably won\'t make it back...')}</p><br>
                         <p class="maq_mission-description-text">${_('Deliver 1')} <span class="maq_mission-text-item-name">${_('Weapon')}</span> ${_('to')} <span class="maq_mission-text-location-name">Rue Baradat</span> ${_('on a Parade Day (Day 3, 6, 9, 12, and 14). The Worker is Arrested. Increase')} <span class="maq_mission-text-morale">${_('Morale')}</span> ${_('by 1. Before this mission is completed, the road between')} <span class="maq_mission-text-location-name">Rue Baradat</span> ${_('and')} <span class="maq_mission-text-location-name">Fence</span> ${_('is blocked on Parade Days.')}</p>`;
                         break;
                     case 'officers_mansion':
@@ -371,6 +371,21 @@ function (dojo, declare) {
                 }
             });
 
+            // BOARD SPACES TOOLTIPS
+            this.bga.gameui.addTooltip('space-2', 'Fence', `${_('Buy Weapon: Spend 1 Money to gain 1 Weapon')}`);
+            this.bga.gameui.addTooltip('space-4', 'Radio B', `${_('Get Intel: Gain 1 Intel')}<br>${_('Airdrop: add 1 Money, OR 1 Weapon, OR 3 Food on empty Field.')}`);
+            this.bga.gameui.addTooltip('space-5', 'Doctor', `${_('Get Medicine: Gain 1 Medicine')}`);
+            this.bga.gameui.addTooltip('space-6', 'Poor District', `${_('Increase Morale: Spend 1 Food AND 1 Medicine to increase Morale by 1')}`);
+            this.bga.gameui.addTooltip('space-7', 'Black Market', `${_('Sell Food: Sell 1 Food for 1 Money. Decrease morale by 1')}<br>${_('Sell Medicine: Sell 1 Medicine for 1 Money. Decrease morale by 1')}`);
+            this.bga.gameui.addTooltip('space-8', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
+            this.bga.gameui.addTooltip('space-9', 'Radio B', `${_('Get Intel: Gain 1 Intel')}<br>${_('Airdrop: add 1 Money, OR 1 Weapon, OR 3 Food on empty Field.')}`);
+            this.bga.gameui.addTooltip('space-10', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
+            this.bga.gameui.addTooltip('space-12', 'Grocer', `${_('Get Food: Gain 1 Food')}`);
+            this.bga.gameui.addTooltip('space-13', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
+            this.bga.gameui.addTooltip('space-14', 'Field', `${_('Collect resources: Pick up airdropped resources. (Not the same turn as airdrop)')}`);
+            this.bga.gameui.addTooltip('space-15', 'Cafe', `${_('Recruit Worker: Spend 1 Food to recruit Additional Worker')}`);
+            this.bga.gameui.addTooltip('space-17', 'Field', `${_('Collect resources: Pick up airdropped resources. (Not the same turn as airdrop)')}`);
+
             // ADDITIONAL SPACES FOR RESISTANCE
             // SAFE HOUSE
             dojo.place(`
@@ -434,6 +449,17 @@ function (dojo, declare) {
             placedRooms.forEach(room => {
                 this.placeRoomTile(room.location, room.name, false);
             });
+
+            this.bga.gameui.addTooltip('room-tile-room_chemists_lab', 'Chemist Lab', `${_('Get Explosives: Spend 1 Medicine to get 1')}`);
+            this.bga.gameui.addTooltip('room-tile-room_informant', 'Informant', `${_('Get Intel')}`);
+            this.bga.gameui.addTooltip('room-tile-room_counterfeiter', 'Counterfeiter', `${_('Get Money')}`);
+            this.bga.gameui.addTooltip('room-tile-room_safe_house', 'Safe House', `${_('Safe location')}`);
+            this.bga.gameui.addTooltip('room-tile-room_chemists_lab', 'Chemists Lab', `${_('Buy Explosives')}`);
+            this.bga.gameui.addTooltip('room-tile-room_smuggler', 'Smuggler', `${_('Get 3 Food')}<br>${_('Get 3 Medicine')}`);
+            this.bga.gameui.addTooltip('room-tile-room_propagandist', 'Propagandist', `${_('Increase Morale')}`);
+            this.bga.gameui.addTooltip('room-tile-room_pharmacist', 'Pharmacist', `${_('Buy Poison')}`);
+            this.bga.gameui.addTooltip('room-tile-room_forger', 'Forger', `${_('Forge Fake ID')}`);
+            this.bga.gameui.addTooltip('room-tile-room_fixer', 'Fixer', `${_('Use Fixer: Use any other action from not placed tiles by spending 1 extra Money')}`);
 
             // PATROL DISCARD
             Object.values(discardedPatrolCards).forEach((card) => this.discardPatrolCard(card.type_arg, false));
