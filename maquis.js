@@ -438,50 +438,25 @@ function (dojo, declare) {
             this.placeTokens(placedTokens, false);
             
             // ROOM TILES
-            rooms.forEach((room) => dojo.place(`
+            rooms.forEach((room) => {
+                dojo.place(`
                     <div id="${room.name}-tile-container" class="maq_room-tile-container">
                         <div id="room-tile-${room.name}" class="maq_room-tile">
                             <div class="maq_circle-shape"></div>
                             <div class="maq_rectangle-shape"></div>
                         </div>
                     <div>
-                `, `room-tiles`));
+                `, `room-tiles`);
+                if (room.state === 'available') {
+                    this.addTooltipToRoomTile(room.name);
+                }
+            });
             
             placedRooms.forEach(room => {
                 this.bga.gameui.removeTooltip(`space-${room.location}-background-space`);
                 this.placeRoomTile(room.location, room.name, false);
-                
-                let roomName = room.name.replace('room_', '');
-                let roomTitle = '';
-                let roomAction = '';
-
-                switch(roomName) {
-                    case 'informant': roomTitle = 'Informant'; roomAction = _('Get Intel'); break;
-                    case 'counterfeiter': roomTitle = 'Counterfeiter'; roomAction = _('Get Money'); break;
-                    case 'safe_house': roomTitle = 'Safe House'; roomAction = _('Safe location'); break;
-                    case 'chemists_lab': roomTitle = 'Chemists Lab'; roomAction = _('Buy Explosives'); break;
-                    case 'smuggler': roomTitle = 'Smuggler'; roomAction = `${_('Get 3 Food')}<br>${_('Get 3 Medicine')}`; break;
-                    case 'propagandist': roomTitle = 'Propagandist'; roomAction = _('Increase Morale'); break;
-                    case 'pharmacist': roomTitle = 'Pharmacist'; roomAction = _('Buy Poison'); break;
-                    case 'forger': roomTitle = 'Forger'; roomAction = _('Forge Fake ID'); break;
-                    case 'fixer': roomTitle = 'Fixer'; roomAction = _('Use Fixer'); break;
-                }
-
-                if (roomTitle) {
-                    this.bga.gameui.addTooltip(`space-${room.location}-background-space`, roomTitle, roomAction);
-                }
+                this.addTooltipToRoomTile(room.name, room.location);    
             });
-
-            this.bga.gameui.addTooltip('room-tile-room_chemists_lab', 'Chemist Lab', `${_('Get Explosives: Spend 1 Medicine to get 1')}`);
-            this.bga.gameui.addTooltip('room-tile-room_informant', 'Informant', `${_('Get Intel')}`);
-            this.bga.gameui.addTooltip('room-tile-room_counterfeiter', 'Counterfeiter', `${_('Get Money')}`);
-            this.bga.gameui.addTooltip('room-tile-room_safe_house', 'Safe House', `${_('Safe location')}`);
-            this.bga.gameui.addTooltip('room-tile-room_chemists_lab', 'Chemists Lab', `${_('Buy Explosives')}`);
-            this.bga.gameui.addTooltip('room-tile-room_smuggler', 'Smuggler', `${_('Get 3 Food')}<br>${_('Get 3 Medicine')}`);
-            this.bga.gameui.addTooltip('room-tile-room_propagandist', 'Propagandist', `${_('Increase Morale')}`);
-            this.bga.gameui.addTooltip('room-tile-room_pharmacist', 'Pharmacist', `${_('Buy Poison')}`);
-            this.bga.gameui.addTooltip('room-tile-room_forger', 'Forger', `${_('Forge Fake ID')}`);
-            this.bga.gameui.addTooltip('room-tile-room_fixer', 'Fixer', `${_('Use Fixer: Use any other action from not placed tiles by spending 1 extra Money')}`);
 
             // PATROL DISCARD
             Object.values(discardedPatrolCards).forEach((card) => this.discardPatrolCard(card.type_arg, false));
@@ -1173,6 +1148,7 @@ function (dojo, declare) {
 
         placeRoomTile: async function(spaceID, roomID, animate = true) {
             this.bga.gameui.removeTooltip(`space-${spaceID}-background-space`);
+            this.bga.gameui.removeTooltip(`room-tile-${roomID}`);
             dojo.destroy(`room-tile-${roomID}`);
             dojo.place(`
                 <div id="room-tile-${roomID}" class="maq_room-tile">
@@ -1188,7 +1164,7 @@ function (dojo, declare) {
             } else {
                 dojo.destroy(`${roomID}-tile-container`);
             }
-            
+            this.addTooltipToRoomTile(roomID, spaceID);
         },
 
         displayModalWithCard: function(cardId, title) {
@@ -1246,6 +1222,30 @@ function (dojo, declare) {
                 await this.bgaPlayDojoAnimation(animation);
                 dojo.destroy(`${tokenID}`);
             }            
-        }
+        },
+
+        addTooltipToRoomTile: function(name, location = null) {
+            let roomName = name.replace('room_', '');
+            let roomTitle = '';
+            let roomAction = '';
+
+            switch(roomName) {
+                case 'informant': roomTitle = 'Informant'; roomAction = `${_('Get Intel')}`; break;
+                case 'counterfeiter': roomTitle = 'Counterfeiter'; roomAction = `${_('Get Money')}`; break;
+                case 'safe_house': roomTitle = 'Safe House'; roomAction = `${_('Safe location')}`; break;
+                case 'chemists_lab': roomTitle = 'Chemists Lab'; roomAction = `${_('Buy Explosives')}`; break;
+                case 'smuggler': roomTitle = 'Smuggler'; roomAction = `${_('Get 3 Food')}<br>${_('Get 3 Medicine')}`; break;
+                case 'propagandist': roomTitle = 'Propagandist'; roomAction = `${_('Increase Morale')}`; break;
+                case 'pharmacist': roomTitle = 'Pharmacist'; roomAction = `${_('Buy Poison')}`; break;
+                case 'forger': roomTitle = 'Forger'; roomAction = `${_('Forge Fake ID')}`; break;
+                case 'fixer': roomTitle = 'Fixer'; roomAction = `${_('Use Fixer')}`; break;
+            }
+
+            if (location) {
+                this.bga.gameui.addTooltip(`space-${location}-background-space`, roomTitle, roomAction);
+            } else {
+                this.bga.gameui.addTooltip(`room-tile-room_${roomName}`, roomTitle, roomAction);
+            }
+        },
     });
 });
