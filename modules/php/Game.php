@@ -297,7 +297,7 @@ class Game extends \Bga\GameFramework\Table {
     public function stNextWorker() {
         $this->resetActiveSpace();
 
-        if ($this->getPlacedResistance() > 0) {
+        if ($this->getPlacedResistance() > 0 || ($this->getIsCryptographerPlaced() && $this->getRoundNumber() === 11)) {
             $this->gamestate->nextState("activateWorker");
         } else if ($this->getExplosivesAtBridgePlanted()) {
             $this->gamestate->nextState("removeBridge");
