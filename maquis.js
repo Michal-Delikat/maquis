@@ -372,19 +372,20 @@ function (dojo, declare) {
             });
 
             // BOARD SPACES TOOLTIPS
-            this.bga.gameui.addTooltip('space-2', 'Fence', `${_('Buy Weapon: Spend 1 Money to gain 1 Weapon')}`);
-            this.bga.gameui.addTooltip('space-4', 'Radio B', `${_('Get Intel: Gain 1 Intel')}<br>${_('Airdrop: add 1 Money, OR 1 Weapon, OR 3 Food on empty Field.')}`);
-            this.bga.gameui.addTooltip('space-5', 'Doctor', `${_('Get Medicine: Gain 1 Medicine')}`);
-            this.bga.gameui.addTooltip('space-6', 'Poor District', `${_('Increase Morale: Spend 1 Food AND 1 Medicine to increase Morale by 1')}`);
-            this.bga.gameui.addTooltip('space-7', 'Black Market', `${_('Sell Food: Sell 1 Food for 1 Money. Decrease morale by 1')}<br>${_('Sell Medicine: Sell 1 Medicine for 1 Money. Decrease morale by 1')}`);
-            this.bga.gameui.addTooltip('space-8', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
-            this.bga.gameui.addTooltip('space-9', 'Radio B', `${_('Get Intel: Gain 1 Intel')}<br>${_('Airdrop: add 1 Money, OR 1 Weapon, OR 3 Food on empty Field.')}`);
-            this.bga.gameui.addTooltip('space-10', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
-            this.bga.gameui.addTooltip('space-12', 'Grocer', `${_('Get Food: Gain 1 Food')}`);
-            this.bga.gameui.addTooltip('space-13', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
-            this.bga.gameui.addTooltip('space-14', 'Field', `${_('Collect resources: Pick up airdropped resources. (Not the same turn as airdrop)')}`);
-            this.bga.gameui.addTooltip('space-15', 'Cafe', `${_('Recruit Worker: Spend 1 Food to recruit Additional Worker')}`);
-            this.bga.gameui.addTooltip('space-17', 'Field', `${_('Collect resources: Pick up airdropped resources. (Not the same turn as airdrop)')}`);
+            this.bga.gameui.addTooltip('space-1-background-space', 'Fence', `${_('Buy Weapon: Spend 1 Money to gain 1 Weapon')}`);
+            this.bga.gameui.addTooltip('space-2-background-space', 'Fence', `${_('Buy Weapon: Spend 1 Money to gain 1 Weapon')}`);
+            this.bga.gameui.addTooltip('space-4-background-space', 'Radio B', `${_('Get Intel: Gain 1 Intel')}<br>${_('Airdrop: add 1 Money, OR 1 Weapon, OR 3 Food on empty Field.')}`);
+            this.bga.gameui.addTooltip('space-5-background-space', 'Doctor', `${_('Get Medicine: Gain 1 Medicine')}`);
+            this.bga.gameui.addTooltip('space-6-background-space', 'Poor District', `${_('Increase Morale: Spend 1 Food AND 1 Medicine to increase Morale by 1')}`);
+            this.bga.gameui.addTooltip('space-7-background-space', 'Black Market', `${_('Sell Food: Sell 1 Food for 1 Money. Decrease morale by 1')}<br>${_('Sell Medicine: Sell 1 Medicine for 1 Money. Decrease morale by 1')}`);
+            this.bga.gameui.addTooltip('space-8-background-space', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
+            this.bga.gameui.addTooltip('space-9-background-space', 'Radio B', `${_('Get Intel: Gain 1 Intel')}<br>${_('Airdrop: add 1 Money, OR 1 Weapon, OR 3 Food on empty Field.')}`);
+            this.bga.gameui.addTooltip('space-10-background-space', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
+            this.bga.gameui.addTooltip('space-12-background-space', 'Grocer', `${_('Get Food: Gain 1 Food')}`);
+            this.bga.gameui.addTooltip('space-13-background-space', 'Spare Room', `${_('Add Spare Room: Spend 2 Money to place a Spare room tile on this location.')}`);
+            this.bga.gameui.addTooltip('space-14-background-space', 'Field', `${_('Collect resources: Pick up airdropped resources. (Not the same turn as airdrop)')}`);
+            this.bga.gameui.addTooltip('space-15-background-space', 'Cafe', `${_('Recruit Worker: Spend 1 Food to recruit Additional Worker')}`);
+            this.bga.gameui.addTooltip('space-17-background-space', 'Field', `${_('Collect resources: Pick up airdropped resources. (Not the same turn as airdrop)')}`);
 
             // ADDITIONAL SPACES FOR RESISTANCE
             // SAFE HOUSE
@@ -447,7 +448,28 @@ function (dojo, declare) {
                 `, `room-tiles`));
             
             placedRooms.forEach(room => {
+                this.bga.gameui.removeTooltip(`space-${room.location}-background-space`);
                 this.placeRoomTile(room.location, room.name, false);
+                
+                let roomName = room.name.replace('room_', '');
+                let roomTitle = '';
+                let roomAction = '';
+
+                switch(roomName) {
+                    case 'informant': roomTitle = 'Informant'; roomAction = _('Get Intel'); break;
+                    case 'counterfeiter': roomTitle = 'Counterfeiter'; roomAction = _('Get Money'); break;
+                    case 'safe_house': roomTitle = 'Safe House'; roomAction = _('Safe location'); break;
+                    case 'chemists_lab': roomTitle = 'Chemists Lab'; roomAction = _('Buy Explosives'); break;
+                    case 'smuggler': roomTitle = 'Smuggler'; roomAction = `${_('Get 3 Food')}<br>${_('Get 3 Medicine')}`; break;
+                    case 'propagandist': roomTitle = 'Propagandist'; roomAction = _('Increase Morale'); break;
+                    case 'pharmacist': roomTitle = 'Pharmacist'; roomAction = _('Buy Poison'); break;
+                    case 'forger': roomTitle = 'Forger'; roomAction = _('Forge Fake ID'); break;
+                    case 'fixer': roomTitle = 'Fixer'; roomAction = _('Use Fixer'); break;
+                }
+
+                if (roomTitle) {
+                    this.bga.gameui.addTooltip(`space-${room.location}-background-space`, roomTitle, roomAction);
+                }
             });
 
             this.bga.gameui.addTooltip('room-tile-room_chemists_lab', 'Chemist Lab', `${_('Get Explosives: Spend 1 Medicine to get 1')}`);
@@ -1150,6 +1172,7 @@ function (dojo, declare) {
         },
 
         placeRoomTile: async function(spaceID, roomID, animate = true) {
+            this.bga.gameui.removeTooltip(`space-${spaceID}-background-space`);
             dojo.destroy(`room-tile-${roomID}`);
             dojo.place(`
                 <div id="room-tile-${roomID}" class="maq_room-tile">
